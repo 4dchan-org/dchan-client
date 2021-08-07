@@ -1,6 +1,6 @@
-export default function WalletButton({ provider, loadWeb3Modal, logoutOfWeb3Modal }: any) {
+export default function WalletConnect({ provider, loadWeb3Modal, logoutOfWeb3Modal }: any) {
     return (
-        <span>[<button
+        <div>[<button
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
             onClick={() => {
                 if (!provider) {
@@ -11,6 +11,6 @@ export default function WalletButton({ provider, loadWeb3Modal, logoutOfWeb3Moda
             }}
         >
             {!provider ? "Connect Wallet" : "Disconnect Wallet"}
-        </button>]</span>
+        </button>]</div>
     );
 }

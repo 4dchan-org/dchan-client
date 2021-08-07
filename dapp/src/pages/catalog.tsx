@@ -1,7 +1,7 @@
 import BoardHeader from 'components/board/header'
 import FormPost from 'components/form/post'
-import Footer from 'components/footer'
-import CatalogThread from 'components/catalog/thread'
+import Footer from 'components/Footer'
+import CatalogThread from 'components/catalog/CatalogThread'
 import { useQuery } from '@apollo/react-hooks';
 import THREAD_LIST from 'dchan/graphql/queries/threads/list';
 import { Board, Thread } from 'dchan';

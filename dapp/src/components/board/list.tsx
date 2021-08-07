@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
-import Loading from 'components/loading'
+import Loading from 'components/Loading'
 import BOARDS_LIST from 'dchan/graphql/queries/boards/list';
 
 interface Board {

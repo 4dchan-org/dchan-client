@@ -1,6 +1,6 @@
 import logo from 'assets/images/dchan.png'
 import BoardList from 'components/board/list'
-import Footer from 'components/footer'
+import Footer from 'components/Footer'
 import React from 'react'
 
 class HomePage extends React.Component {

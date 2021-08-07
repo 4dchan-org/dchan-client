@@ -1,13 +1,13 @@
 
 import { Board, Thread } from 'dchan'
-import Footer from 'components/footer'
+import Footer from 'components/Footer'
 import BoardHeader from 'components/board/header'
 import FormPost from 'components/form/post'
-import ImageThumbnail from 'components/imageThumbnail'
+import Thumbnail from 'components/Thumbnail'
 import { useQuery } from '@apollo/react-hooks'
 import THREAD_GET from 'dchan/graphql/queries/threads/get';
 import { DateTime } from 'luxon'
-import Loading from 'components/loading'
+import Loading from 'components/Loading'
 
 interface ThreadData {
     thread?: Thread
@@ -100,7 +100,7 @@ export default function ThreadPage({ match: { params: { threadId } } }: any) {
                                     <div className="h-full">
                                         {!!image ?
                                             <div className="px-2 sm:float-left grid center">
-                                                <ImageThumbnail src={ipfsUrl}></ImageThumbnail>
+                                                <Thumbnail src={ipfsUrl}></Thumbnail>
                                             </div> : ""}
 
                                         <blockquote className="text-center sm:text-left">

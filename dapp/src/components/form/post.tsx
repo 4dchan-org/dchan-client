@@ -5,29 +5,25 @@ import Web3 from "web3"
 import { AbiItem } from "web3-utils/types"
 import abi from "dchan/abis/Relay.json"
 import useWeb3Modal from 'hooks/useWeb3Modal';
-import WalletButton from 'components/walletButton'
+import WalletConnect from 'components/wallet/WalletConnect'
+import WalletSwitchChain from 'components/wallet/WalletSwitchChain'
 
 async function postMessage(setStatus: React.Dispatch<React.SetStateAction<string | object | undefined>>) {
   try {
     setStatus("Initializing...")
-
     const ethereum = window.ethereum
     const accounts = await ethereum.enable()
-
-    setStatus("Switching chain...")
-    switchChain()
 
     setStatus("Sending...")
     const web3 = new Web3(window.web3.currentProvider);
     const relayContract = new web3.eth.Contract(abi as AbiItem[], "0xd79aedf2829704750533A47C386422655B2C226D");
-    // const msg = await relayContract.methods.message("Qm...")
-    // await msg.send({
-    //   from: accounts[0]
-    // })
+    const msg = await relayContract.methods.message("Qm...")
+    await msg.send({
+      from: accounts[0]
+    })
+    await new Promise(s => setTimeout(s, 5000))
 
     setStatus("Sent ;)")
-
-    window.location.reload()
   } catch (error) {
     setStatus({ error })
 
@@ -45,16 +41,15 @@ function Status({ status }: { status: string | any }) {
 }
 
 export default function FormPost({ thread }: { thread?: Thread, board?: Board }) {
-  const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+  const [provider, chainId, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
   const [status, setStatus] = useState<string | object>();
 
   return (
     <div>
+      <WalletConnect provider={provider} loadWeb3Modal={loadWeb3Modal} logoutOfWeb3Modal={logoutOfWeb3Modal} />
+      <WalletSwitchChain provider={provider} chainId={chainId} />
       <div>
-        <WalletButton provider={provider} loadWeb3Modal={loadWeb3Modal} logoutOfWeb3Modal={logoutOfWeb3Modal} />
-      </div>
-      <div>
-        {!!provider ?
+        {!!provider && chainId === "0x89" ? 
           <div className="grid center w-full text-left sticky top-0 min-h-200px" style={{ zIndex: 10000 }}>
             <form id="dchan-post-form" className="grid center bg-primary p-2 pointer-events-auto bg-primary">
               <table>

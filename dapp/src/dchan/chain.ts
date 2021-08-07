@@ -1,28 +1,33 @@
 const MATIC_CHAIN = `0x${(137).toString(16)}`
 const MATIC_PARAMS = {
-  chainId: MATIC_CHAIN,
-  chainName: "Matic Mainnet",
-  nativeCurrency: {
-    name: "MATIC",
-    symbol: "matic",
-    decimals: 18,
-  },
-  rpcUrls: "https://rpc-mainnet.matic.network",
-  blockExplorerUrls: [`https://explorer.matic.network/`],
+  "chainId": MATIC_CHAIN,
+  "chainName": "Matic Network",
+  "rpcUrls": ["https://rpc-mainnet.matic.quiknode.pro"],
+  "iconUrls": [
+    "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png"
+  ],
+  "blockExplorerUrls" :[
+    "https://polygonscan.com/"
+  ],
+  "nativeCurrency": {
+    "name": "Matic Token",
+    "symbol": "MATIC",
+    "decimals": 18
+  }
 }
-const ERROR_CHAIN_NOT_FOUND = 4902
+
+const ERRORS_CHAIN_NOT_FOUND = [-32603, 4902]
 
 export async function switchChain() {
+  console.log("Switching chain")
   try {
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: MATIC_CHAIN }],
     });
   } catch (switchError) {
-    console.error({switchError})
-
     // Rescue
-    if (switchError.code === ERROR_CHAIN_NOT_FOUND) {
+    if (ERRORS_CHAIN_NOT_FOUND.includes(switchError.code)) {
       addChain()
     } else {
       throw switchError
@@ -31,8 +36,9 @@ export async function switchChain() {
 }
 
 async function addChain() {
-  await window.ethereum.request({
-    method: "wallet_addEthereumChain",
-    params: [MATIC_PARAMS]
+  const addChainResult = await window.ethereum.request({
+    method: 'wallet_addEthereumChain',
+    params: [MATIC_PARAMS], // you must have access to the specified account
   })
+  window.location.reload()
 }
