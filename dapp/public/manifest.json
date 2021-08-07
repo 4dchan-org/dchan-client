@@ -1,0 +1,18 @@
+{
+
+    "short_name": "dchan",
+    "name": "dchan",
+    "description": "Decentralized Imageboard",
+    "icons": [
+        {
+            "src": "favicons/favicon.ico",
+            "type": "image/x-icon",
+            "sizes": "256x256"
+        }
+    ],
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#ffffff"
+
+}

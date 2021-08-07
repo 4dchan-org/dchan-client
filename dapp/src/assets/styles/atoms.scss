@@ -1,0 +1,169 @@
+/* Custom atomic CSS */
+.text-highlight {
+    color: var(--highlight);
+}
+
+.text-contrast {
+    color: var(--contrast);
+}
+
+.text-accent {
+    color: var(--accent);
+}
+
+.text-quote {
+    color: var(--quote);
+}
+
+.text-readable-anywhere {
+    color: white;
+    text-shadow:
+        0.07em 0 black,
+        0 0.07em black,
+        -0.07em 0 black,
+        0 -0.07em black;
+}
+
+.text-2xs {
+    font-size: 0.5rem;
+}
+
+.font-family-tahoma {
+    font-family: Tahoma,helvetica,sans-serif;
+}
+
+.font-family-arial {
+    font-family: arial,helvetica,sans-serif;
+}
+
+.font-size-090rem {
+    font-size: 0.90rem;
+}
+
+.grid-template-columns-ram-150px {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.bg-primary {
+    background: var(--primary);
+}
+
+.bg-secondary {
+    background: var(--secondary);
+}
+
+.bg-tertiary {
+    background: var(--tertiary);
+}
+
+.bg-highlight {
+    background: var(--highlight);
+}
+
+.border-bottom-invisible {
+    border-bottom: 1px solid rgba($color: #000000, $alpha: 0);
+}
+
+.border-bottom-secondary {
+    border-bottom: 1px solid var(--tertiary-accent);
+}
+
+.max-h-150px {
+    max-height: 150px;
+}
+
+.max-h-320px {
+    max-height: 320px;
+}
+
+.max-h-150px {
+    max-height: 150px;
+}
+
+.max-h-320px {
+    max-height: 320px;
+}
+
+.min-h-100vh {
+    min-height: 100vh;
+}
+
+.max-h-50vh {
+    max-height: 50vh;
+}
+
+.max-w-initial {
+    max-width: initial !important;
+}
+.max-h-initial {
+    max-height: initial !important;
+}
+
+.h-100px {
+    height: 100px;
+}
+
+.w-100px {
+    width: 100px;
+}
+
+.w-64px {
+    width: 64px;
+}
+
+.w-128px {
+    width: 128px;
+}
+
+.w-150px {
+    width: 150px;
+}
+
+.min-w-128px {
+    min-width: 128px;
+}
+
+.max-w-12rem {
+    max-width: 12rem;
+}
+
+.max-w-128px {
+    max-width: 128px;
+}
+
+.max-w-150px {
+    max-width: 150px;
+}
+
+.max-w-11rem {
+    max-width: 11rem;
+}
+
+.max-w-50vw {
+    max-width: 50vw;
+}
+
+.max-w-512px {
+    max-width: 512px;
+}
+
+.h-64px {
+    max-height: 64px;
+}
+
+.max-h-128px {
+    max-height: 128px;
+}
+
+.min-h-200px {
+    min-height: 200px;
+}
+
+.break-word {
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.opacity-2 {
+    opacity: 0.02;
+}

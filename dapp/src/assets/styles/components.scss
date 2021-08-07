@@ -1,0 +1,92 @@
+/** Custom complex behaviour components that I don't want to make atomic scss for **/
+:target.on-target-expand-post {
+    max-height: initial;
+    max-width: initial;
+    z-index: 900;
+    margin-left: -2rem;
+    margin-right: -2rem;
+    width: 14rem;
+}
+
+.on-parent-target-show {
+    display: none;
+}
+
+:target .on-parent-target-show {
+    display: initial;
+}
+
+:target .on-parent-target-hide {
+    display: none;
+}
+
+:target .on-parent-target-font-bold {
+    font-weight: 700;
+}
+
+:target .on-parent-target-highlight {
+    background: var(--tertiary);
+    border-bottom: 1px solid var(--tertiary-accent);
+}
+
+.dchan-post-signature-check {
+    display: none;
+    opacity: 0.25;
+    font-size: 0.5rem;
+}
+
+.dchan-post-signature-check:hover {
+    opacity: 1;
+}
+
+[dchan-post-signature-valid="true"] .dchan-post-signature-check.on-parent-dchan-post-signature-valid-show {
+    display: unset;
+}
+
+[dchan-post-signature-valid="false"] .dchan-post-signature-check.on-parent-dchan-post-signature-invalid-show {
+    display: unset;
+}
+
+.dchan-navigation-board + .dchan-navigation-board::before {
+    content: " / ";
+}
+
+.dchan-post-expand[open] > summary {
+    visibility: hidden;
+    list-style: none;
+    position: absolute;
+    background-color: rgba(0,0,0,0);
+    color: rgba(0,0,0,0);
+    user-select: none;
+    
+    &::before { 
+        visibility: visible;
+        color: black;
+        content:"▼";
+        opacity: 1;
+        z-index: 9001;
+        position: relative;
+    }
+
+    &:not(:hover)::before {
+        opacity: 0.1;
+    }
+}
+
+.dchan-form-expand[open] .dchan-post-fab.absolute {
+  display: none;
+}
+
+img.dchan-image-toggled {
+    max-width: unset;
+    max-height: unset;
+    font-size: 0.5rem;
+    vertical-align: middle;
+}
+
+@media only screen and (max-width: 768px) {
+    img.dchan-image-toggled {
+        max-width: 100vw;
+        max-height: 100vh;
+    }
+}
