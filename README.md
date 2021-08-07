@@ -11,8 +11,9 @@ Decentralized Imageboard Client
 - [`docker` and `docker-compose`](https://docs.docker.com/compose/install/)
 
 ### Start development
-- `docker-compose run --service-ports dapp bash` and `yarn && yarn start`
-- `Open https://localhost:3000`
+- `./bin/docker_bash.sh`
+- In the container
+    - `./bin/yarn_start.sh`
 
 # Links
 - Official website: https://dchan.network/
