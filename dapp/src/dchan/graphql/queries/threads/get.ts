@@ -8,7 +8,7 @@ const THREAD_GET = gql`
       id
       name
     }
-    body
+    comment
     image {
       id
       name

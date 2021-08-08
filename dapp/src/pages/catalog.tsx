@@ -19,11 +19,11 @@ export default function CatalogPage({ match: { params: { boardId } } }: any) {
         THREAD_LIST,
         { variables: { boardId } }
     );
-
+console.log({data})
     const threads = data?.threads
 
     return (
-        <div className="min-h-100vh" dchan-board={data?.board.name}>
+        <div className="min-h-100vh" dchan-board={data?.board?.name}>
             <BoardHeader board={data?.board}></BoardHeader>
 
             <FormPost board={data?.board}></FormPost>

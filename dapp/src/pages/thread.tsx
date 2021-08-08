@@ -1,5 +1,5 @@
 
-import { Board, Thread } from 'dchan'
+import { Board, shortenAddress, Thread } from 'dchan'
 import Footer from 'components/Footer'
 import BoardHeader from 'components/board/header'
 import FormPost from 'components/form/post'
@@ -8,6 +8,7 @@ import { useQuery } from '@apollo/react-hooks'
 import THREAD_GET from 'dchan/graphql/queries/threads/get';
 import { DateTime } from 'luxon'
 import Loading from 'components/Loading'
+import AddressLabel from 'components/AddressLabel'
 
 interface ThreadData {
     thread?: Thread
@@ -53,8 +54,8 @@ export default function ThreadPage({ match: { params: { threadId } } }: any) {
                 }) => {
                     // const createdAtDt = new Date(createdAtUnix).toISOString()
                     const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : ""
-                    const addressShort = address.substr(2,3) + address.substr(-3,3)
-                    const backgroundColor = `#${addressShort}`
+                    const addressShort = shortenAddress(address)
+                    const backgroundColor = `#${addressShort.replace('-', '')}`
                     const createdAt = DateTime.fromMillis(parseInt(createdAtUnix)*1000)
 
                     return <details className="dchan-post-expand" open={true} key={id}>
@@ -62,8 +63,7 @@ export default function ThreadPage({ match: { params: { threadId } } }: any) {
                         <span className="px-0.5 whitespace-nowrap">
                                         <span className="text-accent font-bold">{name}</span>
                                     </span>
-                                    <span className="px-0.5">(<a style={{backgroundColor}} className="font-family-tahoma text-readable-anywhere px-0.5 mx-0.5 rounded" href={`https://etherscan.io/address/${address}`} target="_blank">
-                                        <abbr style={{textDecoration: "none"}} title={address}>{addressShort}</abbr></a>)</span> No.{n}
+                                    <span className="px-0.5">(<AddressLabel address={address}></AddressLabel>)</span> No.{n}
                         </summary>
                         <article id={id} className="dchan-post text-left" dchan-post-from-address={address}>
                             <div className="w-full pb-2 px-4 inline-block on-parent-target-highlight border-bottom-invisible relative">

@@ -9,7 +9,7 @@ class BoardListPage extends React.Component {
             <div>
                 <GenericHeader title="Boards"></GenericHeader>
 
-                <BoardList></BoardList>
+                <BoardList create={true}></BoardList>
 
                 <Footer></Footer>
             </div>
