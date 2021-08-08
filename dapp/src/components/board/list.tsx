@@ -60,7 +60,7 @@ export default function BoardList({create = false}: {create?: boolean}) {
           <tbody>
             {data ? data.boards?.map(({ id, title, postCount, name }) => (
               <tr className="p-4" key={name}>
-                <td><AddressLabel address={id.split(":")[1]}></AddressLabel></td>
+                <td><AddressLabel address={id}></AddressLabel></td>
                 <td className="px-2"><span>{title}</span></td>
                 <td className="px-2"><span><Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500 mx-4" to={`/${id}`}>/{name}/</Link></span></td>
                 <td className="px-2"><span>{postCount} posts</span></td>

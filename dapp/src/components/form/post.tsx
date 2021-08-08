@@ -8,7 +8,8 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 type PostCreateInput = {
-  board: string,
+  board?: string,
+  thread?: string,
   file: FileList,
   name: string,
   subject: string,
@@ -16,7 +17,8 @@ type PostCreateInput = {
 }
 
 type PostCreateData = {
-  board: string,
+  board?: string,
+  thread?: string,
   comment: string,
   file?: {
     byte_size: number,
@@ -33,7 +35,15 @@ type PostCreateData = {
 
 type setStatus = React.Dispatch<React.SetStateAction<string | object | undefined>>
 
-const ipfsUpload = async (files: FileList, setStatus: setStatus) => {
+type IpfsUploadResult = {
+  ipfs: {
+    hash: string,
+  },
+  name: string,
+  byte_size: number
+}
+
+const ipfsUpload = async (files: FileList, setStatus: setStatus): Promise<IpfsUploadResult | undefined> => {
   if (!!files) {
     const file = files[0]
     if (!!file) {
@@ -53,7 +63,7 @@ const ipfsUpload = async (files: FileList, setStatus: setStatus) => {
             hash: ipfs.Hash,
           },
           name: ipfs.Name,
-          byte_size: ipfs.Size
+          byte_size: parseInt(ipfs.Size)
         }
       } else {
         if (ipfs.error) {
@@ -68,30 +78,48 @@ const ipfsUpload = async (files: FileList, setStatus: setStatus) => {
 
 async function postMessage(input: PostCreateInput, provider: any, accounts: any, setStatus: setStatus) {
   console.log({ input })
-  const file = await ipfsUpload(input.file, setStatus)
   const {
     board,
+    thread,
     comment,
     name,
     subject
   } = input
 
-  if (!file) return;
+  let file: IpfsUploadResult | undefined
+  if(input.file.length > 0) {
+    file = await ipfsUpload(input.file, setStatus)
+    if(!file) {
+      setStatus("IPFS file upload failed")
+      return
+    }
+  }
 
   const data: PostCreateData = {
-    board,
     comment,
-    file,
     from: {
       name
     },
     subject
   }
 
+  if(!!file) {
+    data.file = file
+  }
+  if(!!thread) {
+    data.thread = thread
+  }
+  if(!!board) {
+    data.board = board
+  }
+  
+
   try {
     setStatus("Sending...")
 
-    await sendMessage("post:create", data, accounts[0])
+    const response = await sendMessage("post:create", data, accounts[0])
+
+    console.log({response})
 
     setStatus("Sent ;)")
   } catch (error) {
@@ -137,13 +165,15 @@ export default function FormPost({ thread, board }: { thread?: Thread, board?: B
     }
   }
 
+  console.log({errors})
+
   return (
     <div>
       <WalletConnect provider={provider} loadWeb3Modal={loadWeb3Modal} logoutOfWeb3Modal={logoutOfWeb3Modal} />
       <WalletAccount provider={provider} accounts={accounts} />
       <WalletSwitchChain provider={provider} chainId={chainId} />
       <div>
-        {!!provider && chainId === "0x89" ?
+        {!!provider && (chainId === "0x89" || chainId === 137) ?
           <div className="grid center w-full text-left sticky top-0 min-h-200px" style={{ zIndex: 10000 }}>
             <form id="dchan-post-form" className="grid center bg-primary p-2 pointer-events-auto bg-primary" onSubmit={handleSubmit(onSubmit)}>
               {!!board ? <input type="hidden" {...register("board")} value={board.id}></input> : ""}

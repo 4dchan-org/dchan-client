@@ -17,9 +17,12 @@ interface CatalogVars {
 export default function CatalogPage({ match: { params: { boardId } } }: any) {
     const { loading, data } = useQuery<CatalogData, CatalogVars>(
         THREAD_LIST,
-        { variables: { boardId } }
+        { 
+            variables: { boardId },
+            pollInterval: 10000
+        }
     );
-console.log({data})
+    console.log({data})
     const threads = data?.threads
 
     return (

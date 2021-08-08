@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 export default function WalletConnect({ provider, chainId }: any) {
     const [stillStuck, setStillStuck] = useState<boolean>()
 
-    return provider && chainId !== "0x89" ? (
+    return provider && (chainId !== "0x89" && chainId !== 137) ? (
         <div className="p-4">
             <div>
-                You need to be connected to the Polygon chain in order to use dchan
+                You need to be connected to the Polygon chain in order to use dchan. {chainId} {!!provider ? "true" : "false"}
             </div>
             <div>
                 [<button

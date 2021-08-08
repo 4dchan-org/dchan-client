@@ -7,7 +7,7 @@ const CatalogThread = ({thread: {
     isLocked,
     op: {
         subject,
-        body,
+        comment,
         image: {
             ipfsHash
         }
@@ -32,7 +32,7 @@ const CatalogThread = ({thread: {
                         <strong>
                             {subject}
                         </strong>
-                        <blockquote className="whitespace-pre-wrap">{body}</blockquote>
+                        <blockquote className="whitespace-pre-wrap">{comment}</blockquote>
                     </div>
                 </div>
             </div>

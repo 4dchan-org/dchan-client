@@ -32,7 +32,7 @@ const THREAD_GET = gql`
         ...Post
       }
       subject
-      replies {
+      replies(orderBy: n) {
         ...Post
       }
       replyCount

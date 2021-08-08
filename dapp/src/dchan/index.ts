@@ -26,7 +26,7 @@ export type Post = {
     n: number,
     from: User,
     subject: string,
-    body: string,
+    comment: string,
     image: Image,
     createdAtUnix: string
 }

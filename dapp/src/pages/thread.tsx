@@ -20,10 +20,15 @@ interface ThreadVars {
 export default function ThreadPage({ match: { params: { threadId } } }: any) {
     const { loading, data } = useQuery<ThreadData, ThreadVars>(
         THREAD_GET,
-        { variables: { threadId } }
+        { 
+            variables: { threadId } ,
+            pollInterval: 10000
+        }
     );
     
     const thread = data?.thread;
+
+    console.log({thread})
 
     return !thread ? <Loading></Loading> :
         <div className="min-h-100vh" dchan-board={thread?.board.name}>
@@ -49,7 +54,7 @@ export default function ThreadPage({ match: { params: { threadId } } }: any) {
                     n,
                     image,
                     subject,
-                    body,
+                    comment,
                     createdAtUnix
                 }) => {
                     // const createdAtDt = new Date(createdAtUnix).toISOString()
@@ -104,7 +109,7 @@ export default function ThreadPage({ match: { params: { threadId } } }: any) {
                                             </div> : ""}
 
                                         <blockquote className="text-center sm:text-left">
-                                            {body}
+                                            {comment}
                                         </blockquote>
                                     </div>
                                 </div>

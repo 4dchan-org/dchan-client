@@ -11,7 +11,7 @@ const NETWORK_NAME = "matic";
 
 function useWeb3Modal(config = {}) {
   const [provider, setProvider] = useState<Web3Provider>();
-  const [chainId, setChainId] = useState<string>();
+  const [chainId, setChainId] = useState<string|number>();
   const [accounts, setAccounts] = useState<string[]>([]);
   const [autoLoaded, setAutoLoaded] = useState<boolean>(false);
   const { autoLoad = true, infuraId = INFURA_ID, NETWORK = NETWORK_NAME } = config as any;
