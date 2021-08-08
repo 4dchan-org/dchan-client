@@ -1,8 +1,6 @@
 export type Board = {
     title: string,
-    stats: {
-        postCount: number
-    },
+    postCount: number,
     name: string
 }
 

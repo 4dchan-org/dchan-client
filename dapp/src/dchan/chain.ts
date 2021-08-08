@@ -36,7 +36,7 @@ export async function switchChain() {
 }
 
 async function addChain() {
-  const addChainResult = await window.ethereum.request({
+   await window.ethereum.request({
     method: 'wallet_addEthereumChain',
     params: [MATIC_PARAMS], // you must have access to the specified account
   })

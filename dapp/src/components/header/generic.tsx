@@ -2,9 +2,9 @@ import HeaderNavigation from "components/header/navigation"
 import HeaderLogo from "components/header/logo"
 import { Board } from "dchan"
 
-const GenericHeader = ({title, boards}: {title: string, boards?: Board[]}) => (
+const GenericHeader = ({title}: {title: string}) => (
     <header>
-        <HeaderNavigation boards={boards}></HeaderNavigation>
+        <HeaderNavigation></HeaderNavigation>
         <HeaderLogo></HeaderLogo>
 
         <div className="text-4xl text-contrast font-weight-800 font-family-tahoma">

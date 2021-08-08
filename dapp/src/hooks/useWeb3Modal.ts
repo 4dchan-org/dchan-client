@@ -48,7 +48,6 @@ function useWeb3Modal(config = {}) {
 
   const logoutOfWeb3Modal = useCallback(
     async function () {
-      alert("Disconnecting")
       await web3Modal.clearCachedProvider();
       window.location.reload();
     },
