@@ -46,6 +46,8 @@ export type Image = {
     name: string,
     byteSize: number,
     ipfsHash: string,
+    isNsfw: boolean,
+    isSpoiler: boolean,
     score: number,
 }
 

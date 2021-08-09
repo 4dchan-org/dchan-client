@@ -6,8 +6,8 @@ const THREAD_GET = gql`
     n
     from {
       id
-      name
     }
+    name
     comment
     image {
       id
@@ -15,6 +15,8 @@ const THREAD_GET = gql`
       byteSize
       ipfsHash
       score
+      isSpoiler
+      isNsfw
     }
     createdAtUnix
   }
@@ -25,6 +27,7 @@ const THREAD_GET = gql`
       board {
         title
         name
+        isLocked
       }
       isSticky
       isLocked

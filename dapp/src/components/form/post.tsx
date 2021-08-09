@@ -11,6 +11,8 @@ type PostCreateInput = {
   board?: string,
   thread?: string,
   file: FileList,
+  is_nsfw: boolean,
+  is_spoiler: boolean,
   name: string,
   subject: string,
   comment: string
@@ -26,6 +28,8 @@ type PostCreateData = {
       hash: string
     },
     name: string,
+    is_nsfw: boolean,
+    is_spoiler: boolean
   },
   from: {
     name: string
@@ -104,7 +108,7 @@ async function postMessage(input: PostCreateInput, provider: any, accounts: any,
   }
 
   if(!!file) {
-    data.file = file
+    data.file = {...file, is_nsfw: input.is_nsfw, is_spoiler: input.is_spoiler}
   }
   if(!!thread) {
     data.thread = thread
@@ -218,11 +222,22 @@ export default function FormPost({ thread, board }: { thread?: Thread, board?: B
                   <tr>
                     <td className="px-2 border border-solid border-black bg-highlight font-semibold">File</td>
                     <td className="flex center text-xs">
-                      <input className="dchan-input-file flex-grow" type="file" accept="image/*" {...register("file", { required: !thread })}></input>
-                      <div>
+                      <details className="mx-0.5">
+                        <summary>Options</summary>
+                        <div>
+                          <input id="dchan-input-is_spoiler" className="mx-1" type="checkbox" {...register("is_spoiler")}></input>
+                          <label htmlFor="dchan-input-is_spoiler" className="text-black font-weight-800 font-family-tahoma">Spoiler</label>
+                        </div>
+                        <div>
+                          <input id="dchan-input-is_nsfw" className="mx-1" type="checkbox" {...register("is_nsfw")}></input>
+                          <label htmlFor="dchan-input-is_nsfw" className="text-black font-weight-800 font-family-tahoma">NSFW</label>
+                        </div>
+                      </details>
+                      <input className="dchan-input-file flex-grow mx-0.5" type="file" accept="image/*" {...register("file", { required: !thread })}></input>
+                      <div className="flex center">
                         <span>
-                          <button className="dchan-input-file-rename" title="Rename file" type="button" onClick={fileRename}>✎</button>
-                          <button className="dchan-input-file-remove" title="Remove file" type="button" onClick={fileRemove}>❌</button>
+                          <button className="dchan-input-file-rename mx-0.5" title="Rename file" type="button" onClick={fileRename}>✎</button>
+                          <button className="dchan-input-file-remove mx-0.5" title="Remove file" type="button" onClick={fileRemove}>❌</button>
                         </span>
                         <span className="text-xs float-right bg-primary">(1000kb max)</span>
                       </div>

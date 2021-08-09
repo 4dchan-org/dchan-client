@@ -105,7 +105,7 @@ export default function ThreadPage({ match: { params: { threadId } } }: any) {
                                     <div className="h-full">
                                         {!!image ?
                                             <div className="px-2 sm:float-left grid center">
-                                                <Thumbnail src={ipfsUrl}></Thumbnail>
+                                                <Thumbnail src={ipfsUrl} isSpoiler={image.isSpoiler || image.isNsfw}></Thumbnail>
                                             </div> : ""}
 
                                         <blockquote className="text-center sm:text-left">

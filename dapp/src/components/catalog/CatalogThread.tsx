@@ -21,7 +21,7 @@ const CatalogThread = ({thread: {
         <Link to={`/thread/${id}`}>
             <div className="on-parent-target-highlight">
                 <div>
-                    <img className="w-full max-h-150px pointer-events-none shadow-xl object-contain" loading="lazy" src={`https://ipfs.io/ipfs/${ipfsHash}`} />
+                    <img className="w-full max-h-150px pointer-events-none shadow-xl object-contain" src={`https://ipfs.io/ipfs/${ipfsHash}`} />
                 </div>
                 <div className="p-1">
                     <div>

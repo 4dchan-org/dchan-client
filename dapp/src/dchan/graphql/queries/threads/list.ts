@@ -6,8 +6,8 @@ const THREAD_LIST = gql`
     n
     from {
       id
-      name
     }
+    name
     comment
     image {
       id
@@ -15,6 +15,8 @@ const THREAD_LIST = gql`
       byteSize
       ipfsHash
       score
+      isSpoiler
+      isNsfw
     }
     createdAtUnix
   }
@@ -25,6 +27,7 @@ const THREAD_LIST = gql`
       title
       postCount
       name
+      isLocked
     }
     threads(where: {board: $boardId}) {
       id

@@ -1,37 +1,19 @@
-import { Component } from "react"
+import { useState } from "react"
+import missingSrc from 'assets/images/missing.png'
+import spoilerSrc from 'assets/images/spoiler.png'
 
-interface IProps {
-    src: string
+export default function Thumbnail({src, isSpoiler = false}: {src: string, isSpoiler?: boolean}) {
+    const [spoiler, setSpoiler] = useState<boolean>(isSpoiler)
+    const [expand, setExpand] = useState<boolean>(false)
+    const [imgSrc, setImgSrc] = useState<string>(src)
+
+    return (
+        <img 
+            className={!expand ? "max-w-32 max-h-32":""} loading="lazy" src={spoiler ? spoilerSrc : imgSrc} 
+            onClick={() => {
+                setSpoiler(expand && isSpoiler)
+                setExpand(!expand)
+            }} 
+            onError={() => setImgSrc(missingSrc)}></img>
+    )
 }
-
-interface IState {
-    expand: boolean
-}
-
-class ThreadPage extends Component<IProps, IState> {
-    constructor(props: any) {
-        super(props)
-
-        this.state = {
-            expand: false
-        }
-    }
-
-    render() {
-        const {
-            expand
-        } = this.state
-
-        return <img className={!expand ? "max-w-32 max-h-32":""} loading="lazy" src={this.props.src} onClick={() => this.toggle()}></img>
-    }
-
-    toggle() {
-        const expand = !this.state.expand
-        
-        this.setState({
-            expand
-        })
-    }
-}
-
-export default ThreadPage

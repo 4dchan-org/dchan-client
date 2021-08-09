@@ -7,6 +7,7 @@ const BOARDS_LIST = gql`
       title
       postCount
       name
+      isLocked
     }
   }
 `;
