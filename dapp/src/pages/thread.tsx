@@ -8,6 +8,7 @@ import THREAD_GET from "dchan/graphql/queries/threads/get";
 import { DateTime } from "luxon";
 import Loading from "components/Loading";
 import AddressLabel from "components/AddressLabel";
+import useWeb3 from "hooks/useWeb3";
 
 interface ThreadData {
   thread?: Thread;
@@ -19,8 +20,9 @@ interface ThreadVars {
 export default function ThreadPage({
   match: {
     params: { threadId },
-  },
+  }
 }: any) {
+  const useWeb3Result = useWeb3()
   const { loading, data } = useQuery<ThreadData, ThreadVars>(THREAD_GET, {
     variables: { threadId },
     pollInterval: 10000,
@@ -42,7 +44,7 @@ export default function ThreadPage({
           <div>You cannot reply.</div>
         </div>
       ) : (
-        <FormPost thread={thread}></FormPost>
+        <FormPost thread={thread} useWeb3={useWeb3Result}></FormPost>
       )}
 
       <div className="p-2">
@@ -70,10 +72,11 @@ export default function ThreadPage({
               parseInt(createdAtUnix) * 1000
             );
             const isOp = id === thread?.id;
+            name = !name || ("" === name)? "Anonymous" : ""
 
             return (
               <details className="dchan-post-expand" open={true} key={id}>
-                <summary className="text-left" title="Hide/Show">
+                <summary className="text-left pl-2" title="Hide/Show">
                   <span className="px-0.5 whitespace-nowrap">
                     <span className="text-accent font-bold">{name}</span>
                   </span>
@@ -90,12 +93,12 @@ export default function ThreadPage({
                   <div
                     className={`${
                       !isOp ? "bg-secondary" : ""
-                    } pb-2 px-4 inline-block on-parent-target-highlight border-bottom-invisible relative`}
+                    } pb-2 mb-2 px-4 inline-block on-parent-target-highlight border-bottom-invisible relative`}
                   >
                     <div className="flex flex-wrap center sm:block">
                       <span className="font-semibold">{subject}</span>
                       <span className="px-0.5 whitespace-nowrap">
-                        <span className="text-accent font-bold">{name}</span>
+                        <span className="text-accent font-bold px-2">{name}</span>
                       </span>
                       <span className="px-0.5">
                         (

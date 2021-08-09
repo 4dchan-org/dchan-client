@@ -9,7 +9,18 @@ const INFURA_ID = "INVALID_INFURA_KEY";
 
 const NETWORK_NAME = "matic";
 
-function useWeb3Modal(config = {}) {
+type UseWeb3Modal = {
+  loadWeb3Modal: () => Promise<void>;
+  logoutOfWeb3Modal: () => Promise<void>;
+}
+export type UseWeb3 = {
+  provider: Web3Provider | undefined;
+  chainId: string | number | undefined;
+  accounts: string[];
+  web3Modal: UseWeb3Modal
+}
+
+function useWeb3(config = {}): UseWeb3 {
   const [provider, setProvider] = useState<Web3Provider>();
   const [chainId, setChainId] = useState<string|number>();
   const [accounts, setAccounts] = useState<string[]>([]);
@@ -75,7 +86,10 @@ function useWeb3Modal(config = {}) {
     }
   }, [autoLoad, autoLoaded, loadWeb3Modal, setAutoLoaded, web3Modal.cachedProvider]);
 
-  return [provider, chainId, accounts, loadWeb3Modal, logoutOfWeb3Modal];
+  return {
+    provider, chainId, accounts,
+    web3Modal: {loadWeb3Modal, logoutOfWeb3Modal}
+  }
 }
 
-export default useWeb3Modal;
+export default useWeb3;

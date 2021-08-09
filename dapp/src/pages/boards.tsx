@@ -1,20 +1,16 @@
 import Footer from 'components/Footer'
 import BoardList from 'components/board/list'
 import GenericHeader from 'components/header/generic'
-import React from 'react'
+import useWeb3 from 'hooks/useWeb3';
 
-class BoardListPage extends React.Component {
-    render() {
-        return (
-            <div>
-                <GenericHeader title="Boards"></GenericHeader>
+export default function BoardListPage() {
+    const useWeb3Result = useWeb3()
 
-                <BoardList create={true}></BoardList>
+    return (<div>
+        <GenericHeader title="Boards"></GenericHeader>
 
-                <Footer></Footer>
-            </div>
-        );
-    }
+        <BoardList create={true} useWeb3={useWeb3Result}></BoardList>
+
+        <Footer></Footer>
+    </div>)
 }
-
-export default BoardListPage

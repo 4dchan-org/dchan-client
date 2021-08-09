@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Board, sendMessage, Thread } from "dchan"
-import useWeb3Modal from 'hooks/useWeb3Modal';
 import WalletConnect from 'components/wallet/WalletConnect'
 import WalletAccount from 'components/wallet/WalletAccount'
 import WalletSwitchChain from 'components/wallet/WalletSwitchChain'
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { UseWeb3 } from "hooks/useWeb3";
 
 type PostCreateInput = {
   board?: string,
@@ -142,11 +142,10 @@ function Status({ status }: { status: string | any }) {
   </div>
 }
 
-export default function FormPost({ thread, board }: { thread?: Thread, board?: Board }) {
-  const [provider, chainId, accounts, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+export default function FormPost({ thread, board, useWeb3: {provider, chainId, accounts, web3Modal: {loadWeb3Modal, logoutOfWeb3Modal} } }: { thread?: Thread, board?: Board, useWeb3: UseWeb3 }) {
   const [status, setStatus] = useState<string | object>();
 
-  const { register, handleSubmit, watch, formState: { errors }, setValue, getValues } = useForm();
+  const { register, handleSubmit, formState: { errors }, setValue, getValues } = useForm();
   const onSubmit = (data: any) => {
     postMessage(data, provider, accounts, setStatus)
   }

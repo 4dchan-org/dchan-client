@@ -5,8 +5,8 @@ import BOARDS_LIST from 'dchan/graphql/queries/boards/list';
 import { Board, sendMessage, shortenAddress } from 'dchan';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import useWeb3Modal from 'hooks/useWeb3Modal';
 import AddressLabel from 'components/AddressLabel';
+import { UseWeb3 } from 'hooks/useWeb3';
 
 interface BoardListData {
   boards: Board[];
@@ -38,18 +38,17 @@ async function postMessage(data: BoardCreateInput, provider: any, accounts: any,
   }
 }
 
-export default function BoardList({create = false}: {create?: boolean}) {
-  const { loading, data } = useQuery<BoardListData, BoardListVars>(
+export default function BoardList({create = false, useWeb3}: {create?: boolean, useWeb3?: UseWeb3}) {
+  const { data } = useQuery<BoardListData, BoardListVars>(
     BOARDS_LIST,
     { variables: {} }
   );
-
-  const [provider, chainId, accounts, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+  
   const [status, setStatus] = useState<string | object>();
 
-  const { register, handleSubmit, watch, formState: { errors }, setValue, getValues } = useForm();
+  const { register, handleSubmit } = useForm();
   const onSubmit = (data: any) => {
-    postMessage(data, provider, accounts, setStatus)
+    postMessage(data, useWeb3?.provider, useWeb3?.accounts, setStatus)
   }
 
   return (
@@ -66,7 +65,7 @@ export default function BoardList({create = false}: {create?: boolean}) {
                 <td className="px-2"><span>{postCount} posts</span></td>
               </tr>
             )) : <tr><td><Loading></Loading></td></tr>}
-            {provider && create ? <tr className="p-4 text-center">
+            {useWeb3?.provider && create ? <tr className="p-4 text-center">
               <td></td>
               <td className="px-2"><input className="text-center" type="text" placeholder="Videogames" {...register("title")}></input></td>
               <td className="px-2">/<input className="text-center w-16" type="text" placeholder="v" {...register("name")}></input>/</td>

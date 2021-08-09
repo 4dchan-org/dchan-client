@@ -5,6 +5,7 @@ import CatalogThread from 'components/catalog/CatalogThread'
 import { useQuery } from '@apollo/react-hooks';
 import THREAD_LIST from 'dchan/graphql/queries/threads/list';
 import { Board, Thread } from 'dchan';
+import useWeb3 from 'hooks/useWeb3';
 
 interface CatalogData {
     board: Board,
@@ -15,6 +16,7 @@ interface CatalogVars {
 }
 
 export default function CatalogPage({ match: { params: { boardId } } }: any) {
+    const useWeb3Result = useWeb3()
     const { loading, data } = useQuery<CatalogData, CatalogVars>(
         THREAD_LIST,
         { 
@@ -29,7 +31,7 @@ export default function CatalogPage({ match: { params: { boardId } } }: any) {
         <div className="min-h-100vh" dchan-board={data?.board?.name}>
             <BoardHeader board={data?.board}></BoardHeader>
 
-            <FormPost board={data?.board}></FormPost>
+            <FormPost board={data?.board} useWeb3={useWeb3Result}></FormPost>
 
             <div className="p-2">
                 <hr></hr>
