@@ -1,9 +1,52 @@
 import HeaderNavigation from "components/header/navigation"
 import HeaderLogo from "components/header/logo"
-import { Board } from "dchan"
+import { Board, sendMessage } from "dchan"
 import { Link } from 'react-router-dom';
+import { SetStatus } from "components/Status";
 
-export default function BoardHeader({ board: board }: { board: Board | undefined }) {
+async function removeBoard(id: string, accounts: any, setStatus: SetStatus) {
+  try {
+    setStatus("Removing...");
+
+    await sendMessage("board:remove", { id }, accounts[0]);
+
+    setStatus("Removed");
+  } catch (error) {
+    setStatus({ error });
+
+    console.error({ error });
+  }
+}
+
+async function unlockBoard(id: string, accounts: any, setStatus: SetStatus) {
+  try {
+    setStatus("Unlocking...");
+
+    await sendMessage("board:unlock", { id }, accounts[0]);
+
+    setStatus("Unlocked");
+  } catch (error) {
+    setStatus({ error });
+
+    console.error({ error });
+  }
+}
+
+async function lockBoard(id: string, accounts: any, setStatus: SetStatus) {
+  try {
+    setStatus("Locking...");
+
+    await sendMessage("board:lock", { id }, accounts[0]);
+
+    setStatus("Locked");
+  } catch (error) {
+    setStatus({ error });
+
+    console.error({ error });
+  }
+}
+
+export default function BoardHeader({ board: board, isJanny = false}: { board: Board | undefined, isJanny?: boolean }) {
   return (
     <header id="board-header">
       <HeaderNavigation></HeaderNavigation>

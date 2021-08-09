@@ -18,7 +18,19 @@ const THREAD_LIST = gql`
       isSpoiler
       isNsfw
     }
-    createdAtUnix
+    createdAt
+  }
+
+  fragment Thread on Thread {
+    id
+    isPinned
+    isLocked
+    op {
+      ...Post
+    }
+    subject
+    replyCount
+    imageCount
   }
   
   query ThreadList($boardId: String!) {
@@ -29,16 +41,11 @@ const THREAD_LIST = gql`
       name
       isLocked
     }
-    threads(where: {board: $boardId}) {
-      id
-      isSticky
-      isLocked
-      op {
-        ...Post
-      }
-      subject
-      replyCount
-      imageCount
+    pinned: threads(where: {board: $boardId, isPinned: true}, orderBy: lastBumpedAt, orderDirection: desc) {
+      ...Thread
+    }
+    threads(where: {board: $boardId, isPinned: false}, orderBy: lastBumpedAt, orderDirection: desc) {
+      ...Thread
     }
   }
 `;

@@ -18,7 +18,7 @@ const THREAD_GET = gql`
       isSpoiler
       isNsfw
     }
-    createdAtUnix
+    createdAt
   }
   
   query Thread($threadId: String!) {
@@ -29,7 +29,7 @@ const THREAD_GET = gql`
         name
         isLocked
       }
-      isSticky
+      isPinned
       isLocked
       op {
         ...Post

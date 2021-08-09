@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 const CatalogThread = ({thread: {
     id,
-    isSticky,
+    isPinned,
     isLocked,
     op: {
         subject,
@@ -38,7 +38,7 @@ const CatalogThread = ({thread: {
             </div>
         </Link>
         <div className="absolute top-0 right-0">
-            {isSticky ? <span>📌</span> : ""}
+            {isPinned ? <span>📌</span> : ""}
             {isLocked ? <span>🔒</span> : ""}
         </div>
     </article>

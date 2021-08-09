@@ -1,4 +1,4 @@
-import { Board, shortenAddress, Thread } from "dchan";
+import { Board, sendMessage, shortenAddress, Thread, User } from "dchan";
 import Footer from "components/Footer";
 import BoardHeader from "components/board/header";
 import FormPost from "components/form/post";
@@ -7,8 +7,11 @@ import { useQuery } from "@apollo/react-hooks";
 import THREAD_GET from "dchan/graphql/queries/threads/get";
 import { DateTime } from "luxon";
 import Loading from "components/Loading";
-import AddressLabel from "components/AddressLabel";
 import useWeb3 from "hooks/useWeb3";
+import USER_GET from "dchan/graphql/queries/user/get";
+import { useState } from "react";
+import Status, { SetStatus } from "components/Status";
+import Menu from "components/Menu";
 
 interface ThreadData {
   thread?: Thread;
@@ -17,20 +20,114 @@ interface ThreadVars {
   threadId: string;
 }
 
+interface UserData {
+  user?: User;
+}
+interface UserVars {
+  userId: string;
+}
+
+async function removePost(id: string, accounts: any, setStatus: SetStatus) {
+  try {
+    setStatus("Removing...");
+
+    await sendMessage("post:remove", { id }, accounts[0]);
+
+    setStatus("Removed");
+  } catch (error) {
+    setStatus({ error });
+
+    console.error({ error });
+  }
+}
+
+async function lockThread(id: string, accounts: any, setStatus: SetStatus) {
+  try {
+    setStatus("Locking...");
+
+    await sendMessage("thread:lock", { id }, accounts[0]);
+
+    setStatus("Locked");
+  } catch (error) {
+    setStatus({ error });
+
+    console.error({ error });
+  }
+}
+
+async function unlockThread(id: string, accounts: any, setStatus: SetStatus) {
+  try {
+    setStatus("Unlocking...");
+
+    await sendMessage("thread:unlock", { id }, accounts[0]);
+
+    setStatus("Unlocked");
+  } catch (error) {
+    setStatus({ error });
+
+    console.error({ error });
+  }
+}
+
+async function pinThread(id: string, accounts: any, setStatus: SetStatus) {
+  try {
+    setStatus("Pinning...");
+
+    await sendMessage("thread:pin", { id }, accounts[0]);
+
+    setStatus("Pinned");
+  } catch (error) {
+    setStatus({ error });
+
+    console.error({ error });
+  }
+}
+
+async function unpinThread(id: string, accounts: any, setStatus: SetStatus) {
+  try {
+    setStatus("Unpinning...");
+
+    await sendMessage("thread:unpin", { id }, accounts[0]);
+
+    setStatus("Unpinned");
+  } catch (error) {
+    setStatus({ error });
+
+    console.error({ error });
+  }
+}
+
+async function reportPost(id: string, accounts: any, setStatus: SetStatus) {
+  try {
+    setStatus("Reporting...");
+
+    await sendMessage("post:report", { id }, accounts[0]);
+
+    setStatus("Reported");
+  } catch (error) {
+    setStatus({ error });
+
+    console.error({ error });
+  }
+}
+
 export default function ThreadPage({
   match: {
     params: { threadId },
-  }
+  },
 }: any) {
-  const useWeb3Result = useWeb3()
-  const { loading, data } = useQuery<ThreadData, ThreadVars>(THREAD_GET, {
+  const [status, setStatus] = useState<string | object>();
+  const useWeb3Result = useWeb3();
+  const { accounts } = useWeb3Result;
+  const userId = accounts.length > 0 ? accounts[0] : null;
+  const { data } = useQuery<ThreadData, ThreadVars>(THREAD_GET, {
     variables: { threadId },
     pollInterval: 10000,
   });
-
+  const { data: userData } = useQuery<UserData, UserVars>(USER_GET, {
+    variables: { userId: userId || "" },
+  });
   const thread = data?.thread;
-
-  console.log({ thread });
 
   return !thread ? (
     <Loading></Loading>
@@ -60,9 +157,9 @@ export default function ThreadPage({
             image,
             subject,
             comment,
-            createdAtUnix,
+            createdAt: createdAtUnix,
           }) => {
-            // const createdAtDt = new Date(createdAtUnix).toISOString()
+            // const createdAtDt = new Date(createdAt).toISOString()
             const ipfsUrl = !!image
               ? `https://ipfs.io/ipfs/${image.ipfsHash}`
               : "";
@@ -72,18 +169,47 @@ export default function ThreadPage({
               parseInt(createdAtUnix) * 1000
             );
             const isOp = id === thread?.id;
-            name = !name || ("" === name)? "Anonymous" : ""
+            const isOwner = accounts.length > 0 && accounts[0] === address;
+            console.log({userData})
+            const isJanny = userData?.user?.isJanny || false;
+
+            const canPin = isOp && isJanny;
+            const canRemove = isOwner || isJanny;
+            const canLock = isOp && (isOwner || isJanny);
+
+            name = !name || "" === name ? "Anonymous" : "";
 
             return (
               <details className="dchan-post-expand" open={true} key={id}>
                 <summary className="text-left pl-2" title="Hide/Show">
+                  <span className="font-semibold">{subject}</span>
                   <span className="px-0.5 whitespace-nowrap">
                     <span className="text-accent font-bold">{name}</span>
                   </span>
                   <span className="px-0.5">
-                    (<AddressLabel address={address}></AddressLabel>)
-                  </span>{" "}
-                  No.{n}
+                    (
+                    <a
+                      style={{ backgroundColor }}
+                      className="font-family-tahoma text-readable-anywhere px-0.5 mx-0.5 rounded"
+                      href={`https://etherscan.io/address/${address}`}
+                      target="_blank"
+                    >
+                      <abbr style={{ textDecoration: "none" }} title={address}>
+                        {addressShort}
+                      </abbr>
+                    </a>
+                    )
+                  </span>
+                  <span className="px-0.5 whitespace-nowrap text-xs">
+                    {createdAt.toLocaleString(DateTime.DATETIME_SHORT)} (
+                    {createdAt.toRelative()})
+                  </span>
+                  <span className="px-0.5 on-parent-target-font-bold font-family-tahoma whitespace-nowrap">
+                    <a href={`#${id}`} title="Link to this post">
+                      No.
+                    </a>
+                    <button title="Reply to this post">{n}</button>
+                  </span>
                 </summary>
                 <article
                   id={id}
@@ -93,12 +219,14 @@ export default function ThreadPage({
                   <div
                     className={`${
                       !isOp ? "bg-secondary" : ""
-                    } pb-2 mb-2 px-4 inline-block on-parent-target-highlight border-bottom-invisible relative`}
+                    } w-full sm:w-auto pb-2 mb-2 px-4 inline-block on-parent-target-highlight border-bottom-invisible relative`}
                   >
                     <div className="flex flex-wrap center sm:block">
                       <span className="font-semibold">{subject}</span>
                       <span className="px-0.5 whitespace-nowrap">
-                        <span className="text-accent font-bold px-2">{name}</span>
+                        <span className="text-accent font-bold pl-2">
+                          {name}
+                        </span>
                       </span>
                       <span className="px-0.5">
                         (
@@ -118,8 +246,8 @@ export default function ThreadPage({
                         )
                       </span>
                       <span className="px-0.5 whitespace-nowrap text-xs">
-                        {createdAt.toLocaleString(DateTime.DATETIME_SHORT)},{" "}
-                        {createdAt.toRelative()}
+                        {createdAt.toLocaleString(DateTime.DATETIME_SHORT)} (
+                        {createdAt.toRelative()})
                       </span>
                       <span className="px-0.5 on-parent-target-font-bold font-family-tahoma whitespace-nowrap">
                         <a href={`#${id}`} title="Link to this post">
@@ -129,14 +257,14 @@ export default function ThreadPage({
                       </span>
                       <span className="dchan-backlinks"></span>
                       <span>
-                        {thread?.isSticky ? (
-                          <span title="Thread stickied. This might be important.">
+                        {thread?.isPinned ? (
+                          <span title="Thread pinned. This might be important.">
                             📌
                           </span>
                         ) : (
                           <span></span>
                         )}
-                        {thread?.isLocked ? (
+                        {isOp && thread?.isLocked ? (
                           <span title="Thread locked. You cannot reply anymore.">
                             🔒
                           </span>
@@ -144,77 +272,102 @@ export default function ThreadPage({
                           <span></span>
                         )}
                       </span>
-                      {true || thread?.op.from.id === "" ? ( // accounts[0] ?
-                        <details className="inline text-right">
-                          <summary className="h-4 relative"></summary>
-                          <div className="bg-secondary border border-solid border-black p-1 top-6 right-0 absolute">
-                            {isOp ? (
-                              <div>
-                                <form>
-                                  {thread.isLocked ? (
-                                    <span>
-                                      <input
-                                        name="lock"
-                                        type="hidden"
-                                        value="false"
-                                      ></input>
-                                      <button type="submit">🔓 Unlock</button>
-                                    </span>
-                                  ) : (
-                                    <span>
-                                      <input
-                                        name="lock"
-                                        type="hidden"
-                                        value="true"
-                                      ></input>
-                                      <button type="submit">🔒 Lock</button>
-                                    </span>
-                                  )}
-                                </form>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                            {isOp ? (
-                              <div>
-                                <form
-                                  method="POST"
-                                  action="<%= DchanWeb.Router.Helpers.page_path(@conn, :sticky, id) %>"
+                      <Menu>
+                        {canLock ? (
+                          <div>
+                            {thread.isLocked ? (
+                              <span>
+                                <input
+                                  name="lock"
+                                  type="hidden"
+                                  value="false"
+                                ></input>
+                                <button
+                                  onClick={() =>
+                                    unlockThread(id, accounts, setStatus)
+                                  }
                                 >
-                                  {thread.isSticky ? (
-                                    <span>
-                                      <input
-                                        name="sticky"
-                                        type="hidden"
-                                        value="false"
-                                      ></input>
-                                      <button type="submit">📌 Unsticky</button>
-                                    </span>
-                                  ) : (
-                                    <span>
-                                      <input
-                                        name="sticky"
-                                        type="hidden"
-                                        value="true"
-                                      ></input>
-                                      <button type="submit">📌 Sticky</button>
-                                    </span>
-                                  )}
-                                </form>
-                              </div>
+                                  🔓 Unlock
+                                </button>
+                              </span>
                             ) : (
-                              ""
+                              <span>
+                                <input
+                                  name="lock"
+                                  type="hidden"
+                                  value="true"
+                                ></input>
+                                <button
+                                  onClick={() =>
+                                    lockThread(id, accounts, setStatus)
+                                  }
+                                >
+                                  🔒 Lock
+                                </button>
+                              </span>
                             )}
-                            <div>
-                              <form method="POST">
-                                <button type="submit">❌ Remove</button>
-                              </form>
-                            </div>
                           </div>
-                        </details>
-                      ) : (
-                        ""
-                      )}
+                        ) : (
+                          ""
+                        )}
+                        {canPin ? (
+                          <div>
+                            {thread.isPinned ? (
+                              <span>
+                                <input
+                                  name="sticky"
+                                  type="hidden"
+                                  value="false"
+                                ></input>
+                                <button
+                                  onClick={() =>
+                                    unpinThread(id, accounts, setStatus)
+                                  }
+                                >
+                                  📌 Unpin
+                                </button>
+                              </span>
+                            ) : (
+                              <span>
+                                <input
+                                  name="sticky"
+                                  type="hidden"
+                                  value="true"
+                                ></input>
+                                <button
+                                  onClick={() =>
+                                    pinThread(id, accounts, setStatus)
+                                  }
+                                >
+                                  📌 Pin
+                                </button>
+                              </span>
+                            )}
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                        {canRemove ? (
+                          <div>
+                            <button
+                              onClick={() =>
+                                removePost(id, accounts, setStatus)
+                              }
+                            >
+                              ❌ Remove
+                            </button>
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                        <div>
+                          <button
+                            onClick={() => reportPost(id, accounts, setStatus)}
+                          >
+                            ⚠️ Report
+                          </button>
+                        </div>
+                      </Menu>
                     </div>
                     {!!image ? (
                       <div className="text-center sm:text-left">
@@ -267,6 +420,8 @@ export default function ThreadPage({
       </div>
 
       <Footer></Footer>
+
+      <Status className="absolute bottom-0 left-0 p-4" status={status}></Status>
     </div>
   );
 }

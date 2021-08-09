@@ -22,11 +22,11 @@ type BoardCreateInput = {
 
 type setStatus = React.Dispatch<React.SetStateAction<string | object | undefined>>
 
-async function postMessage(data: BoardCreateInput, provider: any, accounts: any, setStatus: setStatus) {
+async function createBoard(data: BoardCreateInput, provider: any, accounts: any, setStatus: setStatus) {
   try {
     setStatus("Creating...")
 
-    const result = await sendMessage("board:create", data, accounts[0])
+    await sendMessage("board:create", data, accounts[0])
 
     setStatus("Created")
 
@@ -48,7 +48,7 @@ export default function BoardList({create = false, useWeb3}: {create?: boolean, 
 
   const { register, handleSubmit } = useForm();
   const onSubmit = (data: any) => {
-    postMessage(data, useWeb3?.provider, useWeb3?.accounts, setStatus)
+    createBoard(data, useWeb3?.provider, useWeb3?.accounts, setStatus)
   }
 
   return (

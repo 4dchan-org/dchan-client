@@ -6,6 +6,7 @@ import WalletSwitchChain from 'components/wallet/WalletSwitchChain'
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { UseWeb3 } from "hooks/useWeb3";
+import Status, { SetStatus } from "components/Status";
 
 type PostCreateInput = {
   board?: string,
@@ -37,8 +38,6 @@ type PostCreateData = {
   subject: string
 }
 
-type setStatus = React.Dispatch<React.SetStateAction<string | object | undefined>>
-
 type IpfsUploadResult = {
   ipfs: {
     hash: string,
@@ -47,7 +46,7 @@ type IpfsUploadResult = {
   byte_size: number
 }
 
-const ipfsUpload = async (files: FileList, setStatus: setStatus): Promise<IpfsUploadResult | undefined> => {
+const ipfsUpload = async (files: FileList, setStatus: SetStatus): Promise<IpfsUploadResult | undefined> => {
   if (!!files) {
     const file = files[0]
     if (!!file) {
@@ -80,7 +79,7 @@ const ipfsUpload = async (files: FileList, setStatus: setStatus): Promise<IpfsUp
   }
 }
 
-async function postMessage(input: PostCreateInput, provider: any, accounts: any, setStatus: setStatus) {
+async function postMessage(input: PostCreateInput, accounts: any, setStatus: SetStatus) {
   console.log({ input })
   const {
     board,
@@ -133,21 +132,12 @@ async function postMessage(input: PostCreateInput, provider: any, accounts: any,
   }
 }
 
-function Status({ status }: { status: string | any }) {
-  return <div className="inline-block text-xs">
-    {status ? status.error ?
-      <div className="text-red-600">
-        <details><summary>Error</summary><pre>{JSON.stringify(status.error, null, 2)}</pre></details></div> : status
-      : ""}
-  </div>
-}
-
 export default function FormPost({ thread, board, useWeb3: {provider, chainId, accounts, web3Modal: {loadWeb3Modal, logoutOfWeb3Modal} } }: { thread?: Thread, board?: Board, useWeb3: UseWeb3 }) {
   const [status, setStatus] = useState<string | object>();
 
   const { register, handleSubmit, formState: { errors }, setValue, getValues } = useForm();
   const onSubmit = (data: any) => {
-    postMessage(data, provider, accounts, setStatus)
+    postMessage(data, accounts, setStatus)
   }
   const fileRemove = () => {
     setValue('file', new FileList())
@@ -167,8 +157,6 @@ export default function FormPost({ thread, board, useWeb3: {provider, chainId, a
       }
     }
   }
-
-  console.log({errors})
 
   return (
     <div>

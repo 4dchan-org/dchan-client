@@ -9,6 +9,7 @@ import useWeb3 from 'hooks/useWeb3';
 
 interface CatalogData {
     board: Board,
+    pinned: Thread[],
     threads: Thread[]
 }
 interface CatalogVars {
@@ -24,8 +25,8 @@ export default function CatalogPage({ match: { params: { boardId } } }: any) {
             pollInterval: 10000
         }
     );
-    console.log({data})
-    const threads = data?.threads
+
+    const threads = [...(data?.pinned || []), ...(data?.threads || [])]
 
     return (
         <div className="min-h-100vh" dchan-board={data?.board?.name}>

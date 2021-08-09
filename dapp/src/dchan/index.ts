@@ -12,7 +12,7 @@ export type Board = {
 export type Thread = {
     id: string,
     board: Board,
-    isSticky: boolean,
+    isPinned: boolean,
     isLocked: boolean,
     op: Post,
     replies: Post[],
@@ -28,7 +28,7 @@ export type Post = {
     subject: string,
     comment: string,
     image: Image,
-    createdAtUnix: string
+    createdAt: string
 }
 
 export type Catalog = {
@@ -38,6 +38,7 @@ export type Catalog = {
 export type User = {
     id: string,
     name: string,
+    isJanny: boolean,
     score: number,
 }
 
