@@ -1,80 +1,161 @@
-import { useQuery } from '@apollo/react-hooks';
-import { Link } from 'react-router-dom';
-import Loading from 'components/Loading'
-import BOARDS_LIST from 'dchan/graphql/queries/boards/list';
-import { Board, sendMessage, shortenAddress } from 'dchan';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import AddressLabel from 'components/AddressLabel';
-import { UseWeb3 } from 'hooks/useWeb3';
+import { useQuery } from "@apollo/react-hooks";
+import { Link } from "react-router-dom";
+import Loading from "components/Loading";
+import BOARDS_LIST from "dchan/graphql/queries/boards/list";
+import { Board, sendMessage, shortenAddress } from "dchan";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import AddressLabel from "components/AddressLabel";
+import { UseWeb3 } from "hooks/useWeb3";
+import BOARDS_SEARCH from "dchan/graphql/queries/boards/search";
 
 interface BoardListData {
   boards: Board[];
 }
 
-interface BoardListVars {
-}
+interface BoardListVars {}
 
 type BoardCreateInput = {
-  title: string,
-  name: string
-}
+  title: string;
+  name: string;
+};
 
-type setStatus = React.Dispatch<React.SetStateAction<string | object | undefined>>
+type setStatus = React.Dispatch<
+  React.SetStateAction<string | object | undefined>
+>;
 
-async function createBoard(data: BoardCreateInput, provider: any, accounts: any, setStatus: setStatus) {
+async function createBoard(
+  data: BoardCreateInput,
+  provider: any,
+  accounts: any,
+  setStatus: setStatus
+) {
   try {
-    setStatus("Creating...")
+    setStatus("Creating...");
 
-    await sendMessage("board:create", data, accounts[0])
+    await sendMessage("board:create", data, accounts[0]);
 
-    setStatus("Created")
+    setStatus("Created");
 
-    window.location.href = `/${data.name}`
+    window.location.href = `/${data.name}`;
   } catch (error) {
-    setStatus({ error })
+    setStatus({ error });
 
-    console.error({ error })
+    console.error({ error });
   }
 }
 
-export default function BoardList({create = false, useWeb3}: {create?: boolean, useWeb3?: UseWeb3}) {
-  const { data } = useQuery<BoardListData, BoardListVars>(
-    BOARDS_LIST,
-    { variables: {} }
-  );
-  
+export default function BoardList({
+  create = false,
+  useWeb3,
+  filter = {},
+}: {
+  create?: boolean;
+  useWeb3?: UseWeb3;
+  filter?: any;
+}) {
+  const { query, variables } = {
+    query: filter.name ? BOARDS_SEARCH : BOARDS_LIST,
+    variables: filter.name ? { name: filter.name } : {},
+  };
+
+  const { data } = useQuery<BoardListData, BoardListVars>(query, { variables });
+
   const [status, setStatus] = useState<string | object>();
 
   const { register, handleSubmit } = useForm();
   const onSubmit = (data: any) => {
-    createBoard(data, useWeb3?.provider, useWeb3?.accounts, setStatus)
-  }
+    createBoard(data, useWeb3?.provider, useWeb3?.accounts, setStatus);
+  };
 
   return (
     <div className="grid center">
-      <Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500 py-1 px-4" to="/boards">All boards</Link>
+      <Link
+        className="text-blue-600 visited:text-purple-600 hover:text-blue-500 py-1 px-4"
+        to="/boards"
+      >
+        All boards
+      </Link>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <table >
+        <table>
           <tbody>
-            {data ? data.boards?.map(({ id, title, postCount, name }) => (
-              <tr className="p-4" key={name}>
-                <td><AddressLabel address={id}></AddressLabel></td>
-                <td className="px-2"><span>{title}</span></td>
-                <td className="px-2"><span><Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500 mx-4" to={`/${id}`}>/{name}/</Link></span></td>
-                <td className="px-2"><span>{postCount} posts</span></td>
+            {data ? (
+              data.boards?.map(({ id, title, postCount, name }) => (
+                <tr className="p-4" key={id}>
+                  <td>
+                    <AddressLabel
+                      address={id}
+                      etherscannable={false}
+                    ></AddressLabel>
+                  </td>
+                  <td className="px-2">
+                    <span>
+                      <Link
+                        className="text-blue-600 visited:text-purple-600 hover:text-blue-500 mx-4"
+                        to={`/${id}`}
+                      >
+                        {title}
+                      </Link>
+                    </span>
+                  </td>
+                  <td className="px-2">
+                    <span>
+                      <Link
+                        className="text-blue-600 visited:text-purple-600 hover:text-blue-500 mx-4"
+                        to={`/${id}`}
+                      >
+                        /{name}/
+                      </Link>
+                    </span>
+                  </td>
+                  <td className="px-2">
+                    <span>{postCount} posts</span>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td>
+                  <Loading></Loading>
+                </td>
               </tr>
-            )) : <tr><td><Loading></Loading></td></tr>}
-            {useWeb3?.provider && create ? <tr className="p-4 text-center">
-              <td></td>
-              <td className="px-2"><input className="text-center" type="text" placeholder="Videogames" {...register("title")}></input></td>
-              <td className="px-2">/<input className="text-center w-16" type="text" placeholder="v" {...register("name")}></input>/</td>
-              <td className="px-2">
-                <button className="px-2 mx-1 bg-gray-100 border" type="submit">{typeof status === "string" ? status : "Create"}</button></td>
-            </tr> : ""}
+            )}
+            {useWeb3?.provider && create ? (
+              <tr className="p-4 text-center">
+                <td></td>
+                <td className="px-2">
+                  <input
+                    className="text-center"
+                    type="text"
+                    placeholder="Videogames"
+                    {...register("title")}
+                  ></input>
+                </td>
+                <td className="px-2">
+                  /
+                  <input
+                    className="text-center w-16"
+                    type="text"
+                    placeholder="v"
+                    {...register("name")}
+                  ></input>
+                  /
+                </td>
+                <td className="px-2">
+                  <button
+                    className="px-2 mx-1 bg-gray-100 border"
+                    type="submit"
+                  >
+                    {typeof status === "string" ? status : "Create"}
+                  </button>
+                </td>
+              </tr>
+            ) : (
+              <tr></tr>
+            )}
           </tbody>
         </table>
       </form>
     </div>
-  )
+  );
 }

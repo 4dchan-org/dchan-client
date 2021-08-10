@@ -8,7 +8,7 @@ export default function WalletConnect({ provider, chainId }: any) {
     return provider && (chainId !== "0x89" && chainId !== 137) ? (
         <div className="p-4">
             <div>
-                You need to be connected to the Polygon chain in order to use dchan.
+                You need to be connected to the Polygon chain in order to interact with dchan.
             </div>
             <div className="text-xs">Current chain ID: {chainId}</div>
             <div>

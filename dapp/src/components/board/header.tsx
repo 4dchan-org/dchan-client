@@ -1,8 +1,9 @@
-import HeaderNavigation from "components/header/navigation"
-import HeaderLogo from "components/header/logo"
-import { Board, sendMessage } from "dchan"
-import { Link } from 'react-router-dom';
+import HeaderNavigation from "components/header/navigation";
+import HeaderLogo from "components/header/logo";
+import { Board, sendMessage } from "dchan";
+import { Link } from "react-router-dom";
 import { SetStatus } from "components/Status";
+import AddressLabel from "components/AddressLabel";
 
 async function removeBoard(id: string, accounts: any, setStatus: SetStatus) {
   try {
@@ -46,18 +47,34 @@ async function lockBoard(id: string, accounts: any, setStatus: SetStatus) {
   }
 }
 
-export default function BoardHeader({ board: board, isJanny = false}: { board: Board | undefined, isJanny?: boolean }) {
+export default function BoardHeader({
+  board: board,
+  isJanny = false,
+}: {
+  board: Board | undefined;
+  isJanny?: boolean;
+}) {
   return (
     <header id="board-header">
       <HeaderNavigation></HeaderNavigation>
       <HeaderLogo></HeaderLogo>
-
-      {!!board && <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative">
-        <div><Link to={`/${board?.name || "?"}`}>/{board?.name || "?"}/ - {board?.title || "?"}</Link></div>
-      </div>}
+      
+      <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative">
+        <div>
+        <AddressLabel
+          address={board?.id || "0x0000000000000000000000000000000000000000"}
+          etherscannable={false}
+        ></AddressLabel>
+        </div>
+        <div>
+        <Link to={`/${board?.id || "#"}`}>
+          /{board?.name || "-"}/ - {board?.title || "-"}
+        </Link>
+        </div>
+      </div>
       <div className="p-2">
         <hr></hr>
       </div>
     </header>
-  )
+  );
 }

@@ -22,7 +22,8 @@ function App() {
           <Route path="/rules" component={RulesPage} />
           <Route path="/faq" component={FAQ} />
           <Route path="/thread/:threadId" component={ThreadPage} />
-          <Route path="/:boardId" component={BoardCatalogPage} />
+          <Route path="/0x:boardId" component={BoardCatalogPage} />
+          <Route path="/:boardName" component={BoardListPage} />
         </Switch>
       </div>
     </Router>

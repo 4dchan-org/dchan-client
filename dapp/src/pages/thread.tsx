@@ -12,6 +12,7 @@ import USER_GET from "dchan/graphql/queries/user/get";
 import { useState } from "react";
 import Status, { SetStatus } from "components/Status";
 import Menu from "components/Menu";
+import UserData from "hooks/userData";
 
 interface ThreadData {
   thread?: Thread;
@@ -119,21 +120,20 @@ export default function ThreadPage({
   const [status, setStatus] = useState<string | object>();
   const useWeb3Result = useWeb3();
   const { accounts } = useWeb3Result;
-  const userId = accounts.length > 0 ? accounts[0] : null;
   const { data } = useQuery<ThreadData, ThreadVars>(THREAD_GET, {
     variables: { threadId },
     pollInterval: 10000,
   });
-  const { data: userData } = useQuery<UserData, UserVars>(USER_GET, {
-    variables: { userId: userId || "" },
-  });
   const thread = data?.thread;
+
+  const userData = UserData(accounts)
+  const isJanny = userData?.user?.isJanny || false;
 
   return !thread ? (
     <Loading></Loading>
   ) : (
     <div className="min-h-100vh" dchan-board={thread?.board.name}>
-      <BoardHeader board={thread?.board}></BoardHeader>
+      <BoardHeader board={thread?.board} isJanny={isJanny}></BoardHeader>
 
       {thread.isLocked ? (
         <div className="text-contrast font-weight-800 font-family-tahoma">
@@ -170,9 +170,6 @@ export default function ThreadPage({
             );
             const isOp = id === thread?.id;
             const isOwner = accounts.length > 0 && accounts[0] === address;
-            console.log({userData})
-            const isJanny = userData?.user?.isJanny || false;
-
             const canPin = isOp && isJanny;
             const canRemove = isOwner || isJanny;
             const canLock = isOp && (isOwner || isJanny);
@@ -181,7 +178,7 @@ export default function ThreadPage({
 
             return (
               <details className="dchan-post-expand" open={true} key={id}>
-                <summary className="text-left pl-2" title="Hide/Show">
+                <summary className="text-left pl-2 opacity-75" title="Hide/Show">
                   <span className="font-semibold">{subject}</span>
                   <span className="px-0.5 whitespace-nowrap">
                     <span className="text-accent font-bold">{name}</span>

@@ -2,7 +2,7 @@ import { gql } from "apollo-boost";
 
 const BOARDS_LIST = gql`
   query Boards {
-    boards {
+    boards(orderBy: postCount, orderDirection: desc) {
       id
       title
       postCount

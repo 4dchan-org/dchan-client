@@ -177,7 +177,7 @@ export default function FormPost({ thread, board, useWeb3: {provider, chainId, a
                       <td>
                         <input className="dchan-input-name px-1" type="text" placeholder="Anonymous" {...register("name")}></input>
                       </td>
-                    </tr> : ""}
+                    </tr> : <tr></tr>}
                   {!thread ?
                     <tr>
                       <td className="px-2 border border-solid border-black bg-highlight font-semibold">Subject</td>
@@ -188,7 +188,7 @@ export default function FormPost({ thread, board, useWeb3: {provider, chainId, a
 
                         <Status status={status}></Status>
                       </td>
-                    </tr> : ""}
+                    </tr> : <tr></tr>}
                   {thread ? <tr>
                     <td className="px-2 border border-solid border-black bg-highlight font-semibold">Name</td>
                     <td>
@@ -198,7 +198,7 @@ export default function FormPost({ thread, board, useWeb3: {provider, chainId, a
 
                       <Status status={status}></Status>
                     </td>
-                  </tr> : ""}
+                  </tr> : <tr></tr>}
                   <tr>
                     <td className="px-2 border border-solid border-black bg-highlight font-semibold">Comment</td>
                     <td>
