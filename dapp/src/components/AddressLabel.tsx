@@ -1,6 +1,6 @@
 import { shortenAddress } from "dchan";
 
-export default function AddressLabel({ address, etherscannable = true } : any) {
+export default function AddressLabel({ address, etherscannable = true } : {address: string, etherscannable?: boolean}) {
   const addressShort = shortenAddress(address);
   const backgroundColor = `#${addressShort.replace("-", "")}`;
 

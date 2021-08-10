@@ -30,11 +30,15 @@ interface UserVars {
 
 async function removePost(id: string, accounts: any, setStatus: SetStatus) {
   try {
-    setStatus("Removing...");
+    setStatus({
+      progress: "Removing..."
+    });
 
     await sendMessage("post:remove", { id }, accounts[0]);
 
-    setStatus("Removed");
+    setStatus({
+      success: "Removed"
+    });
   } catch (error) {
     setStatus({ error });
 
@@ -44,11 +48,15 @@ async function removePost(id: string, accounts: any, setStatus: SetStatus) {
 
 async function lockThread(id: string, accounts: any, setStatus: SetStatus) {
   try {
-    setStatus("Locking...");
+    setStatus({
+      progress: "Locking..."
+    });
 
     await sendMessage("thread:lock", { id }, accounts[0]);
 
-    setStatus("Locked");
+    setStatus({
+      success: "Locked"
+    });
   } catch (error) {
     setStatus({ error });
 
@@ -58,11 +66,15 @@ async function lockThread(id: string, accounts: any, setStatus: SetStatus) {
 
 async function unlockThread(id: string, accounts: any, setStatus: SetStatus) {
   try {
-    setStatus("Unlocking...");
+    setStatus({
+      progress: "Unlocking..."
+    });
 
     await sendMessage("thread:unlock", { id }, accounts[0]);
 
-    setStatus("Unlocked");
+    setStatus({
+      success: "Unlocked"
+    });
   } catch (error) {
     setStatus({ error });
 
@@ -72,11 +84,15 @@ async function unlockThread(id: string, accounts: any, setStatus: SetStatus) {
 
 async function pinThread(id: string, accounts: any, setStatus: SetStatus) {
   try {
-    setStatus("Pinning...");
+    setStatus({
+      progress: "Pinning..."
+    });
 
     await sendMessage("thread:pin", { id }, accounts[0]);
 
-    setStatus("Pinned");
+    setStatus({
+      success: "Pinned"
+    });
   } catch (error) {
     setStatus({ error });
 
@@ -86,11 +102,15 @@ async function pinThread(id: string, accounts: any, setStatus: SetStatus) {
 
 async function unpinThread(id: string, accounts: any, setStatus: SetStatus) {
   try {
-    setStatus("Unpinning...");
+    setStatus({
+      progress: "Unpinning..."
+    });
 
     await sendMessage("thread:unpin", { id }, accounts[0]);
 
-    setStatus("Unpinned");
+    setStatus({
+      success: "Unpinned"
+    });
   } catch (error) {
     setStatus({ error });
 
@@ -100,11 +120,15 @@ async function unpinThread(id: string, accounts: any, setStatus: SetStatus) {
 
 async function reportPost(id: string, accounts: any, setStatus: SetStatus) {
   try {
-    setStatus("Reporting...");
+    setStatus({
+      progress: "Reporting..."
+    });
 
     await sendMessage("post:report", { id }, accounts[0]);
 
-    setStatus("Reported");
+    setStatus({
+      success: "Reported"
+    });
   } catch (error) {
     setStatus({ error });
 
@@ -134,15 +158,7 @@ export default function ThreadPage({
   ) : (
     <div className="min-h-100vh" dchan-board={thread?.board.name}>
       <BoardHeader board={thread?.board} isJanny={isJanny}></BoardHeader>
-
-      {thread.isLocked ? (
-        <div className="text-contrast font-weight-800 font-family-tahoma">
-          <div>Thread locked.</div>
-          <div>You cannot reply.</div>
-        </div>
-      ) : (
-        <FormPost thread={thread} useWeb3={useWeb3Result}></FormPost>
-      )}
+      <FormPost thread={thread} useWeb3={useWeb3Result}></FormPost>
 
       <div className="p-2">
         <hr></hr>
@@ -178,7 +194,7 @@ export default function ThreadPage({
 
             return (
               <details className="dchan-post-expand" open={true} key={id}>
-                <summary className="text-left pl-2 opacity-75" title="Hide/Show">
+                <summary className="text-left pl-2 opacity-75 z-10" title="Hide/Show">
                   <span className="font-semibold">{subject}</span>
                   <span className="px-0.5 whitespace-nowrap">
                     <span className="text-accent font-bold">{name}</span>
@@ -206,6 +222,22 @@ export default function ThreadPage({
                       No.
                     </a>
                     <button title="Reply to this post">{n}</button>
+                  </span>
+                  <span>
+                    {thread?.isPinned ? (
+                      <span title="Thread pinned. This might be important.">
+                        📌
+                      </span>
+                    ) : (
+                      <span></span>
+                    )}
+                    {isOp && thread?.isLocked ? (
+                      <span title="Thread locked. You cannot reply anymore.">
+                        🔒
+                      </span>
+                    ) : (
+                      <span></span>
+                    )}
                   </span>
                 </summary>
                 <article

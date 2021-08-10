@@ -1,14 +1,14 @@
-import logo from 'assets/images/dchan.png'
-import { Link } from 'react-router-dom'
+import Spinner from "components/Spinner";
+import { Link } from "react-router-dom";
 
 const HeaderLogo = () => (
-    <Link to="/">
-        <div className="center flex">
-            <div><strong>WIP</strong></div>
-            <img className="animation-spin p-2 h-20 w-20 pointer-events-none" src={logo} alt="dchan" />
-            <div><strong>POC</strong></div>
-        </div>
-    </Link>
-)
+  <Link to="/">
+    <div className="h-24 font-mono center flex">
+      <span className="text-right">dchan</span>
+      <span><Spinner size={16}></Spinner></span>
+      <span className="text-left">network</span>
+    </div>
+  </Link>
+);
 
-export default HeaderLogo
+export default HeaderLogo;

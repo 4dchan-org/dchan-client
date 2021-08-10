@@ -25,6 +25,7 @@ const THREAD_GET = gql`
     thread(id: $threadId) {
       id
       board {
+        id
         title
         name
         isLocked

@@ -18,7 +18,6 @@ export default function HomePage() {
                         </div>
                         <div className="p-4 text-center">
                             <img className="animation-spin p-2 w-auto pointer-events-none" src={logo} alt="dchan" />
-                            <div>Decentralized Imageboard Project</div>
                             <div className="mt-4">
                                 <BoardList></BoardList>
                             </div>
@@ -26,9 +25,9 @@ export default function HomePage() {
                         <hr>
                         </hr>
                     </section>
-                    <Footer></Footer>
                 </article>
             </div>
+            <Footer></Footer>
         </div>
     );
 }

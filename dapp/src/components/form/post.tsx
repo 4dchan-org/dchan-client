@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { UseWeb3 } from "hooks/useWeb3";
 import Status, { SetStatus } from "components/Status";
 import useEventListener from "hooks/useEventListener";
+import { uniqueId } from "lodash";
 
 type PostCreateInput = {
   board?: string;
@@ -54,7 +55,9 @@ const ipfsUpload = async (
   if (!!files) {
     const file = files[0];
     if (!!file) {
-      setStatus("Uploading image...");
+      setStatus({
+        progress: "Uploading image...",
+      });
 
       let formData = new FormData();
       formData.append("file", file);
@@ -67,7 +70,9 @@ const ipfsUpload = async (
       const ipfs = await ipfsResponse.json();
       console.log({ ipfs });
       if (!!ipfs.Hash) {
-        setStatus("File uploaded");
+        setStatus({
+          success: "File uploaded",
+        });
         return {
           ipfs: {
             hash: ipfs.Hash,
@@ -77,9 +82,13 @@ const ipfsUpload = async (
         };
       } else {
         if (ipfs.error) {
-          setStatus(ipfs.error);
+          setStatus({
+            error: ipfs.error,
+          });
         } else {
-          setStatus("File upload failed!");
+          setStatus({
+            error: "File upload failed!",
+          });
         }
       }
     }
@@ -98,7 +107,9 @@ async function postMessage(
   if (input.file.length > 0) {
     file = await ipfsUpload(input.file, setStatus);
     if (!file) {
-      setStatus("IPFS file upload failed");
+      setStatus({
+        error: "IPFS file upload failed",
+      });
       return;
     }
   }
@@ -126,11 +137,15 @@ async function postMessage(
   }
 
   try {
-    setStatus("Sending...");
+    setStatus({
+      progress: "Sending...",
+    });
 
     await sendMessage("post:create", data, accounts[0]);
 
-    setStatus("Sent ;)");
+    setStatus({
+      success: "Sent ;)",
+    });
   } catch (error) {
     setStatus({ error });
 
@@ -152,6 +167,8 @@ export default function FormPost({
   board?: Board;
   useWeb3: UseWeb3;
 }) {
+  const [isSending, setIsSending] = useState<boolean>(false);
+  const [nonce, setNonce] = useState<string>(uniqueId());
   const [status, setStatus] = useState<string | object>();
   const [thumbnailB64, setThumbnailB64] = useState<string>();
 
@@ -162,12 +179,19 @@ export default function FormPost({
     setValue,
     getValues,
   } = useForm();
-  const onSubmit = (data: any) => {
-    postMessage(data, accounts, setStatus);
+  const onSubmit = async (data: any) => {
+    setIsSending(true);
+    await postMessage(data, accounts, setStatus);
+    setIsSending(false);
+    updateNonce();
   };
   const fileRemove = () => {
-    setValue("file", new FileList());
-    setThumbnailB64(undefined)
+    setValue("file", undefined);
+    setThumbnailB64(undefined);
+  };
+
+  const updateNonce = () => {
+    setNonce(uniqueId());
   };
 
   const updateThumbnail = async () => {
@@ -178,11 +202,11 @@ export default function FormPost({
       let reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = function () {
-        const b64 = reader.result
-        setThumbnailB64(b64 as string)
+        const b64 = reader.result;
+        setThumbnailB64(b64 as string);
       };
     }
-  }
+  };
 
   const fileRename = () => {
     const values = getValues();
@@ -203,15 +227,25 @@ export default function FormPost({
     console.log({ e });
     const files = e?.clipboardData?.files;
     if (!!files && files.length > 0) {
-      console.log({files})
+      console.log({ files });
       setValue("file", files);
-      updateThumbnail()
+      updateThumbnail();
     }
   }, []);
 
   useEventListener("paste", handler);
 
-  return (
+  return thread?.isLocked ? (
+    <div className="text-contrast font-weight-800 font-family-tahoma">
+      <div>Thread locked.</div>
+      <div>You cannot reply.</div>
+    </div>
+  ) : board?.isLocked ? (
+    <div className="text-contrast font-weight-800 font-family-tahoma">
+      <div>Board locked.</div>
+      <div>You cannot post.</div>
+    </div>
+  ) : (
     <div>
       <WalletConnect
         provider={provider}
@@ -231,6 +265,7 @@ export default function FormPost({
               className="grid center bg-primary p-2 pointer-events-auto bg-primary"
               onSubmit={handleSubmit(onSubmit)}
             >
+              <input type="hidden" {...register("nonce")} value={nonce}></input>
               {!!board ? (
                 <input
                   type="hidden"
@@ -274,20 +309,23 @@ export default function FormPost({
                         Subject
                       </td>
                       <td>
-                        <input
-                          className="dchan-input-subject px-1"
-                          type="text"
-                          {...register("subject")}
-                        ></input>
+                        <div className="flex items-center justify-start">
+                          <input
+                            className="dchan-input-subject px-1"
+                            type="text"
+                            {...register("subject")}
+                          ></input>
 
-                        <button
-                          className="dchan-post-submit px-2 mx-1 bg-gray-100 border"
-                          type="submit"
-                        >
-                          Post
-                        </button>
+                          <button
+                            className="dchan-post-submit px-2 mx-1 bg-gray-100 border"
+                            type="submit"
+                            disabled={isSending}
+                          >
+                            Post
+                          </button>
 
-                        <Status status={status}></Status>
+                          <Status status={status}></Status>
+                        </div>
                       </td>
                     </tr>
                   ) : (
@@ -299,21 +337,24 @@ export default function FormPost({
                         Name
                       </td>
                       <td>
-                        <input
-                          className="dchan-input-name px-1"
-                          type="text"
-                          placeholder="Anonymous"
-                          {...register("name")}
-                        ></input>
+                        <div className="flex center">
+                          <input
+                            className="dchan-input-name px-1"
+                            type="text"
+                            placeholder="Anonymous"
+                            {...register("name")}
+                          ></input>
 
-                        <button
-                          className="dchan-post-submit px-2 mx-1 bg-gray-100 border"
-                          type="submit"
-                        >
-                          Post
-                        </button>
+                          <button
+                            className="dchan-post-submit px-2 mx-1 bg-gray-100 border"
+                            type="submit"
+                            disabled={isSending}
+                          >
+                            Post
+                          </button>
 
-                        <Status status={status}></Status>
+                          <Status status={status}></Status>
+                        </div>
                       </td>
                     </tr>
                   ) : (
@@ -341,7 +382,7 @@ export default function FormPost({
                     <td className="px-2 border border-solid border-black bg-highlight font-semibold">
                       File
                     </td>
-                    <td className="flex center text-xs">
+                    <td className="flex text-xs">
                       <div className="flex-grow mx-0.5">
                         <input
                           type="file"
@@ -349,12 +390,19 @@ export default function FormPost({
                           {...register("file", { required: !thread })}
                           onChange={updateThumbnail}
                         ></input>
-                        {!!thumbnailB64 ? <details className="mx-0.5" open={true}>
-                          <summary>🖼</summary>
-                          <img className="max-h-24 max-w-24" src={thumbnailB64}></img>
-                        </details> : ""}
+                        {!!thumbnailB64 ? (
+                          <details className="mx-0.5" open={true}>
+                            <summary>🖼</summary>
+                            <img
+                              className="max-h-24 max-w-24"
+                              src={thumbnailB64}
+                            ></img>
+                          </details>
+                        ) : (
+                          ""
+                        )}
                       </div>
-                      <div className="flex center">
+                      <div className="flex">
                         <details className="mx-0.5">
                           <summary>⚙️</summary>
                           <div>

@@ -1,10 +1,6 @@
 dchan
 -----
 
-Decentralized Imageboard Client
-
-! PoC !
-
 ## Development
 
 ### Requirements
@@ -17,5 +13,4 @@ Decentralized Imageboard Client
 
 # Links
 - Official website: https://dchan.network/
-- Discord: https://discord.gg/UswkQv8j2G
-- Source: https://github.com/dchan-network/dchan-client
+- Source: https://github.com/dchan-network/

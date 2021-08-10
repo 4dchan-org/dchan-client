@@ -26,16 +26,19 @@ type setStatus = React.Dispatch<
 
 async function createBoard(
   data: BoardCreateInput,
-  provider: any,
   accounts: any,
   setStatus: setStatus
 ) {
   try {
-    setStatus("Creating...");
+    setStatus({
+      progress: "Creating..."
+    });
 
     await sendMessage("board:create", data, accounts[0]);
 
-    setStatus("Created");
+    setStatus({
+      success: "Created"
+    });
 
     window.location.href = `/${data.name}`;
   } catch (error) {
@@ -65,7 +68,7 @@ export default function BoardList({
 
   const { register, handleSubmit } = useForm();
   const onSubmit = (data: any) => {
-    createBoard(data, useWeb3?.provider, useWeb3?.accounts, setStatus);
+    createBoard(data, useWeb3?.accounts, setStatus);
   };
 
   return (

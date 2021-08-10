@@ -11,7 +11,8 @@ class RulesPage extends React.Component {
                 
                 <div>
                     <ul>
-                        <li>Everything you post is forever</li>
+                        <li>Do not post shit that can get you in trouble</li>
+                        <li>Be decent</li>
                     </ul>
                 </div>
 

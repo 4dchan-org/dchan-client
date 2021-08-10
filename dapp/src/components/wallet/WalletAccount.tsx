@@ -1,3 +1,4 @@
+import AddressLabel from "components/AddressLabel";
 import { shortenAddress } from "dchan";
 
 export default function WalletAccount({ provider, accounts }: any) {
@@ -7,13 +8,7 @@ export default function WalletAccount({ provider, accounts }: any) {
       {accounts.map((account: string) => (
         <span key={account}>
           [
-          <a
-            href={`https://polygonscan.com/address/${account}`}
-            target="_blank"
-            className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-          >
-            {shortenAddress(account)}
-          </a>
+            <AddressLabel address={account}></AddressLabel>
           ]
         </span>
       ))}

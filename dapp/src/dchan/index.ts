@@ -6,6 +6,7 @@ export type Board = {
     id: string,
     title: string,
     postCount: number,
+    isLocked: boolean,
     name: string
 }
 

@@ -2,6 +2,18 @@
     animation: spin-keyframes 60s infinite linear;
 }
 
+.animation-spin.spin-fast {
+    animation: spin-keyframes 30s infinite linear;
+}
+
+.animation-spin.spin-faster {
+    animation: spin-keyframes 10s infinite linear;
+}
+
+.animation-spin.spin-sanic {
+    animation: spin-keyframes 1 infinite linear;
+}
+
 @keyframes spin-keyframes {
     from {
         transform: rotate(0deg);
