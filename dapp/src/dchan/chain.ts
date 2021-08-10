@@ -19,7 +19,6 @@ const MATIC_PARAMS = {
 const ERRORS_CHAIN_NOT_FOUND = [-32603, 4902]
 
 export async function switchChain() {
-  console.log("Switching chain")
   try {
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
