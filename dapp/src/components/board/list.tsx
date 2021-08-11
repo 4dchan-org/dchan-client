@@ -83,7 +83,7 @@ export default function BoardList({
         <table>
           <tbody>
             {data ? (
-              data.boards?.map(({ id, title, postCount, name }) => (
+              data.boards?.map(({ id, title, postCount, name, isLocked, isNsfw }) => (
                 <tr className="p-4" key={id}>
                   <td>
                     <AddressLabel
@@ -113,6 +113,9 @@ export default function BoardList({
                   </td>
                   <td className="px-2">
                     <span>{postCount} posts</span>
+                  </td>
+                  <td className="px-2">
+                    {isLocked ? <span title="Board locked. You cannot post.">🔒</span> : ""}
                   </td>
                 </tr>
               ))

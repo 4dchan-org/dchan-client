@@ -7,6 +7,7 @@ export type Board = {
     title: string,
     postCount: number,
     isLocked: boolean,
+    isNsfw: boolean,
     name: string
 }
 

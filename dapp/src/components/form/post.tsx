@@ -156,17 +156,18 @@ async function postMessage(
 export default function FormPost({
   thread,
   board,
-  useWeb3: {
-    provider,
-    chainId,
-    accounts,
-    web3Modal: { loadWeb3Modal, logoutOfWeb3Modal },
-  },
+  useWeb3,
 }: {
   thread?: Thread;
   board?: Board;
   useWeb3: UseWeb3;
 }) {
+  const {
+    provider,
+    chainId,
+    accounts,
+    web3Modal: { loadWeb3Modal, logoutOfWeb3Modal },
+  } = useWeb3
   const [isSending, setIsSending] = useState<boolean>(false);
   const [nonce, setNonce] = useState<string>(uniqueId());
   const [status, setStatus] = useState<string | object>();
@@ -234,6 +235,7 @@ export default function FormPost({
   }, []);
 
   useEventListener("paste", handler);
+  console.log({useWeb3})
 
   return thread?.isLocked ? (
     <div className="text-contrast font-weight-800 font-family-tahoma">
@@ -404,7 +406,7 @@ export default function FormPost({
                       </div>
                       <div className="flex">
                         <details className="mx-0.5">
-                          <summary>⚙️</summary>
+                          <summary className="text-right">⚙️</summary>
                           <div>
                             <input
                               id="dchan-input-is_spoiler"

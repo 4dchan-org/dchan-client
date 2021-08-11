@@ -38,8 +38,8 @@ const CatalogThread = ({thread: {
             </div>
         </Link>
         <div className="absolute top-0 right-0">
-            {isPinned ? <span>📌</span> : ""}
-            {isLocked ? <span>🔒</span> : ""}
+            {isPinned ? <span title="Thread pinned. This might be important.">📌</span> : ""}
+            {isLocked ? <span title="Thread locked. You cannot post.">🔒</span> : ""}
         </div>
     </article>
 )
