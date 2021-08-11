@@ -9,12 +9,11 @@ class RulesPage extends React.Component {
             <div>
                 <GenericHeader title="The rules"></GenericHeader>
                 
-                <div>
-                    <ul>
-                        <li>Do not post shit that can get you in trouble</li>
-                        <li>Be decent</li>
-                    </ul>
-                </div>
+                <pre>
+* Do not post shit that can get you in trouble
+<br></br>
+* Be decent
+                </pre>
 
                 <Footer></Footer>
             </div>

@@ -75,10 +75,11 @@ export default function BoardHeader({
   return (
     <header id="board-header">
       <HeaderNavigation></HeaderNavigation>
+
       <HeaderLogo></HeaderLogo>
 
       <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative">
-        <div className="text-xs">
+        <div className="text-xs pb-2">
           <AddressLabel
             address={board?.id || "0x0000000000000000000000000000000000000000"}
             etherscannable={false}
@@ -86,7 +87,7 @@ export default function BoardHeader({
         </div>
         <div>
           <span className="font-semibold">
-            <Link to={`/${board?.id || "#"}`}>
+            <Link to={board ? `/${board.name}/${board.id}` : "#"}>
               /{board?.name || "-"}/ - {board?.title || "-"}
             </Link>
           </span>

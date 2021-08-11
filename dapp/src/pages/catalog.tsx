@@ -33,6 +33,7 @@ export default function CatalogPage({
   const userData = UserData(accounts);
   const isJanny = userData?.user?.isJanny || false;
 
+  const board = data?.board
   const threads = [...(data?.pinned || []), ...(data?.threads || [])];
 
   return (
@@ -51,14 +52,14 @@ export default function CatalogPage({
 
       {loading ? (
         <Loading></Loading>
-      ) : threads ? (
+      ) : board && threads ? (
         threads.length === 0 ? (
           <div className="center grid">{`No threads.`}</div>
         ) : (
           <div>
             <div className="grid grid-template-columns-ram-150px place-items-start font-size-090rem px-4 md:px-8">
               {threads.map((thread: Thread) => (
-                <CatalogThread thread={thread} key={thread.id}></CatalogThread>
+                <CatalogThread board={board} thread={thread} key={thread.id}></CatalogThread>
               ))}
             </div>
 
@@ -73,7 +74,7 @@ export default function CatalogPage({
           </div>
         )
       ) : (
-        ""
+        "Board not found"
       )}
 
       <Footer></Footer>

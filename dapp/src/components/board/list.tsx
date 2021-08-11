@@ -95,7 +95,7 @@ export default function BoardList({
                     <span>
                       <Link
                         className="text-blue-600 visited:text-purple-600 hover:text-blue-500 mx-4"
-                        to={`/${id}`}
+                        to={`/${name}/${id}`}
                       >
                         {title}
                       </Link>
@@ -105,7 +105,7 @@ export default function BoardList({
                     <span>
                       <Link
                         className="text-blue-600 visited:text-purple-600 hover:text-blue-500 mx-4"
-                        to={`/${id}`}
+                        to={`/${name}/${id}`}
                       >
                         /{name}/
                       </Link>

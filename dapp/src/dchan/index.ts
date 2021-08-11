@@ -30,6 +30,12 @@ export type Post = {
     comment: string,
     image: Image,
     createdAt: string
+    bans: PostBan[]
+}
+
+export type PostBan = {
+    reason: string,
+    seconds: number,
 }
 
 export type Catalog = {

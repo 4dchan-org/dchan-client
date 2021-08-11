@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 
 const HeaderLogo = () => (
   <Link to="/">
-    <div className="h-24 font-mono center flex">
-      <span className="text-right">dchan</span>
-      <span><Spinner size={16}></Spinner></span>
-      <span className="text-left">network</span>
-    </div>
+    <span className="h-24 font-mono center grid grid-cols-2">
+      <span className="text-right mr-8">dchan</span>
+      <span className="absolute left-0 right-0"><Spinner size={16}></Spinner></span>
+      <span className="text-left ml-8">network</span>
+    </span>
   </Link>
 );
 

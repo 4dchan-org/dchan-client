@@ -136,6 +136,58 @@ async function reportPost(id: string, accounts: any, setStatus: SetStatus) {
   }
 }
 
+async function unbanUser(id: string, accounts: any, setStatus: SetStatus) {
+  try {
+    setStatus({
+      progress: "Unbanning..."
+    });
+
+    await sendMessage("user:unban", { id }, accounts[0]);
+
+    setStatus({
+      success: "Unbanned" 
+    });
+  } catch (error) {
+    setStatus({ error });
+
+    console.error({ error });
+  }
+}
+
+async function banPost(id: string, accounts: any, setStatus: SetStatus) {
+  try {
+    setStatus({
+      progress: "Banning..."
+    });
+
+    const secondsStr = window.prompt("How many seconds?")
+    const seconds = parseInt(secondsStr || "")
+    if(seconds == NaN) {
+      setStatus({
+        error: `Not a number: ${secondsStr}`
+      })
+      return 
+    }
+
+    const reason = window.prompt("Reason?")
+
+    const until = DateTime.fromSeconds(DateTime.now().toSeconds() + seconds)
+    if(window.confirm(`Banning until ${until.toISO()}`)) {
+      await sendMessage("post:ban", { id, seconds, reason }, accounts[0]);
+
+      setStatus({
+        success: "Banned" 
+      });
+    } else {
+      setStatus("Canceled")
+    }
+  } catch (error) {
+    setStatus({ error });
+
+    console.error({ error });
+  }
+}
+
 export default function ThreadPage({
   match: {
     params: { threadId },
@@ -145,7 +197,7 @@ export default function ThreadPage({
   const useWeb3Result = useWeb3();
   const { accounts } = useWeb3Result;
   const { data } = useQuery<ThreadData, ThreadVars>(THREAD_GET, {
-    variables: { threadId },
+    variables: { threadId: `0x${threadId}` },
     pollInterval: 10000,
   });
   const thread = data?.thread;
@@ -172,6 +224,7 @@ export default function ThreadPage({
             n,
             image,
             subject,
+            bans,
             comment,
             createdAt: createdAtUnix,
           }) => {
@@ -188,7 +241,9 @@ export default function ThreadPage({
             const isOwner = accounts.length > 0 && accounts[0] === address;
             const canPin = isOp && isJanny;
             const canRemove = isOwner || isJanny;
+            const canBan = isJanny;
             const canLock = isOp && (isOwner || isJanny);
+            console.log({bans})
 
             name = !name || "" === name ? "Anonymous" : "";
 
@@ -389,6 +444,19 @@ export default function ThreadPage({
                         ) : (
                           ""
                         )}
+                        {canBan ? (
+                          <div>
+                            <button
+                              onClick={() =>
+                                banPost(id, accounts, setStatus)
+                              }
+                            >
+                              🔫 Ban
+                            </button>
+                          </div>
+                        ) : (
+                          ""
+                        )}
                         <div>
                           <button
                             onClick={() => reportPost(id, accounts, setStatus)}
@@ -433,6 +501,8 @@ export default function ThreadPage({
                         <blockquote className="text-center sm:text-left">
                           {comment}
                         </blockquote>
+
+                        {bans.length > 0 ? <div className="text-xl font-bold text-contrast whitespace-nowrap">( USER WAS BANNED FOR THIS POST )</div> : ""}
                       </div>
                     </div>
                   </div>

@@ -19,6 +19,10 @@ const THREAD_GET = gql`
       isNsfw
     }
     createdAt
+    bans {
+      reason
+      seconds
+    }
   }
   
   query Thread($threadId: String!) {

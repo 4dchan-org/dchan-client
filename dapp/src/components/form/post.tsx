@@ -337,7 +337,7 @@ export default function FormPost({
                         Name
                       </td>
                       <td>
-                        <div className="flex center">
+                        <div className="flex items-center justify-start">
                           <input
                             className="dchan-input-name px-1"
                             type="text"
