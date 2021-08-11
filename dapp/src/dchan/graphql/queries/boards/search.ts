@@ -8,6 +8,7 @@ const BOARDS_SEARCH = gql`
       postCount
       name
       isLocked
+      isNsfw
     }
   }
 `;

@@ -40,6 +40,7 @@ const THREAD_LIST = gql`
       postCount
       name
       isLocked
+      isNsfw
     }
     pinned: threads(where: {board: $boardId, isPinned: true}, orderBy: lastBumpedAt, orderDirection: desc) {
       ...Thread
