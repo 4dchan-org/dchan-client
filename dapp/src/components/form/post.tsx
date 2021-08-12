@@ -112,17 +112,14 @@ export default function FormPost({
 
   const pasteHandler = useCallback((event) => {
     const clipboardData = event.clipboardData || event.originalEvent.clipboardData
-    console.log({clipboardData})
     const {files, items} = clipboardData;
     if (!!items && items.length > 0) {
       const item = items[0]
       if (item.kind === 'file') {
         const blob = item.getAsFile();
-        console.log({blob})
         const reader = new FileReader();
         reader.onload = async (event) => {
           const dataUrl = event?.target?.result
-          console.log({dataUrl})
           if(_.isString(dataUrl)) {
             const mimeType = dataUrl.substring(dataUrl.indexOf(":")+1, dataUrl.indexOf(";"))
             
@@ -140,7 +137,6 @@ export default function FormPost({
         reader.readAsDataURL(blob);
       }
     } else if (!!files && files.length > 0) {
-      console.log({files})
       setValue("file", files);
       updateThumbnail();
     }

@@ -1,11 +1,20 @@
+import { useQuery } from '@apollo/react-hooks';
 import logo from 'assets/images/dchan.png'
 import BoardList from 'components/board/list'
 import Footer from 'components/Footer'
+import { Board } from 'dchan';
+import BOARDS_LIST from 'dchan/graphql/queries/boards/list';
 import useWeb3 from 'hooks/useWeb3';
 import React from 'react'
 import { Link } from 'react-router-dom';
 
 export default function HomePage() {
+
+    const { query } = {
+      query: BOARDS_LIST,
+    };
+    const { loading, data } = useQuery<{boards: Board[]}, any>(query, {});
+    
     return (
         <div className="center-grid w-full min-h-screen bg-primary">
             <div className="grid bg-primary font-family-arial">
@@ -26,7 +35,7 @@ export default function HomePage() {
                                 >
                                     All boards
                                 </Link>
-                                <BoardList></BoardList>
+                                <BoardList boards={data?.boards}></BoardList>
                             </div>
                         </div>
                         <hr>

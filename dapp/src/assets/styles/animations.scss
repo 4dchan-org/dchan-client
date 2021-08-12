@@ -25,17 +25,22 @@
 }
 
 .animation-download {
-    animation: download-keyframes 2s infinite linear;
+    animation: download-keyframes 2s infinite ease-in-out;
 }
 
 @keyframes download-keyframes {
-    from {
+    0% {
         opacity: 0;
-        transform: scale(2);
+        transform: scale(1);
     }
 
-    to {
-        opacity: 1;
-        transform: scale(0);
+    50% {
+        opacity: 0.5;
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.8);
     }
 }

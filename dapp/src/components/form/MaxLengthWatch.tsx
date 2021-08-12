@@ -10,7 +10,7 @@ export default function ({
   return (
     <span
       className={[
-        "absolute bottom-0 right-0 text-xs bg-white",
+        "absolute bottom-0 right-0 text-xs bg-white pointer-events-none",
         className,
         value < maxLength * 0.1
           ? "opacity-0"

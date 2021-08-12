@@ -9,7 +9,6 @@ const Footer = () => (
         </div>
         <a className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white border-t-0" href="//git.dchan.network" target="_blank" rel="noreferrer">git</a>
         <Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white border-t-0" to="/rules" target="_blank" rel="noreferrer">Rules</Link>
-        <Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white border-t-0" to="/faq" target="_blank" rel="noreferrer">FAQ</Link>
     </footer>
 )
 

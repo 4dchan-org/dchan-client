@@ -5,9 +5,11 @@ import IPFSImage from "./IPFSImage";
 
 export default function IPFSThumbnail({
   hash,
+  className = "",
   isSpoiler = false,
   isNsfw = false,
 }: {
+  className?: string,
   hash: string;
   isSpoiler?: boolean;
   isNsfw?: boolean;
@@ -21,11 +23,17 @@ export default function IPFSThumbnail({
   const canShow = (!isNsfw || showNsfw) && (!isSpoiler || showSpoiler)
 
   return (
-    <span className="relative">
+    <span className={`${className} relative`}>
       <span
         className={"filter " + (!canShow ? "blur-md" : "")}
         onClick={() => {
-          setExpand(!expand);
+          if(isNsfw && !showNsfw) {
+            setShowNsfw(true)
+          } else if(isSpoiler && !showSpoiler) {
+            setShowSpoiler(true)
+          } else {
+            setExpand(!expand);
+          }
         }}
       >
         <IPFSImage
@@ -38,9 +46,6 @@ export default function IPFSThumbnail({
         <img
           className={coverClass + thumbnailClass}
           src={spoilerSrc}
-          onClick={() => {
-            setShowSpoiler(!showSpoiler);
-          }}
         ></img>
       ) : (
         ""
@@ -49,9 +54,6 @@ export default function IPFSThumbnail({
         <img
           className={coverClass + thumbnailClass}
           src={nsfwSrc}
-          onClick={() => {
-            setShowNsfw(!showNsfw);
-          }}
         ></img>
       ) : (
         ""

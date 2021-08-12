@@ -1,3 +1,4 @@
+import sanitizeHtml from "sanitize-html";
 import { backgroundColorAddress, shortenAddress, Thread, User } from "dchan";
 import Footer from "components/Footer";
 import BoardHeader from "components/board/header";
@@ -8,7 +9,7 @@ import THREAD_GET from "dchan/graphql/queries/threads/get";
 import { DateTime } from "luxon";
 import Loading from "components/Loading";
 import useWeb3 from "hooks/useWeb3";
-import { useState } from "react";
+import React, { useState } from "react";
 import Status, { SetStatus } from "components/Status";
 import UserData from "hooks/userData";
 import Menu from "components/Menu";
@@ -23,6 +24,7 @@ import {
 } from "dchan/operations";
 import Error from "components/Error";
 import _ from "lodash";
+import Markdown from "markdown-to-jsx";
 
 interface ThreadData {
   thread?: Thread;
@@ -54,9 +56,15 @@ export default function ThreadPage({
   const userData = UserData(accounts);
   const isJanny = userData?.user?.isJanny || false;
 
+  const replyTo = (id: string) => {
+    console.log({ id });
+  };
+
   return loading ? (
     <Loading></Loading>
-  ) : !thread ? (<Error subject={"Thread not found"} body={"¯\\_(ツ)_/¯"} />) : (
+  ) : !thread ? (
+    <Error subject={"Thread not found"} body={"¯\\_(ツ)_/¯"} />
+  ) : (
     <div className="min-h-100vh" dchan-board={thread?.board.name}>
       <BoardHeader board={thread?.board} isJanny={isJanny}></BoardHeader>
       <FormPost thread={thread} useWeb3={useWeb3Result}></FormPost>
@@ -86,15 +94,15 @@ export default function ThreadPage({
           const createdAt = DateTime.fromMillis(parseInt(createdAtUnix) * 1000);
           const isOp = id === thread?.id;
           const isOwner = accounts.length > 0 && accounts[0] === address;
-          
-          const isPinned = thread?.isPinned
-          const isLocked = thread?.isLocked
+
+          const isPinned = thread?.isPinned;
+          const isLocked = thread?.isLocked;
 
           const canPin = isOp && isJanny;
           const canRemove = isOwner || isJanny;
           const canBan = isJanny;
           const canLock = isOp && (isOwner || isJanny);
-          
+
           name = !name || "" === name ? "Anonymous" : name;
 
           const PostHeader = () => {
@@ -127,7 +135,12 @@ export default function ThreadPage({
                   <a href={`#${id}`} title="Link to this post">
                     No.
                   </a>
-                  <button title="Reply to this post">{n}</button>
+                  <button
+                    title="Reply to this post"
+                    onClick={() => replyTo(id)}
+                  >
+                    {n}
+                  </button>
                 </span>
                 <span className="dchan-backlinks"></span>
                 <span>
@@ -268,10 +281,14 @@ export default function ThreadPage({
                       <span>
                         File:{" "}
                         <span className="text-xs">
-                          <a className="text-blue-600 max-w-64" href={ipfsUrl} title={image.name}>
+                          <a
+                            className="text-blue-600 max-w-64"
+                            href={ipfsUrl}
+                            title={image.name}
+                          >
                             {_.truncate(image.name, {
                               length: 32,
-                              'omission': '...'
+                              omission: "...",
                             })}
                           </a>
                           {/* <a className="text-blue-600" href={ipfsUrl} download={`ipfs_${image.id}.${image.name}`}>📥</a> */}
@@ -297,11 +314,43 @@ export default function ThreadPage({
                         ""
                       )}
 
-                      {isOp ? <span className="font-semibold">{thread.subject}</span> : ""}
+                      {isOp ? (
+                        <span className="font-semibold">{thread.subject}</span>
+                      ) : (
+                        ""
+                      )}
 
-                      <blockquote className="text-center sm:text-left break-words">
+                      <Markdown
+                        className="inline-block dchan-post-markdown text-center sm:text-left break-words"
+                        options={{
+                          disableParsingRawHTML: true,
+                          overrides: {
+                            img: {
+                              component: ({ children, ...props }) => (
+                                <a
+                                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                                  href={props.src}
+                                  target="_blank"
+                                >
+                                {props.src}
+                                </a>
+                              ),
+                            },
+                            a: {
+                              component: ({ children, ...props }) => (
+                                <a
+                                  {...props}
+                                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                                >
+                                  {children}
+                                </a>
+                              ),
+                            },
+                          },
+                        }}
+                      >
                         {comment}
-                      </blockquote>
+                      </Markdown>
 
                       {bans.length > 0 ? (
                         <div className="text-xl font-bold text-contrast whitespace-nowrap">

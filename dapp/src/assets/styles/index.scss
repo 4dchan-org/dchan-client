@@ -8,3 +8,8 @@
 @import "./boards.scss";
 @import "./animations.scss";
 @import "./center.scss";
+@import "./markdown.scss";
+
+button[disabled] {
+    opacity: 0.5
+}

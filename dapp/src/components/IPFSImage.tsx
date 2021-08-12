@@ -23,13 +23,14 @@ export default function IPFSImage({
     <span>
       {imgLoading ? (
         <span className="relative">
+          Loading...
           <img
-            className={className + " absolute animation-download"}
+            className={"absolute top-0 left-0 h-150px w-150px animation-download"}
             style={style}
             src={ipfsLoadingSrc}
           />
           <img
-            className={className}
+            className={`${className} h-150px w-150px`}
             style={style}
             src={ipfsLoadingSrc}
           />

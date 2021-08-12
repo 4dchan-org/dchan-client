@@ -11,7 +11,6 @@ import BoardCatalogPage from './pages/catalog'
 import BoardListPage from "./pages/boards"
 import BoardSearchPage from "./pages/boardSearch"
 import ThreadPage from "./pages/thread";
-import FAQPage from "pages/faq";
 import ReferencePage from "pages/reference";
 
 function App() {
@@ -22,7 +21,6 @@ function App() {
           <Route exact path="/" component={HomePage} />
           <Route exact path="/boards" component={BoardListPage} />
           <Route path="/rules" component={RulesPage} />
-          <Route path="/faq" component={FAQPage} />
           <Route path="/0x:ref" component={ReferencePage} />
           <Route path="/:boardName/0x:boardId/0x:threadId" component={ThreadPage} />
           <Route path="/:boardName/0x:boardId" component={BoardCatalogPage} />
