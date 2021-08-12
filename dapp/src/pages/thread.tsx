@@ -94,7 +94,7 @@ export default function ThreadPage({
           const canRemove = isOwner || isJanny;
           const canBan = isJanny;
           const canLock = isOp && (isOwner || isJanny);
-          console.log({name})
+          
           name = !name || "" === name ? "Anonymous" : name;
 
           const PostHeader = () => {
@@ -296,7 +296,7 @@ export default function ThreadPage({
                       ) : (
                         ""
                       )}
-                      
+
                       {isOp ? <span className="font-semibold">{thread.subject}</span> : ""}
 
                       <blockquote className="text-center sm:text-left break-words">
