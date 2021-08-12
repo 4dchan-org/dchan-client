@@ -8,7 +8,3 @@
 @import "./boards.scss";
 @import "./animations.scss";
 @import "./center.scss";
-
-.marker-closed-hide:not([open])::marker {
-    display: none;
-}

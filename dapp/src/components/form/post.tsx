@@ -8,9 +8,10 @@ import { useForm } from "react-hook-form";
 import { UseWeb3 } from "hooks/useWeb3";
 import Status, { SetStatus } from "components/Status";
 import useEventListener from "hooks/useEventListener";
-import { uniqueId } from "lodash";
+import _, { uniqueId } from "lodash";
 import { postMessage } from "dchan/operations";
 import MaxLengthWatch from "./MaxLengthWatch";
+import AddressLabel from "components/AddressLabel";
 
 export default function FormPost({
   thread,
@@ -42,6 +43,7 @@ export default function FormPost({
     formState: { errors },
     setValue,
     getValues,
+    reset: resetForm
   } = useForm();
 
   const values = getValues();
@@ -49,16 +51,20 @@ export default function FormPost({
 
   const onSubmit = async (data: any) => {
     setIsSending(true);
-    const { events } = await postMessage(data, accounts, setStatus);
+    const result = await postMessage(data, accounts, setStatus);
 
-    const { transactionHash, logIndex } = events[0];
+    const events = result?.events;
+    if (events && events.length > 0) {
+      const { transactionHash, logIndex } = events[0];
 
-    if (board && !thread) {
-      const url = `/${transactionHash}-${logIndex}`;
-      history.push(url);
+      if (board && !thread) {
+        const url = `/${transactionHash}-${logIndex}`;
+        history.push(url);
+      }
     }
 
     setIsSending(false);
+    resetForm()
     updateNonce();
   };
 
@@ -90,6 +96,12 @@ export default function FormPost({
       const file = files[0];
       const name = prompt("Rename in", file.name);
       if (!!name) {
+        if (name.length > 1000) {
+          alert("Filename too long, 1000 chars max");
+
+          return;
+        }
+
         const blob = file.slice(0, file.size, file.type);
         const list = new DataTransfer();
         list.items.add(new File([blob], name, { type: file.type }));
@@ -98,15 +110,43 @@ export default function FormPost({
     }
   };
 
-  const handler = useCallback((e) => {
-    const files = e?.clipboardData?.files;
-    if (!!files && files.length > 0) {
+  const pasteHandler = useCallback((event) => {
+    const clipboardData = event.clipboardData || event.originalEvent.clipboardData
+    console.log({clipboardData})
+    const {files, items} = clipboardData;
+    if (!!items && items.length > 0) {
+      const item = items[0]
+      if (item.kind === 'file') {
+        const blob = item.getAsFile();
+        console.log({blob})
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+          const dataUrl = event?.target?.result
+          console.log({dataUrl})
+          if(_.isString(dataUrl)) {
+            const mimeType = dataUrl.substring(dataUrl.indexOf(":")+1, dataUrl.indexOf(";"))
+            
+            const file = await fetch(dataUrl)
+              .then(res => res.arrayBuffer())
+              .then(buf => new File([buf], `file.${mimeType.split("/")[1]}`, {type: mimeType}))
+            
+            const list = new DataTransfer();
+            list.items.add(file);
+
+            setValue("file", list.files);
+            updateThumbnail();
+          }
+        }
+        reader.readAsDataURL(blob);
+      }
+    } else if (!!files && files.length > 0) {
+      console.log({files})
       setValue("file", files);
       updateThumbnail();
     }
   }, []);
-  console.log({ values });
-  useEventListener("paste", handler);
+  
+  useEventListener("paste", pasteHandler);
 
   return thread?.isLocked ? (
     <div className="text-contrast font-weight-800 font-family-tahoma">
@@ -174,9 +214,9 @@ export default function FormPost({
                             onChange={(e) =>
                               setNameLength(e.target.value.length)
                             }
-                            maxLength={250}
+                            maxLength={70}
                           ></input>
-                          <MaxLengthWatch maxLength={250} value={nameLength} />
+                          <MaxLengthWatch maxLength={70} value={nameLength} />
                         </span>
                       </td>
                     </tr>
@@ -198,11 +238,11 @@ export default function FormPost({
                               onChange={(e) =>
                                 setSubjectLength(e.target.value.length)
                               }
-                              maxLength={500}
+                              maxLength={140}
                               placeholder={"..."}
                             ></input>
                             <MaxLengthWatch
-                              maxLength={500}
+                              maxLength={140}
                               value={subjectLength}
                             />
                           </span>
@@ -238,12 +278,9 @@ export default function FormPost({
                               onChange={(e) =>
                                 setNameLength(e.target.value.length)
                               }
-                              maxLength={250}
+                              maxLength={70}
                             ></input>
-                            <MaxLengthWatch
-                              maxLength={250}
-                              value={nameLength}
-                            />
+                            <MaxLengthWatch maxLength={70} value={nameLength} />
                           </span>
 
                           <button
@@ -301,6 +338,7 @@ export default function FormPost({
                           (1000kb max)
                         </span>
                         <input
+                          className="w-64"
                           type="file"
                           accept="image/*"
                           {...register("file", { required: !thread })}
@@ -384,7 +422,7 @@ export default function FormPost({
                   </tr>
                 </tbody>
               </table>
-              <div className="p-1 text-xs">
+              <div className="p-1 text-xs flex center">
                 <input
                   id="dchan-input-rules"
                   className="mx-1"
@@ -395,23 +433,34 @@ export default function FormPost({
                   htmlFor="dchan-input-rules"
                   className="text-black font-weight-800 font-family-tahoma"
                 >
-                  I've read the{" "}
-                  <Link
-                    to="/rules"
-                    target="_blank"
-                    className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                  >
-                    rules
-                  </Link>{" "}
-                  and the{" "}
-                  <Link
-                    to="/faq"
-                    target="_blank"
-                    className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                  >
-                    FAQ
-                  </Link>{" "}
-                  before posting.
+                  <ul>
+                    <li>
+                      I've read the{" "}
+                      <Link
+                        to="/rules"
+                        target="_blank"
+                        className="text-blue-600 visited:text-purple-600 hover:text-blue-140"
+                      >
+                        rules
+                      </Link>{" "}
+                      before posting.
+                    </li>
+                    <li>
+                      I understand that{" "}
+                      <abbr title="Posts can be removed, but they will still be retrievable from the blockchain.">
+                        <i>posts cannot be deleted</i>
+                      </abbr>
+                    </li>
+                    {accounts && accounts.length > 0 ? (
+                      <li>
+                        I understand that my address{" "}
+                        <AddressLabel address={accounts[0]}></AddressLabel> will
+                        be public
+                      </li>
+                    ) : (
+                      ""
+                    )}
+                  </ul>
                 </label>
                 {errors.rulesAccepted && (
                   <div className="px-1 text-contrast">

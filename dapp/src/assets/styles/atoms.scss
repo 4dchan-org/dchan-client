@@ -88,6 +88,14 @@
     min-height: 100vh;
 }
 
+.min-h-75vh {
+    min-height: 75vh;
+}
+
+.max-h-75vh {
+    max-height: 75vh;
+}
+
 .max-h-50vh {
     max-height: 50vh;
 }
@@ -95,6 +103,7 @@
 .max-w-initial {
     max-width: initial !important;
 }
+
 .max-h-initial {
     max-height: initial !important;
 }

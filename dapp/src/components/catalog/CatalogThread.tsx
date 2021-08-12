@@ -6,8 +6,8 @@ const CatalogThread = ({thread: {
     id,
     isPinned,
     isLocked,
+    subject,
     op: {
-        subject,
         comment,
         image: {
             ipfsHash

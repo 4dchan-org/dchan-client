@@ -21,6 +21,8 @@ import {
   unlockThread,
   unpinThread,
 } from "dchan/operations";
+import Error from "components/Error";
+import _ from "lodash";
 
 interface ThreadData {
   thread?: Thread;
@@ -43,7 +45,7 @@ export default function ThreadPage({
 }: any) {
   const useWeb3Result = useWeb3();
   const { accounts } = useWeb3Result;
-  const { data } = useQuery<ThreadData, ThreadVars>(THREAD_GET, {
+  const { loading, data } = useQuery<ThreadData, ThreadVars>(THREAD_GET, {
     variables: { threadId: `0x${threadId}` },
     pollInterval: 10000,
   });
@@ -52,9 +54,9 @@ export default function ThreadPage({
   const userData = UserData(accounts);
   const isJanny = userData?.user?.isJanny || false;
 
-  return !thread ? (
+  return loading ? (
     <Loading></Loading>
-  ) : (
+  ) : !thread ? (<Error subject={"Thread not found"} body={"¯\\_(ツ)_/¯"} />) : (
     <div className="min-h-100vh" dchan-board={thread?.board.name}>
       <BoardHeader board={thread?.board} isJanny={isJanny}></BoardHeader>
       <FormPost thread={thread} useWeb3={useWeb3Result}></FormPost>
@@ -67,10 +69,10 @@ export default function ThreadPage({
         {[thread.op, ...thread.replies].map((post) => {
           let {
             id,
-            from: { name, id: address },
+            from: { id: address },
             n,
+            name,
             image,
-            subject,
             bans,
             comment,
             createdAt: createdAtUnix,
@@ -92,15 +94,14 @@ export default function ThreadPage({
           const canRemove = isOwner || isJanny;
           const canBan = isJanny;
           const canLock = isOp && (isOwner || isJanny);
-
-          name = !name || "" === name ? "Anonymous" : "";
+          console.log({name})
+          name = !name || "" === name ? "Anonymous" : name;
 
           const PostHeader = () => {
             const [status, setStatus] = useState<string | object>();
 
             return (
               <span>
-                <span className="font-semibold">{subject}</span>
                 <span className="px-0.5 whitespace-nowrap">
                   <span className="text-accent font-bold">{name}</span>
                 </span>
@@ -108,7 +109,7 @@ export default function ThreadPage({
                   (
                   <a
                     style={{ backgroundColor }}
-                    className="font-family-tahoma text-readable-anywhere px-0.5 mx-0.5 rounded"
+                    className="font-family-tahoma text-readable-anywhere px-0.5 mx-0.5 rounded whitespace-nowrap"
                     href={`https://etherscan.io/address/${address}`}
                     target="_blank"
                   >
@@ -257,7 +258,7 @@ export default function ThreadPage({
                 <div
                   className={`${
                     !isOp ? "bg-secondary" : ""
-                  } w-full sm:w-auto pb-2 mb-2 px-4 inline-block on-parent-target-highlight border-bottom-invisible relative`}
+                  } w-full sm:w-auto pb-2 mb-2 px-4 inline-block on-parent-target-highlight border-bottom-invisible relative max-w-screen-xl`}
                 >
                   <div className="flex flex-wrap center sm:block pl-2">
                     <PostHeader></PostHeader>
@@ -267,8 +268,11 @@ export default function ThreadPage({
                       <span>
                         File:{" "}
                         <span className="text-xs">
-                          <a className="text-blue-600" href={ipfsUrl}>
-                            {image.name}
+                          <a className="text-blue-600 max-w-64" href={ipfsUrl} title={image.name}>
+                            {_.truncate(image.name, {
+                              length: 32,
+                              'omission': '...'
+                            })}
                           </a>
                           {/* <a className="text-blue-600" href={ipfsUrl} download={`ipfs_${image.id}.${image.name}`}>📥</a> */}
                           <span>, {Math.trunc(image.byteSize * 0.001)}kb</span>
@@ -280,7 +284,7 @@ export default function ThreadPage({
                     ""
                   )}
                   <div className="py-1">
-                    <div className="h-full">
+                    <div className="h-full max-w-max">
                       {!!image ? (
                         <div className="px-2 sm:float-left grid center">
                           <IPFSThumbnail
@@ -292,8 +296,10 @@ export default function ThreadPage({
                       ) : (
                         ""
                       )}
+                      
+                      {isOp ? <span className="font-semibold">{thread.subject}</span> : ""}
 
-                      <blockquote className="text-center sm:text-left">
+                      <blockquote className="text-center sm:text-left break-words">
                         {comment}
                       </blockquote>
 

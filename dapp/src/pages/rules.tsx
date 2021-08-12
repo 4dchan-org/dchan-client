@@ -1,26 +1,35 @@
-import Footer from 'components/Footer'
-import BoardList from 'components/board/list'
-import GenericHeader from 'components/header/generic'
-import React from 'react'
+import Footer from "components/Footer";
+import React from "react";
+import Card from "components/Card";
+import GenericHeader from "components/header/generic";
+import { Link } from "react-router-dom";
 
 class RulesPage extends React.Component {
-    render() {
-        return (
-            <div>
-                <GenericHeader title="The rules"></GenericHeader>
-                
-                <pre>
-* Do not post shit that can get you in trouble
-<br></br>
-* Be decent
-<br></br>
-* Everything you post is forever. You can remove posts, but YOU CAN NOT DELETE THEM. They will still be retrievable from the blockchain.
-                </pre>
+  render() {
+    return (
+      <div>
+        <GenericHeader title="Rules"></GenericHeader>
 
-                <Footer></Footer>
-            </div>
-        );
-    }
+        <div className="center grid min-h-75vh">
+          <Card
+            title={<span>The rules</span>}
+            body={
+              <span className="p-8">
+                <pre>
+                  * Do not post shit that can get you in trouble
+                  <br></br>* Be decent
+                </pre>
+              </span>
+            }
+          />
+        </div>
+        
+        <Link to="/">Home</Link>
+
+        <Footer></Footer>
+      </div>
+    );
+  }
 }
 
-export default RulesPage
+export default RulesPage;

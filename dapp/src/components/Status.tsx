@@ -18,7 +18,7 @@ export default function Status({
             <div className="text-red-600">
               <details>
                 <summary>Error</summary>
-                <pre>{JSON.stringify(status.error, null, 2)}</pre>
+                <pre>{status.error.message ? status.error.message : JSON.stringify(status.error, null, 2)}</pre>
               </details>
             </div>
           ) : status.progress ? (

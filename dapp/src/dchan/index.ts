@@ -1,6 +1,7 @@
 import Web3 from "web3"
 import abi from "abis/Relay.json"
 import { AbiItem } from "web3-utils/types"
+import Config from "config"
 
 export type Board = {
     id: string,
@@ -19,7 +20,8 @@ export type Thread = {
     op: Post,
     replies: Post[],
     replyCount: number,
-    imageCount: number
+    imageCount: number,
+    subject: string,
 }
 
 export type Post = {
@@ -27,7 +29,7 @@ export type Post = {
     thread: Thread,
     n: number,
     from: User,
-    subject: string,
+    name: string,
     comment: string,
     image: Image,
     createdAt: string
@@ -79,10 +81,16 @@ export function createJsonMessage(op: string, data: object) {
 
 export async function sendMessage(operation: string, data: object, from: string) {
     const web3 = new Web3(window.web3.currentProvider);
-    const relayContract = new web3.eth.Contract(abi as AbiItem[], "0x5a139ee9f56c4F24240aF366807490C171922b0E");
+    const relayContract = new web3.eth.Contract(abi as AbiItem[], Config.contract.address);
     
     const msg = await relayContract.methods.message(createJsonMessage(operation, data))
     return await msg.send({
       from
     })
+}
+
+export async function getBalance(account: string) {
+    const web3 = new Web3(window.web3.currentProvider);
+    
+    return web3.eth.getBalance(account)
 }

@@ -28,6 +28,7 @@ const THREAD_GET = gql`
   query Thread($threadId: String!) {
     thread(id: $threadId) {
       id
+      subject
       board {
         id
         title

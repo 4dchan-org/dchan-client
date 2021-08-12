@@ -3,6 +3,7 @@ import BoardList from 'components/board/list'
 import Footer from 'components/Footer'
 import useWeb3 from 'hooks/useWeb3';
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 export default function HomePage() {
     return (
@@ -19,6 +20,12 @@ export default function HomePage() {
                         <div className="p-4 text-center">
                             <img className="animation-spin p-2 w-auto pointer-events-none" src={logo} alt="dchan" />
                             <div className="mt-4">
+                                <Link
+                                    className="text-blue-600 visited:text-purple-600 hover:text-blue-500 py-1 px-4"
+                                    to="/boards"
+                                >
+                                    All boards
+                                </Link>
                                 <BoardList></BoardList>
                             </div>
                         </div>
