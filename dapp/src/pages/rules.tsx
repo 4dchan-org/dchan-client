@@ -10,7 +10,7 @@ class RulesPage extends React.Component {
       <div>
         <GenericHeader title="Rules"></GenericHeader>
 
-        <div className="center grid min-h-75vh">
+        <div className="center grid">
           <Card
             title={<span>The rules</span>}
             body={
@@ -24,7 +24,7 @@ class RulesPage extends React.Component {
           />
         </div>
         
-        <Link to="/">Home</Link>
+        <Link className="m-4 text-blue-600 visited:text-purple-600 hover:text-blue-500" to="/">Home</Link>
 
         <Footer></Footer>
       </div>

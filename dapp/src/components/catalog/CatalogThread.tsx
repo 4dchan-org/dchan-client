@@ -3,6 +3,7 @@ import IPFSImage from "components/IPFSImage"
 import { Link } from "react-router-dom"
 import spoilerSrc from "assets/images/spoiler.png";
 import nsfwSrc from "assets/images/nsfw.png";
+import PostBody from "components/post/PostBody";
 
 const CatalogThread = ({thread: {
     id,
@@ -28,6 +29,7 @@ const CatalogThread = ({thread: {
             <Link to={`/${board.name}/${board.id}/${id}`}>
                 <div className="on-parent-target-highlight">
                     <div>
+                        <IPFSImage className={(isSpoiler || isNsfw ? "filter blur brightness-50 " : "") + imgClassName} hash={ipfsHash} />
                         {isSpoiler ? (
                             <img
                             className={imgClassName}
@@ -39,7 +41,6 @@ const CatalogThread = ({thread: {
                             src={nsfwSrc}
                             ></img>
                         ): ""}
-                        <IPFSImage className={(isSpoiler || isNsfw ? "filter blur-md " : "") + imgClassName} hash={ipfsHash} />
                     </div>
                     <div className="p-1">
                         <div>
@@ -50,7 +51,7 @@ const CatalogThread = ({thread: {
                             <strong>
                                 {subject}
                             </strong>
-                            <blockquote className="whitespace-pre-wrap">{comment}</blockquote>
+                            <PostBody style={{textAlign: "center"}}>{comment}</PostBody>
                         </div>
                     </div>
                 </div>

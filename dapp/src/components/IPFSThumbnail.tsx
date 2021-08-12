@@ -19,13 +19,13 @@ export default function IPFSThumbnail({
   const [expand, setExpand] = useState<boolean>(false);
 
   const thumbnailClass = "max-w-32 max-h-32"
-  const coverClass = "absolute left-0 right-0 top-0 bottom-0"
+  const coverClass = "absolute bottom-0"
   const canShow = (!isNsfw || showNsfw) && (!isSpoiler || showSpoiler)
 
   return (
     <span className={`${className} relative`}>
       <span
-        className={"filter " + (!canShow ? "blur-md" : "")}
+        className={"filter " + (!canShow ? "blur brightness-50" : "")}
         onClick={() => {
           if(isNsfw && !showNsfw) {
             setShowNsfw(true)

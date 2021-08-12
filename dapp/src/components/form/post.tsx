@@ -16,11 +16,11 @@ import AddressLabel from "components/AddressLabel";
 export default function FormPost({
   thread,
   board,
-  useWeb3,
+  useWeb3
 }: {
   thread?: Thread;
   board?: Board;
-  useWeb3: UseWeb3;
+  useWeb3: UseWeb3 
 }) {
   const {
     provider,

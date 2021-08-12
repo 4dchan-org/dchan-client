@@ -13,7 +13,7 @@ export default function BoardList({
     <div className={`${className} grid center`}>
       <table>
         <tbody>
-          {boards?.map(({ id, title, postCount, name, isLocked, isNsfw }) => (
+          {!boards ? "" : boards.length > 0 ? boards.map(({ id, title, postCount, name, isLocked, isNsfw }) => (
             <tr className="p-4" key={id}>
               <td>
                 <AddressLabel
@@ -50,9 +50,14 @@ export default function BoardList({
                 ) : (
                   ""
                 )}
+                {isNsfw ? (
+                  <span title="NSFW Board">🔞</span>
+                ) : (
+                  ""
+                )}
               </td>
             </tr>
-          ))}
+          )) : "No boards"}
         </tbody>
       </table>
     </div>

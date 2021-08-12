@@ -30,10 +30,13 @@ export default function BoardListPage() {
   const { loading, data } = useQuery<BoardListData, BoardListVars>(query, {});
 
   const [status, setStatus] = useState<string | object>();
+  const [isCreating, setIsCreating] = useState<boolean>(false);
 
   const { register, handleSubmit } = useForm();
-  const onSubmit = (data: any) => {
-    createBoard(data, accounts, setStatus);
+  const onSubmit = async (data: any) => {
+    setIsCreating(true);
+    await createBoard(data, accounts, setStatus);
+    setIsCreating(false)
   };
 
   return (
@@ -75,6 +78,7 @@ export default function BoardListPage() {
                       <button
                         className="px-2 mx-1 bg-gray-100 border"
                         type="submit"
+                        disabled={isCreating}
                       >
                         {typeof status === "string" ? status : "Create"}
                       </button>
@@ -84,7 +88,7 @@ export default function BoardListPage() {
                   <tr></tr>
                 )}
               </form>
-              
+
               <Card
                 title={<span>Most popular</span>}
                 body={<BoardList boards={data?.boards}></BoardList>}

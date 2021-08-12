@@ -25,7 +25,7 @@
 }
 
 .animation-download {
-    animation: download-keyframes 2s infinite ease-in-out;
+    animation: download-keyframes 5s infinite cubic-bezier(0.6, -0.28, 0.735, 0.045)
 }
 
 @keyframes download-keyframes {
@@ -35,7 +35,7 @@
     }
 
     50% {
-        opacity: 0.5;
+        opacity: 0.35;
         transform: scale(0.9);
     }
 

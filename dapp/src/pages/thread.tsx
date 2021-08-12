@@ -24,7 +24,7 @@ import {
 } from "dchan/operations";
 import Error from "components/Error";
 import _ from "lodash";
-import Markdown from "markdown-to-jsx";
+import PostBody from "components/post/PostBody";
 
 interface ThreadData {
   thread?: Thread;
@@ -320,37 +320,7 @@ export default function ThreadPage({
                         ""
                       )}
 
-                      <Markdown
-                        className="inline-block dchan-post-markdown text-center sm:text-left break-words"
-                        options={{
-                          disableParsingRawHTML: true,
-                          overrides: {
-                            img: {
-                              component: ({ children, ...props }) => (
-                                <a
-                                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                                  href={props.src}
-                                  target="_blank"
-                                >
-                                {props.src}
-                                </a>
-                              ),
-                            },
-                            a: {
-                              component: ({ children, ...props }) => (
-                                <a
-                                  {...props}
-                                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                                >
-                                  {children}
-                                </a>
-                              ),
-                            },
-                          },
-                        }}
-                      >
-                        {comment}
-                      </Markdown>
+                      <PostBody>{comment}</PostBody>
 
                       {bans.length > 0 ? (
                         <div className="text-xl font-bold text-contrast whitespace-nowrap">
