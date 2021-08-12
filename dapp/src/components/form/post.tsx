@@ -3,155 +3,14 @@ import { Board, sendMessage, Thread } from "dchan";
 import WalletConnect from "components/wallet/WalletConnect";
 import WalletAccount from "components/wallet/WalletAccount";
 import WalletSwitchChain from "components/wallet/WalletSwitchChain";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { UseWeb3 } from "hooks/useWeb3";
 import Status, { SetStatus } from "components/Status";
 import useEventListener from "hooks/useEventListener";
 import { uniqueId } from "lodash";
-
-type PostCreateInput = {
-  board?: string;
-  thread?: string;
-  file: FileList;
-  is_nsfw: boolean;
-  is_spoiler: boolean;
-  name: string;
-  subject: string;
-  comment: string;
-};
-
-type PostCreateData = {
-  board?: string;
-  thread?: string;
-  comment: string;
-  file?: {
-    byte_size: number;
-    ipfs: {
-      hash: string;
-    };
-    name: string;
-    is_nsfw: boolean;
-    is_spoiler: boolean;
-  };
-  from: {
-    name: string;
-  };
-  subject: string;
-};
-
-type IpfsUploadResult = {
-  ipfs: {
-    hash: string;
-  };
-  name: string;
-  byte_size: number;
-};
-
-const ipfsUpload = async (
-  files: FileList,
-  setStatus: SetStatus
-): Promise<IpfsUploadResult | undefined> => {
-  if (!!files) {
-    const file = files[0];
-    if (!!file) {
-      setStatus({
-        progress: "Uploading image...",
-      });
-
-      let formData = new FormData();
-      formData.append("file", file);
-
-      const ipfsResponse = await fetch(
-        "https://api.thegraph.com/ipfs/api/v0/add",
-        { method: "POST", body: formData }
-      );
-
-      const ipfs = await ipfsResponse.json();
-      console.log({ ipfs });
-      if (!!ipfs.Hash) {
-        setStatus({
-          success: "File uploaded",
-        });
-        return {
-          ipfs: {
-            hash: ipfs.Hash,
-          },
-          name: ipfs.Name,
-          byte_size: parseInt(ipfs.Size),
-        };
-      } else {
-        if (ipfs.error) {
-          setStatus({
-            error: ipfs.error,
-          });
-        } else {
-          setStatus({
-            error: "File upload failed!",
-          });
-        }
-      }
-    }
-  }
-};
-
-async function postMessage(
-  input: PostCreateInput,
-  accounts: any,
-  setStatus: SetStatus
-) {
-  console.log({ input });
-  const { board, thread, comment, name, subject } = input;
-
-  let file: IpfsUploadResult | undefined;
-  if (input.file.length > 0) {
-    file = await ipfsUpload(input.file, setStatus);
-    if (!file) {
-      setStatus({
-        error: "IPFS file upload failed",
-      });
-      return;
-    }
-  }
-
-  const data: PostCreateData = {
-    comment,
-    from: {
-      name,
-    },
-    subject,
-  };
-
-  if (!!file) {
-    data.file = {
-      ...file,
-      is_nsfw: input.is_nsfw,
-      is_spoiler: input.is_spoiler,
-    };
-  }
-  if (!!thread) {
-    data.thread = thread;
-  }
-  if (!!board) {
-    data.board = board;
-  }
-
-  try {
-    setStatus({
-      progress: "Sending...",
-    });
-
-    await sendMessage("post:create", data, accounts[0]);
-
-    setStatus({
-      success: "Sent ;)",
-    });
-  } catch (error) {
-    setStatus({ error });
-
-    console.error({ error });
-  }
-}
+import { postMessage } from "dchan/operations";
+import MaxLengthWatch from "./MaxLengthWatch";
 
 export default function FormPost({
   thread,
@@ -167,10 +26,14 @@ export default function FormPost({
     chainId,
     accounts,
     web3Modal: { loadWeb3Modal, logoutOfWeb3Modal },
-  } = useWeb3
+  } = useWeb3;
+  const history = useHistory();
   const [isSending, setIsSending] = useState<boolean>(false);
   const [nonce, setNonce] = useState<string>(uniqueId());
   const [status, setStatus] = useState<string | object>();
+  const [commentLength, setCommentLength] = useState<number>(0);
+  const [nameLength, setNameLength] = useState<number>(0);
+  const [subjectLength, setSubjectLength] = useState<number>(0);
   const [thumbnailB64, setThumbnailB64] = useState<string>();
 
   const {
@@ -180,12 +43,25 @@ export default function FormPost({
     setValue,
     getValues,
   } = useForm();
+
+  const values = getValues();
+  const files: FileList = values.file;
+
   const onSubmit = async (data: any) => {
     setIsSending(true);
-    await postMessage(data, accounts, setStatus);
+    const { events } = await postMessage(data, accounts, setStatus);
+
+    const { transactionHash, logIndex } = events[0];
+
+    if (board && !thread) {
+      const url = `/${transactionHash}-${logIndex}`;
+      history.push(url);
+    }
+
     setIsSending(false);
     updateNonce();
   };
+
   const fileRemove = () => {
     setValue("file", undefined);
     setThumbnailB64(undefined);
@@ -196,8 +72,7 @@ export default function FormPost({
   };
 
   const updateThumbnail = async () => {
-    const values = getValues();
-    const files: FileList = values.file;
+    const files: FileList = getValues().file;
     if (!!files && files.length > 0) {
       const file = files[0];
       let reader = new FileReader();
@@ -210,8 +85,7 @@ export default function FormPost({
   };
 
   const fileRename = () => {
-    const values = getValues();
-    const files: FileList = values.file;
+    const files: FileList = getValues().file;
     if (!!files && files.length > 0) {
       const file = files[0];
       const name = prompt("Rename in", file.name);
@@ -225,17 +99,14 @@ export default function FormPost({
   };
 
   const handler = useCallback((e) => {
-    console.log({ e });
     const files = e?.clipboardData?.files;
     if (!!files && files.length > 0) {
-      console.log({ files });
       setValue("file", files);
       updateThumbnail();
     }
   }, []);
-
+  console.log({ values });
   useEventListener("paste", handler);
-  console.log({useWeb3})
 
   return thread?.isLocked ? (
     <div className="text-contrast font-weight-800 font-family-tahoma">
@@ -294,12 +165,19 @@ export default function FormPost({
                         Name
                       </td>
                       <td>
-                        <input
-                          className="dchan-input-name px-1"
-                          type="text"
-                          placeholder="Anonymous"
-                          {...register("name")}
-                        ></input>
+                        <span className="relative">
+                          <input
+                            className="dchan-input-name px-1"
+                            type="text"
+                            placeholder="Anonymous"
+                            {...register("name")}
+                            onChange={(e) =>
+                              setNameLength(e.target.value.length)
+                            }
+                            maxLength={250}
+                          ></input>
+                          <MaxLengthWatch maxLength={250} value={nameLength} />
+                        </span>
                       </td>
                     </tr>
                   ) : (
@@ -312,11 +190,22 @@ export default function FormPost({
                       </td>
                       <td>
                         <div className="flex items-center justify-start">
-                          <input
-                            className="dchan-input-subject px-1"
-                            type="text"
-                            {...register("subject")}
-                          ></input>
+                          <span className="relative">
+                            <input
+                              className="dchan-input-subject px-1"
+                              type="text"
+                              {...register("subject")}
+                              onChange={(e) =>
+                                setSubjectLength(e.target.value.length)
+                              }
+                              maxLength={500}
+                              placeholder={"..."}
+                            ></input>
+                            <MaxLengthWatch
+                              maxLength={500}
+                              value={subjectLength}
+                            />
+                          </span>
 
                           <button
                             className="dchan-post-submit px-2 mx-1 bg-gray-100 border"
@@ -340,12 +229,22 @@ export default function FormPost({
                       </td>
                       <td>
                         <div className="flex items-center justify-start">
-                          <input
-                            className="dchan-input-name px-1"
-                            type="text"
-                            placeholder="Anonymous"
-                            {...register("name")}
-                          ></input>
+                          <span className="relative">
+                            <input
+                              className="dchan-input-name px-1"
+                              type="text"
+                              placeholder="Anonymous"
+                              {...register("name")}
+                              onChange={(e) =>
+                                setNameLength(e.target.value.length)
+                              }
+                              maxLength={250}
+                            ></input>
+                            <MaxLengthWatch
+                              maxLength={250}
+                              value={nameLength}
+                            />
+                          </span>
 
                           <button
                             className="dchan-post-submit px-2 mx-1 bg-gray-100 border"
@@ -367,12 +266,24 @@ export default function FormPost({
                       Comment
                     </td>
                     <td>
-                      <textarea
-                        className="dchan-input-comment px-1"
-                        cols={40}
-                        rows={4}
-                        {...register("comment", { required: !thread })}
-                      ></textarea>
+                      <span className="relative">
+                        <textarea
+                          className="dchan-input-comment px-1"
+                          cols={40}
+                          rows={4}
+                          {...register("comment", { required: !thread })}
+                          onChange={(e) =>
+                            setCommentLength(e.target.value.length)
+                          }
+                          maxLength={2000}
+                          placeholder={"..."}
+                        ></textarea>
+                        <MaxLengthWatch
+                          className="pr-4"
+                          maxLength={2000}
+                          value={commentLength}
+                        />
+                      </span>
                       {errors.comment && (
                         <div className="px-1 text-contrast">
                           This field is required
@@ -386,77 +297,83 @@ export default function FormPost({
                     </td>
                     <td className="flex text-xs">
                       <div className="flex-grow mx-0.5">
+                        <span className="text-xs float-right bg-primary">
+                          (1000kb max)
+                        </span>
                         <input
                           type="file"
                           accept="image/*"
                           {...register("file", { required: !thread })}
                           onChange={updateThumbnail}
                         ></input>
-                        {!!thumbnailB64 ? (
-                          <details className="mx-0.5" open={true}>
-                            <summary>🖼</summary>
-                            <img
-                              className="max-h-24 max-w-24"
-                              src={thumbnailB64}
-                            ></img>
-                          </details>
+                        {!!files && files.length > 0 ? (
+                          <div className="flex">
+                            {!!thumbnailB64 ? (
+                              <details className="mx-0.5" open={true}>
+                                <summary>🖼</summary>
+                                <img
+                                  className="max-h-24 max-w-24"
+                                  src={thumbnailB64}
+                                ></img>
+                              </details>
+                            ) : (
+                              ""
+                            )}
+                            <span>
+                              <button
+                                className="dchan-input-file-rename mx-0.5"
+                                title="Rename file"
+                                type="button"
+                                onClick={fileRename}
+                              >
+                                ✎
+                              </button>
+                              <button
+                                className="dchan-input-file-remove mx-0.5"
+                                title="Remove file"
+                                type="button"
+                                onClick={fileRemove}
+                              >
+                                ❌
+                              </button>
+                            </span>
+                            <details className="mx-0.5">
+                              <summary className="marker-closed-hide">
+                                ⚙️
+                              </summary>
+                              <div>
+                                <input
+                                  id="dchan-input-is_spoiler"
+                                  className="mx-1"
+                                  type="checkbox"
+                                  {...register("is_spoiler")}
+                                ></input>
+                                <label
+                                  htmlFor="dchan-input-is_spoiler"
+                                  className="text-black font-weight-800 font-family-tahoma"
+                                >
+                                  Spoiler
+                                </label>
+                              </div>
+                              <div>
+                                <input
+                                  id="dchan-input-is_nsfw"
+                                  className="mx-1"
+                                  type="checkbox"
+                                  {...register("is_nsfw")}
+                                ></input>
+                                <label
+                                  htmlFor="dchan-input-is_nsfw"
+                                  className="text-black font-weight-800 font-family-tahoma"
+                                >
+                                  NSFW
+                                </label>
+                              </div>
+                            </details>
+                          </div>
                         ) : (
                           ""
                         )}
-                      </div>
-                      <div className="flex">
-                        <details className="mx-0.5">
-                          <summary className="text-right">⚙️</summary>
-                          <div>
-                            <input
-                              id="dchan-input-is_spoiler"
-                              className="mx-1"
-                              type="checkbox"
-                              {...register("is_spoiler")}
-                            ></input>
-                            <label
-                              htmlFor="dchan-input-is_spoiler"
-                              className="text-black font-weight-800 font-family-tahoma"
-                            >
-                              Spoiler
-                            </label>
-                          </div>
-                          <div>
-                            <input
-                              id="dchan-input-is_nsfw"
-                              className="mx-1"
-                              type="checkbox"
-                              {...register("is_nsfw")}
-                            ></input>
-                            <label
-                              htmlFor="dchan-input-is_nsfw"
-                              className="text-black font-weight-800 font-family-tahoma"
-                            >
-                              NSFW
-                            </label>
-                          </div>
-                        </details>
-                        <span>
-                          <button
-                            className="dchan-input-file-rename mx-0.5"
-                            title="Rename file"
-                            type="button"
-                            onClick={fileRename}
-                          >
-                            ✎
-                          </button>
-                          <button
-                            className="dchan-input-file-remove mx-0.5"
-                            title="Remove file"
-                            type="button"
-                            onClick={fileRemove}
-                          >
-                            ❌
-                          </button>
-                        </span>
-                        <span className="text-xs float-right bg-primary">
-                          (1000kb max)
-                        </span>
                       </div>
                     </td>
                     {errors.file && (

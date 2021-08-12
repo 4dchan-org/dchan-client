@@ -33,7 +33,7 @@ const THREAD_LIST = gql`
     imageCount
   }
   
-  query ThreadList($boardId: String!) {
+  query ThreadList($boardId: String!, $limit: Int!) {
     board(id: $boardId) {
       id
       title
@@ -45,7 +45,7 @@ const THREAD_LIST = gql`
     pinned: threads(where: {board: $boardId, isPinned: true}, orderBy: lastBumpedAt, orderDirection: desc) {
       ...Thread
     }
-    threads(where: {board: $boardId, isPinned: false}, orderBy: lastBumpedAt, orderDirection: desc) {
+    threads(where: {board: $boardId, isPinned: false}, orderBy: lastBumpedAt, orderDirection: desc, first: $limit) {
       ...Thread
     }
   }

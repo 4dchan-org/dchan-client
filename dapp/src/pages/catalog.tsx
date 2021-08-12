@@ -16,6 +16,7 @@ interface CatalogData {
 }
 interface CatalogVars {
   boardId: string;
+  limit: number
 }
 
 export default function CatalogPage({
@@ -25,7 +26,7 @@ export default function CatalogPage({
 }: any) {
   const useWeb3Result = useWeb3();
   const { loading, data } = useQuery<CatalogData, CatalogVars>(THREAD_LIST, {
-    variables: { boardId: `0x${boardId}` },
+    variables: { boardId: `0x${boardId}`, limit: 25 },
     pollInterval: 10000,
   });
 

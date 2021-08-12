@@ -64,6 +64,10 @@ export function shortenAddress(address: string) {
     return `${address.substring(2,5)}-${address.substring(address.length-3)}`
 }
 
+export function backgroundColorAddress(address: string) {
+    return `#${shortenAddress(address).replace("-", "")}`
+}
+
 export function createJsonMessage(op: string, data: object) {
     return JSON.stringify({
         ns: "dchan",
@@ -76,6 +80,7 @@ export function createJsonMessage(op: string, data: object) {
 export async function sendMessage(operation: string, data: object, from: string) {
     const web3 = new Web3(window.web3.currentProvider);
     const relayContract = new web3.eth.Contract(abi as AbiItem[], "0x5a139ee9f56c4F24240aF366807490C171922b0E");
+    
     const msg = await relayContract.methods.message(createJsonMessage(operation, data))
     return await msg.send({
       from

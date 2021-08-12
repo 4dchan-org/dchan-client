@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import AddressLabel from "components/AddressLabel";
 import { UseWeb3 } from "hooks/useWeb3";
 import BOARDS_SEARCH from "dchan/graphql/queries/boards/search";
+import { createBoard } from "dchan/operations";
 
 interface BoardListData {
   boards: Board[];
@@ -15,38 +16,9 @@ interface BoardListData {
 
 interface BoardListVars {}
 
-type BoardCreateInput = {
-  title: string;
-  name: string;
-};
-
 type setStatus = React.Dispatch<
   React.SetStateAction<string | object | undefined>
 >;
-
-async function createBoard(
-  data: BoardCreateInput,
-  accounts: any,
-  setStatus: setStatus
-) {
-  try {
-    setStatus({
-      progress: "Creating..."
-    });
-
-    await sendMessage("board:create", data, accounts[0]);
-
-    setStatus({
-      success: "Created"
-    });
-
-    window.location.href = `/${data.name}`;
-  } catch (error) {
-    setStatus({ error });
-
-    console.error({ error });
-  }
-}
 
 export default function BoardList({
   create = false,

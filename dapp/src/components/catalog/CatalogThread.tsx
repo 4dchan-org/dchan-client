@@ -1,4 +1,5 @@
 import { Board, Thread } from "dchan"
+import IPFSImage from "components/IPFSImage"
 import { Link } from "react-router-dom"
 
 const CatalogThread = ({thread: {
@@ -21,7 +22,7 @@ const CatalogThread = ({thread: {
         <Link to={`/${board.name}/${board.id}/${id}`}>
             <div className="on-parent-target-highlight">
                 <div>
-                    <img className="w-full max-h-150px pointer-events-none shadow-xl object-contain" src={`https://ipfs.io/ipfs/${ipfsHash}`} />
+                    <IPFSImage className="w-full max-h-150px pointer-events-none shadow-xl object-contain" hash={ipfsHash} />
                 </div>
                 <div className="p-1">
                     <div>

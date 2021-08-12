@@ -6,60 +6,7 @@ import Status, { SetStatus } from "components/Status";
 import AddressLabel from "components/AddressLabel";
 import Menu from "components/Menu";
 import { useState } from "react";
-
-async function removeBoard(id: string, accounts: any, setStatus: SetStatus) {
-  try {
-    setStatus({
-      progress: "Removing..."
-    });
-
-    await sendMessage("board:remove", { id }, accounts[0]);
-
-    setStatus({
-      success: "Removed"
-    });
-  } catch (error) {
-    setStatus({ error });
-
-    console.error({ error });
-  }
-}
-
-async function unlockBoard(id: string, accounts: any, setStatus: SetStatus) {
-  try {
-    setStatus({
-      progress: "Unlocking..."
-    });
-
-    await sendMessage("board:unlock", { id }, accounts[0]);
-
-    setStatus({
-      success: "Unlocked"
-    });
-  } catch (error) {
-    setStatus({ error });
-
-    console.error({ error });
-  }
-}
-
-async function lockBoard(id: string, accounts: any, setStatus: SetStatus) {
-  try {
-    setStatus({
-      progress: "Locking..."
-    });
-
-    await sendMessage("board:lock", { id }, accounts[0]);
-
-    setStatus({
-      success: "Locked"
-    });
-  } catch (error) {
-    setStatus({ error });
-
-    console.error({ error });
-  }
-}
+import { lockBoard, removeBoard, unlockBoard } from "dchan/operations";
 
 export default function BoardHeader({
   board,

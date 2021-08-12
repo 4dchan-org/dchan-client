@@ -31,15 +31,7 @@ function useWeb3(config = {}): UseWeb3 {
   // You can see other options at https://github.com/Web3Modal/web3modal
   const web3Modal = new Web3Modal({
     network: NETWORK,
-    cacheProvider: true,
-    providerOptions: {
-      walletconnect: {
-        package: WalletConnectProvider,
-        options: {
-          infuraId,
-        },
-      },
-    },
+    cacheProvider: true
   });
 
   // Open wallet selection modal.
