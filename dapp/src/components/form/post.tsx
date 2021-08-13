@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Board, sendMessage, Thread } from "dchan";
 import WalletConnect from "components/wallet/WalletConnect";
 import WalletAccount from "components/wallet/WalletAccount";
@@ -12,6 +12,7 @@ import _, { uniqueId } from "lodash";
 import { postMessage } from "dchan/operations";
 import MaxLengthWatch from "./MaxLengthWatch";
 import AddressLabel from "components/AddressLabel";
+import PubSub from 'pubsub-js'
 
 export default function FormPost({
   thread,
@@ -37,6 +38,17 @@ export default function FormPost({
   const [subjectLength, setSubjectLength] = useState<number>(0);
   const [thumbnailB64, setThumbnailB64] = useState<string>();
 
+  const onQuote = useCallback(function (msg, data) {
+    const { comment } = getValues()
+    const quote = `>>${data}`
+    setValue('comment', `${comment}${!!comment && comment.substr(-1, 1) !== ' ' ? ' ' : '' }${quote} `)
+  }, []);
+
+  useEffect(() => {
+    PubSub.subscribe('FORM_QUOTE', onQuote);
+  }, [onQuote])
+  
+  
   const {
     register,
     handleSubmit,
@@ -301,7 +313,7 @@ export default function FormPost({
                     <td>
                       <span className="relative">
                         <textarea
-                          className="dchan-input-comment px-1"
+                          className="dchan-input-comment px-1 font-sans"
                           cols={40}
                           rows={4}
                           {...register("comment", { required: !thread })}

@@ -56,8 +56,8 @@ export default function ThreadPage({
   const userData = UserData(accounts);
   const isJanny = userData?.user?.isJanny || false;
 
-  const replyTo = (id: string) => {
-    console.log({ id });
+  const replyTo = (n: string) => {
+    PubSub.publish('FORM_QUOTE', n);
   };
 
   return loading ? (
@@ -132,12 +132,12 @@ export default function ThreadPage({
                   {createdAt.toRelative()})
                 </span>
                 <span className="px-0.5 on-parent-target-font-bold font-family-tahoma whitespace-nowrap">
-                  <a href={`#${id}`} title="Link to this post">
+                  <a href={`#${n}`} title="Link to this post">
                     No.
                   </a>
                   <button
                     title="Reply to this post"
-                    onClick={() => replyTo(id)}
+                    onClick={() => replyTo(`${n}`)}
                   >
                     {n}
                   </button>
@@ -264,7 +264,7 @@ export default function ThreadPage({
                 <PostHeader></PostHeader>
               </summary>
               <article
-                id={id}
+                id={`${n}`}
                 className="dchan-post text-left w-full"
                 dchan-post-from-address={address}
               >
