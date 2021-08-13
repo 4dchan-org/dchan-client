@@ -7,7 +7,6 @@ import sanitizeHtml from 'sanitize-html';
 }
 
 export default function PostBody({children, style = {}}: {style?: any, children: any}) {
-  console.log({children})
   const kLINK_DETECTION_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/igm
   
   const sanitized = sanitizeHtml(children)
@@ -18,7 +17,6 @@ export default function PostBody({children, style = {}}: {style?: any, children:
     .replace(kLINK_DETECTION_REGEX, "<a class=\"text-blue-600 visited:text-purple-600 hover:text-blue-500\" href=\"$1\" target=\"_blank\" rel=\"noreferrer\">$1</a>") // Links
     .replace(/\n/gm, "<br>")
     
-  console.log({__html, sanitized, children})
     return (
       <div
         className="inline-block text-center sm:text-left break-words font-sans"

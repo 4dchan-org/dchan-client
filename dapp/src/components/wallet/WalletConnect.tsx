@@ -4,7 +4,11 @@ export default function WalletConnect({
   provider,
   loadWeb3Modal,
   logoutOfWeb3Modal,
-}: any) {
+}: {
+  provider: any,
+  loadWeb3Modal: any,
+  logoutOfWeb3Modal: any
+}) {
   const [stillStuck, setStillStuck] = useState<boolean>(false);
 
   return (
@@ -19,7 +23,7 @@ export default function WalletConnect({
             }, 2000);
             if (!provider) {
               await loadWeb3Modal();
-              clearTimeout(timeout)
+              clearTimeout(timeout);
               setStillStuck(false);
             } else {
               logoutOfWeb3Modal();
@@ -32,9 +36,9 @@ export default function WalletConnect({
       </div>
       {stillStuck ? (
         <div className="text-xs px-2">
-          <div className="p-1 text-center">
-            <small>
-              You need {" "}
+          <small className="p-1 text-center">
+            <div>
+              You need{" "}
               <a
                 className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                 href="//metamask.io"
@@ -48,9 +52,12 @@ export default function WalletConnect({
               >
                 Trust Wallet
               </a>{" "}
-              (Mobile) to interact with dchan
-            </small>
-          </div>
+              (Mobile) to interact with dchan.
+            </div>
+            <div>
+              Other wallets might not be supported.
+            </div>
+          </small>
         </div>
       ) : (
         ""

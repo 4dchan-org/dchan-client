@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 import AddressLabel, { LABEL_CLASSNAME } from "components/AddressLabel";
 import { backgroundColorAddress, Board } from "dchan";
-import BOARDS_LIST from "dchan/graphql/queries/boards/list";
+import BOARDS_LIST_MOST_POPULAR from "dchan/graphql/queries/boards/list_most_popular";
 import { Link } from "react-router-dom";
 
 interface BoardListData {
@@ -12,7 +12,7 @@ interface BoardListVars {}
 
 export default function HeaderNavigation() {
   const { loading, data } = useQuery<BoardListData, BoardListVars>(
-    BOARDS_LIST,
+    BOARDS_LIST_MOST_POPULAR,
     { variables: {} }
   );
 
@@ -29,7 +29,7 @@ export default function HeaderNavigation() {
       ]
       <span className="text-black text-opacity-50">
         [
-        {!!boards &&
+      {!!boards &&
           boards.map((board) => (
             <span className="dchan-navigation-board" key={board.id}>
               <Link

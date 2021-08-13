@@ -2,16 +2,16 @@ import { useQuery } from '@apollo/react-hooks';
 import logo from 'assets/images/dchan.png'
 import BoardList from 'components/board/list'
 import Footer from 'components/Footer'
+import Spinner from 'components/Spinner';
+import Loading from 'components/Loading';
 import { Board } from 'dchan';
-import BOARDS_LIST from 'dchan/graphql/queries/boards/list';
-import useWeb3 from 'hooks/useWeb3';
-import React from 'react'
+import BOARDS_LIST_MOST_POPULAR from 'dchan/graphql/queries/boards/list_most_popular';
 import { Link } from 'react-router-dom';
 
 export default function HomePage() {
 
     const { query } = {
-      query: BOARDS_LIST,
+      query: BOARDS_LIST_MOST_POPULAR,
     };
     const { loading, data } = useQuery<{boards: Board[]}, any>(query, {});
     
@@ -35,7 +35,7 @@ export default function HomePage() {
                                 >
                                     All boards
                                 </Link>
-                                <BoardList boards={data?.boards}></BoardList>
+                                <BoardList loading={loading} boards={data?.boards}></BoardList>
                             </div>
                         </div>
                         <hr>
