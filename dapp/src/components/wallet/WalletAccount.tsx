@@ -11,7 +11,9 @@ export default function WalletAccount({ provider, accounts }: any) {
     const refreshBalance = async () => {
       try {
         setBalance(parseInt(await getBalance(account)) / Math.pow(10, 18));
-      } catch (e) {}
+      } catch (e) {
+        console.error({refreshBalance: e})
+      }
     };
 
     const interval = setInterval(refreshBalance, 10000);

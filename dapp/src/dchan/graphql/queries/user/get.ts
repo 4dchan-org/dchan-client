@@ -4,7 +4,11 @@ const USER_GET = gql`
   query User($userId: String!) {
     user(id: $userId) {
       id
-      isJanny
+      jannies {
+        board {
+          id
+        }
+      }
     }
   }
 `;

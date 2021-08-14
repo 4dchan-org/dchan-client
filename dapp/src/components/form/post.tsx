@@ -35,6 +35,7 @@ export default function FormPost({
   const [status, setStatus] = useState<string | object>();
   const [commentLength, setCommentLength] = useState<number>(0);
   const [nameLength, setNameLength] = useState<number>(0);
+  const [fileSize, setFileSize] = useState<number>(0);
   const [subjectLength, setSubjectLength] = useState<number>(0);
   const [thumbnailB64, setThumbnailB64] = useState<string>();
 
@@ -82,14 +83,14 @@ export default function FormPost({
 
   const fileRemove = () => {
     setValue("file", undefined);
-    setThumbnailB64(undefined);
+    onFileChange()
   };
 
   const updateNonce = () => {
     setNonce(uniqueId());
   };
 
-  const updateThumbnail = async () => {
+  const refreshThumbnail = async () => {
     const files: FileList = getValues().file;
     if (!!files && files.length > 0) {
       const file = files[0];
@@ -99,6 +100,18 @@ export default function FormPost({
         const b64 = reader.result;
         setThumbnailB64(b64 as string);
       };
+    } else {
+      setThumbnailB64(undefined);
+    }
+  };
+
+  const onFileChange = async () => {
+    refreshThumbnail()
+    const files: FileList = getValues().file;
+    if (!!files && files.length > 0) {
+      setFileSize(files[0].size/1024)
+    } else {
+      setFileSize(0)
     }
   };
 
@@ -143,14 +156,14 @@ export default function FormPost({
             list.items.add(file);
 
             setValue("file", list.files);
-            updateThumbnail();
+            onFileChange();
           }
         }
         reader.readAsDataURL(blob);
       }
     } else if (!!files && files.length > 0) {
       setValue("file", files);
-      updateThumbnail();
+      onFileChange();
     }
   }, []);
   
@@ -350,7 +363,7 @@ export default function FormPost({
                           type="file"
                           accept="image/*"
                           {...register("file", { required: !thread })}
-                          onChange={updateThumbnail}
+                          onChange={onFileChange}
                         ></input>
                         {!!files && files.length > 0 ? (
                           <div className="flex">
@@ -361,6 +374,9 @@ export default function FormPost({
                                   className="max-h-24 max-w-24"
                                   src={thumbnailB64}
                                 ></img>
+                                <span className={`text-xs ${fileSize > 1000 ? "text-contrast" : ""}`}>
+                                  {Math.round(fileSize)} kb
+                                </span>
                               </details>
                             ) : (
                               ""

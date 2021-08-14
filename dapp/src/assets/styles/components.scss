@@ -90,3 +90,12 @@ img.dchan-image-toggled {
         max-height: 100vh;
     }
 }
+
+.dchan-post-spoiler {
+    background-color: black;
+    color: black;
+}
+
+.dchan-post-spoiler:hover {
+    color: white;
+}

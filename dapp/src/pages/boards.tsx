@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Board } from "dchan";
 import Loading from "components/Loading";
+import { useHistory } from "react-router-dom";
 
 interface BoardListData {
   mostPopular: Board[];
@@ -25,15 +26,22 @@ export default function BoardListPage() {
   const { query } = {
     query: BOARDS_LIST,
   };
+  
   const { loading, data } = useQuery<BoardListData, BoardListVars>(query, {});
-
+  const history = useHistory();
   const [status, setStatus] = useState<string | object>();
   const [isCreating, setIsCreating] = useState<boolean>(false);
 
   const { register, handleSubmit } = useForm();
   const onSubmit = async (data: any) => {
     setIsCreating(true);
-    await createBoard(data, accounts, setStatus);
+    const result = await createBoard(data, accounts, setStatus);
+    const events = result?.events;
+    if (events && events.length > 0) {
+      const { transactionHash, logIndex } = events[0];
+      const url = `/${transactionHash}-${logIndex}`;
+      history.push(url);
+    }
     setIsCreating(false);
   };
 
@@ -78,7 +86,6 @@ export default function BoardListPage() {
                   <form className="border center flex" onSubmit={handleSubmit(onSubmit)}>
                     {provider ? (
                       <tr className="p-4 text-center">
-                        <td></td>
                         <td className="px-2">
                           <input
                             className="text-center"
@@ -96,6 +103,20 @@ export default function BoardListPage() {
                             {...register("name")}
                           ></input>
                           /
+                        </td>
+                        <td className="px-2">
+                          <input
+                            id="dchan-input-is_nsfw"
+                            className="mx-1"
+                            type="checkbox"
+                            {...register("nsfw")}
+                          ></input>
+                          <label
+                            htmlFor="dchan-input-is_nsfw"
+                            className="text-black font-weight-800 font-family-tahoma"
+                          >
+                            NSFW
+                          </label>
                         </td>
                         <td className="px-2">
                           <button

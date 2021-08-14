@@ -10,6 +10,12 @@ export type Board = {
     isLocked: boolean,
     isNsfw: boolean,
     name: string
+    jannies: BoardJanny[]
+}
+
+export type BoardJanny = {
+    id: string
+    user: User
 }
 
 export type Thread = {
@@ -37,8 +43,13 @@ export type Post = {
 }
 
 export type PostBan = {
+    post: Post,
+    ban: Ban,
+}
+
+export type Ban = {
     reason: string,
-    seconds: number,
+    expiresAt: number,
 }
 
 export type Catalog = {
@@ -47,8 +58,9 @@ export type Catalog = {
 
 export type User = {
     id: string,
+    address: string,
     name: string,
-    isJanny: boolean,
+    jannies: BoardJanny[],
     score: number,
 }
 
@@ -92,5 +104,7 @@ export async function sendMessage(operation: string, data: object, from: string)
 export async function getBalance(account: string) {
     const web3 = new Web3(window.web3.currentProvider);
     
-    return web3.eth.getBalance(account)
+    const balance = await web3.eth.getBalance(account)
+    console.log({balance})
+    return balance
 }

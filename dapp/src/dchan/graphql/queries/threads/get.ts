@@ -20,8 +20,10 @@ const THREAD_GET = gql`
     }
     createdAt
     bans {
-      reason
-      seconds
+      ban {
+        reason
+        expiresAt
+      }
     }
   }
   

@@ -20,37 +20,44 @@ export async function upload(
                 progress: "Uploading image...",
             });
 
-            let formData = new FormData();
-            formData.append("file", file);
+            try {
+                let formData = new FormData();
+                formData.append("file", file);
+                const ipfsResponse = await fetch(
+                    Config.ipfs.endpoint,
+                    { method: "POST", body: formData }
+                );
 
-            const ipfsResponse = await fetch(
-                Config.ipfs.endpoint,
-                { method: "POST", body: formData }
-            );
-
-            const ipfs = await ipfsResponse.json();
-            console.log({ ipfs });
-            if (!!ipfs.Hash) {
-                setStatus({
-                    success: "File uploaded",
-                });
-                return {
-                    ipfs: {
-                        hash: ipfs.Hash,
-                    },
-                    name: ipfs.Name,
-                    byte_size: parseInt(ipfs.Size),
-                };
-            } else {
-                if (ipfs.error) {
+                const ipfs = await ipfsResponse.json();
+                console.log({ ipfs });
+                if (!!ipfs.Hash) {
                     setStatus({
-                        error: ipfs.error,
+                        success: "File uploaded",
                     });
+                    return {
+                        ipfs: {
+                            hash: ipfs.Hash,
+                        },
+                        name: ipfs.Name,
+                        byte_size: parseInt(ipfs.Size),
+                    };
                 } else {
-                    setStatus({
-                        error: "File upload failed!",
-                    });
+                    if (ipfs.error) {
+                        setStatus({
+                            error: ipfs.error,
+                        });
+                    } else {
+                        setStatus({
+                            error: "File upload failed!",
+                        });
+                    }
                 }
+            } catch (error) {
+                console.error({ ipfsUpload: error })
+                setStatus({
+                    error: "File upload failed!",
+                });
+                return;
             }
         }
     }

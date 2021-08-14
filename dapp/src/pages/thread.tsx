@@ -54,7 +54,8 @@ export default function ThreadPage({
   const thread = data?.thread;
 
   const userData = UserData(accounts);
-  const isJanny = userData?.user?.isJanny || false;
+  console.log({userData})
+  const isJanny = false
 
   const replyTo = (n: string) => {
     PubSub.publish('FORM_QUOTE', n);

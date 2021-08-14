@@ -3,7 +3,7 @@ import FormPost from "components/form/post";
 import Footer from "components/Footer";
 import CatalogThread from "components/catalog/CatalogThread";
 import { useQuery } from "@apollo/react-hooks";
-import THREAD_LIST from "dchan/graphql/queries/threads/list";
+import CATALOG from "dchan/graphql/queries/catalog";
 import { Board, Thread } from "dchan";
 import useWeb3 from "hooks/useWeb3";
 import UserData from "hooks/userData";
@@ -25,14 +25,15 @@ export default function CatalogPage({
   },
 }: any) {
   const useWeb3Result = useWeb3();
-  const { loading, data } = useQuery<CatalogData, CatalogVars>(THREAD_LIST, {
+  const { loading, data } = useQuery<CatalogData, CatalogVars>(CATALOG, {
     variables: { boardId: `0x${boardId}`, limit: 25 },
     pollInterval: 10000,
   });
 
   const { accounts } = useWeb3Result;
   const userData = UserData(accounts);
-  const isJanny = userData?.user?.isJanny || false;
+  console.log({userData})
+  const isJanny = false // @TODO Check user is in any of board jannies or is admin
 
   const board = data?.board
   const threads = [...(data?.pinned || []), ...(data?.threads || [])];

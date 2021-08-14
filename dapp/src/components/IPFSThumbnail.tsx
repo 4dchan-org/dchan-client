@@ -44,7 +44,7 @@ export default function IPFSThumbnail({
       </span>
       {!showSpoiler && isSpoiler ? (
         <img
-          className={coverClass + thumbnailClass}
+          className={[coverClass, thumbnailClass].join(' ')}
           src={spoilerSrc}
         ></img>
       ) : (
@@ -52,7 +52,7 @@ export default function IPFSThumbnail({
       )}
       {!showNsfw && isNsfw? (
         <img
-          className={coverClass + thumbnailClass}
+          className={[coverClass, thumbnailClass].join(' ')}
           src={nsfwSrc}
         ></img>
       ) : (

@@ -1,6 +1,6 @@
 import { gql } from "apollo-boost";
 
-const THREAD_LIST = gql`
+const CATALOG = gql`
   fragment Post on Post {
     id
     n
@@ -41,6 +41,11 @@ const THREAD_LIST = gql`
       name
       isLocked
       isNsfw
+      jannies {
+        user {
+          address
+        }
+      }
     }
     pinned: threads(where: {board: $boardId, isPinned: true}, orderBy: lastBumpedAt, orderDirection: desc) {
       ...Thread
@@ -51,4 +56,4 @@ const THREAD_LIST = gql`
   }
 `;
 
-export default THREAD_LIST
+export default CATALOG

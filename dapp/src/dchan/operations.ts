@@ -49,9 +49,6 @@ export async function postMessage(
     if (input.file.length > 0) {
         file = await upload(input.file, setStatus);
         if (!file) {
-            setStatus({
-                error: "IPFS file upload failed",
-            });
             return;
         }
     }
@@ -143,13 +140,13 @@ export async function createBoard(
             progress: "Creating..."
         });
 
-        await sendMessage("board:create", data, accounts[0]);
+        const result = await sendMessage("board:create", data, accounts[0]);
 
         setStatus({
             success: "Created"
         });
 
-        window.location.href = `/${data.name}`;
+        return result
     } catch (error) {
         setStatus({ error });
 
