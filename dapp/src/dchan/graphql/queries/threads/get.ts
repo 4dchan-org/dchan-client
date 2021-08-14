@@ -36,6 +36,7 @@ const THREAD_GET = gql`
         title
         name
         isLocked
+        isNsfw
       }
       isPinned
       isLocked

@@ -11,7 +11,6 @@ import Loading from "components/Loading";
 import useWeb3 from "hooks/useWeb3";
 import React, { useState } from "react";
 import Status, { SetStatus } from "components/Status";
-import UserData from "hooks/userData";
 import Menu from "components/Menu";
 import {
   banPost,
@@ -33,28 +32,19 @@ interface ThreadVars {
   threadId: string;
 }
 
-interface UserData {
-  user?: User;
-}
-interface UserVars {
-  userId: string;
-}
-
 export default function ThreadPage({
   match: {
     params: { threadId },
   },
 }: any) {
   const useWeb3Result = useWeb3();
-  const { accounts } = useWeb3Result;
+  const { accounts, userData } = useWeb3Result;
   const { loading, data } = useQuery<ThreadData, ThreadVars>(THREAD_GET, {
     variables: { threadId: `0x${threadId}` },
     pollInterval: 10000,
   });
   const thread = data?.thread;
 
-  const userData = UserData(accounts);
-  console.log({userData})
   const isJanny = false
 
   const replyTo = (n: string) => {
@@ -66,7 +56,7 @@ export default function ThreadPage({
   ) : !thread ? (
     <Error subject={"Thread not found"} body={"¯\\_(ツ)_/¯"} />
   ) : (
-    <div className="min-h-100vh" dchan-board={thread?.board.name}>
+    <div className="bg-primary min-h-100vh" dchan-board={thread?.board.name} data-theme={thread?.board?.isNsfw ? "nsfw" : "blueboard" }>
       <BoardHeader board={thread?.board} isJanny={isJanny}></BoardHeader>
       <FormPost thread={thread} useWeb3={useWeb3Result}></FormPost>
 

@@ -46,7 +46,7 @@ export default function BoardListPage() {
   };
 
   return (
-    <div>
+    <div className="bg-primary min-h-100vh">
       <GenericHeader title="Boards"></GenericHeader>
       {loading ? (
         <tr>

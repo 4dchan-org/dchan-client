@@ -10,7 +10,7 @@ export default function WalletAccount({ provider, accounts }: any) {
   useEffect(() => {
     const refreshBalance = async () => {
       try {
-        setBalance(parseInt(await getBalance(account)) / Math.pow(10, 18));
+        setBalance(parseInt(await getBalance(accounts[0])) / Math.pow(10, 18));
       } catch (e) {
         console.error({refreshBalance: e})
       }
@@ -20,7 +20,7 @@ export default function WalletAccount({ provider, accounts }: any) {
     refreshBalance();
 
     return () => clearInterval(interval);
-  }, []);
+  }, [accounts]);
 
   return provider && account ? (
     <div className="text-xs center grid">

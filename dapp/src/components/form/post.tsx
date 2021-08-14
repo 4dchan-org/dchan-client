@@ -222,13 +222,13 @@ export default function FormPost({
                 <tbody>
                   {!thread ? (
                     <tr>
-                      <td className="px-2 border border-solid border-black bg-highlight font-semibold">
+                      <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
                         Name
                       </td>
                       <td>
                         <span className="relative">
                           <input
-                            className="dchan-input-name px-1"
+                            className="dchan-input-name px-1 border border-solid border-gray focus:border-indigo-300"
                             type="text"
                             placeholder="Anonymous"
                             {...register("name")}
@@ -246,14 +246,14 @@ export default function FormPost({
                   )}
                   {!thread ? (
                     <tr>
-                      <td className="px-2 border border-solid border-black bg-highlight font-semibold">
+                      <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
                         Subject
                       </td>
                       <td>
                         <div className="flex items-center justify-start">
                           <span className="relative">
                             <input
-                              className="dchan-input-subject px-1"
+                              className="dchan-input-subject px-1 border border-solid border-gray focus:border-indigo-300"
                               type="text"
                               {...register("subject")}
                               onChange={(e) =>
@@ -285,14 +285,14 @@ export default function FormPost({
                   )}
                   {thread ? (
                     <tr>
-                      <td className="px-2 border border-solid border-black bg-highlight font-semibold">
+                      <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
                         Name
                       </td>
                       <td>
                         <div className="flex items-center justify-start">
                           <span className="relative">
                             <input
-                              className="dchan-input-name px-1"
+                              className="dchan-input-name px-1 border border-solid border-gray focus:border-indigo-300"
                               type="text"
                               placeholder="Anonymous"
                               {...register("name")}
@@ -320,13 +320,13 @@ export default function FormPost({
                     <tr></tr>
                   )}
                   <tr>
-                    <td className="px-2 border border-solid border-black bg-highlight font-semibold">
+                    <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
                       Comment
                     </td>
                     <td>
                       <span className="relative">
                         <textarea
-                          className="dchan-input-comment px-1 font-sans"
+                          className="dchan-input-comment px-1 font-sans border border-solid border-gray focus:border-indigo-300"
                           cols={40}
                           rows={4}
                           {...register("comment", { required: !thread })}
@@ -350,7 +350,7 @@ export default function FormPost({
                     </td>
                   </tr>
                   <tr>
-                    <td className="px-2 border border-solid border-black bg-highlight font-semibold">
+                    <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
                       File
                     </td>
                     <td className="flex text-xs">

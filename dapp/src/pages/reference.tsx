@@ -39,7 +39,7 @@ export default function ReferencePage({ match: { params: { ref } } }: any) {
 
 
     return (
-        <div className="center grid w-screen h-screen">
+        <div className="bg-primary center grid w-screen h-screen">
             {loading ? <div><Spinner></Spinner><Loading></Loading></div> : <Error subject="Not found" body="This is a 404 page"></Error>
 }
         </div>

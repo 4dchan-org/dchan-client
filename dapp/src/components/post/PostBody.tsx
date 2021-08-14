@@ -9,7 +9,7 @@ import sanitizeHtml from 'sanitize-html';
 export default function PostBody({children, style = {}}: {style?: any, children: any}) {
   const kLINK_DETECTION_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/igm
   const sanitized = sanitizeHtml(children)
-  console.log({sanitized})
+  // console.log({sanitized})
   let __html = sanitized
     .replace(/^&gt;(.*)$/gm, "<span class=\"text-quote\">&gt;$1</span>") // Quotes
     .replace(/&gt;&gt;(0[xX][0-9a-fA-F])+/gm, "<a class=\"text-blue-600 visited:text-purple-600 hover:text-blue-500\">&gt;&gt;$1</a>") // Post quotes

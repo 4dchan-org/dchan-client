@@ -13,10 +13,12 @@ import BoardSearchPage from "pages/boardSearch"
 import ThreadPage from "pages/thread";
 import ReferencePage from "pages/reference";
 import AdminPage from "pages/admin";
+import LockBanner from "components/LockBanner";
 
 function App() {
   return (
     <Router>
+      <LockBanner />
       <div className="App text-center">
         <Switch>
           <Route exact path="/" component={HomePage} />

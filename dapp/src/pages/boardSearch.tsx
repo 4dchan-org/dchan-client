@@ -15,7 +15,7 @@ export default function BoardListPage({
   const { loading, data } = useQuery(BOARDS_SEARCH, { variables: { name } });
 
   return (
-    <div>
+    <div className="bg-primary min-h-100vh">
       <GenericHeader title="Boards"></GenericHeader>
 
       <Link

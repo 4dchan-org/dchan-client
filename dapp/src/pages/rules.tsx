@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 class RulesPage extends React.Component {
   render() {
     return (
-      <div>
+      <div className="bg-primary min-h-100vh">
         <GenericHeader title="Rules"></GenericHeader>
 
         <div className="center grid">
