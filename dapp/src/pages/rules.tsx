@@ -16,8 +16,9 @@ class RulesPage extends React.Component {
             body={
               <span className="p-8">
                 <pre>
-                  * Do not post shit that can get you in trouble
-                  <br></br>* Be decent
+                  * Do not post stuff that can get you in trouble with local or global jurisdictions.
+                  <br></br>
+                  * Be decent.
                 </pre>
               </span>
             }

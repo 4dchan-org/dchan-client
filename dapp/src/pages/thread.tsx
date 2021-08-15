@@ -24,6 +24,7 @@ import {
 import Error from "components/Error";
 import _ from "lodash";
 import PostBody from "components/post/PostBody";
+import { HashLink } from "react-router-hash-link";
 
 interface ThreadData {
   thread?: Thread;
@@ -280,6 +281,7 @@ export default function ThreadPage({
                         File:{" "}
                         <span className="text-xs">
                           <a
+                            target="_blank"
                             className="text-blue-600 max-w-64"
                             href={ipfsUrl}
                             title={image.name}
@@ -335,9 +337,9 @@ export default function ThreadPage({
           );
         })}
         <div>
-          <a href="#board-header" className="inline bg-secondary rounded-full">
+          <HashLink to="#board-header" className="inline bg-secondary rounded-full">
             ⤴️
-          </a>
+          </HashLink>
         </div>
       </div> : ""}
 
