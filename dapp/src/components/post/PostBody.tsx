@@ -12,9 +12,9 @@ export default function PostBody({children, style = {}}: {style?: any, children:
   // console.log({sanitized})
   let __html = sanitized
     .replace(/^&gt;(.*)$/gm, "<span class=\"text-quote\">&gt;$1</span>") // Quotes
-    .replace(/&gt;&gt;(0[xX][0-9a-fA-F])+/gm, "<a class=\"text-blue-600 visited:text-purple-600 hover:text-blue-500\">&gt;&gt;$1</a>") // Post quotes
+    .replace(/&gt;&gt;(0[xX][0-9a-fA-F])+/gm, "<a href=\"/#/$1\" class=\"text-blue-600 visited:text-purple-600 hover:text-blue-500\">&gt;&gt;$1</a>") // Post quotes
     .replace(/\[spoiler\]((?:.|\s)*?)\[\/spoiler]/gm, "<span class=\"dchan-post-spoiler\">$1</span>") // Spoiler
-    .replace(/&gt;&gt;(\d)+/gm, "<a class=\"text-blue-600 visited:text-purple-600 hover:text-blue-500\" onclick=\"quotePost($1)\" href=\"#dchan-post-form\">&gt;&gt;$1</a>") // Post quotes
+    .replace(/&gt;&gt;(\d)+/gm, "<button class=\"text-blue-600 visited:text-purple-600 hover:text-blue-500\" onclick=\"quotePost($1)\">&gt;&gt;$1</button>") // Post quotes
     .replace(kLINK_DETECTION_REGEX, "<a class=\"text-blue-600 visited:text-purple-600 hover:text-blue-500\" href=\"$1\" target=\"_blank\" rel=\"noreferrer\">$1</a>") // Links
     .replace(/\n/gm, "<br>")
     

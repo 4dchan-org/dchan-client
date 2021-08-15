@@ -1,13 +1,4 @@
 /** Custom complex behaviour components that I don't want to make atomic scss for **/
-:target.on-target-expand-post {
-    max-height: initial;
-    max-width: initial;
-    z-index: 900;
-    margin-left: -2rem;
-    margin-right: -2rem;
-    width: 14rem;
-}
-
 .on-parent-target-show {
     display: none;
 }
@@ -22,11 +13,6 @@
 
 :target .on-parent-target-font-bold {
     font-weight: 700;
-}
-
-:target .on-parent-target-highlight {
-    background: var(--tertiary);
-    border-bottom: 1px solid var(--tertiary-accent);
 }
 
 .dchan-post-signature-check {

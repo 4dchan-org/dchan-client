@@ -51,9 +51,13 @@ export default function ThreadPage({
     PubSub.publish('FORM_QUOTE', n);
   };
 
-  return loading ? (
-    <Loading></Loading>
-  ) : !thread ? (
+  const [focusedPost, setFocusedPost] = useState<string>();
+  
+  const focusPost = (focusId: string) => {
+    setFocusedPost(focusId)
+  }
+
+  return !loading && !thread ? (
     <Error subject={"Thread not found"} body={"¯\\_(ツ)_/¯"} />
   ) : (
     <div className="bg-primary min-h-100vh" dchan-board={thread?.board.name} data-theme={thread?.board?.isNsfw ? "nsfw" : "blueboard" }>
@@ -64,6 +68,7 @@ export default function ThreadPage({
         <hr></hr>
       </div>
 
+      {loading ? <Loading></Loading> : thread ? 
       <div className="font-size-090rem mx-2 sm:mx-4">
         {[thread.op, ...thread.replies].map((post) => {
           let {
@@ -123,9 +128,9 @@ export default function ThreadPage({
                   {createdAt.toRelative()})
                 </span>
                 <span className="px-0.5 on-parent-target-font-bold font-family-tahoma whitespace-nowrap">
-                  <a href={`#${n}`} title="Link to this post">
+                  <button onClick={() => focusPost(id)} title="Link to this post">
                     No.
-                  </a>
+                  </button>
                   <button
                     title="Reply to this post"
                     onClick={() => replyTo(`${n}`)}
@@ -262,7 +267,9 @@ export default function ThreadPage({
                 <div
                   className={`${
                     !isOp ? "bg-secondary" : ""
-                  } w-full sm:w-auto pb-2 mb-2 px-4 inline-block on-parent-target-highlight border-bottom-invisible relative max-w-screen-xl`}
+                  } ${
+                    focusedPost === id ? "bg-tertiary" : ""
+                  } w-full sm:w-auto pb-2 mb-2 px-4 inline-block border-bottom-invisible relative max-w-screen-xl`}
                 >
                   <div className="flex flex-wrap center sm:block pl-2">
                     <PostHeader></PostHeader>
@@ -332,7 +339,7 @@ export default function ThreadPage({
             ⤴️
           </a>
         </div>
-      </div>
+      </div> : ""}
 
       <Footer></Footer>
     </div>

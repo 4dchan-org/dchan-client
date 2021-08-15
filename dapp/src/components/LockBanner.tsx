@@ -36,7 +36,6 @@ export default function LockBanner() {
                   Someone made a stinky and dchan got locked.
                 </div>
                 <div className="text-sm">Hopefully it wasn't you.</div>
-                <div className="text-md">brb...?</div>
               </div>
             </div>
           }

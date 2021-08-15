@@ -65,7 +65,11 @@
 }
 
 .border-bottom-secondary {
-    border-bottom: 1px solid var(--tertiary-accent);
+    border-bottom: 1px solid var(--secondary);
+}
+
+.border-bottom-tertiary {
+    border-bottom: 1px solid var(--tertiary);
 }
 
 .max-h-150px {

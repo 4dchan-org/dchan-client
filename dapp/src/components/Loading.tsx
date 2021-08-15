@@ -1,7 +1,12 @@
+import Spinner from "./Spinner";
+
 export default function Loading() {  
     return (
       <div className="grid center">
-          Loading...
+          <Spinner speed={"sanic"}></Spinner>
+          <div>
+            Loading...
+          </div>
       </div>
     )
   }

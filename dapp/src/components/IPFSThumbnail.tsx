@@ -25,7 +25,7 @@ export default function IPFSThumbnail({
   return (
     <span className={`${className} relative`}>
       <span
-        className={"filter " + (!canShow ? "blur brightness-50" : "")}
+        className={"filter " + (!canShow ? "blur brightness-50 contrast-50" : "")}
         onClick={() => {
           if(isNsfw && !showNsfw) {
             setShowNsfw(true)
@@ -46,6 +46,7 @@ export default function IPFSThumbnail({
         <img
           className={[coverClass, thumbnailClass].join(' ')}
           src={spoilerSrc}
+          onClick={() => setShowSpoiler(true)}
         ></img>
       ) : (
         ""
@@ -54,6 +55,7 @@ export default function IPFSThumbnail({
         <img
           className={[coverClass, thumbnailClass].join(' ')}
           src={nsfwSrc}
+          onClick={() => setShowNsfw(true)}
         ></img>
       ) : (
         ""

@@ -8,6 +8,10 @@ const SEARCH_BY_ID = gql`
     }
     thread(id: $id) {
       id
+      board {
+        id
+        name
+      }
     }
     user(id: $id) {
       id

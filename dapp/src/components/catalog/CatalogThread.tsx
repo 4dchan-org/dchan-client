@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import spoilerSrc from "assets/images/spoiler.png";
 import nsfwSrc from "assets/images/nsfw.png";
 import PostBody from "components/post/PostBody";
+import { useState } from "react";
 
 const CatalogThread = ({thread: {
     id,
@@ -21,15 +22,36 @@ const CatalogThread = ({thread: {
     replyCount,
     imageCount
 }, board}: {thread: Thread, board: Board}) => {
+    const [focused, setFocused] = useState<boolean>(false);
+
+    const onExternalPostCatalogFocus = (_: any, focusId: string) => {
+        console.log({focusId})
+        setFocused(id == focusId)
+    }
+
+    PubSub.subscribe('POST_CATALOG_FOCUS', onExternalPostCatalogFocus);
+
+    const focusPost = () => {
+        console.log({id})
+        PubSub.publish('POST_CATALOG_FOCUS', id)
+    }
+
     const imgClassName = "w-full max-h-150px pointer-events-none shadow-xl object-contain"
     return (
-        <article id={id} className="dchan-post relative text-decoration-none leading-4 text-black m-0.5 border-black overflow-hidden max-h-320px max-w-150px break-word on-target-expand-post w-full h-full place-items-start">
-            <a className="on-parent-target-hide absolute top-0 left-0 right-0 bottom-0" href={`#${id}`}></a>
+        <article id={id} className="dchan-post relative text-decoration-none leading-4 text-black m-0.5 border-black overflow-hidden max-h-320px max-w-150px break-word w-full h-full place-items-start" style={focused ? {
+            maxHeight: "initial",
+            maxWidth: "initial",
+            zIndex: 900,
+            marginLeft: "-2rem",
+            marginRight: "-2rem",
+            width: "14rem",
+        } : {}}>
+            {!focused ? <a href={window.location.href} onClick={focusPost} className="absolute top-0 left-0 right-0 bottom-0"></a> : ""}
 
             <Link to={`/${board.name}/${board.id}/${id}`}>
-                <div className="on-parent-target-highlight">
+                <div className={focused ? "bg-tertiary border-bottom-tertiary" : ""}>
                     <div>
-                        <IPFSImage className={(isSpoiler || isNsfw ? "filter blur brightness-50 " : "") + imgClassName} hash={ipfsHash} />
+                        <IPFSImage className={(isSpoiler || isNsfw ? "filter blur brightness-50 contrast-50 " : "") + imgClassName} hash={ipfsHash} />
                         {isSpoiler ? (
                             <img
                             className={imgClassName}

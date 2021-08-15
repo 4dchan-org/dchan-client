@@ -1,7 +1,8 @@
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Switch,
-  Route
+  Route,
+  useHistory
 } from "react-router-dom";
 
 import 'assets/styles/index.scss';
@@ -15,9 +16,12 @@ import ReferencePage from "pages/reference";
 import AdminPage from "pages/admin";
 import LockBanner from "components/LockBanner";
 
+// const url = window.location.href.replace(/^.*\/\/[^\/]+/, '') // what the fuck?
+// window.history.replaceState({}, '"dchan.network', '/');
+
 function App() {
   return (
-    <Router>
+    <Router basename="/">
       <LockBanner />
       <div className="App text-center">
         <Switch>

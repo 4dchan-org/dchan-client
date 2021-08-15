@@ -9,6 +9,7 @@ import useWeb3 from "hooks/useWeb3";
 import Loading from "components/Loading";
 import _ from "lodash";
 import { useState } from "react";
+import { HashLink as Link } from 'react-router-hash-link';
 
 interface CatalogData {
   board: Board;
@@ -131,12 +132,11 @@ export default function CatalogPage({
             </div>
 
             <div>
-              <a
-                href="#board-header"
+              <Link to="#board-header"
                 className="inline bg-secondary rounded-full"
               >
                 ⤴️
-              </a>
+              </Link>
             </div>
           </div>
         )

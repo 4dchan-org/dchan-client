@@ -9,7 +9,7 @@ export default function WalletConnect({
   loadWeb3Modal: any,
   logoutOfWeb3Modal: any
 }) {
-  const [stillStuck, setStillStuck] = useState<boolean>(false);
+  const [stillStuck, setStillStuck] = useState<boolean>(true);
 
   return (
     <div>

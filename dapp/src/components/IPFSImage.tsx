@@ -13,9 +13,10 @@ export default function IPFSImage({
   style?: React.CSSProperties;
   loading?: "eager" | "lazy";
 }) {
+  const ipfsSrc = `https://ipfs.io/ipfs/${hash}`
   const [imgError, setImgError] = useState<any>(false);
   const [imgLoading, setImgLoading] = useState<boolean>(true);
-  const [imgSrc, setImgSrc] = useState<string>(`https://ipfs.io/ipfs/${hash}`);
+  const [imgSrc, setImgSrc] = useState<string>(ipfsSrc);
 
   !!imgError && console.log({imgError})
 
@@ -39,6 +40,10 @@ export default function IPFSImage({
         src={imgSrc}
         onLoad={() => setImgLoading(false)}
         loading={loading}
+        onClick={() => {
+          setImgSrc(ipfsSrc + "?t="+ (new Date('2012.08.10').getTime()))
+          setImgError(undefined)
+        }}
         onError={e => {
           setImgSrc(ipfsErrorSrc)
           setImgError(e)

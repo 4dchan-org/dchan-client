@@ -18,7 +18,7 @@ interface BoardListData {
   lastCreated: Board[];
 }
 
-interface BoardListVars {}
+interface BoardListVars { }
 
 export default function BoardListPage() {
   const { accounts, provider } = useWeb3();
@@ -26,7 +26,7 @@ export default function BoardListPage() {
   const { query } = {
     query: BOARDS_LIST,
   };
-  
+
   const { loading, data } = useQuery<BoardListData, BoardListVars>(query, {});
   const history = useHistory();
   const [status, setStatus] = useState<string | object>();
@@ -49,11 +49,9 @@ export default function BoardListPage() {
     <div className="bg-primary min-h-100vh">
       <GenericHeader title="Boards"></GenericHeader>
       {loading ? (
-        <tr>
-          <td>
-            <Loading></Loading>
-          </td>
-        </tr>
+        <div className="center grid">
+          <Loading></Loading>
+        </div>
       ) : (
         <div>
           <div className="center flex">

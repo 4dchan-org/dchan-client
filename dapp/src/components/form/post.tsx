@@ -471,7 +471,7 @@ export default function FormPost({
                     </li>
                     <li>
                       I understand that{" "}
-                      <abbr title="Posts can be removed, but they will still be retrievable from the blockchain.">
+                      <abbr title="Posts can be removed, but they will still be retrievable somehow. Remember, the internet does not forget. Ever.">
                         <i>posts cannot be deleted</i>
                       </abbr>
                     </li>

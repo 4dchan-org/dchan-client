@@ -11,7 +11,7 @@
 }
 
 .animation-spin.spin-sanic {
-    animation: spin-keyframes 1 infinite linear;
+    animation: spin-keyframes 1s infinite linear;
 }
 
 @keyframes spin-keyframes {
