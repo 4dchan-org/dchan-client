@@ -10,6 +10,7 @@ import Loading from "components/Loading";
 import _ from "lodash";
 import { useState } from "react";
 import { HashLink as Link } from 'react-router-hash-link';
+import useUser from "hooks/useUser";
 
 interface CatalogData {
   board: Board;
@@ -23,26 +24,33 @@ interface CatalogVars {
 
 export default function CatalogPage({
   match: {
-    params: { boardId },
+    params: { boardId: boardIdParam },
   },
 }: any) {
+  const boardId = `0x${boardIdParam}`
   const useWeb3Result = useWeb3();
   const { refetch, loading, data } = useQuery<CatalogData, CatalogVars>(
     CATALOG,
     {
-      variables: { boardId: `0x${boardId}`, limit: 25 },
+      variables: { boardId, limit: 25 },
     }
   );
   const [search, setSearch] = useState<string>("");
 
-  const throttledRefresh = _.throttle(refetch, 5000);
+  const throttledRefresh = _.throttle(() => {
+    try {
+      refetch({
+        boardId
+      })
+    } catch(e) {
+      console.error({refreshError: e})
+    }
+  }, 5000);
   const onRefresh = () => throttledRefresh();
 
   const onSearchChange = (e: any) => setSearch(e.target.value);
 
-  const { accounts, userData } = useWeb3Result;
-  const isJanny = false; // @TODO Check user is in any of board jannies or is admin
-
+  const { accounts } = useWeb3Result;
   const board = data?.board;
   const threads = [...(data?.pinned || []), ...(data?.threads || [])];
 
@@ -54,8 +62,6 @@ export default function CatalogPage({
     >
       <BoardHeader
         board={data?.board}
-        isJanny={isJanny}
-        accounts={accounts}
       ></BoardHeader>
 
       <FormPost board={data?.board} useWeb3={useWeb3Result}></FormPost>

@@ -14,18 +14,22 @@ class RulesPage extends React.Component {
           <Card
             title={<span>The rules</span>}
             body={
-              <span className="p-8">
-                <pre>
-                  * Do not post stuff that can get you in trouble with local or global jurisdictions.
-                  <br></br>
-                  * Be decent.
-                </pre>
-              </span>
+              <div className="p-8">
+                <ul className="list-disc text-wrap">
+                  <li>Do not post anything that can get you in trouble with local or global jurisdictions. You alone assume full responsibility for the content you post and upload.</li>
+                  <li>Be decent.</li>
+                </ul>
+              </div>
             }
           />
         </div>
-        
-        <Link className="m-4 text-blue-600 visited:text-purple-600 hover:text-blue-500" to="/">Home</Link>
+
+        <Link
+          className="m-4 text-blue-600 visited:text-purple-600 hover:text-blue-500"
+          to="/"
+        >
+          Home
+        </Link>
 
         <Footer></Footer>
       </div>

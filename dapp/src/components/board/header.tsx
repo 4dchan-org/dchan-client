@@ -7,16 +7,17 @@ import AddressLabel from "components/AddressLabel";
 import Menu from "components/Menu";
 import { useState } from "react";
 import { lockBoard, removeBoard, unlockBoard } from "dchan/operations";
+import useUser from "hooks/useUser";
+import useWeb3 from "hooks/useWeb3";
 
 export default function BoardHeader({
-  board,
-  accounts,
-  isJanny = false,
+  board
 }: {
-  board: Board | undefined;
-  accounts?: string[];
-  isJanny?: boolean;
+  board: Board | undefined
 }) {
+  const { accounts } = useWeb3()
+  const { isJanny } = useUser()
+  const bIsJanny = board ? isJanny(board.id) : false
   const [status, setStatus] = useState<string | object>();
 
   return (
@@ -45,7 +46,7 @@ export default function BoardHeader({
               <span></span>
             )}
           </span>
-          {board && isJanny ? (
+          {board && bIsJanny ? (
             <span>
               <span>
                 <Menu>

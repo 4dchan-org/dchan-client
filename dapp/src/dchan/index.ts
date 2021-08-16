@@ -16,6 +16,7 @@ export type Board = {
 export type BoardJanny = {
     id: string
     user: User
+    board: Board | undefined // Could have been deleted
 }
 
 export type Thread = {
@@ -56,6 +57,10 @@ export type Catalog = {
     threads: Thread[]
 }
 
+export type Admin = {
+    id: string
+}
+
 export type User = {
     id: string,
     address: string,
@@ -93,18 +98,25 @@ export function createJsonMessage(op: string, data: object) {
 
 export async function sendMessage(operation: string, data: object, from: string) {
     const web3 = new Web3(window.web3.currentProvider);
-    const relayContract = new web3.eth.Contract(abi as AbiItem[], Config.contract.address);
-    
+
+    const relayContract = new web3.eth.Contract(abi as AbiItem[], Config.contract.address)
     const msg = await relayContract.methods.message(createJsonMessage(operation, data))
-    return await msg.send({
+
+    return msg.send({
       from
     })
 }
 
+export async function sendTip(from: string, to: string, amount: number) {
+    const web3 = new Web3(window.web3.currentProvider);
+
+    const value = amount * Math.pow(10, 18); // Convert to wei value
+
+    return web3.eth.sendTransaction({ from ,to, value })
+}
+
 export async function getBalance(account: string) {
     const web3 = new Web3(window.web3.currentProvider);
-    
-    const balance = await web3.eth.getBalance(account)
-    console.log({balance})
-    return balance
+
+    return web3.eth.getBalance(account)
 }
