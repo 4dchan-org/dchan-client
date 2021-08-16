@@ -46,7 +46,7 @@
 }
 
 .animation-fade-in {
-    animation: fade-in-keyframes 1s ease-in
+    animation: fade-in-keyframes 1s cubic-bezier(0,.69,.69,1)
 }
 
 @keyframes fade-in-keyframes {

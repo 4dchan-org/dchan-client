@@ -1,4 +1,4 @@
-import IPFSThumbnail from "components/IPFSThumbnail";
+import IPFSImage from "components/IPFSImage";
 import { Post as DchanPost, Thread } from "dchan";
 import { truncate } from "lodash";
 import { useState } from "react";
@@ -73,11 +73,13 @@ export default function Post({ post, thread }: { post: DchanPost; thread: Thread
             <div className="h-full max-w-max">
               {!!image ? (
                 <div className="px-2 sm:float-left grid center">
-                  <IPFSThumbnail
+                  <IPFSImage
                     hash={image.ipfsHash}
                     isSpoiler={image.isSpoiler}
                     isNsfw={image.isNsfw}
-                  ></IPFSThumbnail>
+                    thumbnail={true}
+                    expandable={true}
+                  ></IPFSImage>
                 </div>
               ) : (
                 ""

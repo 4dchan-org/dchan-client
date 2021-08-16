@@ -51,7 +51,7 @@ const CatalogThread = ({thread: {
             <Link to={`/${board.name}/${board.id}/${id}`}>
                 <div className={focused ? "bg-tertiary border-bottom-tertiary" : ""}>
                     <div>
-                        <IPFSImage className={(isSpoiler || isNsfw ? "filter blur brightness-50 contrast-50 " : "") + imgClassName} hash={ipfsHash} />
+                        <IPFSImage className={(isSpoiler || isNsfw ? "filter blur brightness-50 contrast-50 " : "") + imgClassName} hash={ipfsHash} expandable={false} thumbnail={true} />
                         {isSpoiler ? (
                             <img
                             className={imgClassName}
