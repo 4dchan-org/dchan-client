@@ -75,23 +75,17 @@ export async function postMessage(
         data.board = board;
     }
 
-    try {
-        setStatus({
-            progress: "Sending...",
-        });
+    setStatus({
+        progress: "Sending...",
+    });
 
-        const result = await sendMessage("post:create", data, accounts[0]);
+    const result = await sendMessage("post:create", data, accounts[0]);
 
-        setStatus({
-            success: "Sent ;)",
-        });
+    setStatus({
+        success: "Sent ;)",
+    });
 
-        return result
-    } catch (error) {
-        setStatus({ error });
-
-        console.error({ error });
-    }
+    return result
 }
 
 export async function removePost(id: string, accounts: any, setStatus: SetStatus) {

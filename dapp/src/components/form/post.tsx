@@ -64,21 +64,28 @@ export default function FormPost({
 
   const onSubmit = async (data: any) => {
     setIsSending(true);
-    const result = await postMessage(data, accounts, setStatus);
+    try {
+      const result = await postMessage(data, accounts, setStatus);
 
-    const events = result?.events;
-    if (events && events.length > 0) {
-      const { transactionHash, logIndex } = events[0];
-
-      if (board && !thread) {
-        const url = `/${transactionHash}-${logIndex}`;
-        history.push(url);
+      const events = result?.events;
+      if (events && events.length > 0) {
+        const { transactionHash, logIndex } = events[0];
+        console.log({transactionHash, logIndex, board, thread})
+        if (board && !thread) {
+          const url = `/${transactionHash}-${logIndex}`;
+          history.push(url);
+        }
       }
+
+      resetForm()
+      updateNonce();
+    } catch(error) {
+      setStatus({ error });
+      
+      console.log({error})
     }
 
     setIsSending(false);
-    resetForm()
-    updateNonce();
   };
 
   const fileRemove = () => {

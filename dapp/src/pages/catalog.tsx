@@ -9,8 +9,9 @@ import useWeb3 from "hooks/useWeb3";
 import Loading from "components/Loading";
 import _ from "lodash";
 import { useState } from "react";
-import { HashLink as Link } from 'react-router-hash-link';
+import { HashLink, HashLink as Link } from 'react-router-hash-link';
 import useUser from "hooks/useUser";
+import { DateTime } from "luxon";
 
 interface CatalogData {
   board: Board;
@@ -29,6 +30,7 @@ export default function CatalogPage({
 }: any) {
   const boardId = `0x${boardIdParam}`
   const useWeb3Result = useWeb3();
+  
   const { refetch, loading, data } = useQuery<CatalogData, CatalogVars>(
     CATALOG,
     {
@@ -37,20 +39,22 @@ export default function CatalogPage({
   );
   const [search, setSearch] = useState<string>("");
 
-  const throttledRefresh = _.throttle(() => {
+  const [lastRefreshedAt, setLastRefreshedAt] = useState<DateTime>(DateTime.now());
+
+  const throttledRefresh = _.throttle(async () => {
     try {
-      refetch({
+      await refetch({
         boardId
       })
+      setLastRefreshedAt(DateTime.now())
     } catch(e) {
       console.error({refreshError: e})
     }
   }, 5000);
+  
   const onRefresh = () => throttledRefresh();
-
   const onSearchChange = (e: any) => setSearch(e.target.value);
 
-  const { accounts } = useWeb3Result;
   const board = data?.board;
   const threads = [...(data?.pinned || []), ...(data?.threads || [])];
 
@@ -74,12 +78,12 @@ export default function CatalogPage({
         <div className="mx-2">
           <span className="mx-1">
             [
-            <a
+            <HashLink
               className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-              href="#bottom"
+              to="#bottom"
             >
               Bottom
-            </a>
+            </HashLink>
             ]
           </span>
           <span className="mx-1">
@@ -90,7 +94,7 @@ export default function CatalogPage({
             >
               Refresh
             </button>
-            ]
+            ] <span className="text-xs whitespace-nowrap"><small>Last refreshed at {lastRefreshedAt ? lastRefreshedAt.toLocaleString(DateTime.DATETIME_SHORT) : ""} </small></span>
           </span>
         </div>
         <div className="mx-2 flex-grow"></div>
