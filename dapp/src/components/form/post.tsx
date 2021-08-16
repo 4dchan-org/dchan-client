@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
-import { Board, sendMessage, Thread } from "dchan";
+import { Board, Thread } from "dchan";
 import WalletConnect from "components/wallet/WalletConnect";
 import WalletAccount from "components/wallet/WalletAccount";
 import WalletSwitchChain from "components/wallet/WalletSwitchChain";
 import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { UseWeb3 } from "hooks/useWeb3";
-import Status, { SetStatus } from "components/Status";
+import Status from "components/Status";
 import useEventListener from "hooks/useEventListener";
-import _, { uniqueId } from "lodash";
+import { isString, uniqueId } from "lodash";
 import { postMessage } from "dchan/operations";
 import MaxLengthWatch from "./MaxLengthWatch";
 import AddressLabel from "components/AddressLabel";
-import PubSub from 'pubsub-js'
+import { subscribe } from 'pubsub-js'
 
 export default function FormPost({
   thread,
@@ -46,7 +46,7 @@ export default function FormPost({
   }, []);
 
   useEffect(() => {
-    PubSub.subscribe('FORM_QUOTE', onQuote);
+    subscribe('FORM_QUOTE', onQuote);
   }, [onQuote])
   
   
@@ -81,7 +81,7 @@ export default function FormPost({
       updateNonce();
     } catch(error) {
       setStatus({ error });
-      
+
       console.log({error})
     }
 
@@ -152,7 +152,7 @@ export default function FormPost({
         const reader = new FileReader();
         reader.onload = async (event) => {
           const dataUrl = event?.target?.result
-          if(_.isString(dataUrl)) {
+          if(isString(dataUrl)) {
             const mimeType = dataUrl.substring(dataUrl.indexOf(":")+1, dataUrl.indexOf(";"))
             
             const file = await fetch(dataUrl)
@@ -478,7 +478,7 @@ export default function FormPost({
                     </li>
                     <li>
                       I understand that{" "}
-                      <abbr title="Posts and content can be removed, but other users will still be able to retrieve them. Once it's out there, there's no going back. No one will be able to help you erase it. _The internet never forgets_">
+                      <abbr title="Posts and content can be removed, but other users will still be able to retrieve them. Once it's out there, there's no going back. No one will be able to help you erase it. _The_internet_never_forgets_">
                         <i>posts cannot be deleted</i>
                       </abbr>
                     </li>

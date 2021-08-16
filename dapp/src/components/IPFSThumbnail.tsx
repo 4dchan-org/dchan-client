@@ -46,6 +46,7 @@ export default function IPFSThumbnail({
         <img
           className={[coverClass, thumbnailClass].join(' ')}
           src={spoilerSrc}
+          alt="SPOILER"
           onClick={() => setShowSpoiler(true)}
         ></img>
       ) : (
@@ -55,6 +56,7 @@ export default function IPFSThumbnail({
         <img
           className={[coverClass, thumbnailClass].join(' ')}
           src={nsfwSrc}
+          alt="NSFW"
           onClick={() => setShowNsfw(true)}
         ></img>
       ) : (

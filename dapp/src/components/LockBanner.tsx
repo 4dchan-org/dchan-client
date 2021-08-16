@@ -30,7 +30,7 @@ export default function LockBanner() {
           title={<div className="text-red-500 text-4xl">UH OH</div>}
           body={
             <div className="center grid">
-              <img src={poopieSrc} />
+              <img src={poopieSrc} alt="poopie" />
               <div className="p-4">
                 <div className="text-md">
                   Someone made a stinky and dchan got locked.

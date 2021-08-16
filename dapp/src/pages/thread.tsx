@@ -28,7 +28,7 @@ import {
   unpinThread,
 } from "dchan/operations";
 import Error from "components/Error";
-import _ from "lodash";
+import { truncate } from "lodash";
 import PostBody from "components/post/PostBody";
 import { HashLink } from "react-router-hash-link";
 import useUser from "hooks/useUser";
@@ -346,7 +346,7 @@ export default function ThreadPage({
                               href={ipfsUrl}
                               title={image.name}
                             >
-                              {_.truncate(image.name, {
+                              {truncate(image.name, {
                                 length: 32,
                                 omission: "...",
                               })}

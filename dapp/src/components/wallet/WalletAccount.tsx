@@ -32,7 +32,7 @@ export default function WalletAccount({ provider, accounts }: any) {
         {balance ? (
           <span>
             ( {balance.toFixed(4)}
-            <img className="inline h-4 w-4 mx-1" title="MATIC" src={polygonLogo}></img>)
+            <img className="inline h-4 w-4 mx-1" alt="MATIC" src={polygonLogo}></img>)
           </span>
         ) : (
           ""

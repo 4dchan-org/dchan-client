@@ -56,11 +56,13 @@ const CatalogThread = ({thread: {
                             <img
                             className={imgClassName}
                             src={spoilerSrc}
+                            alt="SPOILER"
                             ></img>
                         ) : isNsfw? (
                             <img
                             className={imgClassName}
                             src={nsfwSrc}
+                            alt="NSFW"
                             ></img>
                         ): ""}
                     </div>

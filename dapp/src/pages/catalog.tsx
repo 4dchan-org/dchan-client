@@ -7,10 +7,9 @@ import CATALOG from "dchan/graphql/queries/catalog";
 import { Board, Thread } from "dchan";
 import useWeb3 from "hooks/useWeb3";
 import Loading from "components/Loading";
-import _ from "lodash";
+import { throttle } from "lodash";
 import { useState } from "react";
 import { HashLink, HashLink as Link } from 'react-router-hash-link';
-import useUser from "hooks/useUser";
 import { DateTime } from "luxon";
 
 interface CatalogData {
@@ -41,7 +40,7 @@ export default function CatalogPage({
 
   const [lastRefreshedAt, setLastRefreshedAt] = useState<DateTime>(DateTime.now());
 
-  const throttledRefresh = _.throttle(async () => {
+  const throttledRefresh = throttle(async () => {
     try {
       await refetch({
         boardId
