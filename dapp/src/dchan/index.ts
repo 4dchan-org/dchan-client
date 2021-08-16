@@ -1,7 +1,7 @@
 import Web3 from "web3"
 import abi from "abis/Relay.json"
 import { AbiItem } from "web3-utils/types"
-import Config from "config"
+import Config from "settings/default"
 
 export type Board = {
     id: string,

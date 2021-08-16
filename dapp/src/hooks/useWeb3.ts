@@ -1,11 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Web3Provider } from "@ethersproject/providers";
 import Web3Modal from "web3modal";
-import { User } from "dchan";
-
-// Enter a valid infura key here to avoid being rate limited
-// You can get a key for free at https://infura.io/register
-const INFURA_ID = "INVALID_INFURA_KEY";
 
 const NETWORK_NAME = "matic";
 
@@ -17,15 +12,7 @@ export type UseWeb3 = {
   provider: Web3Provider | undefined;
   chainId: string | number | undefined;
   accounts: string[];
-  web3Modal: UseWeb3Modal;
-  userData?: UserData;
-}
-
-interface UserData {
-  user?: User;
-}
-interface UserVars {
-  userId: string;
+  web3Modal: UseWeb3Modal
 }
 
 function useWeb3(config = {}): UseWeb3 {
@@ -33,7 +20,7 @@ function useWeb3(config = {}): UseWeb3 {
   const [chainId, setChainId] = useState<string|number>();
   const [accounts, setAccounts] = useState<string[]>([]);
   const [autoLoaded, setAutoLoaded] = useState<boolean>(false);
-  const { autoLoad = true, infuraId = INFURA_ID, NETWORK = NETWORK_NAME } = config as any;
+  const { autoLoad = true, NETWORK = NETWORK_NAME } = config as any;
 
   // Web3Modal also supports many other wallets.
   // You can see other options at https://github.com/Web3Modal/web3modal

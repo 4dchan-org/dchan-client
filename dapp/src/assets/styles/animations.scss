@@ -44,3 +44,17 @@
         transform: scale(0.8);
     }
 }
+
+.animation-fade-in {
+    animation: fade-in-keyframes 1s ease-in
+}
+
+@keyframes fade-in-keyframes {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1
+    }
+}

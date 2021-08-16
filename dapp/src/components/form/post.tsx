@@ -5,30 +5,29 @@ import WalletAccount from "components/wallet/WalletAccount";
 import WalletSwitchChain from "components/wallet/WalletSwitchChain";
 import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { UseWeb3 } from "hooks/useWeb3";
+import useWeb3 from "hooks/useWeb3";
 import Status from "components/Status";
 import useEventListener from "hooks/useEventListener";
 import { isString, uniqueId } from "lodash";
 import { postMessage } from "dchan/operations";
 import MaxLengthWatch from "./MaxLengthWatch";
 import AddressLabel from "components/AddressLabel";
-import { subscribe } from 'pubsub-js'
+import { subscribe } from "pubsub-js";
 
 export default function FormPost({
   thread,
   board,
-  useWeb3
 }: {
   thread?: Thread;
   board?: Board;
-  useWeb3: UseWeb3 
 }) {
   const {
     provider,
     chainId,
     accounts,
     web3Modal: { loadWeb3Modal, logoutOfWeb3Modal },
-  } = useWeb3;
+  } = useWeb3();
+
   const history = useHistory();
   const [isSending, setIsSending] = useState<boolean>(false);
   const [nonce, setNonce] = useState<string>(uniqueId());
@@ -40,23 +39,27 @@ export default function FormPost({
   const [thumbnailB64, setThumbnailB64] = useState<string>();
 
   const onQuote = useCallback(function (msg, data) {
-    const { comment } = getValues()
-    const quote = `>>${data}`
-    setValue('comment', `${comment}${!!comment && comment.substr(-1, 1) !== ' ' ? ' ' : '' }${quote} `)
+    const { comment } = getValues();
+    const quote = `>>${data}`;
+    setValue(
+      "comment",
+      `${comment}${
+        !!comment && comment.substr(-1, 1) !== " " ? " " : ""
+      }${quote} `
+    );
   }, []);
 
   useEffect(() => {
-    subscribe('FORM_QUOTE', onQuote);
-  }, [onQuote])
-  
-  
+    subscribe("FORM_QUOTE", onQuote);
+  }, [onQuote]);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
     getValues,
-    reset: resetForm
+    reset: resetForm,
   } = useForm();
 
   const values = getValues();
@@ -70,19 +73,19 @@ export default function FormPost({
       const events = result?.events;
       if (events && events.length > 0) {
         const { transactionHash, logIndex } = events[0];
-        console.log({transactionHash, logIndex, board, thread})
+        console.log({ transactionHash, logIndex, board, thread });
         if (board && !thread) {
           const url = `/${transactionHash}-${logIndex}`;
           history.push(url);
         }
       }
 
-      resetForm()
+      resetForm();
       updateNonce();
-    } catch(error) {
+    } catch (error) {
       setStatus({ error });
 
-      console.log({error})
+      console.log({ error });
     }
 
     setIsSending(false);
@@ -90,7 +93,7 @@ export default function FormPost({
 
   const fileRemove = () => {
     setValue("file", undefined);
-    onFileChange()
+    onFileChange();
   };
 
   const updateNonce = () => {
@@ -113,12 +116,12 @@ export default function FormPost({
   };
 
   const onFileChange = async () => {
-    refreshThumbnail()
+    refreshThumbnail();
     const files: FileList = getValues().file;
     if (!!files && files.length > 0) {
-      setFileSize(files[0].size/1024)
+      setFileSize(files[0].size / 1024);
     } else {
-      setFileSize(0)
+      setFileSize(0);
     }
   };
 
@@ -143,29 +146,38 @@ export default function FormPost({
   };
 
   const pasteHandler = useCallback((event) => {
-    const clipboardData = event.clipboardData || event.originalEvent.clipboardData
-    const {files, items} = clipboardData;
+    const clipboardData =
+      event.clipboardData || event.originalEvent.clipboardData;
+    const { files, items } = clipboardData;
     if (!!items && items.length > 0) {
-      const item = items[0]
-      if (item.kind === 'file') {
+      const item = items[0];
+      if (item.kind === "file") {
         const blob = item.getAsFile();
         const reader = new FileReader();
         reader.onload = async (event) => {
-          const dataUrl = event?.target?.result
-          if(isString(dataUrl)) {
-            const mimeType = dataUrl.substring(dataUrl.indexOf(":")+1, dataUrl.indexOf(";"))
-            
+          const dataUrl = event?.target?.result;
+          if (isString(dataUrl)) {
+            const mimeType = dataUrl.substring(
+              dataUrl.indexOf(":") + 1,
+              dataUrl.indexOf(";")
+            );
+
             const file = await fetch(dataUrl)
-              .then(res => res.arrayBuffer())
-              .then(buf => new File([buf], `file.${mimeType.split("/")[1]}`, {type: mimeType}))
-            
+              .then((res) => res.arrayBuffer())
+              .then(
+                (buf) =>
+                  new File([buf], `file.${mimeType.split("/")[1]}`, {
+                    type: mimeType,
+                  })
+              );
+
             const list = new DataTransfer();
             list.items.add(file);
 
             setValue("file", list.files);
             onFileChange();
           }
-        }
+        };
         reader.readAsDataURL(blob);
       }
     } else if (!!files && files.length > 0) {
@@ -173,7 +185,7 @@ export default function FormPost({
       onFileChange();
     }
   }, []);
-  
+
   useEventListener("paste", pasteHandler);
 
   return thread?.isLocked ? (
@@ -381,7 +393,11 @@ export default function FormPost({
                                   className="max-h-24 max-w-24"
                                   src={thumbnailB64}
                                 ></img>
-                                <span className={`text-xs ${fileSize > 1000 ? "text-contrast" : ""}`}>
+                                <span
+                                  className={`text-xs ${
+                                    fileSize > 1000 ? "text-contrast" : ""
+                                  }`}
+                                >
                                   {Math.round(fileSize)} kb
                                 </span>
                               </details>
@@ -485,8 +501,10 @@ export default function FormPost({
                     {accounts && accounts.length > 0 ? (
                       <li>
                         I understand that my address{" "}
-                        <AddressLabel address={accounts[0]}></AddressLabel> <abbr title="Remember that other users will have access to all past transactions you ever made on this account. Be mindful of the security risks this can entail.">will
-                        be made public</abbr>
+                        <AddressLabel address={accounts[0]}></AddressLabel>{" "}
+                        <abbr title="Remember that other users will have access to all past transactions you ever made on this account. Be mindful of the security risks this can entail.">
+                          will be made public
+                        </abbr>
                       </li>
                     ) : (
                       ""

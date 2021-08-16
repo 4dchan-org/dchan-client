@@ -1,8 +1,8 @@
-import HeaderNavigation from "components/header/navigation";
+import HeaderNavigation from "components/header/HeaderNavigation";
 import HeaderLogo from "components/header/logo";
-import { Board, sendMessage } from "dchan";
+import { Board } from "dchan";
 import { Link } from "react-router-dom";
-import Status, { SetStatus } from "components/Status";
+import Status from "components/Status";
 import AddressLabel from "components/AddressLabel";
 import Menu from "components/Menu";
 import { useState } from "react";

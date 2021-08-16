@@ -1,6 +1,4 @@
 import Footer from "components/Footer";
-import React from "react";
-import Card from "components/Card";
 import GenericHeader from "components/header/generic";
 import { Link } from "react-router-dom";
 import useWeb3 from "hooks/useWeb3";

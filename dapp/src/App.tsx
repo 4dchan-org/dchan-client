@@ -14,6 +14,7 @@ import BoardSearchPage from "pages/boardSearch"
 import ThreadPage from "pages/thread";
 import ReferencePage from "pages/reference";
 import AdminPage from "pages/admin";
+import SettingsPage from "pages/settings";
 import LockBanner from "components/LockBanner";
 
 // const url = window.location.href.replace(/^.*\/\/[^\/]+/, '') // what the fuck?
@@ -29,6 +30,7 @@ function App() {
           <Route exact path="/boards" component={BoardListPage} />
           <Route path="/rules" component={RulesPage} />
           <Route path="/admin" component={AdminPage} />
+          <Route path="/settings" component={SettingsPage} />
           <Route path="/0x:ref" component={ReferencePage} />
           <Route path="/:boardName/0x:boardId/0x:threadId" component={ThreadPage} />
           <Route path="/:boardName/0x:boardId" component={BoardCatalogPage} />

@@ -17,38 +17,44 @@ export default function IPFSImage({
   const [imgError, setImgError] = useState<any>(false);
   const [imgLoading, setImgLoading] = useState<boolean>(true);
   const [imgSrc, setImgSrc] = useState<string>(ipfsSrc);
+  const [retryTimeout, setRetryTimeout] = useState<number>(2000)
+
+  const retry = () => {
+    setImgLoading(true)
+    setImgSrc(ipfsSrc + "?t="+ (new Date('2012.08.10').getTime()))
+    setImgError(undefined)
+    setRetryTimeout(Math.min(retryTimeout * 2, 60000))
+  }
 
   !!imgError && console.log({imgError})
 
   return (
-    <span>
+    <div>
       {imgLoading ? (
-        <span className="relative">
+        <div className="relative">
           <img
             className={"h-150px w-150px animation-download"}
             style={style}
             src={ipfsLoadingSrc}
           />
-          <span>Loading...</span>
-        </span>
-      ) : (
-        ""
-      )}
+          <div>Loading...</div>
+        </div>
+      ) : imgError ? <div className="p-2 opacity-50 hover:opacity-100">Image load error</div> : ""}
       <img
-        className={className}
+        className={className + " animation-fade-in"}
         style={imgLoading ? { ...style, visibility: "hidden" } : style}
         src={imgSrc}
         onLoad={() => setImgLoading(false)}
         loading={loading}
         onClick={() => {
-          setImgSrc(ipfsSrc + "?t="+ (new Date('2012.08.10').getTime()))
           setImgError(undefined)
         }}
         onError={e => {
           setImgSrc(ipfsErrorSrc)
           setImgError(e)
+          setTimeout(retry, retryTimeout)
         }}
       />
-    </span>
+    </div>
   );
 }

@@ -28,7 +28,7 @@ function useUser() {
     if(loading) return undefined
     
     const isAdmin = !!(data?.admin?.id)
-    console.log({isAdmin})
+    
     return isAdmin
   }
 
@@ -36,7 +36,7 @@ function useUser() {
     if(loading) return undefined
     
     const isJanny = isAdmin() || !!(data?.user?.jannies?.filter(({id}) => id === boardId).length)
-    console.log({isJanny})
+    
     return isJanny
   }
 

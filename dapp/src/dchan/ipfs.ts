@@ -1,5 +1,5 @@
 import { SetStatus } from "components/Status";
-import Config from "config";
+import Config from "settings/default";
 
 export type IpfsUploadResult = {
     ipfs: {

@@ -28,12 +28,12 @@ export default function CatalogPage({
   },
 }: any) {
   const boardId = `0x${boardIdParam}`
-  const useWeb3Result = useWeb3();
   
   const { refetch, loading, data } = useQuery<CatalogData, CatalogVars>(
     CATALOG,
     {
       variables: { boardId, limit: 25 },
+      pollInterval: 60_000
     }
   );
   const [search, setSearch] = useState<string>("");
@@ -67,7 +67,7 @@ export default function CatalogPage({
         board={data?.board}
       ></BoardHeader>
 
-      <FormPost board={data?.board} useWeb3={useWeb3Result}></FormPost>
+      <FormPost board={data?.board}></FormPost>
 
       <div className="p-2">
         <hr></hr>
@@ -93,7 +93,7 @@ export default function CatalogPage({
             >
               Refresh
             </button>
-            ] <span className="text-xs whitespace-nowrap"><small>Last refreshed at {lastRefreshedAt ? lastRefreshedAt.toLocaleString(DateTime.DATETIME_SHORT) : ""} </small></span>
+            ] <span className="text-xs whitespace-nowrap opacity-50 hover:opacity-100"><small>Last refreshed at {lastRefreshedAt ? lastRefreshedAt.toLocaleString(DateTime.DATETIME_SHORT) : ""} </small></span>
           </span>
         </div>
         <div className="mx-2 flex-grow"></div>

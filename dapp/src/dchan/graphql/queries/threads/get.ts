@@ -6,6 +6,7 @@ const THREAD_GET = gql`
     n
     from {
       id
+      address
     }
     name
     comment

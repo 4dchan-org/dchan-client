@@ -1,8 +1,8 @@
 import { useQuery } from "@apollo/react-hooks";
 import CHAN_STATUS from "dchan/graphql/queries/chan_status";
 import poopieSrc from "assets/images/poopie.png";
-import Config from "config";
 import Card from "./Card";
+import useSettings from "hooks/useSettings";
 interface ChanStatusData {
   chanStatus: {
     isLocked: boolean;
@@ -14,11 +14,12 @@ interface ChanStatusVars {
 }
 
 export default function LockBanner() {
+  const [settings] = useSettings()
   const { loading, data } = useQuery<ChanStatusData, ChanStatusVars>(
     CHAN_STATUS,
     {
       variables: {
-        id: Config.contract.address,
+        id: settings.contract.address,
       },
     }
   );

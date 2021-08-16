@@ -1,4 +1,3 @@
-import Markdown from "markdown-to-jsx";
 import sanitizeHtml from 'sanitize-html';
 
 (window as any).quotePost = function(quoting: any) {
