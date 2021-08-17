@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Board, Thread } from "dchan";
 import WalletConnect from "components/wallet/WalletConnect";
 import WalletAccount from "components/wallet/WalletAccount";
@@ -28,6 +28,7 @@ export default function FormPost({
   } = useWeb3();
 
   const history = useHistory();
+  const formRef = useRef<HTMLFormElement>(null);
   const [isSending, setIsSending] = useState<boolean>(false);
   const [nonce, setNonce] = useState<string>(uniqueId());
   const [status, setStatus] = useState<string | object>();
@@ -58,7 +59,8 @@ export default function FormPost({
         !!comment && comment.substr(-1, 1) !== " " ? " " : ""
       }${quote} `
     );
-  }, [getValues, setValue]);
+    formRef.current?.scrollIntoView()
+  }, [getValues, setValue, formRef]);
 
   useEffect(() => {
     subscribe("FORM_QUOTE", onQuote);
@@ -209,6 +211,7 @@ export default function FormPost({
             style={{ zIndex: 10000 }}
           >
             <form
+              ref={formRef}
               id="dchan-post-form"
               className="grid center bg-primary p-2 pointer-events-auto bg-primary"
               onSubmit={handleSubmit(onSubmit)}
