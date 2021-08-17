@@ -71,7 +71,7 @@ export default function PostHeader({
     } catch (e) {
       console.error({ onSendTipError: e });
     }
-  }, []);
+  }, [accounts]);
 
   const focusPost = useCallback(
     (id: string) => {

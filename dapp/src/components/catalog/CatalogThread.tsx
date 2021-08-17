@@ -31,11 +31,11 @@ const CatalogThread = ({thread, board}: {thread: Thread, board: Board}) => {
 
     useEffect(() => {
         subscribe('POST_CATALOG_FOCUS', onExternalPostCatalogFocus);
-    }, [subscribe])
+    }, [subscribe, onExternalPostCatalogFocus])
 
     const focusPost = useCallback(() => {
-        publish('POST_CATALOG_FOCUS', id)
-    }, [publish])
+        publish('POST_CATALOG_FOCUS', thread.id)
+    }, [publish, thread])
 
     const imgClassName = "w-full max-h-150px pointer-events-none shadow-xl object-contain"
     return (

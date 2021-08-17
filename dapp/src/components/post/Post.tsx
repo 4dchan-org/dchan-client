@@ -29,7 +29,7 @@ export default function Post({ post, thread }: { post: DchanPost; thread: Thread
 
   useEffect(() => {
     subscribe("POST_BACKLINK", (_: any, {from, to}: {from: DchanPost, to: string}) => {
-      if(`${to}` === `${n}` || to === id) {
+      if(`${to}` === `${post.n}` || to === post.id) {
         setBacklinks({...backlinks, [from.id]: from})
       }
     });
