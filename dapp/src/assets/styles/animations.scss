@@ -25,7 +25,8 @@
 }
 
 .animation-download {
-    animation: download-keyframes 5s infinite cubic-bezier(0.6, -0.28, 0.735, 0.045)
+    animation: download-keyframes 5s infinite cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    animation-delay: 2.5s;
 }
 
 @keyframes download-keyframes {

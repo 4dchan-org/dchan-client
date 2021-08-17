@@ -7,7 +7,7 @@ import ipfsErrorSrc from "assets/images/ipfs_error.png";
 export default function IPFSImage({
   hash,
   style,
-  loading,
+  htmlLoading = "lazy",
   className = "",
   isSpoiler = false,
   isNsfw = false,
@@ -17,7 +17,7 @@ export default function IPFSImage({
   hash: string;
   className?: string;
   style?: React.CSSProperties;
-  loading?: "eager" | "lazy";
+  htmlLoading?: "eager" | "lazy";
   isSpoiler?: boolean;
   isNsfw?: boolean;
   expandable?: boolean;
@@ -88,7 +88,7 @@ export default function IPFSImage({
             style={imgLoading ? { ...style, visibility: "hidden" } : !!imgError ? { display: "none" } : style}
             src={imgSrc}
             onLoad={() => setImgLoading(false)}
-            loading={loading}
+            loading={htmlLoading}
             onClick={retry}
             onError={(e) => {
               setImgLoading(false);
@@ -97,7 +97,7 @@ export default function IPFSImage({
           />
         </div>
       </span>
-      {!showSpoiler && isSpoiler ? (
+      {!imgLoading && !showSpoiler && isSpoiler ? (
         <img
           className={[coverClass, thumbnailClass].join(" ")}
           src={spoilerSrc}
@@ -107,7 +107,7 @@ export default function IPFSImage({
       ) : (
         ""
       )}
-      {!showNsfw && isNsfw ? (
+      {!imgLoading && !showNsfw && isNsfw ? (
         <img
           className={[coverClass, thumbnailClass].join(" ")}
           src={nsfwSrc}
