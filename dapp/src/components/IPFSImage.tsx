@@ -38,7 +38,7 @@ export default function IPFSImage({
   const retry = () => {
     if (!!imgError) {
       setImgLoading(true);
-      setImgSrc(ipfsSrc + "?t=" + new Date("2012.08.10").getTime());
+      setImgSrc(`${ipfsSrc}?t=${new Date("2012.08.10").getTime()}`);
       setImgError(undefined);
     }
   };
@@ -49,7 +49,7 @@ export default function IPFSImage({
     <span className={`${className} relative`}>
       <span
         className={
-          "filter " + (!imgLoading && !imgError && !canShow ? "blur brightness-50 contrast-50" : "")
+          `filter ${!imgLoading && !imgError && !canShow ? "blur brightness-50 contrast-50" : ""}`
         }
         onClick={() => {
           if (isNsfw && !showNsfw) {

@@ -44,7 +44,7 @@ const CatalogThread = ({thread: {
             marginRight: "-2rem",
             width: "14rem",
         } : {}}>
-            {!focused ? <button onClick={focusPost} className="absolute top-0 left-0 right-0 bottom-0"></button> : ""}
+            {!focused ? <a href={window.location.href} onClick={focusPost} className="absolute top-0 left-0 right-0 bottom-0"></a> : ""}
 
             <Link to={`/${board.name}/${board.id}/${id}`}>
                 <div className={focused ? "bg-tertiary border-bottom-tertiary" : ""}>

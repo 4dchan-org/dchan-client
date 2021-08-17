@@ -52,14 +52,15 @@ export default function HeaderNavigation() {
         >
           +
         </Link>
-        ]<span className="px-2"></span> [
+        ]
+        {/* <span className="px-2"></span> [
         <Link
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
           to="/settings"
         >
           ⚙️
         </Link>
-        ]
+        ] */}
       </span>
     </div>
   );
