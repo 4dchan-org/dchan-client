@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/react-hooks";
-import AddressLabel, { LABEL_CLASSNAME } from "components/AddressLabel";
+import { LABEL_CLASSNAME } from "components/AddressLabel";
 import { backgroundColorAddress, Board } from "dchan";
 import BOARDS_LIST_MOST_POPULAR from "dchan/graphql/queries/boards/list_most_popular";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ interface BoardListData {
 interface BoardListVars {}
 
 export default function HeaderNavigation() {
-  const { loading, data } = useQuery<BoardListData, BoardListVars>(
+  const { data } = useQuery<BoardListData, BoardListVars>(
     BOARDS_LIST_MOST_POPULAR,
     { variables: {} }
   );

@@ -1,18 +1,14 @@
 import IPFSImage from "components/IPFSImage";
 import { Post as DchanPost, Thread } from "dchan";
 import { truncate } from "lodash";
-import { useState } from "react";
+import { publish, subscribe } from "pubsub-js";
+import { useRef, useState } from "react";
 import PostBody from "./PostBody";
 import PostHeader from "./PostHeader";
 
 export default function Post({ post, thread }: { post: DchanPost; thread: Thread }) {
   const [focused, setFocused] = useState<boolean>(false);
-
-  const onPostFocus = (_: any, focusId: string) => {
-    setFocused(id == focusId);
-  };
-
-  PubSub.subscribe("POST_FOCUS", onPostFocus);
+  const postRef = useRef<HTMLInputElement>(null);
 
   let {
     id,
@@ -23,11 +19,19 @@ export default function Post({ post, thread }: { post: DchanPost; thread: Thread
     comment,
   } = post;
 
+  subscribe("POST_FOCUS", (_: any, focus: string) => {
+    setFocused((focus === id) || (focus === `${n}`));
+  });
+
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
   const isOp = id === thread?.id;
 
+  const onBacklink = (post: string) => {
+    publish("POST_BACKLINK", post)
+  }
+
   return (
-    <details className="dchan-post-expand" open={true} key={id}>
+    <details className="dchan-post-expand" open={true} key={id} ref={postRef}>
       <summary className="text-left pl-2 opacity-50 z-10" title="Hide/Show">
         <PostHeader thread={thread} post={post}></PostHeader>
       </summary>
@@ -51,6 +55,7 @@ export default function Post({ post, thread }: { post: DchanPost; thread: Thread
                 <span className="text-xs">
                   <a
                     target="_blank"
+                    rel="noreferrer"
                     className="text-blue-600 max-w-64"
                     href={ipfsUrl}
                     title={image.name}
@@ -91,7 +96,7 @@ export default function Post({ post, thread }: { post: DchanPost; thread: Thread
                 ""
               )}
 
-              <PostBody>{comment}</PostBody>
+              <PostBody onBacklink={onBacklink}>{comment}</PostBody>
 
               {bans.length > 0 ? (
                 <div className="text-xl font-bold text-contrast whitespace-nowrap">

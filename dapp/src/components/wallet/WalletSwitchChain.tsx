@@ -1,6 +1,5 @@
 import { switchChain } from "dchan/chain";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 export default function WalletConnect({ provider, chainId }: any) {
   const [stillStuck, setStillStuck] = useState<boolean>(false);
@@ -32,6 +31,7 @@ export default function WalletConnect({ provider, chainId }: any) {
           In case the above button does not seem to work, refer to{" "}
           <a
             target="_blank"
+            rel="noreferrer"
             href="https://www.google.com/search?q=how+to+connect+to+polygon+chain"
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
           >

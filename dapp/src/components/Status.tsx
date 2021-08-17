@@ -1,4 +1,3 @@
-import Loading from "./Loading";
 import Spinner from "./Spinner";
 
 export type SetStatus = React.Dispatch<React.SetStateAction<any>>;

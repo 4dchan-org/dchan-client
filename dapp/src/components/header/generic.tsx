@@ -1,6 +1,5 @@
 import HeaderNavigation from "components/header/HeaderNavigation"
 import HeaderLogo from "components/header/logo"
-import { Board } from "dchan"
 
 const GenericHeader = ({title}: {title: string}) => (
     <header>

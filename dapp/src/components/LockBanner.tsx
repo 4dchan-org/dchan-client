@@ -15,7 +15,7 @@ interface ChanStatusVars {
 
 export default function LockBanner() {
   const [settings] = useSettings()
-  const { loading, data } = useQuery<ChanStatusData, ChanStatusVars>(
+  const { data } = useQuery<ChanStatusData, ChanStatusVars>(
     CHAN_STATUS,
     {
       variables: {

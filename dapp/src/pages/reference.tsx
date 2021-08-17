@@ -1,7 +1,6 @@
 import { useQuery } from '@apollo/react-hooks';
 import Error from 'components/Error';
 import Loading from 'components/Loading';
-import Spinner from 'components/Spinner';
 import SEARCH_BY_ID from 'dchan/graphql/queries/search';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -41,7 +40,7 @@ export default function ReferencePage({ match: { params: { ref } } }: any) {
                 history.push(location)
             }
         }
-    }, [data])
+    }, [history, data])
 
 
     return (

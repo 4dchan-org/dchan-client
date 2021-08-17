@@ -24,8 +24,7 @@ export default function FormPost({
   const {
     provider,
     chainId,
-    accounts,
-    web3Modal: { loadWeb3Modal, logoutOfWeb3Modal },
+    accounts
   } = useWeb3();
 
   const history = useHistory();
@@ -37,22 +36,6 @@ export default function FormPost({
   const [fileSize, setFileSize] = useState<number>(0);
   const [subjectLength, setSubjectLength] = useState<number>(0);
   const [thumbnailB64, setThumbnailB64] = useState<string>();
-
-  const onQuote = useCallback(function (msg, data) {
-    const { comment } = getValues();
-    const quote = `>>${data}`;
-    setValue(
-      "comment",
-      `${comment}${
-        !!comment && comment.substr(-1, 1) !== " " ? " " : ""
-      }${quote} `
-    );
-  }, []);
-
-  useEffect(() => {
-    subscribe("FORM_QUOTE", onQuote);
-  }, [onQuote]);
-
   const {
     register,
     handleSubmit,
@@ -64,6 +47,21 @@ export default function FormPost({
 
   const values = getValues();
   const files: FileList = values.file;
+
+  const onQuote = useCallback(function (msg, data) {
+    const { comment } = getValues();
+    const quote = `>>${data}`;
+    setValue(
+      "comment",
+      `${comment}${
+        !!comment && comment.substr(-1, 1) !== " " ? " " : ""
+      }${quote} `
+    );
+  }, [getValues, setValue]);
+
+  useEffect(() => {
+    subscribe("FORM_QUOTE", onQuote);
+  }, [onQuote]);
 
   const onSubmit = async (data: any) => {
     setIsSending(true);
@@ -100,7 +98,7 @@ export default function FormPost({
     setNonce(uniqueId());
   };
 
-  const refreshThumbnail = async () => {
+  const refreshThumbnail = useCallback(async () => {
     const files: FileList = getValues().file;
     if (!!files && files.length > 0) {
       const file = files[0];
@@ -113,9 +111,9 @@ export default function FormPost({
     } else {
       setThumbnailB64(undefined);
     }
-  };
+  }, [getValues, setThumbnailB64]);
 
-  const onFileChange = async () => {
+  const onFileChange = useCallback(async () => {
     refreshThumbnail();
     const files: FileList = getValues().file;
     if (!!files && files.length > 0) {
@@ -123,7 +121,7 @@ export default function FormPost({
     } else {
       setFileSize(0);
     }
-  };
+  }, [refreshThumbnail, setFileSize, getValues]);
 
   const fileRename = () => {
     const files: FileList = getValues().file;
@@ -184,7 +182,7 @@ export default function FormPost({
       setValue("file", files);
       onFileChange();
     }
-  }, []);
+  }, [onFileChange, setValue]);
 
   useEventListener("paste", pasteHandler);
 
@@ -200,13 +198,10 @@ export default function FormPost({
     </div>
   ) : (
     <div>
-      <WalletConnect
-        provider={provider}
-        loadWeb3Modal={loadWeb3Modal}
-        logoutOfWeb3Modal={logoutOfWeb3Modal}
-      />
-      <WalletAccount provider={provider} accounts={accounts} />
-      <WalletSwitchChain provider={provider} chainId={chainId} />
+      <WalletConnect />
+      <WalletAccount />
+      <WalletSwitchChain />
+
       <div>
         {!!provider && (chainId === "0x89" || chainId === 137) ? (
           <div
@@ -390,6 +385,7 @@ export default function FormPost({
                               <details className="mx-0.5" open={true}>
                                 <summary>🖼</summary>
                                 <img
+                                  alt=""
                                   className="max-h-24 max-w-24"
                                   src={thumbnailB64}
                                 ></img>

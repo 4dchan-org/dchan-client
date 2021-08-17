@@ -36,7 +36,7 @@ export default function IPFSImage({
   const canShow = (!isNsfw || showNsfw) && (!isSpoiler || showSpoiler);
 
   const retry = () => {
-    if(!!imgError) {
+    if (!!imgError) {
       setImgLoading(true);
       setImgSrc(ipfsSrc + "?t=" + new Date("2012.08.10").getTime());
       setImgError(undefined);
@@ -49,7 +49,7 @@ export default function IPFSImage({
     <span className={`${className} relative`}>
       <span
         className={
-          "filter " + (!canShow ? "blur brightness-50 contrast-50" : "")
+          "filter " + (!imgLoading && !imgError && !canShow ? "blur brightness-50 contrast-50" : "")
         }
         onClick={() => {
           if (isNsfw && !showNsfw) {
@@ -62,30 +62,42 @@ export default function IPFSImage({
         }}
       >
         <div>
-          {imgLoading ? (
-            <div className="relative center grid">
-              <img
-                className={"h-150px w-150px animation-download"}
-                style={style}
-                src={ipfsLoadingSrc}
-              />
-              <div className="p-2 opacity-50 hover:opacity-100">Loading...</div>
-            </div>
-          ) : imgError ? (
-            <div className="relative center grid">
-              <img
-                className={"h-150px w-150px animation-fade-in"}
-                style={style}
-                src={ipfsErrorSrc}
-              />
-              <div className="p-2 opacity-50 hover:opacity-100">Image load error</div>
-            </div>
-          ) : (
-            ""
-          )}
+          <div className="opacity-50">
+            {imgLoading ? (
+              <div className="relative center grid">
+                <img
+                  className={"h-150px w-150px animation-download"}
+                  style={style}
+                  src={ipfsLoadingSrc}
+                  alt=""
+                />
+                <div className="p-2">Loading...</div>
+              </div>
+            ) : imgError ? (
+              <div className="relative center grid">
+                <img
+                  className={"h-150px w-150px animation-fade-in"}
+                  style={style}
+                  src={ipfsErrorSrc}
+                  alt=""
+                />
+                <div className="p-2">Image load error</div>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
           <img
-            className={`${className} ${!expand || imgError ? thumbnailClass : ""} animation-fade-in`}
-            style={imgLoading ? { ...style, visibility: "hidden" } : !!imgError ? { display: "none" } : style}
+            className={`${className} ${
+              !expand || imgError ? thumbnailClass : ""
+            } animation-fade-in`}
+            style={
+              imgLoading
+                ? { ...style, visibility: "hidden" }
+                : !!imgError
+                ? { display: "none" }
+                : style
+            }
             src={imgSrc}
             onLoad={() => setImgLoading(false)}
             loading={htmlLoading}
@@ -94,6 +106,7 @@ export default function IPFSImage({
               setImgLoading(false);
               setImgError(e);
             }}
+            alt=""
           />
         </div>
       </span>

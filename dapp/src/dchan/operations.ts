@@ -282,7 +282,7 @@ export async function banPost(id: string, accounts: any, setStatus: SetStatus) {
 
         const secondsStr = window.prompt("How many seconds?")
         const seconds = parseInt(secondsStr || "")
-        if (seconds == NaN) {
+        if (isNaN(seconds)) {
             setStatus({
                 error: `Not a number: ${secondsStr}`
             })

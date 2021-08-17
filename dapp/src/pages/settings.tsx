@@ -1,9 +1,6 @@
 import Footer from "components/Footer";
 import GenericHeader from "components/header/generic";
-import { Link } from "react-router-dom";
-import useLocalStorage from "hooks/useLocalStorage";
 import Config from "settings/default";
-import MaxLengthWatch from "components/form/MaxLengthWatch";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import Status from "components/Status";

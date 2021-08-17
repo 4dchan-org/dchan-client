@@ -1,7 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
-import { Web3Provider } from "@ethersproject/providers";
-import Web3Modal from "web3modal";
-import WalletConnectProvider from "@walletconnect/web3-provider";
+import { useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import USER_GET from "dchan/graphql/queries/user/get";
 import { Admin, User } from "dchan";
@@ -42,7 +39,7 @@ function useUser() {
 
   useEffect(() => {
     refetch()
-  }, [accounts])
+  }, [refetch])
 
   return {...query, isJanny, isAdmin }
 }

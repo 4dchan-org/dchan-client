@@ -5,8 +5,6 @@ import FormPost from "components/form/post";
 import { useQuery } from "@apollo/react-hooks";
 import THREAD_GET from "dchan/graphql/queries/threads/get";
 import Loading from "components/Loading";
-import useWeb3 from "hooks/useWeb3";
-import { useState } from "react";
 import Error from "components/Error";
 import { HashLink } from "react-router-hash-link";
 import Post from "components/post/Post";
@@ -56,7 +54,7 @@ export default function ThreadPage({
       ) : thread ? (
         <div className="font-size-090rem mx-2 sm:mx-4">
           {[thread.op, ...thread.replies].map((post) => (
-            <Post post={post} thread={thread} />
+            <Post post={post} thread={thread} key={post.id} />
           ))}
           <div>
             <HashLink

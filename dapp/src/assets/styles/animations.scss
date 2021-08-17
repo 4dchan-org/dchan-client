@@ -26,23 +26,27 @@
 
 .animation-download {
     animation: download-keyframes 5s infinite cubic-bezier(0.6, -0.28, 0.735, 0.045);
-    animation-delay: 2.5s;
 }
 
 @keyframes download-keyframes {
     0% {
-        opacity: 0;
-        transform: scale(1);
-    }
-
-    50% {
         opacity: 0.35;
         transform: scale(0.9);
     }
 
-    100% {
+    49% {
         opacity: 0;
         transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 0;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0.35;
+        transform: scale(0.9);
     }
 }
 

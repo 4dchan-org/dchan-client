@@ -32,7 +32,7 @@ export default function PostHeader({post: {id, n, name, from: { address }, creat
   const onSendTip = async (to: string, amount?: number) => {
     try {
       amount = amount ? amount : parseInt(prompt("How many? (MATIC)") || "")
-      if (amount == NaN) {
+      if (isNaN(amount)) {
         alert("Invalid amount")
         return
       }
@@ -70,6 +70,7 @@ export default function PostHeader({post: {id, n, name, from: { address }, creat
               className="font-family-tahoma text-readable-anywhere px-0.5 mx-0.5 rounded whitespace-nowrap"
               href={`https://etherscan.io/address/${address}`}
               target="_blank"
+              rel="noreferrer"
             >
               <abbr
                 style={{ textDecoration: "none" }}

@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import { Web3Provider } from "@ethersproject/providers";
+import { singletonHook } from 'react-singleton-hook';
 import Web3Modal from "web3modal";
 
 const NETWORK_NAME = "matic";
@@ -15,43 +16,49 @@ export type UseWeb3 = {
   web3Modal: UseWeb3Modal
 }
 
-function useWeb3(config = {}): UseWeb3 {
-  const [provider, setProvider] = useState<Web3Provider>();
-  const [chainId, setChainId] = useState<string|number>();
-  const [accounts, setAccounts] = useState<string[]>([]);
-  const [autoLoaded, setAutoLoaded] = useState<boolean>(false);
-  const { autoLoad = true, NETWORK = NETWORK_NAME } = config as any;
+const Web3Context = createContext(new Web3Modal({
+  network: NETWORK_NAME,
+  cacheProvider: true
+}));
 
-  // Web3Modal also supports many other wallets.
-  // You can see other options at https://github.com/Web3Modal/web3modal
-  const web3Modal = new Web3Modal({
-    network: NETWORK,
-    cacheProvider: true
-  });
+const useWeb3 = singletonHook({
+  provider: undefined,
+  chainId: undefined, accounts: [],
+  web3Modal: {
+    loadWeb3Modal: async () => { },
+    logoutOfWeb3Modal: async () => { }
+
+  }
+}, () => {
+  const web3Modal = useContext(Web3Context);
+  const [provider, setProvider] = useState<Web3Provider>();
+  const [chainId, setChainId] = useState<string | number>();
+  const [accounts, setAccounts] = useState<string[]>([]);
 
   // Open wallet selection modal.
   const loadWeb3Modal = useCallback(async () => {
     const newProvider = await web3Modal.connect();
+    console.log({ newProvider })
     setProvider(new Web3Provider(newProvider));
     setChainId(window.ethereum.chainId)
-    
+
     const accounts = await window.ethereum.request({
       method: 'eth_accounts',
     })
-    console.log({accounts})
+    console.log({ accounts })
     setAccounts(accounts)
-    
+
     window.ethereum.on('accountsChanged', (accounts: []) => {
-      if(accounts.length == 0) {
+      if (accounts.length === 0) {
         setProvider(undefined)
       }
-      
-      console.log({accounts})
+
+      console.log({ accounts })
 
       setAccounts(accounts)
     });
     window.ethereum.on('chainChanged', (chainId: string) => {
-      console.log({chainId})
+      console.log({ chainId })
 
       setChainId(chainId)
     });
@@ -65,17 +72,9 @@ function useWeb3(config = {}): UseWeb3 {
     [web3Modal],
   );
 
-  // If autoLoad is enabled and the the wallet had been loaded before, load it automatically now.
-  useEffect(() => {
-    if (autoLoad && !autoLoaded && web3Modal.cachedProvider) {
-      loadWeb3Modal();
-      setAutoLoaded(true);
-    }
-  }, [autoLoad, autoLoaded, loadWeb3Modal, setAutoLoaded, web3Modal.cachedProvider]);
-
   return {
-    provider, chainId, accounts, web3Modal: {loadWeb3Modal, logoutOfWeb3Modal}
+    provider, chainId, accounts, web3Modal: { loadWeb3Modal, logoutOfWeb3Modal }
   }
-}
+});
 
-export default useWeb3;
+export default useWeb3

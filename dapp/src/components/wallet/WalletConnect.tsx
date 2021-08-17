@@ -1,15 +1,15 @@
+import useWeb3 from "hooks/useWeb3";
 import { useState } from "react";
 
-export default function WalletConnect({
-  provider,
-  loadWeb3Modal,
-  logoutOfWeb3Modal,
-}: {
-  provider: any,
-  loadWeb3Modal: any,
-  logoutOfWeb3Modal: any
-}) {
-  const [stillStuck, setStillStuck] = useState<boolean>(false);
+export default function WalletConnect() {
+  const {
+    provider,
+    web3Modal: {
+      loadWeb3Modal,
+      logoutOfWeb3Modal,
+    }
+  } = useWeb3()
+   const [stillStuck, setStillStuck] = useState<boolean>(false);
 
   return (
     <div>

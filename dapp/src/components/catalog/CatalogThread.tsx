@@ -1,8 +1,6 @@
 import { Board, Thread } from "dchan"
 import IPFSImage from "components/IPFSImage"
 import { Link } from "react-router-dom"
-import spoilerSrc from "assets/images/spoiler.png";
-import nsfwSrc from "assets/images/nsfw.png";
 import PostBody from "components/post/PostBody";
 import { useState } from "react";
 
@@ -26,7 +24,7 @@ const CatalogThread = ({thread: {
 
     const onExternalPostCatalogFocus = (_: any, focusId: string) => {
         console.log({focusId})
-        setFocused(id == focusId)
+        setFocused(id === focusId)
     }
 
     PubSub.subscribe('POST_CATALOG_FOCUS', onExternalPostCatalogFocus);
@@ -46,12 +44,12 @@ const CatalogThread = ({thread: {
             marginRight: "-2rem",
             width: "14rem",
         } : {}}>
-            {!focused ? <a href={window.location.href} onClick={focusPost} className="absolute top-0 left-0 right-0 bottom-0"></a> : ""}
+            {!focused ? <button onClick={focusPost} className="absolute top-0 left-0 right-0 bottom-0"></button> : ""}
 
             <Link to={`/${board.name}/${board.id}/${id}`}>
                 <div className={focused ? "bg-tertiary border-bottom-tertiary" : ""}>
                     <div>
-                        <IPFSImage className={imgClassName} hash={ipfsHash} expandable={false} thumbnail={true} />
+                        <IPFSImage className={imgClassName} hash={ipfsHash} expandable={false} thumbnail={true} isSpoiler={isSpoiler} isNsfw={isNsfw} />
                     </div>
                     <div className="p-1">
                         <div>

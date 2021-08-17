@@ -5,7 +5,6 @@ import CatalogThread from "components/catalog/CatalogThread";
 import { useQuery } from "@apollo/react-hooks";
 import CATALOG from "dchan/graphql/queries/catalog";
 import { Board, Thread } from "dchan";
-import useWeb3 from "hooks/useWeb3";
 import Loading from "components/Loading";
 import { throttle } from "lodash";
 import { useState } from "react";
@@ -126,10 +125,10 @@ export default function CatalogPage({
                   return !search ||
                     thread.subject
                       .toLocaleLowerCase()
-                      .indexOf(search.toLocaleLowerCase()) != -1 ||
+                      .indexOf(search.toLocaleLowerCase()) !== -1 ||
                     thread.op.comment
                       .toLocaleLowerCase()
-                      .indexOf(search.toLocaleLowerCase()) != -1;
+                      .indexOf(search.toLocaleLowerCase()) !== -1;
                 })
                 .map((thread: Thread) => (
                   <CatalogThread

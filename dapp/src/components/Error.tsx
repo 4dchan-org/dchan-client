@@ -1,4 +1,13 @@
+import { useCallback } from "react";
+import { Link, useHistory } from "react-router-dom";
+
 export default function Error({ subject, body }: { subject: string, body: string }) {
+    const history = useHistory();
+
+    const back = useCallback(() => {
+        history.goBack()
+    }, [history])
+
     return (<div className="font-family-arial text-center">
         <div className="grid center min-h-100vh">
             <div>
@@ -9,10 +18,10 @@ export default function Error({ subject, body }: { subject: string, body: string
                     {body}
                 </div>
                 <div>
-                    <a className="text-blue-600 visited:text-purple-600 m-4" href="javascript:history.back()">Go back</a>
+                    <button className="text-blue-600 visited:text-purple-600 m-4" onClick={back}>Go back</button>
                 </div>
                 <div>
-                    <a className="text-blue-600 visited:text-purple-600 m-4" href="/">Go home</a>
+                    <Link className="text-blue-600 visited:text-purple-600 m-4" to="/">Go home</Link>
                 </div>
             </div>
         </div>

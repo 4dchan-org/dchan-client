@@ -1,7 +1,6 @@
 import Footer from "components/Footer";
 import BoardList from "components/board/list";
 import GenericHeader from "components/header/generic";
-import useWeb3 from "hooks/useWeb3";
 import Card from "components/Card";
 import BOARDS_SEARCH from "dchan/graphql/queries/boards/search";
 import { useQuery } from "@apollo/react-hooks";
@@ -12,7 +11,7 @@ export default function BoardListPage({
     params: { boardName: name },
   },
 }: any) {
-  const { loading, data } = useQuery(BOARDS_SEARCH, { variables: { name } });
+  const { data } = useQuery(BOARDS_SEARCH, { variables: { name } });
 
   return (
     <div className="bg-primary min-h-100vh">

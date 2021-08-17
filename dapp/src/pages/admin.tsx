@@ -6,7 +6,7 @@ import { sendMessage } from "dchan";
 import WalletConnect from "components/wallet/WalletConnect";
 
 export default function AdminPage() {
-  const { web3Modal, accounts, provider } = useWeb3();
+  const { accounts } = useWeb3();
 
   const adminClaim = async () => {
     await sendMessage("admin:claim", {}, accounts[0])
@@ -24,7 +24,7 @@ export default function AdminPage() {
     <div className="bg-primary min-h-100vh">
       <GenericHeader title="Admin panel"></GenericHeader>
 
-      <WalletConnect provider={provider} {...web3Modal}></WalletConnect>
+      <WalletConnect></WalletConnect>
 
       <div className="center grid">
         <button onClick={adminClaim}>Claim</button>
