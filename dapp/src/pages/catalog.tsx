@@ -1,5 +1,5 @@
 import BoardHeader from "components/board/header";
-import FormPost from "components/form/post";
+import FormPost from "components/form/FormPost";
 import Footer from "components/Footer";
 import CatalogThread from "components/catalog/CatalogThread";
 import { useQuery } from "@apollo/react-hooks";

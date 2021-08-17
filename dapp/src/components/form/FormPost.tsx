@@ -12,7 +12,7 @@ import { isString, uniqueId } from "lodash";
 import { postMessage } from "dchan/operations";
 import MaxLengthWatch from "./MaxLengthWatch";
 import AddressLabel from "components/AddressLabel";
-import { subscribe } from "pubsub-js";
+import usePubSub from "hooks/usePubSub";
 
 export default function FormPost({
   thread,
@@ -36,6 +36,7 @@ export default function FormPost({
   const [fileSize, setFileSize] = useState<number>(0);
   const [subjectLength, setSubjectLength] = useState<number>(0);
   const [thumbnailB64, setThumbnailB64] = useState<string>();
+  const {subscribe} = usePubSub();
   const {
     register,
     handleSubmit,
@@ -61,7 +62,7 @@ export default function FormPost({
 
   useEffect(() => {
     subscribe("FORM_QUOTE", onQuote);
-  }, [onQuote]);
+  }, [subscribe, onQuote]);
 
   const onSubmit = async (data: any) => {
     setIsSending(true);
@@ -71,7 +72,6 @@ export default function FormPost({
       const events = result?.events;
       if (events && events.length > 0) {
         const { transactionHash, logIndex } = events[0];
-        console.log({ transactionHash, logIndex, board, thread });
         if (board && !thread) {
           const url = `/${transactionHash}-${logIndex}`;
           history.push(url);

@@ -1,14 +1,16 @@
 import IPFSImage from "components/IPFSImage";
 import { Post as DchanPost, Thread } from "dchan";
+import usePubSub from "hooks/usePubSub";
 import { truncate } from "lodash";
-import { publish, subscribe } from "pubsub-js";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import PostBody from "./PostBody";
 import PostHeader from "./PostHeader";
 
 export default function Post({ post, thread }: { post: DchanPost; thread: Thread }) {
   const [focused, setFocused] = useState<boolean>(false);
+  const [backlinks, setBacklinks] = useState<object>({});
   const postRef = useRef<HTMLInputElement>(null);
+  const {publish, subscribe} = usePubSub();
 
   let {
     id,
@@ -19,16 +21,31 @@ export default function Post({ post, thread }: { post: DchanPost; thread: Thread
     comment,
   } = post;
 
-  subscribe("POST_FOCUS", (_: any, focus: string) => {
-    setFocused((focus === id) || (focus === `${n}`));
-  });
+  useEffect(() => {
+    subscribe("POST_FOCUS", (_: any, focus: string) => {
+      setFocused((focus === post.id) || (`${focus}` === `${post.n}`));
+    });
+  }, [post, setFocused, subscribe])
+
+  useEffect(() => {
+    subscribe("POST_BACKLINK", (_: any, {from, to}: {from: DchanPost, to: string}) => {
+      if(`${to}` === `${n}` || to === id) {
+        setBacklinks({...backlinks, [from.id]: from})
+      }
+    });
+  }, [post, backlinks, setFocused, setBacklinks, subscribe])
 
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
   const isOp = id === thread?.id;
 
-  const onBacklink = (post: string) => {
-    publish("POST_BACKLINK", post)
-  }
+  const onBacklink = useCallback((to: string) => {
+    // Shit's broken, don't use
+    // const msg = {
+    //   from: post,
+    //   to
+    // }
+    // publish("POST_BACKLINK", msg)
+  }, [publish])
 
   return (
     <details className="dchan-post-expand" open={true} key={id} ref={postRef}>
@@ -46,7 +63,7 @@ export default function Post({ post, thread }: { post: DchanPost; thread: Thread
           } w-full sm:w-auto pb-2 mb-2 px-4 inline-block border-bottom-invisible relative max-w-screen-xl`}
         >
           <div className="flex flex-wrap center sm:block pl-2">
-            <PostHeader thread={thread} post={post}></PostHeader>
+            <PostHeader thread={thread} post={post} backlinks={backlinks}></PostHeader>
           </div>
           {!!image ? (
             <div className="text-center sm:text-left">

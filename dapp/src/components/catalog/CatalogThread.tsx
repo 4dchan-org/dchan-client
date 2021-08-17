@@ -2,37 +2,40 @@ import { Board, Thread } from "dchan"
 import IPFSImage from "components/IPFSImage"
 import { Link } from "react-router-dom"
 import PostBody from "components/post/PostBody";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import usePubSub from "hooks/usePubSub";
 
-const CatalogThread = ({thread: {
-    id,
-    isPinned,
-    isLocked,
-    subject,
-    op: {
-        comment,
-        image: {
-            ipfsHash,
-            isNsfw,
-            isSpoiler
-        }
-    },
-    replyCount,
-    imageCount
-}, board}: {thread: Thread, board: Board}) => {
+const CatalogThread = ({thread, board}: {thread: Thread, board: Board}) => {
+    const {
+        id,
+        isPinned,
+        isLocked,
+        subject,
+        op: {
+            comment,
+            image: {
+                ipfsHash,
+                isNsfw,
+                isSpoiler
+            }
+        },
+        replyCount,
+        imageCount
+    } = thread
     const [focused, setFocused] = useState<boolean>(false);
+    const {publish, subscribe} = usePubSub();
 
-    const onExternalPostCatalogFocus = (_: any, focusId: string) => {
-        console.log({focusId})
-        setFocused(id === focusId)
-    }
+    const onExternalPostCatalogFocus = useCallback((_: any, focusId: string) => {
+        setFocused(thread.id === focusId)
+    }, [thread, setFocused])
 
-    PubSub.subscribe('POST_CATALOG_FOCUS', onExternalPostCatalogFocus);
+    useEffect(() => {
+        subscribe('POST_CATALOG_FOCUS', onExternalPostCatalogFocus);
+    }, [subscribe])
 
-    const focusPost = () => {
-        console.log({id})
-        PubSub.publish('POST_CATALOG_FOCUS', id)
-    }
+    const focusPost = useCallback(() => {
+        publish('POST_CATALOG_FOCUS', id)
+    }, [publish])
 
     const imgClassName = "w-full max-h-150px pointer-events-none shadow-xl object-contain"
     return (

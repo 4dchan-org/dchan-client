@@ -1,7 +1,6 @@
 import sanitizeHtml from 'sanitize-html';
 
 (window as any).focusPost = function(focusId: any) {
-  console.log({focusId})
   PubSub.publish('POST_FOCUS', focusId)
 }
 
@@ -15,7 +14,9 @@ export default function PostBody({children, style = {}, onBacklink = () => ({})}
 
   const sanitized = sanitizeHtml(children)
   
-  sanitized.match(BACKLINK_REGEX)?.forEach(onBacklink)
+  sanitized.match(BACKLINK_REGEX)?.forEach((backlink) => {
+    onBacklink(backlink.replace(/&gt;/g, ""))
+  })
 
   let __html = sanitized
     .replace(TEXT_QUOTES_REGEX, "<span class=\"text-quote\">&gt;$1</span>") // Text quotes

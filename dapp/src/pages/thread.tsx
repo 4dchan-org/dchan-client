@@ -1,7 +1,7 @@
 import { Thread } from "dchan";
 import Footer from "components/Footer";
 import BoardHeader from "components/board/header";
-import FormPost from "components/form/post";
+import FormPost from "components/form/FormPost";
 import { useQuery } from "@apollo/react-hooks";
 import THREAD_GET from "dchan/graphql/queries/threads/get";
 import Loading from "components/Loading";
