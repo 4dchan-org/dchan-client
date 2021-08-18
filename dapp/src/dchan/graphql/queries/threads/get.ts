@@ -26,6 +26,7 @@ const THREAD_GET = gql`
         expiresAt
       }
     }
+    score
   }
   
   query Thread($threadId: String!) {

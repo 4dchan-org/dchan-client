@@ -1,7 +1,9 @@
 import { switchChain } from "dchan/chain";
+import useWeb3 from "hooks/useWeb3";
 import { useState } from "react";
 
-export default function WalletConnect({ provider, chainId }: any) {
+export default function WalletConnect() {
+  const { provider, chainId } = useWeb3()
   const [stillStuck, setStillStuck] = useState<boolean>(false);
 
   return provider && chainId !== "0x89" && chainId !== 137 ? (

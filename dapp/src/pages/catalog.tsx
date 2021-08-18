@@ -7,9 +7,10 @@ import CATALOG from "dchan/graphql/queries/catalog";
 import { Board, Thread } from "dchan";
 import Loading from "components/Loading";
 import { throttle } from "lodash";
-import { useState } from "react";
-import { HashLink, HashLink as Link } from 'react-router-hash-link';
+import { useCallback, useState } from "react";
+import { HashLink, HashLink as Link } from "react-router-hash-link";
 import { DateTime } from "luxon";
+import { useHistory } from "react-router-dom";
 
 interface CatalogData {
   board: Board;
@@ -26,35 +27,51 @@ export default function CatalogPage({
     params: { boardId: boardIdParam },
   },
 }: any) {
-  const boardId = `0x${boardIdParam}`
-  
+  const boardId = `0x${boardIdParam}`;
+
   const { refetch, loading, data } = useQuery<CatalogData, CatalogVars>(
     CATALOG,
     {
       variables: { boardId, limit: 25 },
-      pollInterval: 60_000
+      pollInterval: 60_000,
     }
   );
   const [search, setSearch] = useState<string>("");
 
-  const [lastRefreshedAt, setLastRefreshedAt] = useState<DateTime>(DateTime.now());
+  const [lastRefreshedAt, setLastRefreshedAt] = useState<DateTime>(
+    DateTime.now()
+  );
 
   const throttledRefresh = throttle(async () => {
     try {
       await refetch({
-        boardId
-      })
-      setLastRefreshedAt(DateTime.now())
-    } catch(e) {
-      console.error({refreshError: e})
+        boardId,
+      });
+      setLastRefreshedAt(DateTime.now());
+    } catch (e) {
+      console.error({ refreshError: e });
     }
   }, 5000);
-  
+
   const onRefresh = () => throttledRefresh();
   const onSearchChange = (e: any) => setSearch(e.target.value);
 
   const board = data?.board;
   const threads = [...(data?.pinned || []), ...(data?.threads || [])];
+
+  const history = useHistory();
+  const [focused, setFocused] = useState<string>("");
+
+  const onFocus = useCallback(
+    (focusId: string) => {
+      if (focused === focusId && focusId.indexOf("0x") === 0 && !!board) {
+        history.push(`/${board.name}/${board.id}/${focusId}`);
+      } else {
+        setFocused(focusId);
+      }
+    },
+    [board, focused, history, setFocused]
+  );
 
   return (
     <div
@@ -62,9 +79,7 @@ export default function CatalogPage({
       dchan-board={data?.board?.name}
       data-theme={board?.isNsfw ? "nsfw" : "blueboard"}
     >
-      <BoardHeader
-        board={data?.board}
-      ></BoardHeader>
+      <BoardHeader board={data?.board}></BoardHeader>
 
       <FormPost board={data?.board}></FormPost>
 
@@ -92,7 +107,15 @@ export default function CatalogPage({
             >
               Refresh
             </button>
-            ] <span className="text-xs whitespace-nowrap opacity-50 hover:opacity-100"><small>Last refreshed at {lastRefreshedAt ? lastRefreshedAt.toLocaleString(DateTime.DATETIME_SHORT) : ""} </small></span>
+            ]{" "}
+            <span className="text-xs whitespace-nowrap opacity-50 hover:opacity-100">
+              <small>
+                Last refreshed at{" "}
+                {lastRefreshedAt
+                  ? lastRefreshedAt.toLocaleString(DateTime.DATETIME_SHORT)
+                  : ""}{" "}
+              </small>
+            </span>
           </span>
         </div>
         <div className="mx-2 flex-grow"></div>
@@ -122,17 +145,20 @@ export default function CatalogPage({
             <div className="grid grid-template-columns-ram-150px place-items-start font-size-090rem px-4 md:px-8">
               {threads
                 .filter((thread: Thread) => {
-                  return !search ||
+                  return (
+                    !search ||
                     thread.subject
                       .toLocaleLowerCase()
                       .indexOf(search.toLocaleLowerCase()) !== -1 ||
                     thread.op.comment
                       .toLocaleLowerCase()
-                      .indexOf(search.toLocaleLowerCase()) !== -1;
+                      .indexOf(search.toLocaleLowerCase()) !== -1
+                  );
                 })
                 .map((thread: Thread) => (
                   <CatalogThread
-                    board={board}
+                    onFocus={onFocus}
+                    isFocused={focused === thread.id}
                     thread={thread}
                     key={thread.id}
                   ></CatalogThread>
@@ -140,7 +166,8 @@ export default function CatalogPage({
             </div>
 
             <div>
-              <Link to="#board-header"
+              <Link
+                to="#board-header"
                 className="inline bg-secondary rounded-full"
               >
                 ⤴️

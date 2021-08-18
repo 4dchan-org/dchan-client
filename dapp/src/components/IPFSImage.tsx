@@ -31,7 +31,7 @@ export default function IPFSImage({
   const [showNsfw, setShowNsfw] = useState<boolean>(false);
   const [expand, setExpand] = useState<boolean>(!thumbnail);
 
-  const thumbnailClass = "max-w-32 max-h-32";
+  const thumbnailClass = thumbnail ? "max-w-32 max-h-32" : "";
   const coverClass = "absolute bottom-0";
   const canShow = (!isNsfw || showNsfw) && (!isSpoiler || showSpoiler);
 
@@ -48,9 +48,6 @@ export default function IPFSImage({
   return (
     <span className={`${className} relative`}>
       <span
-        className={
-          `filter ${!imgLoading && !imgError && !canShow ? "blur brightness-50 contrast-50" : ""}`
-        }
         onClick={() => {
           if (isNsfw && !showNsfw) {
             setShowNsfw(true);
@@ -94,7 +91,7 @@ export default function IPFSImage({
             style={
               imgLoading
                 ? { ...style, visibility: "hidden" }
-                : !!imgError
+                : !!imgError || !canShow
                 ? { display: "none" }
                 : style
             }

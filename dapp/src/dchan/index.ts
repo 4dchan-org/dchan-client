@@ -3,6 +3,13 @@ import abi from "abis/Relay.json"
 import { AbiItem } from "web3-utils/types"
 import Config from "settings/default"
 
+export const EXTERNAL_LINK_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/igm
+export const BACKLINK_REGEX = /&gt;&gt;(\d+)/gm
+export const SPOILER_REGEX = /\[spoiler\]((?:.|\s)*?)\[\/spoiler]/gm
+export const REF_REGEX = /&gt;&gt;(0[xX][0-9a-fA-F])+/gm
+export const TEXT_QUOTES_REGEX = /^&gt;(.*)$/gm
+export const NEWLINE_REGEX = /\n/gm
+
 export type Board = {
     id: string,
     title: string,
@@ -29,6 +36,7 @@ export type Thread = {
     replyCount: number,
     imageCount: number,
     subject: string,
+    score: number
 }
 
 export type Post = {
@@ -40,7 +48,8 @@ export type Post = {
     comment: string,
     image: Image,
     createdAt: string
-    bans: PostBan[]
+    bans: PostBan[],
+    score: number,
 }
 
 export type PostBan = {
@@ -80,7 +89,7 @@ export type Image = {
 }
 
 export function shortenAddress(address: string) {
-    return `${address.substring(2,5)}-${address.substring(address.length-3)}`
+    return `${address.substring(2, 5)}-${address.substring(address.length - 3)}`
 }
 
 export function backgroundColorAddress(address: string) {
@@ -103,7 +112,7 @@ export async function sendMessage(operation: string, data: object, from: string)
     const msg = await relayContract.methods.message(createJsonMessage(operation, data))
 
     return msg.send({
-      from
+        from
     })
 }
 
@@ -112,7 +121,7 @@ export async function sendTip(from: string, to: string, amount: number) {
 
     const value = amount * Math.pow(10, 18); // Convert to wei value
 
-    return web3.eth.sendTransaction({ from ,to, value })
+    return web3.eth.sendTransaction({ from, to, value })
 }
 
 export async function getBalance(account: string) {

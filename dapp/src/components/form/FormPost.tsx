@@ -1,8 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Board, Thread } from "dchan";
-import WalletConnect from "components/wallet/WalletConnect";
-import WalletAccount from "components/wallet/WalletAccount";
-import WalletSwitchChain from "components/wallet/WalletSwitchChain";
 import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useWeb3 from "hooks/useWeb3";
@@ -13,6 +10,7 @@ import { postMessage } from "dchan/operations";
 import MaxLengthWatch from "./MaxLengthWatch";
 import AddressLabel from "components/AddressLabel";
 import usePubSub from "hooks/usePubSub";
+import Wallet from "components/Wallet";
 
 export default function FormPost({
   thread,
@@ -91,15 +89,6 @@ export default function FormPost({
     setIsSending(false);
   };
 
-  const fileRemove = () => {
-    setValue("file", undefined);
-    onFileChange();
-  };
-
-  const updateNonce = () => {
-    setNonce(uniqueId());
-  };
-
   const refreshThumbnail = useCallback(async () => {
     const files: FileList = getValues().file;
     if (!!files && files.length > 0) {
@@ -125,7 +114,16 @@ export default function FormPost({
     }
   }, [refreshThumbnail, setFileSize, getValues]);
 
-  const fileRename = () => {
+  const fileRemove = useCallback(() => {
+    setValue("file", undefined);
+    onFileChange();
+  }, [setValue, onFileChange]);
+
+  const updateNonce = () => {
+    setNonce(uniqueId());
+  };
+
+  const fileRename = useCallback(() => {
     const files: FileList = getValues().file;
     if (!!files && files.length > 0) {
       const file = files[0];
@@ -143,7 +141,7 @@ export default function FormPost({
         setValue("file", list.files);
       }
     }
-  };
+  }, [getValues, setValue]);
 
   const pasteHandler = useCallback((event) => {
     const clipboardData =
@@ -200,9 +198,7 @@ export default function FormPost({
     </div>
   ) : (
     <div>
-      <WalletConnect />
-      <WalletAccount />
-      <WalletSwitchChain />
+      <Wallet />
 
       <div>
         {!!provider && (chainId === "0x89" || chainId === 137) ? (
@@ -499,9 +495,9 @@ export default function FormPost({
                     </li>
                     {accounts && accounts.length > 0 ? (
                       <li>
-                        I understand that my address{" "}
+                        and that my address{" "}
                         <AddressLabel address={accounts[0]}></AddressLabel>{" "}
-                        <abbr title="Remember that other users will have access to all past transactions you ever made on this account. Be mindful of the security risks this can entail.">
+                        <abbr title="Remember that other users will have access to all past transactions you ever made on this account. Be mindful of the security risks.">
                           will be made public
                         </abbr>
                       </li>

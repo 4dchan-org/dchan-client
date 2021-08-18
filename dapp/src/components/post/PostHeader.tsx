@@ -34,6 +34,7 @@ export default function PostHeader({
     name,
     from: { address },
     createdAt: createdAtUnix,
+    score
   },
   thread,
   backlinks,
@@ -59,23 +60,26 @@ export default function PostHeader({
     [publish]
   );
 
-  const onSendTip = useCallback(async (to: string, amount?: number) => {
-    try {
-      amount = amount ? amount : parseInt(prompt("How many? (MATIC)") || "");
-      if (isNaN(amount)) {
-        alert("Invalid amount");
-        return;
-      }
+  const onSendTip = useCallback(
+    async (to: string, amount?: number) => {
+      try {
+        amount = amount ? amount : parseInt(prompt("How many? (MATIC)") || "");
+        if (isNaN(amount)) {
+          alert("Invalid amount");
+          return;
+        }
 
-      await sendTip(accounts[0], to, amount);
-    } catch (e) {
-      console.error({ onSendTipError: e });
-    }
-  }, [accounts]);
+        await sendTip(accounts[0], to, amount);
+      } catch (e) {
+        console.error({ onSendTipError: e });
+      }
+    },
+    [accounts]
+  );
 
   const focusPost = useCallback(
-    (id: string) => {
-      publish("POST_FOCUS", id);
+    (n: string) => {
+      publish("POST_FOCUS", n);
     },
     [publish]
   );
@@ -88,8 +92,9 @@ export default function PostHeader({
   const canRemove = isOwner || isJanny;
   const canBan = isJanny;
   const canLock = isOp && (isOwner || isJanny);
-  const postBacklinks: Post[] = backlinks ? Object.values(backlinks) : []
-  
+  const postBacklinks: Post[] = backlinks ? Object.values(backlinks) : [];
+  const isReported = (score / 1_000_000_000) < 1
+
   return (
     <span>
       <span className="px-0.5 whitespace-nowrap">
@@ -104,7 +109,7 @@ export default function PostHeader({
             <a
               style={{ backgroundColor: backgroundColorAddress(address) }}
               className="font-family-tahoma text-readable-anywhere px-0.5 mx-0.5 rounded whitespace-nowrap"
-              href={`https://etherscan.io/address/${address}`}
+              href={`https://polygonscan.com/address/${address}`}
               target="_blank"
               rel="noreferrer"
             >
@@ -161,74 +166,83 @@ export default function PostHeader({
         ) : (
           <span></span>
         )}
+        {isReported ? (
+          <span title="Post was reported too many times and was therefore hidden to shield your virgin eyes. You're welcome.">⚠️</span>
+        ) : (
+          <span></span>
+        )}
       </span>
-      <Menu>
-        {canLock ? (
+      {accounts && accounts[0] ? (
+        <Menu>
+          {canLock ? (
+            <div>
+              {thread.isLocked ? (
+                <span>
+                  <input name="lock" type="hidden" value="false"></input>
+                  <button onClick={() => unlockThread(id, accounts, setStatus)}>
+                    🔓 Unlock
+                  </button>
+                </span>
+              ) : (
+                <span>
+                  <input name="lock" type="hidden" value="true"></input>
+                  <button onClick={() => lockThread(id, accounts, setStatus)}>
+                    🔒 Lock
+                  </button>
+                </span>
+              )}
+            </div>
+          ) : (
+            ""
+          )}
+          {canPin ? (
+            <div>
+              {thread.isPinned ? (
+                <span>
+                  <input name="sticky" type="hidden" value="false"></input>
+                  <button onClick={() => unpinThread(id, accounts, setStatus)}>
+                    📌 Unpin
+                  </button>
+                </span>
+              ) : (
+                <span>
+                  <input name="sticky" type="hidden" value="true"></input>
+                  <button onClick={() => pinThread(id, accounts, setStatus)}>
+                    📌 Pin
+                  </button>
+                </span>
+              )}
+            </div>
+          ) : (
+            ""
+          )}
+          {canRemove ? (
+            <div>
+              <button onClick={() => removePost(id, accounts, setStatus)}>
+                ❌ Remove
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
+          {canBan ? (
+            <div>
+              <button onClick={() => banPost(id, accounts, setStatus)}>
+                🔫 Ban
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
           <div>
-            {thread.isLocked ? (
-              <span>
-                <input name="lock" type="hidden" value="false"></input>
-                <button onClick={() => unlockThread(id, accounts, setStatus)}>
-                  🔓 Unlock
-                </button>
-              </span>
-            ) : (
-              <span>
-                <input name="lock" type="hidden" value="true"></input>
-                <button onClick={() => lockThread(id, accounts, setStatus)}>
-                  🔒 Lock
-                </button>
-              </span>
-            )}
-          </div>
-        ) : (
-          ""
-        )}
-        {canPin ? (
-          <div>
-            {thread.isPinned ? (
-              <span>
-                <input name="sticky" type="hidden" value="false"></input>
-                <button onClick={() => unpinThread(id, accounts, setStatus)}>
-                  📌 Unpin
-                </button>
-              </span>
-            ) : (
-              <span>
-                <input name="sticky" type="hidden" value="true"></input>
-                <button onClick={() => pinThread(id, accounts, setStatus)}>
-                  📌 Pin
-                </button>
-              </span>
-            )}
-          </div>
-        ) : (
-          ""
-        )}
-        {canRemove ? (
-          <div>
-            <button onClick={() => removePost(id, accounts, setStatus)}>
-              ❌ Remove
+            <button onClick={() => reportPost(id, accounts, setStatus)}>
+              ⚠️ Report
             </button>
           </div>
-        ) : (
-          ""
-        )}
-        {canBan ? (
-          <div>
-            <button onClick={() => banPost(id, accounts, setStatus)}>
-              🔫 Ban
-            </button>
-          </div>
-        ) : (
-          ""
-        )}
-        <div>
-          <button onClick={() => reportPost(id, accounts, setStatus)}>
-            ⚠️ Report
-          </button>
-        </div>
-      </Menu>
+        </Menu>
+      ) : (
+        ""
+      )}
       <Status status={status}></Status>
     </span>
   );

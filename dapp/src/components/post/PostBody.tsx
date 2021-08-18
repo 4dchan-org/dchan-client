@@ -1,22 +1,12 @@
+import { BACKLINK_REGEX, EXTERNAL_LINK_REGEX, NEWLINE_REGEX, REF_REGEX, SPOILER_REGEX, TEXT_QUOTES_REGEX } from 'dchan';
 import sanitizeHtml from 'sanitize-html';
 
-(window as any).focusPost = function(focusId: any) {
-  PubSub.publish('POST_FOCUS', focusId)
+(window as any).focusPost = function(n: any) {
+  PubSub.publish('POST_FOCUS', n)
 }
 
-export default function PostBody({children, style = {}, onBacklink = () => ({})}: {style?: any, children: any, onBacklink?: (post: string) => void}) {
-  const EXTERNAL_LINK_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/igm
-  const BACKLINK_REGEX = /&gt;&gt;(\d+)/gm
-  const SPOILER_REGEX = /\[spoiler\]((?:.|\s)*?)\[\/spoiler]/gm
-  const REF_REGEX = /&gt;&gt;(0[xX][0-9a-fA-F])+/gm
-  const TEXT_QUOTES_REGEX = /^&gt;(.*)$/gm
-  const NEWLINE_REGEX = /\n/gm
-
+export default function PostBody({children, style = {}}: {style?: any, children: any}) {
   const sanitized = sanitizeHtml(children)
-  
-  sanitized.match(BACKLINK_REGEX)?.forEach((backlink) => {
-    onBacklink(backlink.replace(/&gt;/g, ""))
-  })
 
   let __html = sanitized
     .replace(TEXT_QUOTES_REGEX, "<span class=\"text-quote\">&gt;$1</span>") // Text quotes

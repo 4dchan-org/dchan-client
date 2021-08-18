@@ -31,6 +31,7 @@ const CATALOG = gql`
     subject
     replyCount
     imageCount
+    score
   }
   
   query ThreadList($boardId: String!, $limit: Int!) {
