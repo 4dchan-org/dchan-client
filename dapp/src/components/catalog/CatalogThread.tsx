@@ -1,6 +1,7 @@
 import { Thread } from "dchan";
 import IPFSImage from "components/IPFSImage";
 import PostBody from "components/post/PostBody";
+import LowScoreDisclaimer from "components/LowScoreDisclaimer";
 
 const CatalogThread = ({
   thread,
@@ -28,14 +29,13 @@ const CatalogThread = ({
     isSpoiler: false,
   };
 
-  const imgClassName =
-    "w-full pointer-events-none shadow-xl object-contain";
-  const isReported = score / 1_000_000_000 < 1;
+  const imgClassName = "w-full pointer-events-none shadow-xl object-contain";
+  const isLowScore = score / 1_000_000_000 < 1;
 
   return (
     <article
       id={id}
-      className="dchan-post relative text-decoration-none leading-4 text-black m-0.5 border-black overflow-hidden max-h-320px max-w-150px break-word w-full h-full place-items-start"
+      className="dchan-post relative text-decoration-none leading-4 text-black m-0.5 border-black overflow-hidden min-h-12rem max-h-320px max-w-150px break-word w-full h-full place-items-start"
       style={
         isFocused
           ? {
@@ -49,14 +49,19 @@ const CatalogThread = ({
           : {}
       }
     >
+      {isLowScore && !isFocused ? (
+        <LowScoreDisclaimer onClick={() => onFocus(id)}></LowScoreDisclaimer>
+      ) : (
+        ""
+      )}
       <button onClick={() => onFocus(id)}>
         <div
           className={[
             isFocused ? "bg-tertiary border-bottom-tertiary" : "",
-            !isFocused && isReported ? "dchan-censor" : "",
+            !isFocused && isLowScore ? "dchan-censor" : "",
           ].join(" ")}
         >
-          {ipfsHash ? (
+          {ipfsHash && (!isLowScore || isFocused) ? (
             <div>
               <IPFSImage
                 className={imgClassName}
@@ -75,8 +80,17 @@ const CatalogThread = ({
               R:<strong>{replyCount}</strong>, I:<strong>{imageCount}</strong>
             </div>
             <div className="word-wrap">
-              <strong>{subject}</strong>
-              <PostBody style={{ minWidth: isFocused ? "12rem" : "initial", textAlign: "center" }}>{comment}</PostBody>
+              <div>
+                <strong>{subject}</strong>
+              </div>
+              <PostBody
+                style={{
+                  minWidth: isFocused ? "12rem" : "initial",
+                  textAlign: "center",
+                }}
+              >
+                {comment}
+              </PostBody>
             </div>
           </div>
         </div>
@@ -89,13 +103,6 @@ const CatalogThread = ({
         )}
         {isLocked ? (
           <span title="Thread locked. You cannot post.">🔒</span>
-        ) : (
-          ""
-        )}
-        {isReported ? (
-          <span title="Post was reported too many times and was therefore hidden to shield your virgin eyes. You're welcome.">
-            ⚠️
-          </span>
         ) : (
           ""
         )}

@@ -28,14 +28,7 @@ import { useCallback, useState } from "react";
 };
 
 export default function PostHeader({
-  post: {
-    id,
-    n,
-    name,
-    from: { address },
-    createdAt: createdAtUnix,
-    score
-  },
+  post,
   thread,
   backlinks,
 }: {
@@ -43,6 +36,14 @@ export default function PostHeader({
   thread: Thread;
   backlinks?: object;
 }) {
+  const {
+    id,
+    n,
+    name,
+    from: { address },
+    createdAt: createdAtUnix,
+    score
+  } = post
   const { accounts } = useWeb3();
   const { publish } = usePubSub();
   const { isJanny: fIsJanny } = useUser();
@@ -54,8 +55,8 @@ export default function PostHeader({
   const isJanny = !!thread ? fIsJanny(thread.board.id) : false;
 
   const replyTo = useCallback(
-    (n: string) => {
-      publish("FORM_QUOTE", n);
+    (n: number | string) => {
+      publish("FORM_QUOTE", `${n}`);
     },
     [publish]
   );
@@ -77,12 +78,9 @@ export default function PostHeader({
     [accounts]
   );
 
-  const focusPost = useCallback(
-    (n: string) => {
-      publish("POST_FOCUS", n);
-    },
-    [publish]
-  );
+  const focusPost = useCallback((n: number | string) => {
+    publish("POST_FOCUS", `${n}`)
+  }, [publish]);
 
   const isPinned = thread?.isPinned;
   const isLocked = thread?.isLocked;
@@ -140,10 +138,10 @@ export default function PostHeader({
         {createdAt.toRelative()})
       </span>
       <span className="px-0.5 on-parent-target-font-bold font-family-tahoma whitespace-nowrap">
-        <button onClick={() => focusPost(id)} title="Link to this post">
+        <button onClick={() => focusPost(post.n)} title="Link to this post">
           No.
         </button>
-        <button title="Reply to this post" onClick={() => replyTo(`${n}`)}>
+        <button title="Reply to this post" onClick={() => replyTo(post.n)}>
           {n}
         </button>
       </span>
@@ -151,7 +149,7 @@ export default function PostHeader({
         {postBacklinks?.map((post) => (
           <button
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-            onClick={() => focusPost(`${post.n}`)}
+            onClick={() => focusPost(post.n)}
           >{`>>${post.n}`}</button>
         ))}
       </span>
@@ -167,7 +165,7 @@ export default function PostHeader({
           <span></span>
         )}
         {isReported ? (
-          <span title="Post was reported too many times and was therefore hidden to shield your virgin eyes. You're welcome.">⚠️</span>
+          <span title="Post hidden due to reports.">⚠️</span>
         ) : (
           <span></span>
         )}

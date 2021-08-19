@@ -1,5 +1,5 @@
 /** Custom complex behaviour components that I don't want to make atomic scss for **/
-.dchan-censor:not(:hover) {
+.dchan-censor {
     opacity: 0.25;
     filter: blur(2px) contrast(0.5) saturate(0.5);
 }

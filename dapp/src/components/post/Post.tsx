@@ -36,7 +36,7 @@ export default function Post({
 
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
 
-  const isReported = score / 1_000_000_000 < 1;
+  const isLowScore = score / 1_000_000_000 < 1;
   useEffect(() => {
     subscribe(
       "POST_BACKLINK",
@@ -63,7 +63,7 @@ export default function Post({
   }, [post, publish]);
 
   return (
-    <details className="dchan-post-expand" open={true} key={id} ref={postRef}>
+    <details className="dchan-post-expand" open={!isLowScore} key={id} ref={postRef}>
       <summary className="text-left pl-2 opacity-50 z-10" title="Hide/Show">
         <PostHeader thread={thread} post={post}></PostHeader>
       </summary>
@@ -84,7 +84,7 @@ export default function Post({
               backlinks={backlinks}
             ></PostHeader>
           </div>
-          <span className={isReported ? "dchan-censor" : ""}>
+          <div>
             {!!image ? (
               <div className="text-center sm:text-left">
                 <span>
@@ -112,7 +112,7 @@ export default function Post({
               ""
             )}
             <div className="py-1">
-              <div className="h-full max-w-max">
+              <div className="h-full max-w-max flex">
                 {!!image ? (
                   <div className="px-2 sm:float-left grid center">
                     <IPFSImage
@@ -127,24 +127,29 @@ export default function Post({
                   ""
                 )}
 
-                {isOp ? (
-                  <span className="font-semibold">{thread.subject}</span>
-                ) : (
-                  ""
-                )}
-
-                <PostBody>{comment}</PostBody>
-
-                {bans.length > 0 ? (
-                  <div className="text-xl font-bold text-contrast whitespace-nowrap">
-                    ( USER WAS BANNED FOR THIS POST )
+                <span>
+                  <div>
+                    {isOp ? (
+                      <span className="font-semibold">{thread.subject}</span>
+                    ) : (
+                      ""
+                    )}
                   </div>
-                ) : (
-                  ""
-                )}
+                  <div>
+                    <PostBody>{comment}</PostBody>
+                  </div>
+
+                  {bans.length > 0 ? (
+                    <div className="text-xl font-bold text-contrast whitespace-nowrap">
+                      ( USER WAS BANNED FOR THIS POST )
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </span>
               </div>
             </div>
-          </span>{" "}
+          </div>{" "}
         </div>
       </article>
     </details>

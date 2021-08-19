@@ -11,6 +11,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { Board } from "dchan";
 import Loading from "components/Loading";
 import { useHistory } from "react-router-dom";
+import WalletConnect from "components/wallet/WalletConnect";
 
 interface BoardListData {
   mostPopular: Board[];
@@ -81,54 +82,57 @@ export default function BoardListPage() {
               <Card
                 title={<span>Create a board!</span>}
                 body={
-                  <form className="border center flex" onSubmit={handleSubmit(onSubmit)}>
-                    {provider ? (
-                      <tr className="p-4 text-center">
-                        <td className="px-2">
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <WalletConnect />
+                    <div className="border center flex">
+                      {provider ? (
+                        <tr className="p-4 text-center">
+                          <td className="px-2">
+                            <input
+                              className="text-center"
+                              type="text"
+                              placeholder="Videogames"
+                              {...register("title")}
+                            ></input>
+                          </td>
+                          <td className="px-2">
+                            /
                           <input
-                            className="text-center"
-                            type="text"
-                            placeholder="Videogames"
-                            {...register("title")}
-                          ></input>
-                        </td>
-                        <td className="px-2">
+                              className="text-center w-16"
+                              type="text"
+                              placeholder="v"
+                              {...register("name")}
+                            ></input>
                           /
-                          <input
-                            className="text-center w-16"
-                            type="text"
-                            placeholder="v"
-                            {...register("name")}
-                          ></input>
-                          /
                         </td>
-                        <td className="px-2">
-                          <input
-                            id="dchan-input-is_nsfw"
-                            className="mx-1"
-                            type="checkbox"
-                            {...register("nsfw")}
-                          ></input>
-                          <label
-                            htmlFor="dchan-input-is_nsfw"
-                            className="text-black font-weight-800 font-family-tahoma"
-                          >
-                            NSFW
+                          <td className="px-2">
+                            <input
+                              id="dchan-input-is_nsfw"
+                              className="mx-1"
+                              type="checkbox"
+                              {...register("nsfw")}
+                            ></input>
+                            <label
+                              htmlFor="dchan-input-is_nsfw"
+                              className="text-black font-weight-800 font-family-tahoma"
+                            >
+                              NSFW
                           </label>
-                        </td>
-                        <td className="px-2">
-                          <button
-                            className="px-2 mx-1 bg-gray-100 border"
-                            type="submit"
-                            disabled={isCreating}
-                          >
-                            {typeof status === "string" ? status : "Create"}
-                          </button>
-                        </td>
-                      </tr>
-                    ) : (
-                      <tr></tr>
-                    )}
+                          </td>
+                          <td className="px-2">
+                            <button
+                              className="px-2 mx-1 bg-gray-100 border"
+                              type="submit"
+                              disabled={isCreating}
+                            >
+                              {typeof status === "string" ? status : "Create"}
+                            </button>
+                          </td>
+                        </tr>
+                      ) : (
+                        <tr></tr>
+                      )}
+                    </div>
                   </form>
                 }
               />

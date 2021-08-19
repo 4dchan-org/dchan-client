@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import spoilerSrc from "assets/images/spoiler.png";
 import nsfwSrc from "assets/images/nsfw.png";
 import ipfsLoadingSrc from "assets/images/ipfs.png";
@@ -32,32 +32,19 @@ export default function IPFSImage({
   const [expand, setExpand] = useState<boolean>(!thumbnail);
 
   const thumbnailClass = thumbnail ? "max-w-32 max-h-32" : "";
-  const coverClass = "absolute bottom-0";
   const canShow = (!isNsfw || showNsfw) && (!isSpoiler || showSpoiler);
 
-  const retry = () => {
-    if (!!imgError) {
-      setImgLoading(true);
-      setImgSrc(`${ipfsSrc}?t=${new Date("2012.08.10").getTime()}`);
-      setImgError(undefined);
-    }
-  };
+  const retry = useCallback(() => {
+    setImgLoading(true);
+    setImgSrc(`${ipfsSrc}?t=${new Date().getTime()}`);
+    setImgError(undefined);
+  }, [ipfsSrc, setImgLoading, setImgSrc, setImgError]);
 
   !!imgError && console.log({ imgError });
 
   return (
-    <span className={`${className} relative`}>
-      <span
-        onClick={() => {
-          if (isNsfw && !showNsfw) {
-            setShowNsfw(true);
-          } else if (isSpoiler && !showSpoiler) {
-            setShowSpoiler(true);
-          } else if (expandable) {
-            setExpand(!expand);
-          }
-        }}
-      >
+    <div className={`${className} relative`}>
+      <span>
         <div>
           <div className="opacity-50">
             {imgLoading ? (
@@ -66,6 +53,7 @@ export default function IPFSImage({
                   className={"h-150px w-150px animation-download"}
                   style={style}
                   src={ipfsLoadingSrc}
+                  onClick={retry}
                   alt=""
                 />
                 <div className="p-2">Loading...</div>
@@ -76,6 +64,7 @@ export default function IPFSImage({
                   className={"h-150px w-150px animation-fade-in"}
                   style={style}
                   src={ipfsErrorSrc}
+                  onClick={retry}
                   alt=""
                 />
                 <div className="p-2">Image load error</div>
@@ -84,49 +73,59 @@ export default function IPFSImage({
               ""
             )}
           </div>
-          <img
-            className={`${className} ${
-              !expand || imgError ? thumbnailClass : ""
-            } animation-fade-in`}
-            style={
-              imgLoading
-                ? { ...style, visibility: "hidden" }
-                : !!imgError || !canShow
-                ? { display: "none" }
-                : style
-            }
-            src={imgSrc}
-            onLoad={() => setImgLoading(false)}
-            loading={htmlLoading}
-            onClick={retry}
-            onError={(e) => {
-              setImgLoading(false);
-              setImgError(e);
-            }}
-            alt=""
-          />
+          <div>
+            {!imgLoading && !imgError && !showSpoiler && isSpoiler ? (
+              <img
+                className={thumbnailClass}
+                src={spoilerSrc}
+                alt="SPOILER"
+                onClick={() => setShowSpoiler(true)}
+              ></img>
+            ) : (
+              ""
+            )}
+            {!imgLoading &&
+            !imgError &&
+            (showSpoiler || !isSpoiler) &&
+            !showNsfw &&
+            isNsfw ? (
+              <img
+                className={thumbnailClass}
+                src={nsfwSrc}
+                alt="NSFW"
+                onClick={() => setShowNsfw(true)}
+              ></img>
+            ) : (
+              ""
+            )}
+            <img
+              className={`${className} ${
+                !expand || imgError ? thumbnailClass : ""
+              } animation-fade-in`}
+              style={
+                imgLoading
+                  ? { ...style, visibility: "hidden", position: "absolute" }
+                  : !!imgError || !canShow
+                  ? { display: "none" }
+                  : style
+              }
+              src={imgSrc}
+              onLoad={() => setImgLoading(false)}
+              loading={htmlLoading}
+              onClick={() => {
+                if (expandable) {
+                  setExpand(!expand);
+                }
+              }}
+              onError={(e) => {
+                setImgLoading(false);
+                setImgError(e);
+              }}
+              alt=""
+            />
+          </div>
         </div>
       </span>
-      {!imgLoading && !showSpoiler && isSpoiler ? (
-        <img
-          className={[coverClass, thumbnailClass].join(" ")}
-          src={spoilerSrc}
-          alt="SPOILER"
-          onClick={() => setShowSpoiler(true)}
-        ></img>
-      ) : (
-        ""
-      )}
-      {!imgLoading && !showNsfw && isNsfw ? (
-        <img
-          className={[coverClass, thumbnailClass].join(" ")}
-          src={nsfwSrc}
-          alt="NSFW"
-          onClick={() => setShowNsfw(true)}
-        ></img>
-      ) : (
-        ""
-      )}
-    </span>
+    </div>
   );
 }
