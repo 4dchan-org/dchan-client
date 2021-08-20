@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="flex justify-center text-align-center mt-4 border-t border-black pb-4 text-xs relative">
+    <footer className="flex justify-center text-align-center mt-4 border-t border-black pb-4 text-xs relative min-w-100vw overflow-hidden">
       <div className="absolute left-0 px-2 flex">
         <details>
           <summary className="text-left">Powered by</summary>
