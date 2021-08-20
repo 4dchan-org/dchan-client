@@ -22,7 +22,7 @@ export default function HomePage() {
                     </header>
                     <section className="bg-white border border-black border-t-0 w-full">
                         <div className="p-1 text-center">
-                            <small>Use with <a className="text-blue-600 visited:text-purple-600 hover:text-blue-500" href="//metamask.io">Metamask</a> (Desktop) or <a className="text-blue-600 visited:text-purple-600 hover:text-blue-500" href="//trustwallet.com/">Trust Wallet</a> (Mobile)</small>
+                            <small>Use with <a className="text-blue-600 visited:text-purple-600 hover:text-blue-500" href="//metamask.io">Metamask</a>{" "}(Desktop) or <a className="text-blue-600 visited:text-purple-600 hover:text-blue-500" href="//trustwallet.com/">Trust Wallet</a>{" "}(Mobile)</small>
                         </div>
                         <div className="p-4 text-center">
                             <img className="animation-spin p-2 w-auto pointer-events-none" src={logo} alt="dchan" />

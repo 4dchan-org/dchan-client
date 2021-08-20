@@ -77,7 +77,7 @@ export default function Post({
             focused ? "bg-tertiary" : ""
           } w-full sm:w-auto pb-2 mb-2 px-4 inline-block border-bottom-invisible relative max-w-screen-xl`}
         >
-          <div className="flex flex-wrap center sm:block pl-2">
+          <div className="flex flex-wrap center text-center sm:text-left sm:block pl-2">
             <PostHeader
               thread={thread}
               post={post}
@@ -112,7 +112,7 @@ export default function Post({
               ""
             )}
             <div className="py-1">
-              <div className="h-full max-w-max flex items-start">
+              <div className="h-full max-w-max flex flex-wrap justify-center text-left sm:justify-start sm:items-start">
                 {!!image ? (
                   <div className="px-2 sm:float-left grid center flex-shrink-0">
                     <IPFSImage

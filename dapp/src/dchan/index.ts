@@ -3,6 +3,7 @@ import abi from "abis/Relay.json"
 import { AbiItem } from "web3-utils/types"
 import Config from "settings/default"
 import { reverse, sortBy } from "lodash"
+import { DateTime } from "luxon"
 
 export const EXTERNAL_LINK_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/igm
 export const BACKLINK_REGEX = /&gt;&gt;(\d+)/gm
@@ -16,6 +17,7 @@ export type Board = {
     title: string,
     threadCount: number,
     postCount: number,
+    lastBumpedAt: string,
     createdAt: string,
     createdAtBlock: number,
     isLocked: boolean,
@@ -146,4 +148,8 @@ export function isLowScore({
 export function getLastCreatedAtBlock(threads: Thread[] | undefined) {
     return threads && threads.length > 0
         ? reverse(sortBy(threads, ["createdAtBlock"]))[0].createdAtBlock : undefined
+}
+
+export function dateTimeFromBigInt(bigInt: string) {
+    return DateTime.fromMillis(parseInt(bigInt) * 1000)
 }

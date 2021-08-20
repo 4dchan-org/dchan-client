@@ -32,14 +32,14 @@ export default function WalletConnect() {
                 href="//metamask.io"
               >
                 Metamask
-              </a>
+              </a>{" "}
               (for Desktop) or{" "}
               <a
                 className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                 href="//trustwallet.com/"
               >
                 Trust Wallet
-              </a>
+              </a>{" "}
               (for Mobile).
             </div>
             <div>Other wallets might not be supported.</div>

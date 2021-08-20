@@ -63,7 +63,7 @@ export default function BoardListPage() {
               />
             </div>
           </div>
-          <div className="center flex">
+          <div className="center flex flex-wrap">
             <span className="px-2">
               <Card
                 title={<span>Last created</span>}

@@ -43,6 +43,7 @@ const CATALOG = gql`
       name
       isLocked
       isNsfw
+      lastBumpedAt
       createdAtBlock
       jannies {
         user {

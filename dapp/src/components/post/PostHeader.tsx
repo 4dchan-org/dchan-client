@@ -2,6 +2,7 @@ import Menu from "components/Menu";
 import Status from "components/Status";
 import {
   backgroundColorAddress,
+  dateTimeFromBigInt,
   isLowScore,
   Post,
   sendTip,
@@ -50,7 +51,7 @@ export default function PostHeader({
   const isOwner = accounts.length > 0 && accounts[0] === address;
   const [status, setStatus] = useState<string | object>();
 
-  const createdAt = DateTime.fromMillis(parseInt(createdAtUnix) * 1000);
+  const createdAt = dateTimeFromBigInt(createdAtUnix);
 
   const isJanny = !!thread ? fIsJanny(thread.board.id) : false;
 
@@ -99,24 +100,21 @@ export default function PostHeader({
           {!name || "" === name ? "Anonymous" : name}
         </span>
       </span>
-      <span className="px-0.5">
-        (
+      <span className="px-1">
         <details className="inline">
           <summary>
-            <a
+          (<a
               style={{ backgroundColor: backgroundColorAddress(address) }}
               className="font-family-tahoma text-readable-anywhere px-0.5 mx-0.5 rounded whitespace-nowrap"
               href={`https://polygonscan.com/address/${address}`}
               target="_blank"
               rel="noreferrer"
-            >
-              <abbr style={{ textDecoration: "none" }} title={address}>
+            ><abbr style={{ textDecoration: "none" }} title={address}>
                 {shortenAddress(address)}
-              </abbr>
-            </a>
+              </abbr></a>)
           </summary>
           <div className="flex">
-            <button
+            (<button
               className="text-blue-600 visited:text-purple-600 hover:text-blue-500 flex-grow"
               onClick={() => onSendTip(address, 0.001)}
             >
@@ -127,10 +125,9 @@ export default function PostHeader({
               onClick={() => onSendTip(address)}
             >
               +
-            </button>
+            </button>)
           </div>
         </details>
-        )
       </span>
       <span className="px-0.5 whitespace-nowrap text-xs">
         {createdAt.toLocaleString(DateTime.DATETIME_SHORT)} (
