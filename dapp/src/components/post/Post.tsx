@@ -112,9 +112,9 @@ export default function Post({
               ""
             )}
             <div className="py-1">
-              <div className="h-full max-w-max flex">
+              <div className="h-full max-w-max flex items-start">
                 {!!image ? (
-                  <div className="px-2 sm:float-left grid center">
+                  <div className="px-2 sm:float-left grid center flex-shrink-0">
                     <IPFSImage
                       hash={image.ipfsHash}
                       isSpoiler={image.isSpoiler}

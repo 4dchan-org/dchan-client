@@ -2,6 +2,7 @@ import Menu from "components/Menu";
 import Status from "components/Status";
 import {
   backgroundColorAddress,
+  isLowScore,
   Post,
   sendTip,
   shortenAddress,
@@ -41,8 +42,7 @@ export default function PostHeader({
     n,
     name,
     from: { address },
-    createdAt: createdAtUnix,
-    score
+    createdAt: createdAtUnix
   } = post
   const { accounts } = useWeb3();
   const { publish } = usePubSub();
@@ -91,7 +91,6 @@ export default function PostHeader({
   const canBan = isJanny;
   const canLock = isOp && (isOwner || isJanny);
   const postBacklinks: Post[] = backlinks ? Object.values(backlinks) : [];
-  const isReported = (score / 1_000_000_000) < 1
 
   return (
     <span>
@@ -164,7 +163,7 @@ export default function PostHeader({
         ) : (
           <span></span>
         )}
-        {isReported ? (
+        {isLowScore(post) ? (
           <span title="Post hidden due to reports.">⚠️</span>
         ) : (
           <span></span>

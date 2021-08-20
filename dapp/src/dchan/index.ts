@@ -2,6 +2,7 @@ import Web3 from "web3"
 import abi from "abis/Relay.json"
 import { AbiItem } from "web3-utils/types"
 import Config from "settings/default"
+import { reverse, sortBy } from "lodash"
 
 export const EXTERNAL_LINK_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/igm
 export const BACKLINK_REGEX = /&gt;&gt;(\d+)/gm
@@ -13,7 +14,10 @@ export const NEWLINE_REGEX = /\n/gm
 export type Board = {
     id: string,
     title: string,
+    threadCount: number,
     postCount: number,
+    createdAt: string,
+    createdAtBlock: number,
     isLocked: boolean,
     isNsfw: boolean,
     name: string
@@ -35,6 +39,8 @@ export type Thread = {
     replies: Post[],
     replyCount: number,
     imageCount: number,
+    createdAt: string,
+    createdAtBlock: string,
     subject: string,
     score: number
 }
@@ -47,7 +53,8 @@ export type Post = {
     name: string,
     comment: string,
     image: Image,
-    createdAt: string
+    createdAt: string,
+    createdAtBlock: string,
     bans: PostBan[],
     score: number,
 }
@@ -128,4 +135,15 @@ export async function getBalance(account: string) {
     const web3 = new Web3(window.web3.currentProvider);
 
     return web3.eth.getBalance(account)
+}
+
+export function isLowScore({
+    score
+}: Thread | Post) {
+    return (score / 1_000_000_000) < 1
+}
+
+export function getLastCreatedAtBlock(threads: Thread[] | undefined) {
+    return threads && threads.length > 0
+        ? reverse(sortBy(threads, ["createdAtBlock"]))[0].createdAtBlock : undefined
 }

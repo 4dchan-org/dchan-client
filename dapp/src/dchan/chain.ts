@@ -1,12 +1,19 @@
 const MATIC_CHAIN = `0x${(137).toString(16)}`
 const MATIC_PARAMS = {
   "chainId": MATIC_CHAIN,
-  "chainName": "Matic Network",
-  "rpcUrls": ["https://rpc-mainnet.matic.quiknode.pro"],
+  "chainName": "Matic Mainnet",
+  "rpcUrls": [
+    "https://rpc-mainnet.matic.network",
+    "https://matic-mainnet.chainstacklabs.com",
+    "https://rpc-mainnet.maticvigil.com",
+    "https://rpc-mainnet.matic.quiknode.pro",
+    "https://matic-mainnet-full-rpc.bwarelabs.com",
+    "https://matic-mainnet-archive-rpc.bwarelabs.com"
+  ],
   "iconUrls": [
     "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png"
   ],
-  "blockExplorerUrls" :[
+  "blockExplorerUrls": [
     "https://polygonscan.com/"
   ],
   "nativeCurrency": {
@@ -35,7 +42,7 @@ export async function switchChain() {
 }
 
 async function addChain() {
-   await window.ethereum.request({
+  await window.ethereum.request({
     method: 'wallet_addEthereumChain',
     params: [MATIC_PARAMS], // you must have access to the specified account
   })

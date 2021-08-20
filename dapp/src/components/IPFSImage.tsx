@@ -40,8 +40,6 @@ export default function IPFSImage({
     setImgError(undefined);
   }, [ipfsSrc, setImgLoading, setImgSrc, setImgError]);
 
-  !!imgError && console.log({ imgError });
-
   return (
     <div className={`${className} relative`}>
       <span>

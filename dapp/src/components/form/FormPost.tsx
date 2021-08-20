@@ -489,7 +489,7 @@ export default function FormPost({
                     </li>
                     <li>
                       I understand that{" "}
-                      <abbr title="Posts and content can be removed, but other users will still be able to retrieve them. Once it's out there, there's no going back. No one will be able to help you erase it. _The_internet_never_forgets_">
+                      <abbr title="Posts and images can be removed, but it's possible (and likely) that other users will still be able to retrieve them. _The_internet_never_forgets_">
                         <i>posts cannot be deleted</i>
                       </abbr>
                     </li>
@@ -497,7 +497,7 @@ export default function FormPost({
                       <li>
                         and that my address{" "}
                         <AddressLabel address={accounts[0]}></AddressLabel>{" "}
-                        <abbr title="Remember that other users will have access to all past transactions you ever made on this account. Be mindful of the security risks.">
+                        <abbr title="When posting, remember that other users will be able to view all past transactions you ever made using this address. Be mindful of the security risks this entails.">
                           will be made public
                         </abbr>
                       </li>

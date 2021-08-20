@@ -35,8 +35,8 @@ const CATALOG = gql`
     createdAtBlock
   }
   
-  query ThreadList($boardId: String!, $limit: Int!) {
-    board(id: $boardId) {
+  query ThreadList($boardId: String!, $limit: Int!, $currentBlock: Int) {
+    board(id: $boardId, block: {number: $currentBlock}) {
       id
       title
       postCount
@@ -50,10 +50,10 @@ const CATALOG = gql`
         }
       }
     }
-    pinned: threads(where: {board: $boardId, isPinned: true}, orderBy: lastBumpedAt, orderDirection: desc) {
+    pinned: threads(where: {board: $boardId, isPinned: true}, orderBy: lastBumpedAt, orderDirection: desc, block: {number: $currentBlock}) {
       ...Thread
     }
-    threads(where: {board: $boardId, isPinned: false}, orderBy: lastBumpedAt, orderDirection: desc, first: $limit) {
+    threads(where: {board: $boardId, isPinned: false}, orderBy: lastBumpedAt, orderDirection: desc, first: $limit, block: {number: $currentBlock}) {
       ...Thread
     }
   }

@@ -13,3 +13,9 @@
 button[disabled] {
     opacity: 0.5
 }
+
+body {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+}
