@@ -5,7 +5,7 @@ import CatalogThread from "components/catalog/CatalogThread";
 import { useQuery } from "@apollo/react-hooks";
 import CATALOG from "dchan/graphql/queries/catalog";
 import CATALOG_TIMETRAVEL from "dchan/graphql/queries/catalog_tt";
-import { Board, dateTimeFromBigInt, getLastCreatedAtBlock, isLowScore, Thread } from "dchan";
+import { Board, Thread, Timestamp } from "dchan";
 import Loading from "components/Loading";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { HashLink, HashLink as Link } from "react-router-hash-link";
@@ -13,6 +13,8 @@ import { DateTime } from "luxon";
 import { useHistory } from "react-router-dom";
 import useInterval from "@use-it/interval";
 import { useThrottleCallback } from "@react-hook/throttle";
+import { isLowScore, sortByCreatedAt } from "dchan/entities/thread";
+import { fromBigInt } from "dchan/entities/datetime";
 
 interface CatalogData {
   board: Board;
@@ -32,14 +34,15 @@ export default function CatalogPage({
 }: any) {
   const boardId = `0x${boardIdParam}`;
   const [showLowScore, setShowLowScore] = useState<boolean>(false); // @TODO config
-  const [isTimeTravelPanelOpen, setTimeTravelPanelOpen] = useState<boolean>(false); // @TODO config
+  const [isTimeTravelPanelOpen, setTimeTravelPanelOpen] =
+    useState<boolean>(false); // @TODO config
   const [search, setSearch] = useState<string>("");
   const [currentBlock, setCurrentBlock] = useState<number | undefined>(
     undefined
   );
   const [timeTravelRange, setTimeTravelRange] = useState<{
-    min?: number;
-    max?: number;
+    min?: Timestamp;
+    max?: Timestamp;
   }>({});
 
   const { refetch, loading, data } = useQuery<CatalogData, CatalogVars>(
@@ -61,10 +64,13 @@ export default function CatalogPage({
   const [lastRefreshedAt, setLastRefreshedAt] = useState<DateTime>(
     DateTime.now()
   );
-  const [lastBumpedAtShort, setLastBumpedAtShort] = useState<string>("")
+  const [lastBumpedAtShort, setLastBumpedAtShort] = useState<string>("");
   useEffect(() => {
-    board && setLastBumpedAtShort(dateTimeFromBigInt(board.lastBumpedAt).toLocaleString(DateTime.DATETIME_SHORT))
-  }, [board, setLastBumpedAtShort])
+    board &&
+      setLastBumpedAtShort(
+        fromBigInt(board.lastBumpedAt).toLocaleString(DateTime.DATETIME_SHORT)
+      );
+  }, [board, setLastBumpedAtShort]);
 
   const [lastRefreshedRelative, setLastRefreshedAtRelative] =
     useState<string>("");
@@ -80,7 +86,7 @@ export default function CatalogPage({
     }
   }, [boardId, refetch, setLastRefreshedAt]);
 
-  const onRefresh = useThrottleCallback(refresh, 1, true)
+  const onRefresh = useThrottleCallback(refresh, 1, true);
   const onSearchChange = (e: any) => setSearch(e.target.value);
 
   const history = useHistory();
@@ -98,44 +104,52 @@ export default function CatalogPage({
   );
 
   const toggleTimeTravelPanel = useCallback(() => {
-    setTimeTravelPanelOpen(!isTimeTravelPanelOpen)
-  }, [isTimeTravelPanelOpen, setTimeTravelPanelOpen])
+    setTimeTravelPanelOpen(!isTimeTravelPanelOpen);
+  }, [isTimeTravelPanelOpen, setTimeTravelPanelOpen]);
 
   // Time travel
-  const onTimeTravel = useThrottleCallback(useCallback(
-    (e) => {
-      setCurrentBlock(parseInt(e.target.value));
-    },
-    [setCurrentBlock]
-  ), 1, true);
+  const onTimeTravel = useThrottleCallback(
+    useCallback(
+      (e) => {
+        setCurrentBlock(parseInt(e.target.value));
+      },
+      [setCurrentBlock]
+    ),
+    10,
+    true
+  );
 
   useEffect(() => {
     if (board?.createdAtBlock && currentBlock === undefined) {
-      const lastCreatedAtBlock = parseInt(
-        getLastCreatedAtBlock(threads) || `${board?.createdAtBlock}`
-      );
+      const sortedThreads = sortByCreatedAt(threads);
+      const lastThread = sortedThreads ? sortedThreads[0] : undefined;
+
       // setCurrentBlock(lastCreatedAtBlock)
       setTimeTravelRange({
-        min: board?.createdAtBlock,
-        max: lastCreatedAtBlock,
+        min: {
+          block: board?.createdAtBlock,
+          unix: board?.createdAt,
+        },
+        max: {
+          block: lastThread?.createdAtBlock || "",
+          unix: lastThread?.createdAt || "",
+        },
       });
     }
   }, [board, threads, currentBlock, setCurrentBlock, setTimeTravelRange]);
 
-  // Last refreshed 
+  // Last refreshed
   // This is a crock of bullshit
   const refreshLastRefreshedAtRelative = useCallback(() => {
-    setLastRefreshedAtRelative(
-      lastRefreshedAt.toRelative() || ""
-    );
-  }, [lastRefreshedAt, setLastRefreshedAtRelative])
+    setLastRefreshedAtRelative(lastRefreshedAt.toRelative() || "");
+  }, [lastRefreshedAt, setLastRefreshedAtRelative]);
 
   useEffect(() => {
-    refreshLastRefreshedAtRelative()
-  }, [lastRefreshedAt, refreshLastRefreshedAtRelative])
+    refreshLastRefreshedAtRelative();
+  }, [lastRefreshedAt, refreshLastRefreshedAtRelative]);
 
   useInterval(() => {
-    refreshLastRefreshedAtRelative()
+    refreshLastRefreshedAtRelative();
   }, 1_000);
 
   return (
@@ -164,29 +178,36 @@ export default function CatalogPage({
             </HashLink>
             ]
           </span>
-          {!currentBlock ?
+          {!currentBlock ? (
             <span className="mx-1">
               [
-            <button
+              <button
                 className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                 onClick={onRefresh}
               >
                 {lastRefreshedRelative}
               </button>
-            ]
-          </span> : ""}
+              ]
+            </span>
+          ) : (
+            ""
+          )}
         </div>
-        <div className="flex-grow">
-        </div>
+        <div className="flex-grow"></div>
         <div className="mx-2 sm:text-center sm:text-right sm:flex sm:items-center sm:justify-end">
           {timeTravelRange.min && timeTravelRange.max ? (
-            <details className="mx-1 sm:text-right" open={isTimeTravelPanelOpen}>
+            <details
+              className="mx-1 sm:text-right"
+              open={isTimeTravelPanelOpen}
+            >
               <summary>
                 [
                 <button
                   className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                   onClick={toggleTimeTravelPanel}
-                >Time Travel</button>
+                >
+                  Time Travel
+                </button>
                 ]
               </summary>
               <div className="text-xs">
@@ -195,41 +216,61 @@ export default function CatalogPage({
                   <input
                     id="timetravel"
                     type="range"
-                    min={timeTravelRange.min}
-                    max={timeTravelRange.max}
+                    min={parseInt(timeTravelRange.min.block)}
+                    max={parseInt(timeTravelRange.max.block)}
                     onChange={onTimeTravel}
-                    value={currentBlock || getLastCreatedAtBlock(threads)}
+                    value={
+                      currentBlock ||
+                      sortByCreatedAt(threads)?.[0]?.createdAtBlock ||
+                      ""
+                    }
                   />{" "}
                   <span className="mx-1">Now</span>
                 </div>
-                {currentBlock ? (
-                  <div>
-                    <div>Block n.{currentBlock}</div>
-                    <div>
-                      [
-                      <button
-                        className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                        onClick={() => setCurrentBlock(undefined)}
-                      >
-                        Return to present
-                      </button>
-                      ]
-                    </div>
-                  </div>
-                ) : (
-                  ""
-                )}
+                <div className="grid center grid-cols-3 text-center">
+                  <span className="mx-1">
+                    {fromBigInt(timeTravelRange.min.unix).toLocaleString(
+                      DateTime.DATE_SHORT
+                    )}
+                  </span>
+                  <span>{currentBlock ? `Block n.${currentBlock}` : ""}</span>
+                  <span className="mx-1">
+                    {fromBigInt(timeTravelRange.max.unix).toLocaleString(
+                      DateTime.DATE_SHORT
+                    )}
+                  </span>
+                </div>
               </div>
             </details>
           ) : (
             ""
           )}
-          {lastBumpedAtShort ?
-            <span className="mx-1 text-xs">
-              [
-            {lastBumpedAtShort}
-            ]
-          </span> : ""}
+          {lastBumpedAtShort ? (
+            <span>
+              {currentBlock ? (
+                <div className="mx-1 text-xs">Time traveled to</div>
+              ) : (
+                ""
+              )}
+              <div className="mx-1 text-xs">[{lastBumpedAtShort}]</div>
+              {currentBlock ? (
+                <div>
+                  [
+                  <button
+                    className="text-blue-600 visited:text-purple-600 hover:text-blue-500 text-xs"
+                    onClick={() => setCurrentBlock(undefined)}
+                  >
+                    Return to present
+                  </button>
+                  ]
+                </div>
+              ) : (
+                ""
+              )}
+            </span>
+          ) : (
+            ""
+          )}
           <div className="mx-1 text-center">
             <div>
               <label htmlFor="search">Search: </label>
@@ -251,7 +292,7 @@ export default function CatalogPage({
         <hr></hr>
       </div>
 
-      <div className="min-h-screen">
+      <div>
         {loading ? (
           <Loading className="p-4"></Loading>
         ) : board && threads ? (
@@ -261,7 +302,7 @@ export default function CatalogPage({
             <div>
               <div className="text-center">
                 <details className="pb-1">
-                  <summary>
+                  <summary className="text-xs text-gray-600">
                     Threads: {threads.length} (Hidden:{" "}
                     {threads.filter((t) => isLowScore(t)).length}), Messages:{" "}
                     {board?.postCount}
@@ -275,9 +316,8 @@ export default function CatalogPage({
                   ></input>
                   <label htmlFor="dchan-input-show-reported">
                     Show hidden threads
-            </label>
+                  </label>
                 </details>
-
               </div>
               <div className="grid grid-template-columns-ram-150px place-items-start font-size-090rem px-4 sm:px-8">
                 {threads
@@ -309,7 +349,7 @@ export default function CatalogPage({
                   className="inline bg-secondary rounded-full"
                 >
                   ⤴️
-              </Link>
+                </Link>
               </div>
             </div>
           )

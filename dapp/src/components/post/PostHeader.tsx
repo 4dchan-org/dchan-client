@@ -2,13 +2,13 @@ import Menu from "components/Menu";
 import Status from "components/Status";
 import {
   backgroundColorAddress,
-  dateTimeFromBigInt,
-  isLowScore,
   Post,
   sendTip,
   shortenAddress,
   Thread,
 } from "dchan";
+import { fromBigInt } from "dchan/entities/datetime";
+import { isLowScore } from "dchan/entities/post";
 import {
   banPost,
   lockThread,
@@ -51,7 +51,7 @@ export default function PostHeader({
   const isOwner = accounts.length > 0 && accounts[0] === address;
   const [status, setStatus] = useState<string | object>();
 
-  const createdAt = dateTimeFromBigInt(createdAtUnix);
+  const createdAt = fromBigInt(createdAtUnix);
 
   const isJanny = !!thread ? fIsJanny(thread.board.id) : false;
 

@@ -2,6 +2,7 @@ import { Thread } from "dchan";
 import IPFSImage from "components/IPFSImage";
 import PostBody from "components/post/PostBody";
 import LowScoreDisclaimer from "components/LowScoreDisclaimer";
+import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
 
 const CatalogThread = ({
   thread,
@@ -20,7 +21,6 @@ const CatalogThread = ({
     op: { comment, image },
     replyCount,
     imageCount,
-    score,
   } = thread;
 
   const { ipfsHash, isNsfw, isSpoiler } = image || {
@@ -30,7 +30,7 @@ const CatalogThread = ({
   };
 
   const imgClassName = "w-full pointer-events-none shadow-xl object-contain";
-  const isLowScore = score / 1_000_000_000 < 1;
+  const isLowScore = isLowScoreThread(thread)
 
   return (
     <article

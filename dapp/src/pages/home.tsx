@@ -7,7 +7,6 @@ import BOARDS_LIST_MOST_POPULAR from 'dchan/graphql/queries/boards/list_most_pop
 import { Link } from 'react-router-dom';
 
 export default function HomePage() {
-
     const { query } = {
       query: BOARDS_LIST_MOST_POPULAR,
     };

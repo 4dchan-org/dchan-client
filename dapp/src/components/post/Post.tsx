@@ -36,7 +36,7 @@ export default function Post({
 
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
 
-  const isLowScore = score / 1_000_000_000 < 1;
+  const isLowScore = parseInt(score) / 1_000_000_000 < 1;
   useEffect(() => {
     subscribe(
       "POST_BACKLINK",
@@ -103,7 +103,7 @@ export default function Post({
                       })}
                     </a>
                     {/* <a className="text-blue-600" href={ipfsUrl} download={`ipfs_${image.id}.${image.name}`}>📥</a> */}
-                    <span>, {Math.trunc(image.byteSize * 0.001)}kb</span>
+                    <span>, {Math.trunc(parseInt(image.byteSize) * 0.001)}kb</span>
                     {/* <span>{image.resolution.height}x{image.resolution.width}</span> */}
                   </span>
                 </span>

@@ -19,6 +19,7 @@ const CATALOG = gql`
       isNsfw
     }
     createdAt
+    createdAtBlock
   }
 
   fragment Thread on Thread {
@@ -32,6 +33,7 @@ const CATALOG = gql`
     replyCount
     imageCount
     score
+    createdAt
     createdAtBlock
   }
   
@@ -44,6 +46,7 @@ const CATALOG = gql`
       isLocked
       isNsfw
       lastBumpedAt
+      createdAt
       createdAtBlock
       jannies {
         user {

@@ -6,6 +6,7 @@ import {
 
 import 'assets/styles/index.scss';
 import HomePage from 'pages/home'
+import AbusePage from 'pages/abuse'
 import RulesPage from 'pages/rules'
 import BoardCatalogPage from 'pages/catalog'
 import BoardListPage from "pages/boards"
@@ -25,6 +26,7 @@ function App() {
           <Route exact path="/" component={HomePage} />
           <Route exact path="/boards" component={BoardListPage} />
           <Route path="/rules" component={RulesPage} />
+          <Route path="/abuse" component={AbusePage} />
           <Route path="/admin" component={AdminPage} />
           <Route path="/settings" component={SettingsPage} />
           <Route path="/0x:ref" component={ReferencePage} />

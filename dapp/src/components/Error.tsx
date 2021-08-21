@@ -1,13 +1,7 @@
-import { useCallback } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+import BackButton from "./BackButton";
 
 export default function Error({ subject, body }: { subject: string, body: string }) {
-    const history = useHistory();
-
-    const back = useCallback(() => {
-        history.goBack()
-    }, [history])
-
     return (<div className="font-family-arial text-center">
         <div className="grid center min-h-100vh">
             <div>
@@ -18,7 +12,7 @@ export default function Error({ subject, body }: { subject: string, body: string
                     {body}
                 </div>
                 <div>
-                    <button className="text-blue-600 visited:text-purple-600 m-4" onClick={back}>Go back</button>
+                    <BackButton />
                 </div>
                 <div>
                     <Link className="text-blue-600 visited:text-purple-600 m-4" to="/">Go home</Link>
