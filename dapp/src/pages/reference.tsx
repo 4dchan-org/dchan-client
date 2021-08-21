@@ -19,7 +19,8 @@ export default function ReferencePage({ match: { params: { ref } } }: any) {
 
             const {
                 board,
-                thread
+                thread,
+                post
             } = data
 
             if (board?.name && board?.id && thread?.id) {
@@ -34,10 +35,14 @@ export default function ReferencePage({ match: { params: { ref } } }: any) {
                 location = `/${thread?.board?.name}/${thread?.board?.id}/${thread?.id}`
             }
 
+            if (post?.thread?.board?.name && post?.thread?.board?.id && post?.thread?.id) {
+                location = `/${post?.thread?.board?.name}/${post?.thread?.board?.id}/${post?.thread?.id}`
+            }
+
             console.log({data, location})
 
             if (location) {
-                history.push(location)
+                history.replace(location)
             }
         }
     }, [history, data])
@@ -45,7 +50,7 @@ export default function ReferencePage({ match: { params: { ref } } }: any) {
 
     return (
         <div className="bg-primary center grid w-screen h-screen">
-            {loading ? <Loading></Loading> : <Error subject="Not found" body="This is a 404 page"></Error>}
+            {loading ? <Loading></Loading> : !data ? <Error subject="Not found" body="This is a 404 page"></Error> : ""}
         </div>
     );
 }

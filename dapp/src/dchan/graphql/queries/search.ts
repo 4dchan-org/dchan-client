@@ -13,6 +13,16 @@ const SEARCH_BY_ID = gql`
         name
       }
     }
+    post(id: $id) {
+      id
+      thread {
+        id
+        board {
+          id
+          name
+        }
+      }
+    }
     user(id: $id) {
       id
     }

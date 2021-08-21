@@ -2,16 +2,18 @@ import IPFSImage from "components/IPFSImage";
 import { BACKLINK_REGEX, Post as DchanPost, Thread } from "dchan";
 import usePubSub from "hooks/usePubSub";
 import { truncate } from "lodash";
-import { useEffect, useRef, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import PostBody from "./PostBody";
 import PostHeader from "./PostHeader";
 
 export default function Post({
   post,
   thread,
+  header
 }: {
   post: DchanPost;
-  thread: Thread;
+  thread?: Thread;
+  header?: ReactElement
 }) {
   const [focused, setFocused] = useState<boolean>(false);
   const [backlinks, setBacklinks] = useState<object>({});
@@ -65,7 +67,7 @@ export default function Post({
   return (
     <details className="dchan-post-expand" open={!isLowScore} key={id} ref={postRef}>
       <summary className="text-left pl-2 opacity-50 z-10" title="Hide/Show">
-        <PostHeader thread={thread} post={post}></PostHeader>
+        <PostHeader thread={thread} post={post}>{header}</PostHeader>
       </summary>
       <article
         id={`${n}`}
@@ -82,7 +84,7 @@ export default function Post({
               thread={thread}
               post={post}
               backlinks={backlinks}
-            ></PostHeader>
+            >{header}</PostHeader>
           </div>
           <div>
             {!!image ? (
@@ -129,7 +131,7 @@ export default function Post({
 
                 <span>
                   <div>
-                    {isOp ? (
+                    {isOp && thread ? (
                       <span className="font-semibold">{thread.subject}</span>
                     ) : (
                       ""

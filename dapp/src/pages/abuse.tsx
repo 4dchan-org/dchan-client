@@ -11,9 +11,9 @@ export default function AbusePage() {
           body={
             <div>
               <Markdown className="text-center p-4">{`
-This is a decentralized application: the content shown is not hosted on the servers of the website you're currently using it from and is instead retrieved from IPFS, meaning there is no way for the website owner to delete it. 
+This is a decentralized application: the content shown is not hosted on the servers hosting this application and is instead retrieved from [IPFS](https://ipfs.io/), meaning there is no way for this website's owner to delete it.
 
-You may still use the built-in report system to notify janitors about the offensive content so it can be hidden from view, or you may ask the owners of your currently configured IPFS gateway to prevent that content from being served.
+However, you may still use the built-in report system to notify janitors about the offensive content so it can be hidden from view, or you may file an issue to the owners of your currently configured IPFS gateway to prevent that content from being publicly served.
               `}</Markdown>
             </div>
           }

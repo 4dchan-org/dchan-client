@@ -22,7 +22,7 @@ import usePubSub from "hooks/usePubSub";
 import useUser from "hooks/useUser";
 import useWeb3 from "hooks/useWeb3";
 import { DateTime } from "luxon";
-import { useCallback, useState } from "react";
+import { ReactElement, useCallback, useState } from "react";
 
 (window as any).quotePost = function (quoting: any) {
   console.log({ quoting });
@@ -33,10 +33,12 @@ export default function PostHeader({
   post,
   thread,
   backlinks,
+  children
 }: {
   post: Post;
-  thread: Thread;
+  thread?: Thread;
   backlinks?: object;
+  children?: ReactElement
 }) {
   const {
     id,
@@ -166,11 +168,14 @@ export default function PostHeader({
           <span></span>
         )}
       </span>
+      {
+        children
+      }
       {accounts && accounts[0] ? (
         <Menu>
           {canLock ? (
             <div>
-              {thread.isLocked ? (
+              {thread && thread.isLocked ? (
                 <span>
                   <input name="lock" type="hidden" value="false"></input>
                   <button onClick={() => unlockThread(id, accounts, setStatus)}>
@@ -191,7 +196,7 @@ export default function PostHeader({
           )}
           {canPin ? (
             <div>
-              {thread.isPinned ? (
+              {thread && thread.isPinned ? (
                 <span>
                   <input name="sticky" type="hidden" value="false"></input>
                   <button onClick={() => unpinThread(id, accounts, setStatus)}>

@@ -31,7 +31,7 @@ export default function IPFSImage({
   const [showNsfw, setShowNsfw] = useState<boolean>(false);
   const [expand, setExpand] = useState<boolean>(!thumbnail);
 
-  const thumbnailClass = thumbnail ? "max-w-32 max-h-32" : "";
+  const thumbnailClass = thumbnail ? "max-w-8rem max-h-32" : "";
   const canShow = (!isNsfw || showNsfw) && (!isSpoiler || showSpoiler);
 
   const retry = useCallback(() => {

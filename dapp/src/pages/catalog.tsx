@@ -1,11 +1,12 @@
 import BoardHeader from "components/board/header";
 import FormPost from "components/form/FormPost";
 import Footer from "components/Footer";
+import PostComponent from "components/post/Post";
 import CatalogThread from "components/catalog/CatalogThread";
 import { useQuery } from "@apollo/react-hooks";
 import CATALOG from "dchan/graphql/queries/catalog";
 import CATALOG_TIMETRAVEL from "dchan/graphql/queries/catalog_tt";
-import { Board, Thread, Timestamp } from "dchan";
+import { Board, Post, Thread, Timestamp } from "dchan";
 import Loading from "components/Loading";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { HashLink, HashLink as Link } from "react-router-hash-link";
@@ -13,18 +14,24 @@ import { DateTime } from "luxon";
 import { useHistory } from "react-router-dom";
 import useInterval from "@use-it/interval";
 import { useThrottleCallback } from "@react-hook/throttle";
-import { isLowScore, sortByCreatedAt } from "dchan/entities/thread";
+import {
+  isLowScore as isLowScoreThread,
+  sortByCreatedAt,
+} from "dchan/entities/thread";
+import { isLowScore as isLowScorePost } from "dchan/entities/post";
 import { fromBigInt } from "dchan/entities/datetime";
 
 interface CatalogData {
   board: Board;
   pinned: Thread[];
   threads: Thread[];
+  postSearch: Post[];
 }
 interface CatalogVars {
   boardId: string;
   currentBlock?: number;
   limit: number;
+  search: string;
 }
 
 export default function CatalogPage({
@@ -44,17 +51,26 @@ export default function CatalogPage({
     min?: Timestamp;
     max?: Timestamp;
   }>({});
+  const onSearchChange = (e: any) => setSearch(e.target.value);
+
+  const variables = {
+    ...{
+      boardId,
+      limit: 25,
+      search: search.length > 1 ? `${search}:*` : "",
+    },
+    ...(currentBlock ? { currentBlock } : {}),
+  };
 
   const { refetch, loading, data } = useQuery<CatalogData, CatalogVars>(
     !currentBlock ? CATALOG : CATALOG_TIMETRAVEL,
     {
-      variables: !currentBlock
-        ? { boardId, limit: 25 }
-        : { boardId, currentBlock, limit: 25 },
+      variables,
       pollInterval: 60_000,
     }
   );
 
+  const postSearch = data?.postSearch;
   const board = data?.board;
   const threads = useMemo(
     () => [...(data?.pinned || []), ...(data?.threads || [])],
@@ -87,7 +103,6 @@ export default function CatalogPage({
   }, [boardId, refetch, setLastRefreshedAt]);
 
   const onRefresh = useThrottleCallback(refresh, 1, true);
-  const onSearchChange = (e: any) => setSearch(e.target.value);
 
   const history = useHistory();
   const [focused, setFocused] = useState<string>("");
@@ -295,6 +310,55 @@ export default function CatalogPage({
       <div>
         {loading ? (
           <Loading className="p-4"></Loading>
+        ) : postSearch && postSearch.length ? (
+          <div>
+            <div>
+              <div className="text-center">
+                <details className="pb-1">
+                  <summary className="text-xs text-gray-600">
+                    Found: {postSearch.length} posts (Hidden:{" "}
+                    {postSearch.filter((p) => isLowScorePost(p)).length},
+                    Threads: {postSearch.filter((p: Post) => !p.thread).length}
+                  </summary>
+                  <input
+                    id="dchan-input-show-reported"
+                    className="mx-1 text-xs whitespace-nowrap opacity-50 hover:opacity-100"
+                    type="checkbox"
+                    checked={showLowScore}
+                    onChange={() => setShowLowScore(!showLowScore)}
+                  ></input>
+                  <label htmlFor="dchan-input-show-reported">
+                    Show hidden threads
+                  </label>
+                </details>
+              </div>
+            </div>
+            <div>
+              {postSearch
+                  .filter((post: Post) => {
+                    return showLowScore || !isLowScorePost(post);
+                  })
+                  .map((post) => (
+                <div className="p-2 flex flex-wrap">
+                  <PostComponent
+                    post={post}
+                    header={
+                      <span className="p-2">
+                        [
+                        <Link
+                          to={`/${post.id}`}
+                          className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                        >
+                          View
+                        </Link>
+                        ]
+                      </span>
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         ) : board && threads ? (
           threads.length === 0 ? (
             <div className="center grid">{`No threads.`}</div>
@@ -304,8 +368,8 @@ export default function CatalogPage({
                 <details className="pb-1">
                   <summary className="text-xs text-gray-600">
                     Threads: {threads.length} (Hidden:{" "}
-                    {threads.filter((t) => isLowScore(t)).length}), Messages:{" "}
-                    {board?.postCount}
+                    {threads.filter((t) => isLowScoreThread(t)).length}),
+                    Messages: {board?.postCount}
                   </summary>
                   <input
                     id="dchan-input-show-reported"
@@ -322,16 +386,7 @@ export default function CatalogPage({
               <div className="grid grid-template-columns-ram-150px place-items-start font-size-090rem px-4 sm:px-8">
                 {threads
                   .filter((thread: Thread) => {
-                    return (
-                      (!search ||
-                        thread.subject
-                          .toLocaleLowerCase()
-                          .indexOf(search.toLocaleLowerCase()) !== -1 ||
-                        thread.op.comment
-                          .toLocaleLowerCase()
-                          .indexOf(search.toLocaleLowerCase()) !== -1) &&
-                      (showLowScore || !isLowScore(thread))
-                    );
+                    return showLowScore || !isLowScoreThread(thread);
                   })
                   .map((thread: Thread) => (
                     <CatalogThread

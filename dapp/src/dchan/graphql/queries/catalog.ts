@@ -6,6 +6,7 @@ const CATALOG = gql`
     n
     from {
       id
+      address
     }
     name
     comment
@@ -20,6 +21,13 @@ const CATALOG = gql`
     }
     createdAt
     createdAtBlock
+    bans {
+      ban {
+        reason
+        expiresAt
+      }
+    }
+    score
   }
 
   fragment Thread on Thread {
@@ -37,7 +45,7 @@ const CATALOG = gql`
     createdAtBlock
   }
   
-  query ThreadList($boardId: String!, $limit: Int!) {
+  query Catalog($boardId: String!, $limit: Int!, $search: String) {
     board(id: $boardId) {
       id
       title
@@ -59,6 +67,9 @@ const CATALOG = gql`
     }
     threads(where: {board: $boardId, isPinned: false}, orderBy: lastBumpedAt, orderDirection: desc, first: $limit) {
       ...Thread
+    }
+    postSearch(text: $search) {
+      ...Post
     }
   }
 `;
