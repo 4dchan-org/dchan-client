@@ -72,7 +72,6 @@ export default function PostHeader({
           alert("Invalid amount");
           return;
         }
-
         await sendTip(accounts[0], to, amount);
       } catch (e) {
         console.error({ onSendTipError: e });

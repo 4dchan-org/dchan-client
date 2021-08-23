@@ -1,12 +1,13 @@
+import { isMaticChainId } from "dchan";
 import { switchChain } from "dchan/chain";
 import useWeb3 from "hooks/useWeb3";
 import { useState } from "react";
 
-export default function WalletConnect() {
+export default function WalletSwitchChain() {
   const { provider, chainId } = useWeb3()
   const [stillStuck, setStillStuck] = useState<boolean>(false);
 
-  return provider && chainId !== "0x89" && chainId !== 137 ? (
+  return provider && !isMaticChainId(chainId) ? (
     <div className="p-4">
       <div>
         You need to be connected to the Polygon chain in order to interact with

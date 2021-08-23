@@ -1,21 +1,21 @@
 import AddressLabel from "components/AddressLabel";
-import { getBalance } from "dchan";
+import { getBalance, isMaticChainId } from "dchan";
 import { useEffect, useState } from "react";
 import polygonLogo from "assets/images/polygon.png";
 import useWeb3 from "hooks/useWeb3";
 
 export default function WalletAccount() {
-  const { provider, accounts } = useWeb3()
+  const { provider, accounts, chainId } = useWeb3();
   const account = accounts[0];
   const [balance, setBalance] = useState<number>();
 
   useEffect(() => {
     const refreshBalance = async () => {
       try {
-        if(account) {
+        if (account) {
           setBalance(parseInt(await getBalance(account)) / Math.pow(10, 18));
         } else {
-          setBalance(undefined)
+          setBalance(undefined);
         }
       } catch (e) {
         console.error({ refreshBalance: e });
@@ -28,7 +28,7 @@ export default function WalletAccount() {
     return () => clearInterval(interval);
   }, [account]);
 
-  return provider && account ? (
+  return provider && account && isMaticChainId(chainId) ? (
     <div className="text-xs center grid">
       <div>
         <span className="px-1">Connected as</span>
@@ -37,7 +37,7 @@ export default function WalletAccount() {
         </span>
       </div>
       <div>
-        {balance ? (
+        {balance !== undefined ? (
           <span>
             ( {balance.toFixed(4)}
             <img
@@ -46,15 +46,18 @@ export default function WalletAccount() {
               src={polygonLogo}
             ></img>
             )
-            {balance < 0.0005 ? (
-              <a
-                href="https://matic.supply/"
-                target="_blank"
-                rel="noreferrer"
-                className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
-              >
-                Low on Matic?
-              </a>
+            {balance !== undefined && balance < 0.0005 ? (
+              <div>
+                <a
+                  href="https://matic.supply/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
+                >
+                  <div>Need Matic?</div>
+                  <div>Free faucet: https://matic.supply</div>
+                </a>
+              </div>
             ) : (
               ""
             )}

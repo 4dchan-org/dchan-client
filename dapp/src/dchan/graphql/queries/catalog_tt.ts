@@ -68,7 +68,7 @@ const CATALOG = gql`
     threads(where: {board: $boardId, isPinned: false}, orderBy: lastBumpedAt, orderDirection: desc, first: $limit, block: {number: $currentBlock}) {
       ...Thread
     }
-    postSearch(text: $search, block: {number: $currentBlock}) {
+    postSearch(text: $search, block: {number: $currentBlock}, orderBy: createdAt, orderDirection: desc) {
       ...Post
     }
   }

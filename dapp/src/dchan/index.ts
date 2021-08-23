@@ -141,3 +141,7 @@ export async function getBalance(account: string) {
 
     return web3.eth.getBalance(account)
 }
+
+export function isMaticChainId(chainId: string | number | undefined) {
+    return chainId ? chainId === "0x89" || chainId === 137 : false
+}

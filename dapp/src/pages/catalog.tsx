@@ -16,9 +16,12 @@ import useInterval from "@use-it/interval";
 import { useThrottleCallback } from "@react-hook/throttle";
 import {
   isLowScore as isLowScoreThread,
-  sortByCreatedAt,
+  sortByCreatedAt as sortThreadsByCreatedAt,
 } from "dchan/entities/thread";
-import { isLowScore as isLowScorePost } from "dchan/entities/post";
+import {
+  isLowScore as isLowScorePost,
+  sortByCreatedAt as sortPostsByCreatedAt,
+} from "dchan/entities/post";
 import { fromBigInt } from "dchan/entities/datetime";
 
 interface CatalogData {
@@ -76,6 +79,14 @@ export default function CatalogPage({
     () => [...(data?.pinned || []), ...(data?.threads || [])],
     [data]
   );
+
+  const sortedPostSearch = useMemo(() => {
+    return postSearch ? sortPostsByCreatedAt(postSearch) : undefined;
+  }, [postSearch]);
+
+  const sortedThreads = useMemo(() => {
+    return sortThreadsByCreatedAt(threads)
+  }, [threads])
 
   const [lastRefreshedAt, setLastRefreshedAt] = useState<DateTime>(
     DateTime.now()
@@ -136,7 +147,6 @@ export default function CatalogPage({
 
   useEffect(() => {
     if (board?.createdAtBlock && currentBlock === undefined) {
-      const sortedThreads = sortByCreatedAt(threads);
       const lastThread = sortedThreads ? sortedThreads[0] : undefined;
 
       // setCurrentBlock(lastCreatedAtBlock)
@@ -151,10 +161,9 @@ export default function CatalogPage({
         },
       });
     }
-  }, [board, threads, currentBlock, setCurrentBlock, setTimeTravelRange]);
+  }, [board, sortedThreads, currentBlock, setCurrentBlock, setTimeTravelRange]);
 
   // Last refreshed
-  // This is a crock of bullshit
   const refreshLastRefreshedAtRelative = useCallback(() => {
     setLastRefreshedAtRelative(lastRefreshedAt.toRelative() || "");
   }, [lastRefreshedAt, setLastRefreshedAtRelative]);
@@ -236,7 +245,7 @@ export default function CatalogPage({
                     onChange={onTimeTravel}
                     value={
                       currentBlock ||
-                      sortByCreatedAt(threads)?.[0]?.createdAtBlock ||
+                      sortedThreads?.[0]?.createdAtBlock ||
                       ""
                     }
                   />{" "}
@@ -287,8 +296,9 @@ export default function CatalogPage({
             ""
           )}
           <div className="mx-1 text-center">
-            <div>
+            <div className="relative">
               <label htmlFor="search">Search: </label>
+              {search ? <button onClick={() => setSearch("")}>X</button> : ""}
             </div>
             <div>
               <input
@@ -296,6 +306,7 @@ export default function CatalogPage({
                 className="text-center w-32"
                 type="text"
                 placeholder="..."
+                value={search}
                 onChange={onSearchChange}
               ></input>
             </div>
@@ -310,55 +321,56 @@ export default function CatalogPage({
       <div>
         {loading ? (
           <Loading className="p-4"></Loading>
-        ) : postSearch && postSearch.length ? (
-          <div>
+        ) : search ? (
+          postSearch && postSearch.length ? (
             <div>
-              <div className="text-center">
-                <details className="pb-1">
-                  <summary className="text-xs text-gray-600">
-                    Found: {postSearch.length} posts (Hidden:{" "}
-                    {postSearch.filter((p) => isLowScorePost(p)).length},
-                    Threads: {postSearch.filter((p: Post) => !p.thread).length}
-                  </summary>
-                  <input
-                    id="dchan-input-show-reported"
-                    className="mx-1 text-xs whitespace-nowrap opacity-50 hover:opacity-100"
-                    type="checkbox"
-                    checked={showLowScore}
-                    onChange={() => setShowLowScore(!showLowScore)}
-                  ></input>
-                  <label htmlFor="dchan-input-show-reported">
-                    Show hidden threads
-                  </label>
-                </details>
+              <div>
+                <div className="text-center">
+                  <details className="pb-1">
+                    <summary className="text-xs text-gray-600">
+                      Found: {postSearch.length} posts (Hidden:{" "}
+                      {postSearch.filter((p) => isLowScorePost(p)).length})
+                    </summary>
+                    <div>
+                      <input
+                        id="dchan-input-show-reported"
+                        className="mx-1 text-xs whitespace-nowrap opacity-50 hover:opacity-100"
+                        type="checkbox"
+                        checked={showLowScore}
+                        onChange={() => setShowLowScore(!showLowScore)}
+                      ></input>
+                      <label htmlFor="dchan-input-show-reported">
+                        Show hidden threads
+                      </label>
+                    </div>
+                  </details>
+                </div>
+              </div>
+              <div>
+                {sortedPostSearch?.map((post) => (
+                  <div className="p-2 flex flex-wrap">
+                    <PostComponent
+                      post={post}
+                      header={
+                        <span className="p-2">
+                          [
+                          <Link
+                            to={`/${post.id}`}
+                            className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                          >
+                            View
+                          </Link>
+                          ]
+                        </span>
+                      }
+                    />
+                  </div>
+                ))}
               </div>
             </div>
-            <div>
-              {postSearch
-                  .filter((post: Post) => {
-                    return showLowScore || !isLowScorePost(post);
-                  })
-                  .map((post) => (
-                <div className="p-2 flex flex-wrap">
-                  <PostComponent
-                    post={post}
-                    header={
-                      <span className="p-2">
-                        [
-                        <Link
-                          to={`/${post.id}`}
-                          className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                        >
-                          View
-                        </Link>
-                        ]
-                      </span>
-                    }
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+          ) : (
+            "No results"
+          )
         ) : board && threads ? (
           threads.length === 0 ? (
             <div className="center grid">{`No threads.`}</div>
@@ -371,16 +383,18 @@ export default function CatalogPage({
                     {threads.filter((t) => isLowScoreThread(t)).length}),
                     Messages: {board?.postCount}
                   </summary>
-                  <input
-                    id="dchan-input-show-reported"
-                    className="mx-1 text-xs whitespace-nowrap opacity-50 hover:opacity-100"
-                    type="checkbox"
-                    checked={showLowScore}
-                    onChange={() => setShowLowScore(!showLowScore)}
-                  ></input>
-                  <label htmlFor="dchan-input-show-reported">
-                    Show hidden threads
-                  </label>
+                  <div>
+                    <input
+                      id="dchan-input-show-reported"
+                      className="mx-1 text-xs whitespace-nowrap opacity-50 hover:opacity-100"
+                      type="checkbox"
+                      checked={showLowScore}
+                      onChange={() => setShowLowScore(!showLowScore)}
+                    ></input>
+                    <label htmlFor="dchan-input-show-reported">
+                      Show hidden threads
+                    </label>
+                  </div>
                 </details>
               </div>
               <div className="grid grid-template-columns-ram-150px place-items-start font-size-090rem px-4 sm:px-8">
