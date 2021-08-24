@@ -499,7 +499,7 @@ export default function FormPost({
                         and that my address{" "}
                         <AddressLabel address={accounts[0]}></AddressLabel>{" "}
                         <abbr title="When posting, remember that other users will be able to view all past transactions you ever made using this address. Be mindful of the security risks this entails.">
-                          will be made public
+                          will be made public.
                         </abbr>
                       </li>
                     ) : (

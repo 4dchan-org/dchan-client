@@ -11,13 +11,13 @@ const BOARDS_LIST = gql`
   }
 
   query Boards {
-    mostPopular: boards(orderBy: postCount, orderDirection: desc) {
+    mostPopular: boards(orderBy: postCount, orderDirection: desc, where: {score_gt: "900000000"}) {
       ...Board
     }
-    lastBumped: boards(orderBy: lastBumpedAt, orderDirection: desc) {
+    lastBumped: boards(orderBy: lastBumpedAt, orderDirection: desc, where: {score_gt: "900000000"}) {
       ...Board
     }
-    lastCreated: boards(orderBy: createdAt, orderDirection: desc) {
+    lastCreated: boards(orderBy: createdAt, orderDirection: desc, where: {score_gt: "900000000"}) {
       ...Board
     }
   }

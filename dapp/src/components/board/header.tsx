@@ -6,7 +6,7 @@ import Status from "components/Status";
 import AddressLabel from "components/AddressLabel";
 import Menu from "components/Menu";
 import { useState } from "react";
-import { lockBoard, removeBoard, unlockBoard } from "dchan/operations";
+import { lockBoard, removeBoard, reportBoard, unlockBoard } from "dchan/operations";
 import useUser from "hooks/useUser";
 import useWeb3 from "hooks/useWeb3";
 
@@ -78,6 +78,11 @@ export default function BoardHeader({
                       onClick={() => removeBoard(board.id, accounts, setStatus)}
                     >
                       ❌ Remove
+                    </button>
+                  </div>
+                  <div>
+                    <button onClick={() => reportBoard(board.id, accounts, setStatus)}>
+                      ⚠️ Report
                     </button>
                   </div>
                 </Menu>

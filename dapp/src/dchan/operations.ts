@@ -106,6 +106,24 @@ export async function removePost(id: string, accounts: any, setStatus: SetStatus
     }
 }
 
+export async function reportBoard(id: string, accounts: any, setStatus: SetStatus) {
+    try {
+        setStatus({
+            progress: "Reporting..."
+        });
+
+        await sendMessage("board:report", { id }, accounts[0]);
+
+        setStatus({
+            success: "Reported"
+        });
+    } catch (error) {
+        setStatus({ error });
+
+        console.error({ error });
+    }
+}
+
 export async function reportPost(id: string, accounts: any, setStatus: SetStatus) {
     try {
         setStatus({

@@ -47,7 +47,7 @@ export default function PostHeader({
     from: { address },
     createdAt: createdAtUnix
   } = post
-  const { accounts } = useWeb3();
+  const { provider, accounts } = useWeb3();
   const { publish } = usePubSub();
   const { isJanny: fIsJanny } = useUser();
   const isOwner = accounts.length > 0 && accounts[0] === address;
@@ -114,6 +114,7 @@ export default function PostHeader({
                 {shortenAddress(address)}
               </abbr></a>)
           </summary>
+          {provider ? 
           <div className="flex">
             (<button
               className="text-blue-600 visited:text-purple-600 hover:text-blue-500 flex-grow"
@@ -127,7 +128,7 @@ export default function PostHeader({
             >
               +
             </button>)
-          </div>
+          </div> : ""}
         </details>
       </span>
       <span className="px-0.5 whitespace-nowrap text-xs">

@@ -32,7 +32,8 @@ function App() {
           <Route path="/0x:ref" component={ReferencePage} />
           <Route path="/:boardName/0x:boardId/0x:threadId/:postN" component={ThreadPage} />
           <Route path="/:boardName/0x:boardId/0x:threadId" component={ThreadPage} />
-          <Route path="/:boardName/0x:boardId/:search" component={BoardCatalogPage} />
+          <Route path="/:boardName/0x:boardId/block/:block" component={BoardCatalogPage} />
+          <Route path="/:boardName/0x:boardId/search/:search" component={BoardCatalogPage} />
           <Route path="/:boardName/0x:boardId" component={BoardCatalogPage} />
           <Route path="/:boardName" component={BoardSearchPage} />
         </Switch>

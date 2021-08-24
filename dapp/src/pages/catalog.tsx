@@ -57,7 +57,7 @@ export default function CatalogPage({ match: { params } }: any) {
     undefined
   );
   const [currentBlock, setCurrentBlock] = useState<number | undefined>(
-    undefined
+    params.block ? parseInt(params.block) : undefined
   );
   const [timeTravelRange, setTimeTravelRange] = useState<{
     min: Timestamp;
@@ -73,7 +73,7 @@ export default function CatalogPage({ match: { params } }: any) {
     },
     ...(currentBlock ? { currentBlock } : {}),
   };
-
+  
   const { refetch, loading, data } = useQuery<CatalogData, CatalogVars>(
     !currentBlock ? CATALOG : CATALOG_TIMETRAVEL,
     {
@@ -81,6 +81,7 @@ export default function CatalogPage({ match: { params } }: any) {
       pollInterval: 60_000,
     }
   );
+
   const { data: bbdData } = useQuery<BlockByDateData, BlockByDateVars>(
     BLOCK_BY_DATE,
     {
@@ -105,6 +106,10 @@ export default function CatalogPage({ match: { params } }: any) {
     () => [...(data?.pinned || []), ...(data?.threads || [])],
     [data]
   );
+
+  useEffect(() => {
+    board && history.replace(currentBlock ? `/${board.name}/${board.id}/block/${currentBlock}` : `/${board.name}/${board.id}`)
+  }, [board, currentBlock])
 
   const sortedPostSearch = useMemo(() => {
     return postSearch ? sortPostsByCreatedAt(postSearch) : undefined;
@@ -169,7 +174,7 @@ export default function CatalogPage({ match: { params } }: any) {
 
   useEffect(() => {
     const lastThread = sortedThreads ? sortedThreads[0] : undefined;
-    if (board?.createdAtBlock && currentBlock === undefined) {
+    if (board?.createdAtBlock && (!timeTravelRange || (lastThread && timeTravelRange.max.block < lastThread.createdAtBlock))) {
       setTimeTravelRange({
         min: {
           block: board?.createdAtBlock,
@@ -417,9 +422,8 @@ export default function CatalogPage({ match: { params } }: any) {
                             onClick={() => {
                               !!board &&
                                 history.push(
-                                  `/${board.name}/${board.id}/${search}`
-                                );
-                              console.log({ board });
+                                  `/${board.name}/${board.id}/search/${search}`
+                                )
                             }}
                             className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                           >
@@ -453,61 +457,69 @@ export default function CatalogPage({ match: { params } }: any) {
                     ), Messages: {board?.postCount}
                   </summary>
                   <div className="center grid">
-                    <div className="bg-secondary p-2">
-                      <div>
-                        <input
-                          id="dchan-input-show-reported"
-                          className="mx-1 text-xs whitespace-nowrap opacity-50 hover:opacity-100"
-                          type="checkbox"
-                          checked={showLowScore}
-                          onChange={() => setShowLowScore(!showLowScore)}
-                        ></input>
-                        <label htmlFor="dchan-input-show-reported">
-                          Show hidden threads
-                        </label>
+                    <div className="bg-secondary p-2 max-w-sm">
+                      <div className="text-contrast text-xs text-left">
+                        ⚠ By disabling filters, it's possible you may view (and
+                        download) highly disturbing content, or content which
+                        may be illegal in your jurisdiction.
+                        <div>Do so at your own risk.</div>
                       </div>
-                      <div>
-                        <label htmlFor="dchan-input-show-reported">
-                          Score hide threshold
-                        </label>
+                      <div className="py-2">
                         <div>
                           <input
                             id="dchan-input-show-reported"
                             className="mx-1 text-xs whitespace-nowrap opacity-50 hover:opacity-100"
-                            type="range"
-                            min={0}
-                            max={1}
-                            step={0.1}
-                            value={settings.content.score_threshold}
-                            onChange={(e) =>
-                              setSettings({
-                                ...settings,
-                                content: { score_threshold: e.target.value },
-                              })
-                            }
-                          />
+                            type="checkbox"
+                            checked={showLowScore}
+                            onChange={() => setShowLowScore(!showLowScore)}
+                          ></input>
+                          <label htmlFor="dchan-input-show-reported">
+                            Show hidden content
+                          </label>
                         </div>
-                        <div className="text-sm">
-                          {
+                        <div>
+                          <label htmlFor="dchan-input-show-reported">
+                            Score hide threshold
+                          </label>
+                          <div>
+                            <input
+                              id="dchan-input-show-reported"
+                              className="mx-1 text-xs whitespace-nowrap opacity-50 hover:opacity-100"
+                              type="range"
+                              min={0}
+                              max={1}
+                              step={0.1}
+                              value={settings.content.score_threshold}
+                              onChange={(e) =>
+                                setSettings({
+                                  ...settings,
+                                  content: { score_threshold: e.target.value },
+                                })
+                              }
+                            />
+                          </div>
+                          <div className="text-sm">
                             {
-                              "0": "Show everything",
-                              "0.1": "Hide reported content",
-                              "0.2": "Hide reported content",
-                              "0.3": "Hide reported content",
-                              "0.4": "Hide reported content",
-                              "0.5": "Hide reported content",
-                              "0.6": "Hide reported content",
-                              "0.7": "Hide reported content",
-                              "0.8": "Hide reported content",
-                              "0.9": "Hide reported content",
-                              "1": "Only show content with no reports",
-                            }[settings.content.score_threshold]
-                          }
+                              {
+                                "0": "Show everything",
+                                "0.1": "Hide reported content",
+                                "0.2": "Hide reported content",
+                                "0.3": "Hide reported content",
+                                "0.4": "Hide reported content",
+                                "0.5": "Hide reported content",
+                                "0.6": "Hide reported content",
+                                "0.7": "Hide reported content",
+                                "0.8": "Hide reported content",
+                                "0.9": "Hide reported content",
+                                "1": "Only show content with no reports",
+                              }[settings.content.score_threshold]
+                            }
+                          </div>
                         </div>
-                        <div className="text-xs">
-                          Content score is estimated based on quantity of user
-                          reports and janitor actions.
-                        </div>
+                      </div>
+                      <div className="text-xs text-left">
+                        ℹ Content score is estimated based on quantity of user
+                        reports and janitor actions.
                       </div>
                     </div>
                   </div>

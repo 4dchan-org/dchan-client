@@ -37,7 +37,7 @@ const CatalogThread = ({
   return (
     <article
       id={id}
-      className="dchan-post relative text-decoration-none leading-4 text-black m-0.5 border-black overflow-hidden min-h-12rem max-h-320px max-w-150px break-word w-full h-full place-items-start"
+      className="dchan-post justify-self-center relative text-decoration-none leading-4 text-black m-0.5 border-black overflow-hidden min-h-12rem max-h-320px max-w-150px break-word w-full h-full place-items-start"
       style={
         isFocused
           ? {

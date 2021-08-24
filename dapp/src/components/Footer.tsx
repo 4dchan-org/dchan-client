@@ -1,57 +1,62 @@
 import { Link } from "react-router-dom";
+import polygonSrc from "assets/images/polygon.png";
+import thegraphSrc from "assets/images/thegraph.png";
 
 export default function Footer() {
   return (
-    <footer className="flex justify-center text-align-center mt-4 border-t border-black pb-4 text-xs relative min-w-100vw overflow-hidden">
-      <div className="absolute left-0 px-2 flex mx-2">
-        <details>
-          <summary className="text-left">Powered by</summary>
+    <footer className="flex justify-center text-align-center mt-4 border-t border-black text-xs relative min-w-100vw overflow-visible">
+      <div className="px-2">
+        <div>Powered by</div>
+        <div className="flex m-1">
           <a
-            className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black mx-1 px-1 bg-white border-t"
+            className="mx-1"
             href="//polygon.technology/"
             target="_blank"
             rel="noreferrer"
           >
-            Polygon
+            <img className="w-4 h-4" src={polygonSrc} />
           </a>
           <a
-            className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black mx-1 px-1 bg-white border-t"
+            className="mx-1"
             href="//thegraph.com/"
             target="_blank"
             rel="noreferrer"
           >
-            The Graph
+            <img className="w-4 h-4" src={thegraphSrc} />
           </a>
-        </details>
-      </div>
-      <details>
-        <summary>
-        <Link
-          className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white border-t-0"
-          to="/rules"
-          rel="noreferrer"
-        >
-          Rules
-        </Link></summary>
-        <div className="pt-4">
-        <Link
-          className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black my-4 py-1 px-4 mx-1 bg-white"
-          to="/abuse"
-          rel="noreferrer"
-        >
-          Abuse (DMCA/CSAM)
-        </Link>
         </div>
-      </details>
-      <div>
-        <a
-          className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white border-t-0"
-          href="//github.com/dchan-network"
-          target="_blank"
-          rel="noreferrer"
-        >
-          git
-        </a>
+      </div>
+      <div className="flex mt-1">
+        <details>
+          <summary>
+            <Link
+              className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white border-t-0"
+              to="/rules"
+              rel="noreferrer"
+            >
+              Rules
+            </Link>
+          </summary>
+          <div className="pt-4">
+            <Link
+              className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black my-4 py-1 px-4 mx-1 bg-white"
+              to="/abuse"
+              rel="noreferrer"
+            >
+              Abuse (DMCA/CSAM)
+            </Link>
+          </div>
+        </details>
+        <div>
+          <a
+            className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white border-t-0"
+            href="//github.com/dchan-network"
+            target="_blank"
+            rel="noreferrer"
+          >
+            git
+          </a>
+        </div>
       </div>
     </footer>
   );
