@@ -77,9 +77,10 @@ export default function FormPost({
           history.push(url);
         }
       }
-
-      resetForm();
-      updateNonce();
+      if(!!result) {
+        resetForm()
+        updateNonce()
+      }
     } catch (error) {
       setStatus({ error });
 
@@ -119,9 +120,9 @@ export default function FormPost({
     onFileChange();
   }, [setValue, onFileChange]);
 
-  const updateNonce = () => {
+  const updateNonce = useCallback(() => {
     setNonce(uniqueId());
-  };
+  }, [setNonce]);
 
   const fileRename = useCallback(() => {
     const files: FileList = getValues().file;

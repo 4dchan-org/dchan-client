@@ -68,7 +68,7 @@ export default function ThreadPage({
           {[thread.op, ...thread.replies].map((post) => (
             <Post post={post} thread={thread} key={post.id} />
           ))}
-          <div>
+          <div className="flex center">
             [<HashLink
               className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
               to="#board-header"

@@ -8,6 +8,6 @@ export function sortByCreatedAt(threads: Thread[] | undefined) {
 
 export function isLowScore({
     score
-}: Thread) {
-    return (parseInt(score) / 1_000_000_000) < 1
+}: Thread, threshold: number | string) {
+    return (parseInt(score) / 1_000_000_000) < parseInt(`${threshold}`)
 }

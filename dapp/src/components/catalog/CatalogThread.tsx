@@ -3,6 +3,7 @@ import IPFSImage from "components/IPFSImage";
 import PostBody from "components/post/PostBody";
 import LowScoreDisclaimer from "components/LowScoreDisclaimer";
 import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
+import useSettings from "hooks/useSettings";
 
 const CatalogThread = ({
   thread,
@@ -30,7 +31,8 @@ const CatalogThread = ({
   };
 
   const imgClassName = "w-full pointer-events-none shadow-xl object-contain max-h-320px";
-  const isLowScore = isLowScoreThread(thread)
+  const [settings] = useSettings()
+  const isLowScore = isLowScoreThread(thread, settings.content.score_threshold)
 
   return (
     <article

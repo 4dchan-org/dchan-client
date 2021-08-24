@@ -24,6 +24,7 @@ import {
 } from "dchan/entities/post";
 import { fromBigInt } from "dchan/entities/datetime";
 import BLOCK_BY_DATE from "dchan/graphql/queries/block_by_date";
+import useSettings from "hooks/useSettings";
 
 interface CatalogData {
   board: Board;
@@ -39,19 +40,22 @@ interface CatalogVars {
 }
 
 interface BlockByDateData {
-  blocks: Block[]
+  blocks: Block[];
 }
 interface BlockByDateVars {
-  timestampMin: string,
-  timestampMax: string,
+  timestampMin: string;
+  timestampMax: string;
 }
 
 export default function CatalogPage({ match: { params } }: any) {
   const { boardId: boardIdParam } = params;
   const boardId = `0x${boardIdParam}`;
+  const [settings, setSettings] = useSettings();
   const [showLowScore, setShowLowScore] = useState<boolean>(false); // @TODO config
   const [search, setSearch] = useState<string>(params.search || "");
-  const [currentDate, setCurrentDate] = useState<DateTime | undefined>(undefined)
+  const [currentDate, setCurrentDate] = useState<DateTime | undefined>(
+    undefined
+  );
   const [currentBlock, setCurrentBlock] = useState<number | undefined>(
     undefined
   );
@@ -77,23 +81,23 @@ export default function CatalogPage({ match: { params } }: any) {
       pollInterval: 60_000,
     }
   );
-  const {data: bbdData} = useQuery<BlockByDateData, BlockByDateVars>(
+  const { data: bbdData } = useQuery<BlockByDateData, BlockByDateVars>(
     BLOCK_BY_DATE,
     {
       variables: {
-        timestampMin: `${(currentDate?.toSeconds() || "0")}`,
-        timestampMax: `${(currentDate?.toSeconds() || 0) + 1_000_000}`
+        timestampMin: `${currentDate?.toSeconds() || "0"}`,
+        timestampMax: `${(currentDate?.toSeconds() || 0) + 1_000_000}`,
       },
-      skip: !currentDate
+      skip: !currentDate,
     }
   );
-  
+
   useEffect(() => {
-    if(currentDate) {
-      const block = bbdData?.blocks[0].number || ""
-      !!block && setCurrentBlock(parseInt(block))
+    if (currentDate) {
+      const block = bbdData?.blocks[0].number || "";
+      !!block && setCurrentBlock(parseInt(block));
     }
-  }, [currentDate, bbdData, setCurrentBlock])
+  }, [currentDate, bbdData, setCurrentBlock]);
 
   const postSearch = data?.postSearch;
   const board = data?.board;
@@ -192,7 +196,25 @@ export default function CatalogPage({ match: { params } }: any) {
     refreshLastRefreshedAtRelative();
   }, 1_000);
 
-  console.log({timeTravelRange})
+  const filteredThreads = useMemo(
+    () =>
+      threads
+        .filter((thread: Thread) => {
+          return (
+            showLowScore ||
+            !isLowScoreThread(thread, settings.content.score_threshold)
+          );
+        })
+        .map((thread: Thread) => (
+          <CatalogThread
+            onFocus={onFocus}
+            isFocused={focused === thread.id}
+            thread={thread}
+            key={thread.id}
+          ></CatalogThread>
+        )),
+    [threads, settings, focused, onFocus, showLowScore]
+  );
 
   return (
     <div
@@ -240,14 +262,15 @@ export default function CatalogPage({ match: { params } }: any) {
           {timeTravelRange && lastBumpedAt ? (
             <span>
               {currentBlock ? (
-                <div className="mx-1 text-xs"><abbr title="You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date.">Time traveled to</abbr></div>
+                <div className="mx-1 text-xs">
+                  <abbr title="You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date.">
+                    Time traveled to
+                  </abbr>
+                </div>
               ) : (
                 ""
               )}
-              <details
-                className="mx-1 sm:text-right"
-                open={!!currentBlock}
-              >
+              <details className="mx-1 sm:text-right" open={!!currentBlock}>
                 <summary>
                   <span className="mx-1 text-xs">
                     [
@@ -257,8 +280,8 @@ export default function CatalogPage({ match: { params } }: any) {
                       id="dchan-timetravel-date-input"
                       value={(currentDate || DateTime.now()).toISODate()}
                       onChange={(e) => {
-                        setCurrentDate(DateTime.fromISO(e.target.value))
-                        setCurrentBlock(undefined)
+                        setCurrentDate(DateTime.fromISO(e.target.value));
+                        setCurrentBlock(undefined);
                       }}
                       min={fromBigInt(timeTravelRange.min.unix).toISODate()}
                       max={fromBigInt(timeTravelRange.max.unix).toISODate()}
@@ -302,8 +325,8 @@ export default function CatalogPage({ match: { params } }: any) {
                   <button
                     className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                     onClick={() => {
-                      setCurrentBlock(undefined)
-                      setCurrentDate(undefined)
+                      setCurrentBlock(undefined);
+                      setCurrentDate(undefined);
                     }}
                   >
                     Return to present
@@ -362,7 +385,7 @@ export default function CatalogPage({ match: { params } }: any) {
               <div>
                 <div className="text-center">
                   <details className="pb-1">
-                    <summary className="text-xs text-gray-600">
+                    <summary className="text-xs text-gray-600 [y=">
                       Found: {postSearch.length} posts (Hidden:{" "}
                       {postSearch.filter((p) => isLowScorePost(p)).length})
                     </summary>
@@ -420,47 +443,89 @@ export default function CatalogPage({ match: { params } }: any) {
             <div>
               <div className="text-center">
                 <details className="pb-1">
-                  <summary className="text-xs text-gray-600">
+                  <summary className="text-xs text-gray-600 pb-2">
                     Threads: {threads.length} (Hidden:{" "}
-                    {threads.filter((t) => isLowScoreThread(t)).length}),
-                    Messages: {board?.postCount}
+                    {
+                      threads.filter((t) =>
+                        isLowScoreThread(t, settings.content.score_threshold)
+                      ).length
+                    }
+                    ), Messages: {board?.postCount}
                   </summary>
-                  <div>
-                    <input
-                      id="dchan-input-show-reported"
-                      className="mx-1 text-xs whitespace-nowrap opacity-50 hover:opacity-100"
-                      type="checkbox"
-                      checked={showLowScore}
-                      onChange={() => setShowLowScore(!showLowScore)}
-                    ></input>
-                    <label htmlFor="dchan-input-show-reported">
-                      Show hidden threads
-                    </label>
+                  <div className="center grid">
+                    <div className="bg-secondary p-2">
+                      <div>
+                        <input
+                          id="dchan-input-show-reported"
+                          className="mx-1 text-xs whitespace-nowrap opacity-50 hover:opacity-100"
+                          type="checkbox"
+                          checked={showLowScore}
+                          onChange={() => setShowLowScore(!showLowScore)}
+                        ></input>
+                        <label htmlFor="dchan-input-show-reported">
+                          Show hidden threads
+                        </label>
+                      </div>
+                      <div>
+                        <label htmlFor="dchan-input-show-reported">
+                          Score hide threshold
+                        </label>
+                        <div>
+                          <input
+                            id="dchan-input-show-reported"
+                            className="mx-1 text-xs whitespace-nowrap opacity-50 hover:opacity-100"
+                            type="range"
+                            min={0}
+                            max={1}
+                            step={0.1}
+                            value={settings.content.score_threshold}
+                            onChange={(e) =>
+                              setSettings({
+                                ...settings,
+                                content: { score_threshold: e.target.value },
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="text-sm">
+                          {
+                            {
+                              "0": "Show everything",
+                              "0.1": "Hide reported content",
+                              "0.2": "Hide reported content",
+                              "0.3": "Hide reported content",
+                              "0.4": "Hide reported content",
+                              "0.5": "Hide reported content",
+                              "0.6": "Hide reported content",
+                              "0.7": "Hide reported content",
+                              "0.8": "Hide reported content",
+                              "0.9": "Hide reported content",
+                              "1": "Only show content with no reports",
+                            }[settings.content.score_threshold]
+                          }
+                        </div>
+                        <div className="text-xs">
+                          Content score is estimated based on quantity of user
+                          reports and janitor actions.
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </details>
               </div>
               <div className="grid grid-template-columns-ram-150px place-items-start font-size-090rem px-4 sm:px-8">
-                {threads
-                  .filter((thread: Thread) => {
-                    return showLowScore || !isLowScoreThread(thread);
-                  })
-                  .map((thread: Thread) => (
-                    <CatalogThread
-                      onFocus={onFocus}
-                      isFocused={focused === thread.id}
-                      thread={thread}
-                      key={thread.id}
-                    ></CatalogThread>
-                  ))}
+                {filteredThreads}
               </div>
 
-              <div>
-                [<HashLink
+              <div className="flex center">
+                [
+                <HashLink
                   className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                   to="#board-header"
                 >
                   Top
-                </HashLink>]
+                </HashLink>
+                ]
               </div>
             </div>
           )
