@@ -23,20 +23,20 @@ export default function ReferencePage({ match: { params: { ref } } }: any) {
                 post
             } = data
 
-            if (board?.name && board?.id && thread?.id) {
-                location = `/${board?.name}/${board?.id}/${thread?.id}`
+            if (board && board.name && board.id && thread.id) {
+                location = `/${board.name}/${board.id}/${thread.id}`
             }
 
-            if (board?.name && board?.id) {
-                location = `/${board?.name}/${board?.id}/${thread?.id}`
+            if (board && board.name && board.id) {
+                location = `/${board.name}/${board.id}/${thread.id}`
             }
 
-            if (thread?.board?.name && thread?.board?.id && thread?.id) {
-                location = `/${thread?.board?.name}/${thread?.board?.id}/${thread?.id}`
+            if (thread && thread.board.name && thread.board.id && thread.id) {
+                location = `/${thread.board.name}/${thread.board.id}/${thread.id}`
             }
 
-            if (post?.thread?.board?.name && post?.thread?.board?.id && post?.thread?.id) {
-                location = `/${post?.thread?.board?.name}/${post?.thread?.board?.id}/${post?.thread?.id}`
+            if (post && post.thread.board.name && post.thread.board.id && post.thread.id) {
+                location = `/${post.thread.board.name}/${post.thread.board.id}/${post.thread.id}/${post.n}`
             }
 
             console.log({data, location})

@@ -24,6 +24,25 @@ export default function Footer() {
           </a>
         </details>
       </div>
+      <details>
+        <summary>
+        <Link
+          className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white border-t-0"
+          to="/rules"
+          rel="noreferrer"
+        >
+          Rules
+        </Link></summary>
+        <div className="pt-4">
+        <Link
+          className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black my-4 py-1 px-4 mx-1 bg-white"
+          to="/abuse"
+          rel="noreferrer"
+        >
+          Abuse (DMCA/CSAM)
+        </Link>
+        </div>
+      </details>
       <div>
         <a
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white border-t-0"
@@ -34,25 +53,6 @@ export default function Footer() {
           git
         </a>
       </div>
-      <div>
-        <Link
-          className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white border-t-0"
-          to="/rules"
-          rel="noreferrer"
-        >
-          Rules
-        </Link>
-      </div>
-      <details>
-        <summary></summary>
-        <Link
-          className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white"
-          to="/abuse"
-          rel="noreferrer"
-        >
-          Abuse (DMCA/CSAM)
-        </Link>
-      </details>
     </footer>
   );
 }

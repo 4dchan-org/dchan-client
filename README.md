@@ -1,6 +1,6 @@
 dchan
 -----
-Decentralized Imageboard
+Official client for the [dchan.network](https://dchan.network) decentralized imageboard.
 
 ### Requirements
 - [`docker` and `docker-compose`](https://docs.docker.com/compose/install/)

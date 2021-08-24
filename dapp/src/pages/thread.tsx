@@ -8,6 +8,8 @@ import Loading from "components/Loading";
 import Error from "components/Error";
 import { HashLink } from "react-router-hash-link";
 import Post from "components/post/Post";
+import { useEffect } from "react";
+import usePubSub from "hooks/usePubSub";
 
 interface ThreadData {
   thread?: Thread;
@@ -18,9 +20,12 @@ interface ThreadVars {
 
 export default function ThreadPage({
   match: {
-    params: { threadId },
+    params
   },
 }: any) {
+  const {
+    threadId
+  } = params
   const { loading, data, error } = useQuery<ThreadData, ThreadVars>(
     THREAD_GET,
     {
@@ -29,6 +34,13 @@ export default function ThreadPage({
     }
   );
   const thread = data?.thread;
+
+  const {publish} = usePubSub()
+  useEffect(() => {
+    if(!!data && params && params.postN) {
+      publish('POST_FOCUS', params.postN)
+    }
+  }, [data, params, publish])
 
   return !loading && !thread ? (
     error ? (
@@ -57,12 +69,12 @@ export default function ThreadPage({
             <Post post={post} thread={thread} key={post.id} />
           ))}
           <div>
-            <HashLink
+            [<HashLink
+              className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
               to="#board-header"
-              className="inline bg-secondary rounded-full"
             >
-              ⤴️
-            </HashLink>
+              Top
+            </HashLink>]
           </div>
         </div>
       ) : (

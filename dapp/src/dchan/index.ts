@@ -10,6 +10,12 @@ export const REF_REGEX = /&gt;&gt;(0[xX][0-9a-fA-F])+/gm
 export const TEXT_QUOTES_REGEX = /^&gt;(.*)$/gm
 export const NEWLINE_REGEX = /\n/gm
 
+export type Block = {
+    id: string,
+    timestamp: string,
+    number: string
+}
+
 export type Board = {
     id: string,
     title: string,

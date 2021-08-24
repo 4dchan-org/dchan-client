@@ -9,11 +9,11 @@ import PostHeader from "./PostHeader";
 export default function Post({
   post,
   thread,
-  header
+  header,
 }: {
   post: DchanPost;
   thread?: Thread;
-  header?: ReactElement
+  header?: ReactElement;
 }) {
   const [focused, setFocused] = useState<boolean>(false);
   const [backlinks, setBacklinks] = useState<object>({});
@@ -32,9 +32,13 @@ export default function Post({
 
   useEffect(() => {
     subscribe("POST_FOCUS", (_: any, n: string) => {
-      setFocused(`${n}` === `${post.n}`);
+      const isFocused = `${n}` === `${post.n}`;
+      setFocused(isFocused);
+      if (isFocused) {
+        postRef.current?.scrollIntoView();
+      }
     });
-  }, [post, setFocused, subscribe]);
+  }, [post, postRef, setFocused, subscribe]);
 
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
 
@@ -65,9 +69,16 @@ export default function Post({
   }, [post, publish]);
 
   return (
-    <details className="dchan-post-expand" open={!isLowScore} key={id} ref={postRef}>
+    <details
+      className="dchan-post-expand"
+      open={!isLowScore}
+      key={id}
+      ref={postRef}
+    >
       <summary className="text-left pl-2 opacity-50 z-10" title="Hide/Show">
-        <PostHeader thread={thread} post={post}>{header}</PostHeader>
+        <PostHeader thread={thread} post={post}>
+          {header}
+        </PostHeader>
       </summary>
       <article
         id={`${n}`}
@@ -80,11 +91,9 @@ export default function Post({
           } w-full sm:w-auto pb-2 mb-2 px-4 inline-block border-bottom-invisible relative max-w-screen-xl`}
         >
           <div className="flex flex-wrap center text-center sm:text-left sm:block pl-2">
-            <PostHeader
-              thread={thread}
-              post={post}
-              backlinks={backlinks}
-            >{header}</PostHeader>
+            <PostHeader thread={thread} post={post} backlinks={backlinks}>
+              {header}
+            </PostHeader>
           </div>
           <div>
             {!!image ? (
@@ -105,7 +114,9 @@ export default function Post({
                       })}
                     </a>
                     {/* <a className="text-blue-600" href={ipfsUrl} download={`ipfs_${image.id}.${image.name}`}>📥</a> */}
-                    <span>, {Math.trunc(parseInt(image.byteSize) * 0.001)}kb</span>
+                    <span>
+                      , {Math.trunc(parseInt(image.byteSize) * 0.001)}kb
+                    </span>
                     {/* <span>{image.resolution.height}x{image.resolution.width}</span> */}
                   </span>
                 </span>
@@ -114,9 +125,9 @@ export default function Post({
               ""
             )}
             <div className="py-1">
-              <div className="h-full max-w-max flex flex-wrap justify-center text-left sm:justify-start sm:items-start">
+              <div className="h-full max-w-max flex flex-wrap text-left sm:items-start">
                 {!!image ? (
-                  <div className="px-2 sm:float-left grid center flex-shrink-0">
+                  <div className="px-2 sm:float-left grid center flex-shrink-0 max-w-100vw sm:max-w-max">
                     <IPFSImage
                       hash={image.ipfsHash}
                       isSpoiler={image.isSpoiler}

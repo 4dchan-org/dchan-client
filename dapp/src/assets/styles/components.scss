@@ -68,20 +68,6 @@
   display: none;
 }
 
-img.dchan-image-toggled {
-    max-width: unset;
-    max-height: unset;
-    font-size: 0.5rem;
-    vertical-align: middle;
-}
-
-@media only screen and (max-width: 768px) {
-    img.dchan-image-toggled {
-        max-width: 100vw;
-        max-height: 100vh;
-    }
-}
-
 .dchan-post-spoiler {
     background-color: black;
     color: black;

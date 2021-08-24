@@ -15,6 +15,7 @@ const SEARCH_BY_ID = gql`
     }
     post(id: $id) {
       id
+      n
       thread {
         id
         board {

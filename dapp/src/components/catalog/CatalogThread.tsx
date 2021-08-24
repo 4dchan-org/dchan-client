@@ -29,7 +29,7 @@ const CatalogThread = ({
     isSpoiler: false,
   };
 
-  const imgClassName = "w-full pointer-events-none shadow-xl object-contain";
+  const imgClassName = "w-full pointer-events-none shadow-xl object-contain max-h-320px";
   const isLowScore = isLowScoreThread(thread)
 
   return (

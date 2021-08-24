@@ -7,18 +7,18 @@ export default function AbusePage() {
     <div className="center grid w-full min-h-screen bg-primary">
       <div className="grid bg-primary">
         <Card
-          title={<div className="">DMCA/Abuse</div>}
+          title={<div className="">Abuse (DMCA/CSAM)</div>}
           body={
             <div>
-              <Markdown className="text-center p-4">
-This is a decentralized application: the content shown is not hosted on the servers serving this application but is instead retrieved from [IPFS](https://ipfs.io/). 
+              <Markdown className="text-left p-4">{`
+This is a decentralized application: the content shown here is not hosted on this website's server, nor is deletable by this website's owner. 
 
-There is no way for anyone to delete it. Not the user posting it, not this website's owner, nor anyone else.
+Also, because all content (or IPFS references to it) is permanently stored on the blockchain, it is impossible for anyone to delete it, including the user who posted it.
 
-However, you may still attempt to contact the owners of your currently configured IPFS gateway to notify them about the offending content to stop it from being distributed.
+You may still notify the owners of your currently configured IPFS gateway about the offending content to stop it from being distributed.
 
-You may also use the built-in report system to notify the janitors about the offensive content so it can be hidden from view.
-              </Markdown>
+You may also use the built-in report system to notify this dapp's janitors about the offensive content so it can be hidden from view.
+`}</Markdown>
             </div>
           }
         />

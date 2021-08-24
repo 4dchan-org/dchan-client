@@ -65,7 +65,7 @@ export default function IPFSImage({
                   onClick={retry}
                   alt=""
                 />
-                <div className="p-2">Image load error</div>
+                <div className="p-2">IPFS image load error</div>
               </div>
             ) : (
               ""
