@@ -19,8 +19,9 @@ export default function LockBanner() {
     CHAN_STATUS,
     {
       variables: {
-        id: settings.contract.address,
+        id: settings?.contract?.address || "",
       },
+      skip: !settings?.contract?.address
     }
   );
 

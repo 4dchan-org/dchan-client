@@ -9,7 +9,7 @@ export default function RulesPage() {
           title={<span>The rules</span>}
           body={
             <div className="p-8">
-              <ul className="list-disc text-wrap">
+              <ul className="list-disc text-wrap text-left">
                 <li>
                   Do not post anything that can get you in trouble with local or global jurisdictions.
                 </li>

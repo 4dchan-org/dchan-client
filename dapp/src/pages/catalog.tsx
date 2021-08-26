@@ -16,7 +16,6 @@ import useInterval from "@use-it/interval";
 import { useThrottleCallback } from "@react-hook/throttle";
 import {
   isLowScore as isLowScoreThread,
-  sortByCreatedAt as sortThreadsByCreatedAt,
 } from "dchan/entities/thread";
 import {
   isLowScore as isLowScorePost,
@@ -25,6 +24,7 @@ import {
 import { fromBigInt } from "dchan/entities/datetime";
 import BLOCK_BY_DATE from "dchan/graphql/queries/block_by_date";
 import useSettings from "hooks/useSettings";
+import useLastBlock from "hooks/useLastBlock";
 
 interface CatalogData {
   board: Board;
@@ -83,6 +83,8 @@ export default function CatalogPage({ match: { params } }: any) {
     }
   );
 
+  const lastBlock = useLastBlock()
+
   const { data: bbdData } = useQuery<BlockByDateData, BlockByDateVars>(
     BLOCK_BY_DATE,
     {
@@ -115,10 +117,6 @@ export default function CatalogPage({ match: { params } }: any) {
   const sortedPostSearch = useMemo(() => {
     return postSearch ? sortPostsByCreatedAt(postSearch) : undefined;
   }, [postSearch]);
-
-  const sortedThreads = useMemo(() => {
-    return sortThreadsByCreatedAt(threads);
-  }, [threads]);
 
   const [lastRefreshedAt, setLastRefreshedAt] = useState<DateTime>(
     DateTime.now()
@@ -173,20 +171,19 @@ export default function CatalogPage({ match: { params } }: any) {
   );
 
   useEffect(() => {
-    const lastThread = sortedThreads ? sortedThreads[0] : undefined;
-    if (board?.createdAtBlock && (!timeTravelRange || (lastThread && timeTravelRange.max.block < lastThread.createdAtBlock))) {
+    if (board && lastBlock) {
       setTimeTravelRange({
         min: {
           block: board?.createdAtBlock,
           unix: board?.createdAt,
         },
         max: {
-          block: lastThread?.createdAtBlock || "",
-          unix: lastThread?.createdAt || "",
+          block: lastBlock.number,
+          unix: lastBlock.timestamp,
         },
       });
     }
-  }, [board, sortedThreads, currentBlock, setCurrentBlock, timeTravelRange, setTimeTravelRange]);
+  }, [board, lastBlock, setTimeTravelRange]);
 
   // Last refreshed
   const refreshLastRefreshedAtRelative = useCallback(() => {
@@ -207,7 +204,7 @@ export default function CatalogPage({ match: { params } }: any) {
         .filter((thread: Thread) => {
           return (
             showLowScore ||
-            !isLowScoreThread(thread, settings.content.score_threshold)
+            !isLowScoreThread(thread, settings?.content?.score_threshold)
           );
         })
         .map((thread: Thread) => (
@@ -304,7 +301,7 @@ export default function CatalogPage({ match: { params } }: any) {
                       max={parseInt(timeTravelRange.max.block)}
                       onChange={onTimeTravelByBlock}
                       value={
-                        currentBlock || sortedThreads?.[0]?.createdAtBlock || ""
+                        currentBlock || lastBlock?.number || ""
                       }
                     />{" "}
                     <span className="mx-1">Now</span>
@@ -450,9 +447,7 @@ export default function CatalogPage({ match: { params } }: any) {
                   <summary className="text-xs text-gray-600 pb-2">
                     Threads: {threads.length} (Hidden:{" "}
                     {
-                      threads.filter((t) =>
-                        isLowScoreThread(t, settings.content.score_threshold)
-                      ).length
+                      threads.length - filteredThreads.length
                     }
                     ), Posts: {board?.postCount}
                   </summary>
@@ -489,7 +484,7 @@ export default function CatalogPage({ match: { params } }: any) {
                               min={0}
                               max={1}
                               step={0.1}
-                              value={settings.content.score_threshold}
+                              value={settings?.content?.score_threshold}
                               onChange={(e) =>
                                 setSettings({
                                   ...settings,
@@ -512,7 +507,7 @@ export default function CatalogPage({ match: { params } }: any) {
                                 "0.8": "Hide reported content",
                                 "0.9": "Hide reported content",
                                 "1": "Only show content with no reports",
-                              }[settings.content.score_threshold]
+                              }[settings?.content?.score_threshold || "1"]
                             }
                           </div>
                         </div>
@@ -547,7 +542,7 @@ export default function CatalogPage({ match: { params } }: any) {
       </div>
 
       <div id="bottom" />
-      <Footer></Footer>
+      <Footer showContentDisclaimer={true}></Footer>
     </div>
   );
 }

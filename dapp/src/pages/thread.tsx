@@ -81,7 +81,7 @@ export default function ThreadPage({
         ""
       )}
 
-      <Footer></Footer>
+      <Footer showContentDisclaimer={true}></Footer>
     </div>
   );
 }

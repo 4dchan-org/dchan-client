@@ -31,8 +31,8 @@ const CatalogThread = ({
   };
 
   const imgClassName = "w-full pointer-events-none shadow-xl object-contain max-h-320px";
-  const [settings] = useSettings()
-  const isLowScore = isLowScoreThread(thread, settings.content.score_threshold)
+  const [settings] = useSettings() || [undefined]
+  const isLowScore = isLowScoreThread(thread, settings?.content?.score_threshold)
 
   return (
     <article
