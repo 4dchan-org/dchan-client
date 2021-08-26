@@ -48,7 +48,7 @@ export default function HeaderNavigation() {
         ][
         <Link
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-          to="/boards"
+          to="/_/boards"
         >
           +
         </Link>
@@ -56,7 +56,7 @@ export default function HeaderNavigation() {
         {/* <span className="px-2"></span> [
         <Link
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-          to="/settings"
+          to="/_/settings"
         >
           ⚙️
         </Link>

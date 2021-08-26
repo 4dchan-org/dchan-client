@@ -1,7 +1,7 @@
 import Web3 from "web3"
 import abi from "abis/Relay.json"
 import { AbiItem } from "web3-utils/types"
-import Config from "settings/default"
+import DefaultSettings from "settings/default"
 
 export const EXTERNAL_LINK_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/igm
 export const BACKLINK_REGEX = /&gt;&gt;(\d+)/gm
@@ -126,7 +126,7 @@ export function createJsonMessage(op: string, data: object) {
 export async function sendMessage(operation: string, data: object, from: string) {
     const web3 = new Web3(window.web3.currentProvider);
 
-    const relayContract = new web3.eth.Contract(abi as AbiItem[], Config.contract.address)
+    const relayContract = new web3.eth.Contract(abi as AbiItem[], DefaultSettings.contract.address)
     const msg = await relayContract.methods.message(createJsonMessage(operation, data))
 
     return msg.send({

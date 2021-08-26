@@ -6,6 +6,9 @@ export type Settings = {
     contract: {
         address: string
     },
+    subgraph: {
+        endpoint: string
+    },
     ipfs: {
         endpoint: string
     },

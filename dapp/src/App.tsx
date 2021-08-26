@@ -14,7 +14,6 @@ import BoardSearchPage from "pages/boardSearch"
 import ThreadPage from "pages/thread";
 import ReferencePage from "pages/reference";
 import AdminPage from "pages/admin";
-import SettingsPage from "pages/settings";
 import LockBanner from "components/LockBanner";
 
 function App() {
@@ -24,12 +23,11 @@ function App() {
       <div className="App text-center">
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route exact path="/boards" component={BoardListPage} />
-          <Route path="/rules" component={RulesPage} />
-          <Route path="/abuse" component={AbusePage} />
-          <Route path="/admin" component={AdminPage} />
-          <Route path="/settings" component={SettingsPage} />
-          <Route path="/0x:ref" component={ReferencePage} />
+          <Route exact path="/_/boards" component={BoardListPage} />
+          <Route path="/_/rules" component={RulesPage} />
+          <Route path="/_/abuse" component={AbusePage} />
+          <Route path="/_/admin" component={AdminPage} />
+          <Route path="/_/ref/0x:id" component={ReferencePage} />
           <Route path="/:boardName/0x:boardId/0x:threadId/:postN" component={ThreadPage} />
           <Route path="/:boardName/0x:boardId/0x:threadId" component={ThreadPage} />
           <Route path="/:boardName/0x:boardId/block/:block" component={BoardCatalogPage} />

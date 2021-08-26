@@ -67,7 +67,7 @@ export default function PostHeader({
   const onSendTip = useCallback(
     async (to: string, amount?: number) => {
       try {
-        amount = amount ? amount : parseInt(prompt("How many? (MATIC)") || "");
+        amount = amount ? amount : parseInt(prompt("How much? (MATIC)") || "");
         if (isNaN(amount)) {
           alert("Invalid amount");
           return;
@@ -118,15 +118,9 @@ export default function PostHeader({
           <div className="flex">
             (<button
               className="text-blue-600 visited:text-purple-600 hover:text-blue-500 flex-grow"
-              onClick={() => onSendTip(address, 0.001)}
-            >
-              💸 Tip
-            </button>
-            <button
-              className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
               onClick={() => onSendTip(address)}
             >
-              +
+              💸 Tip
             </button>)
           </div> : ""}
         </details>

@@ -51,6 +51,7 @@ export default function CatalogPage({ match: { params } }: any) {
   const { boardId: boardIdParam } = params;
   const boardId = `0x${boardIdParam}`;
   const [settings, setSettings] = useSettings();
+  const history = useHistory();
   const [showLowScore, setShowLowScore] = useState<boolean>(false); // @TODO config
   const [search, setSearch] = useState<string>(params.search || "");
   const [currentDate, setCurrentDate] = useState<DateTime | undefined>(
@@ -109,7 +110,7 @@ export default function CatalogPage({ match: { params } }: any) {
 
   useEffect(() => {
     board && history.replace(currentBlock ? `/${board.name}/${board.id}/block/${currentBlock}` : `/${board.name}/${board.id}`)
-  }, [board, currentBlock])
+  }, [board, currentBlock, history])
 
   const sortedPostSearch = useMemo(() => {
     return postSearch ? sortPostsByCreatedAt(postSearch) : undefined;
@@ -145,7 +146,6 @@ export default function CatalogPage({ match: { params } }: any) {
 
   const onRefresh = useThrottleCallback(refresh, 1, true);
 
-  const history = useHistory();
   const [focused, setFocused] = useState<string>("");
 
   const onFocus = useCallback(
@@ -186,7 +186,7 @@ export default function CatalogPage({ match: { params } }: any) {
         },
       });
     }
-  }, [board, sortedThreads, currentBlock, setCurrentBlock, setTimeTravelRange]);
+  }, [board, sortedThreads, currentBlock, setCurrentBlock, timeTravelRange, setTimeTravelRange]);
 
   // Last refreshed
   const refreshLastRefreshedAtRelative = useCallback(() => {
@@ -454,7 +454,7 @@ export default function CatalogPage({ match: { params } }: any) {
                         isLowScoreThread(t, settings.content.score_threshold)
                       ).length
                     }
-                    ), Messages: {board?.postCount}
+                    ), Posts: {board?.postCount}
                   </summary>
                   <div className="center grid">
                     <div className="bg-secondary p-2 max-w-sm">

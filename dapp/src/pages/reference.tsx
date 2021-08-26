@@ -5,10 +5,10 @@ import SEARCH_BY_ID from 'dchan/graphql/queries/search';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-export default function ReferencePage({ match: { params: { ref } } }: any) {
+export default function ReferencePage({ match: { params: { id } } }: any) {
     const { loading, data } = useQuery<any, any>(
         SEARCH_BY_ID,
-        { variables: { id: `0x${ref}` } }
+        { variables: { id: `0x${id}` } }
     );
 
     const history = useHistory()

@@ -28,7 +28,7 @@ export default function HomePage() {
                             <div className="mt-4">
                                 <Link
                                     className="text-blue-600 visited:text-purple-600 hover:text-blue-500 py-1 px-4"
-                                    to="/boards"
+                                    to="/_/boards"
                                 >
                                     All boards
                                 </Link>

@@ -14,7 +14,7 @@ export default function Footer() {
             target="_blank"
             rel="noreferrer"
           >
-            <img className="w-4 h-4" src={polygonSrc} />
+            <img className="w-4 h-4" src={polygonSrc} alt="Polygon" />
           </a>
           <a
             className="mx-1"
@@ -22,7 +22,7 @@ export default function Footer() {
             target="_blank"
             rel="noreferrer"
           >
-            <img className="w-4 h-4" src={thegraphSrc} />
+            <img className="w-4 h-4" src={thegraphSrc} alt="The Graph" />
           </a>
         </div>
       </div>
@@ -31,7 +31,7 @@ export default function Footer() {
           <summary>
             <Link
               className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white border-t-0"
-              to="/rules"
+              to="/_/rules"
               rel="noreferrer"
             >
               Rules
@@ -40,7 +40,7 @@ export default function Footer() {
           <div className="pt-4">
             <Link
               className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black my-4 py-1 px-4 mx-1 bg-white"
-              to="/abuse"
+              to="/_/abuse"
               rel="noreferrer"
             >
               Abuse (DMCA/CSAM)

@@ -480,7 +480,7 @@ export default function FormPost({
                     <li>
                       I've read the{" "}
                       <Link
-                        to="/rules"
+                        to="/_/rules"
                         target="_blank"
                         className="text-blue-600 visited:text-purple-600 hover:text-blue-140"
                       >

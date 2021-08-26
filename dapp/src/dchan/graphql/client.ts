@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
+import DefaultSettings from "settings/default";
 
 export default new ApolloClient({
-    uri: "https://api.thegraph.com/subgraphs/name/opdchan/v1-dchan",
+    uri: DefaultSettings.subgraph.endpoint,
     cache: new InMemoryCache(),
 })

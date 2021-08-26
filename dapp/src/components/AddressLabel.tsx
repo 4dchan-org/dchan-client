@@ -5,7 +5,8 @@ export default function AddressLabel({ address, className = "", etherscannable =
     <a
       style={{ backgroundColor: backgroundColorAddress(address) }}
       className={[className, LABEL_CLASSNAME].join(" ")}
-      href={etherscannable ? `https://etherscan.io/address/${address}` : "#"}
+      // eslint-disable-next-line
+      href={etherscannable ? `https://polygonscan.com/address/${address}` : "javascript:void(0)"}
       target={etherscannable ? `_blank` : ""}
     >
       <abbr style={{ textDecoration: "none" }} title={address}>
@@ -15,5 +16,4 @@ export default function AddressLabel({ address, className = "", etherscannable =
   );
 }
 
-// This is the exact moment I stopped giving a fuck
 export const LABEL_CLASSNAME = "font-mono text-readable-anywhere pt-0.5 px-0.5 mx-0.5 rounded opacity-75 hover:opacity-100 text-xs"
