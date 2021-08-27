@@ -11,7 +11,7 @@ const BOARDS_LIST_MOST_POPULAR = gql`
   }
 
   query Boards {
-    boards(first: 10, orderBy: postCount, orderDirection: desc) {
+    boards(orderBy: postCount, orderDirection: desc) {
       ...Board
     }
   }

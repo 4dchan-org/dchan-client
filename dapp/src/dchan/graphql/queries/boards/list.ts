@@ -10,14 +10,20 @@ const BOARDS_LIST = gql`
     isNsfw
   }
 
-  query Boards {
-    mostPopular: boards(first: 10, orderBy: postCount, orderDirection: desc, where: {score_gt: "900000000"}) {
+  query Boards($searchName: String, $searchTitle: String) {
+    searchByTitle: boardSearch(text: $searchTitle) {
       ...Board
     }
-    lastBumped: boards(first: 10, orderBy: lastBumpedAt, orderDirection: desc, where: {score_gt: "900000000"}) {
+    searchByName: boards(where: {name: $searchName}) {
       ...Board
     }
-    lastCreated: boards(first: 10, orderBy: createdAt, orderDirection: desc, where: {score_gt: "900000000"}) {
+    mostPopular: boards(orderBy: postCount, orderDirection: desc, where: {score_gt: "900000000"}) {
+      ...Board
+    }
+    lastBumped: boards(orderBy: lastBumpedAt, orderDirection: desc, where: {score_gt: "900000000"}) {
+      ...Board
+    }
+    lastCreated: boards(orderBy: createdAt, orderDirection: desc, where: {score_gt: "900000000"}) {
       ...Board
     }
   }

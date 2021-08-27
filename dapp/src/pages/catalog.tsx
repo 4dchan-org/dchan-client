@@ -26,6 +26,7 @@ import useLastBlock from "hooks/useLastBlock";
 import { parse as parseQueryString } from "query-string";
 import { isString } from "lodash";
 import {useTitle} from 'react-use';
+import SearchWidget from "components/SearchWidget";
 interface CatalogData {
   board: Board;
   pinned: Thread[];
@@ -68,7 +69,6 @@ export default function CatalogPage({ location, match: { params } }: any) {
     isString(query.block) ? parseInt(query.block) : undefined
   );
   const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
-  const onSearchChange = (e: any) => setSearch(e.target.value);
 
   const variables = {
     ...{
@@ -163,8 +163,7 @@ export default function CatalogPage({ location, match: { params } }: any) {
       (e) => {
         setCurrentBlock(parseInt(e.target.value));
         setCurrentDate(undefined);
-        board &&
-          history.push(`/${board.name}/${board.id}?block=${e.target.value}`);
+        history.replace(`/${params.boardName}/0x${params.boardId}?block=${e.target.value}`);
       },
       [setCurrentBlock, setCurrentDate, history, board]
     ),
@@ -355,35 +354,7 @@ export default function CatalogPage({ location, match: { params } }: any) {
           ) : (
             ""
           )}
-          <div className="mx-1 text-center">
-            <div className="relative">
-              <label htmlFor="search">Search: </label>
-              {search ? (
-                <span className="text-xs">
-                  [
-                  <button
-                    className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                    onClick={() => setSearch("")}
-                  >
-                    Cancel
-                  </button>
-                  ]
-                </span>
-              ) : (
-                ""
-              )}
-            </div>
-            <div>
-              <input
-                id="search"
-                className="text-center w-32"
-                type="text"
-                placeholder="..."
-                value={search}
-                onChange={onSearchChange}
-              ></input>
-            </div>
-          </div>
+          <SearchWidget search={search} setSearch={setSearch} />
         </div>
       </div>
 
