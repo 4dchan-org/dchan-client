@@ -1,7 +1,10 @@
 import Card from "components/Card";
 import SimpleFooter from "components/SimpleFooter";
+import {useTitle} from 'react-use';
 
 export default function RulesPage() {
+  useTitle(`Rules`)
+
   return (
     <div className="center grid w-full min-h-screen bg-primary">
       <div className="grid bg-primary">

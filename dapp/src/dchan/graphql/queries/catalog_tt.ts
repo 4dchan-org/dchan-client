@@ -1,6 +1,8 @@
 import { gql } from "apollo-boost";
+import BOARD_FRAGMENT from '../fragments/board';
 
 const CATALOG = gql`
+  ${BOARD_FRAGMENT}
   fragment Post on Post {
     id
     n
@@ -21,7 +23,7 @@ const CATALOG = gql`
     }
     createdAt
     createdAtBlock {
-      timestamp 
+      timestamp
       number
     }
     bans {
@@ -35,6 +37,7 @@ const CATALOG = gql`
 
   fragment Thread on Thread {
     id
+    n
     isPinned
     isLocked
     op {
@@ -45,31 +48,15 @@ const CATALOG = gql`
     imageCount
     score
     createdAt
-    createdAtBlock
+    createdAtBlock {
+      timestamp
+      number
+    }
   }
   
   query TimeTravelingCatalog($boardId: String!, $limit: Int!, $currentBlock: Int, $search: String) {
     board(id: $boardId, block: {number: $currentBlock}) {
-      id
-      title
-      postCount
-      name
-      isLocked
-      isNsfw
-      lastBumpedAt {
-        timestamp 
-        number
-      }
-      createdAt
-      createdAtBlock {
-        timestamp 
-        number
-      }
-      jannies {
-        user {
-          address
-        }
-      }
+      ...Board
     }
     pinned: threads(where: {board: $boardId, isPinned: true}, orderBy: lastBumpedAt, orderDirection: desc, block: {number: $currentBlock}) {
       ...Thread
@@ -77,7 +64,7 @@ const CATALOG = gql`
     threads(where: {board: $boardId, isPinned: false}, orderBy: lastBumpedAt, orderDirection: desc, first: $limit, block: {number: $currentBlock}) {
       ...Thread
     }
-    postSearch(text: $search, block: {number: $currentBlock}, orderBy: createdAt, orderDirection: desc) {
+    postSearch(text: $search, orderBy: createdAt, orderDirection: desc, block: {number: $currentBlock}) {
       ...Post
     }
   }

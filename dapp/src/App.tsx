@@ -27,11 +27,9 @@ function App() {
           <Route path="/_/rules" component={RulesPage} />
           <Route path="/_/abuse" component={AbusePage} />
           <Route path="/_/admin" component={AdminPage} />
-          <Route path="/_/ref/0x:id" component={ReferencePage} />
-          <Route path="/:boardName/0x:boardId/0x:threadId/:postN" component={ThreadPage} />
-          <Route path="/:boardName/0x:boardId/0x:threadId" component={ThreadPage} />
-          <Route path="/:boardName/0x:boardId/block/:block" component={BoardCatalogPage} />
-          <Route path="/:boardName/0x:boardId/search/:search" component={BoardCatalogPage} />
+          <Route path="/0x:id" component={ReferencePage} />
+          <Route path="/:boardName/0x:boardId/:threadN/:postN" component={ThreadPage} />
+          <Route path="/:boardName/0x:boardId/:threadN" component={ThreadPage} />
           <Route path="/:boardName/0x:boardId" component={BoardCatalogPage} />
           <Route path="/:boardName" component={BoardSearchPage} />
         </Switch>

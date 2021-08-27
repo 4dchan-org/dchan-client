@@ -16,6 +16,7 @@ const CatalogThread = ({
 }) => {
   const {
     id,
+    n,
     isPinned,
     isLocked,
     subject,
@@ -52,11 +53,11 @@ const CatalogThread = ({
       }
     >
       {isLowScore && !isFocused ? (
-        <LowScoreDisclaimer onClick={() => onFocus(id)}></LowScoreDisclaimer>
+        <LowScoreDisclaimer onClick={() => onFocus(n)}></LowScoreDisclaimer>
       ) : (
         ""
       )}
-      <button onClick={() => onFocus(id)}>
+      <button onClick={() => onFocus(n)}>
         <div
           className={[
             isFocused ? "bg-tertiary border-bottom-tertiary" : "",

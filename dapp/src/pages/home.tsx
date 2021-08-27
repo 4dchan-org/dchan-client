@@ -5,12 +5,15 @@ import Footer from 'components/Footer'
 import { Board } from 'dchan';
 import BOARDS_LIST_MOST_POPULAR from 'dchan/graphql/queries/boards/list_most_popular';
 import { Link } from 'react-router-dom';
+import {useTitle} from 'react-use';
 
 export default function HomePage() {
+    useTitle("dchan")
+    
     const { query } = {
       query: BOARDS_LIST_MOST_POPULAR,
     };
-    const { loading, data } = useQuery<{boards: Board[]}, any>(query, {});
+    const { loading, data } = useQuery<{boards: Board[]}, any>(query, {pollInterval: 30_000});
     
     return (
         <div className="center-grid w-full min-h-screen bg-primary">

@@ -1,4 +1,4 @@
-import { Thread } from "dchan";
+import { Board, Thread } from "dchan";
 import Footer from "components/Footer";
 import BoardHeader from "components/board/header";
 import FormPost from "components/form/FormPost";
@@ -10,12 +10,15 @@ import { HashLink } from "react-router-hash-link";
 import Post from "components/post/Post";
 import { useEffect } from "react";
 import usePubSub from "hooks/usePubSub";
+import {useTitle} from 'react-use';
 
 interface ThreadData {
-  thread?: Thread;
+  board?: Board,
+  threads?: Thread[];
 }
 interface ThreadVars {
-  threadId: string;
+  threadN: string;
+  boardId: string;
 }
 
 export default function ThreadPage({
@@ -24,16 +27,17 @@ export default function ThreadPage({
   },
 }: any) {
   const {
-    threadId
+    threadN,
+    boardId
   } = params
   const { loading, data, error } = useQuery<ThreadData, ThreadVars>(
     THREAD_GET,
     {
-      variables: { threadId: `0x${threadId}` },
-      pollInterval: 10000,
+      variables: { threadN, boardId: `0x${boardId}` },
+      pollInterval: 10_000,
     }
   );
-  const thread = data?.thread;
+  const thread = data?.threads?.[0];
 
   const {publish} = usePubSub()
   useEffect(() => {
@@ -41,6 +45,8 @@ export default function ThreadPage({
       publish('POST_FOCUS', params.postN)
     }
   }, [data, params, publish])
+
+  useTitle(`/${data?.board?.name}/ - ${data?.board?.title}`)
 
   return !loading && !thread ? (
     error ? (
@@ -51,10 +57,10 @@ export default function ThreadPage({
   ) : (
     <div
       className="bg-primary min-h-100vh"
-      dchan-board={thread?.board.name}
+      dchan-board={thread?.board?.name}
       data-theme={thread?.board?.isNsfw ? "nsfw" : "blueboard"}
     >
-      <BoardHeader board={thread?.board}></BoardHeader>
+      <BoardHeader board={thread?.board || undefined}></BoardHeader>
       <FormPost thread={thread}></FormPost>
 
       <div className="p-2">

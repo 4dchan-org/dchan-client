@@ -1,56 +1,67 @@
-import { useQuery } from '@apollo/react-hooks';
-import Error from 'components/Error';
-import Loading from 'components/Loading';
-import SEARCH_BY_ID from 'dchan/graphql/queries/search';
-import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useQuery } from "@apollo/react-hooks";
+import Loading from "components/Loading";
+import SEARCH_BY_ID from "dchan/graphql/queries/search";
+import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
-export default function ReferencePage({ match: { params: { id } } }: any) {
-    const { loading, data } = useQuery<any, any>(
-        SEARCH_BY_ID,
-        { variables: { id: `0x${id}` } }
-    );
+export default function ReferencePage({
+  match: {
+    params: { id },
+  },
+}: any) {
+  const { data } = useQuery<any, any>(SEARCH_BY_ID, {
+    variables: { id: `0x${id}` },
+    pollInterval: 5_000,
+  });
 
-    const history = useHistory()
+  const [stillStuck, setStillStuck] = useState<boolean>(false);
 
-    useEffect(() => {
-        if (data) {
-            let location = null
+  setTimeout(() => {
+    setStillStuck(true);
+  }, 5000);
 
-            const {
-                board,
-                thread,
-                post
-            } = data
+  const history = useHistory();
 
-            if (board && board.name && board.id && thread.id) {
-                location = `/${board.name}/${board.id}/${thread.id}`
-            }
+  useEffect(() => {
+    if (data) {
+      let location = null;
 
-            if (board && board.name && board.id) {
-                location = `/${board.name}/${board.id}/${thread.id}`
-            }
+      const { boardCreationEvent, threadCreationEvent, postCreationEvent } =
+        data;
 
-            if (thread && thread.board.name && thread.board.id && thread.id) {
-                location = `/${thread.board.name}/${thread.board.id}/${thread.id}`
-            }
-
-            if (post && post.thread.board.name && post.thread.board.id && post.thread.id) {
-                location = `/${post.thread.board.name}/${post.thread.board.id}/${post.thread.id}/${post.n}`
-            }
-
-            console.log({data, location})
-
-            if (location) {
-                history.replace(location)
-            }
+      if (boardCreationEvent) {
+        const { board } = boardCreationEvent;
+        if (board.name && board.id) {
+          location = `/${board.name}/${board.id}`;
         }
-    }, [history, data])
+      } else if (threadCreationEvent) {
+        const { thread } = threadCreationEvent;
+        if (thread.board.name && thread.board.id && thread.n) {
+          location = `/${thread.board.name}/${thread.board.id}/${thread.n}`;
+        }
+      } else if (postCreationEvent) {
+        const { post } = postCreationEvent;
+        if (post.thread.board.name && post.thread.board.id && post.thread.n) {
+          location = `/${post.thread.board.name}/${post.thread.board.id}/${post.thread.n}/${post.n}`;
+        }
+      }
 
+      if (location) {
+        history.replace(location);
+      }
+    }
+  }, [history, data]);
 
-    return (
-        <div className="bg-primary center grid w-screen h-screen">
-            {loading ? <Loading></Loading> : !data ? <Error subject="Not found" body="This is a 404 page"></Error> : ""}
+  return (
+    <div className="bg-primary center grid w-screen h-screen">
+      <div>
+        <Loading />
+        <div>
+          {stillStuck
+            ? "The content is being created, or the IDs is invalid."
+            : ""}
         </div>
-    );
+      </div>
+    </div>
+  );
 }

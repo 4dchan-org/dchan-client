@@ -13,7 +13,7 @@ interface BoardListVars {}
 export default function HeaderNavigation() {
   const { data } = useQuery<BoardListData, BoardListVars>(
     BOARDS_LIST_MOST_POPULAR,
-    { variables: {} }
+    { variables: {}, pollInterval: 30_000 }
   );
 
   const boards = data?.boards;
@@ -29,7 +29,7 @@ export default function HeaderNavigation() {
       ]
       <span className="text-black text-opacity-50">
         [
-      {!!boards &&
+        {!!boards &&
           boards.map((board) => (
             <span className="dchan-navigation-board" key={board.id}>
               <Link

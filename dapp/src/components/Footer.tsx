@@ -67,7 +67,7 @@ export default function Footer({
             </a>
           </div>
         </div>
-        <div className="text-right px-6">dchan-client v0.0.1</div>
+        <div className="text-right px-6 text-xs text-gray-600">v0.0.1</div>
       </div>
     </footer>
   );

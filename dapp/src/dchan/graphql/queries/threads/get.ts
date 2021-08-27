@@ -1,6 +1,9 @@
 import { gql } from "apollo-boost";
+import BOARD_FRAGMENT from 'dchan/graphql/fragments/board';
 
 const THREAD_GET = gql`
+  ${BOARD_FRAGMENT}
+  
   fragment Post on Post {
     id
     n
@@ -20,6 +23,10 @@ const THREAD_GET = gql`
       isNsfw
     }
     createdAt
+    createdAtBlock {
+      timestamp 
+      number
+    }
     bans {
       ban {
         reason
@@ -29,8 +36,11 @@ const THREAD_GET = gql`
     score
   }
   
-  query Thread($threadId: String!) {
-    thread(id: $threadId) {
+  query Thread($boardId: String!, $threadN: String!) {
+    board(id: $boardId) {
+      ... Board
+    }
+    threads(first: 1, where: {board: $boardId, n: $threadN}) {
       id
       subject
       board {

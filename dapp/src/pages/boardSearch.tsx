@@ -11,7 +11,7 @@ export default function BoardListPage({
     params: { boardName: name },
   },
 }: any) {
-  const { data } = useQuery(BOARDS_SEARCH, { variables: { name } });
+  const { data } = useQuery(BOARDS_SEARCH, { variables: { name }, pollInterval: 30_000 });
 
   return (
     <div className="bg-primary min-h-100vh">

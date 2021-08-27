@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /opt/yarn-v1.22.5/bin/yarn.js add @types/react-hook-form-persist
+  /usr/local/bin/node /opt/yarn-v1.22.5/bin/yarn.js add react-use @types/react-use
 
 PATH: 
   /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2freact-hook-form-persist: Not found
+  Error: https://registry.yarnpkg.com/@types%2freact-use: Not found
       at Request.params.callback [as _callback] (/opt/yarn-v1.22.5/lib/cli.js:66988:18)
       at Request.self.callback (/opt/yarn-v1.22.5/lib/cli.js:140749:22)
       at Request.emit (node:events:394:28)
@@ -57,6 +57,7 @@ npm manifest:
       "@types/luxon": "^1.27.1",
       "@types/node": "^15.12.4",
       "@types/pubsub-js": "^1.8.2",
+      "@types/query-string": "^6.3.0",
       "@types/react": "^17.0.11",
       "@types/react-dom": "^17.0.8",
       "@types/react-router-dom": "^5.1.7",
@@ -74,6 +75,7 @@ npm manifest:
       "node-sass": "^6.0.1",
       "nprogress": "^0.2.0",
       "pubsub-js": "^1.9.3",
+      "query-string": "^7.0.1",
       "react": "^17.0.2",
       "react-dom": "^17.0.2",
       "react-hook-form": "^7.12.2",
@@ -2749,6 +2751,13 @@ Lockfile:
     version "1.5.4"
     resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.4.tgz#15925414e0ad2cd765bfef58842f7e26a7accb24"
     integrity sha512-1HcDas8SEj4z1Wc696tH56G8OlRaH/sqZOynNNB+HF0WOeXPaxTtbYzJY2oEfiUxjSKjhCKr+MvR7dCHcEelug==
+  
+  "@types/query-string@^6.3.0":
+    version "6.3.0"
+    resolved "https://registry.yarnpkg.com/@types/query-string/-/query-string-6.3.0.tgz#b6fa172a01405abcaedac681118e78429d62ea39"
+    integrity sha512-yuIv/WRffRzL7cBW+sla4HwBZrEXRNf1MKQ5SklPEadth+BKbDxiVG8A3iISN5B3yC4EeSCzMZP8llHTcUhOzQ==
+    dependencies:
+      query-string "*"
   
   "@types/react-dom@^17.0.8":
     version "17.0.8"
@@ -12427,6 +12436,16 @@ Lockfile:
     version "6.5.2"
     resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
     integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
+  
+  query-string@*, query-string@^7.0.1:
+    version "7.0.1"
+    resolved "https://registry.yarnpkg.com/query-string/-/query-string-7.0.1.tgz#45bd149cf586aaa582dffc7ec7a8ad97dd02f75d"
+    integrity sha512-uIw3iRvHnk9to1blJCG3BTc+Ro56CBowJXKmNNAm3RulvPBzWLRqKSiiDk+IplJhsydwtuNMHi8UGQFcCLVfkA==
+    dependencies:
+      decode-uri-component "^0.2.0"
+      filter-obj "^1.1.0"
+      split-on-first "^1.0.0"
+      strict-uri-encode "^2.0.0"
   
   query-string@^4.1.0:
     version "4.3.4"

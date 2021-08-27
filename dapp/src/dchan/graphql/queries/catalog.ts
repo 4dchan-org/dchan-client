@@ -1,6 +1,9 @@
 import { gql } from "apollo-boost";
+import BOARD_FRAGMENT from '../fragments/board';
 
 const CATALOG = gql`
+  ${BOARD_FRAGMENT}
+  
   fragment Post on Post {
     id
     n
@@ -35,6 +38,7 @@ const CATALOG = gql`
 
   fragment Thread on Thread {
     id
+    n
     isPinned
     isLocked
     op {
@@ -44,6 +48,7 @@ const CATALOG = gql`
     replyCount
     imageCount
     score
+    createdAt
     createdAtBlock {
       timestamp
       number
@@ -52,25 +57,7 @@ const CATALOG = gql`
   
   query Catalog($boardId: String!, $limit: Int!, $search: String) {
     board(id: $boardId) {
-      id
-      title
-      postCount
-      name
-      isLocked
-      isNsfw
-      lastBumpedAtBlock {
-        timestamp
-        number
-      }
-      createdAtBlock {
-        timestamp
-        number
-      }
-      jannies {
-        user {
-          address
-        }
-      }
+      ... Board
     }
     pinned: threads(where: {board: $boardId, isPinned: true}, orderBy: lastBumpedAt, orderDirection: desc) {
       ...Thread

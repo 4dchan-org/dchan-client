@@ -51,7 +51,7 @@ export default function FormPost({
   const formId = thread?.id || board?.id || ""
   useFormPersist(formId, {watch, setValue}, {
     storage: window.localStorage,
-    exclude: ['file']
+    exclude: ['file','thread','board','nonce']
   });
   useLayoutEffect(() => {
       return () => {
@@ -78,22 +78,29 @@ export default function FormPost({
     subscribe("FORM_QUOTE", onQuote);
   }, [subscribe, onQuote]);
 
-  const onSubmit = async (data: any) => {
+  const updateNonce = useCallback(() => {
+    setNonce(uniqueId());
+  }, [setNonce]);
+
+  const onSubmit = useCallback(async (data: any) => {
     setIsSending(true);
     try {
       const result = await postMessage(data, accounts, setStatus);
 
       const events = result?.events;
-      if (events && events.length > 0) {
-        const { transactionHash, logIndex } = events[0];
+      
+      if(!!result) {
+        resetForm()
+        trigger()
+        updateNonce()
+      }
+
+      if (events && events.Message) {
+        const { transactionHash, logIndex } = events.Message;
         if (board && !thread) {
           const url = `/${transactionHash}-${logIndex}`;
           history.push(url);
         }
-      }
-      if(!!result) {
-        resetForm()
-        updateNonce()
       }
     } catch (error) {
       setStatus({ error });
@@ -102,7 +109,7 @@ export default function FormPost({
     }
 
     setIsSending(false);
-  };
+  }, [accounts, board, history, thread, setStatus, setIsSending, resetForm, trigger, updateNonce]);
 
   const refreshThumbnail = useCallback(async () => {
     const files: FileList = getValues().file;
@@ -133,10 +140,6 @@ export default function FormPost({
     setValue("file", undefined);
     onFileChange();
   }, [setValue, onFileChange]);
-
-  const updateNonce = useCallback(() => {
-    setNonce(uniqueId());
-  }, [setNonce]);
 
   const fileRename = useCallback(() => {
     const files: FileList = getValues().file;

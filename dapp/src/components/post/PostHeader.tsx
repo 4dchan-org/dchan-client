@@ -2,10 +2,8 @@ import AddressLabel from "components/AddressLabel";
 import Menu from "components/Menu";
 import Status from "components/Status";
 import {
-  backgroundColorAddress,
   Post,
   sendTip,
-  shortenAddress,
   Thread,
 } from "dchan";
 import { fromBigInt } from "dchan/entities/datetime";
@@ -46,7 +44,7 @@ export default function PostHeader({
     n,
     name,
     from: { address },
-    createdAt: {
+    createdAtBlock: {
       timestamp: createdAtUnix
     }
   } = post
@@ -58,7 +56,7 @@ export default function PostHeader({
 
   const createdAt = fromBigInt(createdAtUnix);
 
-  const isJanny = !!thread ? fIsJanny(thread.board.id) : false;
+  const isJanny = thread?.board?.id ? fIsJanny(thread.board.id) : false;
 
   const replyTo = useCallback(
     (n: number | string) => {

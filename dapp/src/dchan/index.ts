@@ -21,8 +21,8 @@ export type Board = {
     title: string,
     threadCount: string,
     postCount: string,
-    lastBumpedAt: Block,
-    createdAt: Block,
+    lastBumpedAtBlock: Block,
+    createdAtBlock: Block,
     isLocked: boolean,
     isNsfw: boolean,
     name: string
@@ -37,27 +37,29 @@ export type BoardJanny = {
 
 export type Thread = {
     id: string,
-    board: Board,
+    n: string,
+    board: Board | null,
     isPinned: boolean,
     isLocked: boolean,
     op: Post,
     replies: Post[],
     replyCount: string,
     imageCount: string,
-    createdAt: Block,
+    createdAtBlock: Block,
     subject: string,
     score: string
 }
 
 export type Post = {
     id: string,
-    thread: Thread,
+    board: Board | null,
+    thread: Thread | null,
     n: string,
     from: User,
     name: string,
     comment: string,
     image: Image,
-    createdAt: Block,
+    createdAtBlock: Block,
     bans: PostBan[],
     score: string,
 }
@@ -101,8 +103,6 @@ export type Image = {
 export function shortenAddress(address: string) {
     let offset = address.indexOf("0x") === 0 ? 2 : 0
     const shortAddress = `${address.substring(offset, offset + 3)}-${address.substring(address.length - 3)}`
-    
-    console.log({address, shortAddress})
     return shortAddress
 }
 

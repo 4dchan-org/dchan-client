@@ -21,7 +21,7 @@ export default function BoardListPage() {
     query: BOARDS_LIST,
   };
 
-  const { loading, data } = useQuery<BoardListData, BoardListVars>(query, {});
+  const { loading, data } = useQuery<BoardListData, BoardListVars>(query, {pollInterval: 30_000});
 
   return (
     <div className="bg-primary min-h-100vh">

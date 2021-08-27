@@ -14,9 +14,7 @@ import { DateTime } from "luxon";
 import { useHistory } from "react-router-dom";
 import useInterval from "@use-it/interval";
 import { useThrottleCallback } from "@react-hook/throttle";
-import {
-  isLowScore as isLowScoreThread,
-} from "dchan/entities/thread";
+import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
 import {
   isLowScore as isLowScorePost,
   sortByCreatedAt as sortPostsByCreatedAt,
@@ -25,7 +23,9 @@ import { fromBigInt } from "dchan/entities/datetime";
 import BLOCK_BY_DATE from "dchan/graphql/queries/block_by_date";
 import useSettings from "hooks/useSettings";
 import useLastBlock from "hooks/useLastBlock";
-
+import { parse as parseQueryString } from "query-string";
+import { isString } from "lodash";
+import {useTitle} from 'react-use';
 interface CatalogData {
   board: Board;
   pinned: Thread[];
@@ -51,18 +51,21 @@ interface TimeTravelRange {
   max: Block;
 }
 
-export default function CatalogPage({ match: { params } }: any) {
+export default function CatalogPage({ location, match: { params } }: any) {
   const { boardId: boardIdParam } = params;
+  const query = parseQueryString(location.search);
   const boardId = `0x${boardIdParam}`;
   const [settings, setSettings] = useSettings();
   const history = useHistory();
   const [showLowScore, setShowLowScore] = useState<boolean>(false); // @TODO config
-  const [search, setSearch] = useState<string>(params.search || "");
+  const [search, setSearch] = useState<string>(
+    isString(query.search) ? query.search : ""
+  );
   const [currentDate, setCurrentDate] = useState<DateTime | undefined>(
     undefined
   );
   const [currentBlock, setCurrentBlock] = useState<number | undefined>(
-    params.block ? parseInt(params.block) : undefined
+    isString(query.block) ? parseInt(query.block) : undefined
   );
   const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
   const onSearchChange = (e: any) => setSearch(e.target.value);
@@ -75,7 +78,7 @@ export default function CatalogPage({ match: { params } }: any) {
     },
     ...(currentBlock ? { currentBlock } : {}),
   };
-  
+
   const { refetch, loading, data } = useQuery<CatalogData, CatalogVars>(
     !currentBlock ? CATALOG : CATALOG_TIMETRAVEL,
     {
@@ -84,7 +87,7 @@ export default function CatalogPage({ match: { params } }: any) {
     }
   );
 
-  const lastBlock = useLastBlock()
+  const lastBlock = useLastBlock();
 
   const { data: bbdData } = useQuery<BlockByDateData, BlockByDateVars>(
     BLOCK_BY_DATE,
@@ -111,10 +114,6 @@ export default function CatalogPage({ match: { params } }: any) {
     [data]
   );
 
-  useEffect(() => {
-    board && history.replace(currentBlock ? `/${board.name}/${board.id}/block/${currentBlock}` : `/${board.name}/${board.id}`)
-  }, [board, currentBlock, history])
-
   const sortedPostSearch = useMemo(() => {
     return postSearch ? sortPostsByCreatedAt(postSearch) : undefined;
   }, [postSearch]);
@@ -126,7 +125,7 @@ export default function CatalogPage({ match: { params } }: any) {
   useEffect(() => {
     if (!board) return;
 
-    setLastBumpedAt(board.lastBumpedAt);
+    setLastBumpedAt(board.lastBumpedAtBlock);
   }, [board, setLastBumpedAt]);
 
   const [lastRefreshedRelative, setLastRefreshedAtRelative] =
@@ -149,7 +148,7 @@ export default function CatalogPage({ match: { params } }: any) {
 
   const onFocus = useCallback(
     (focusId: string) => {
-      if (focused === focusId && focusId.indexOf("0x") === 0 && !!board) {
+      if (focused === focusId && !!board) {
         history.push(`/${board.name}/${board.id}/${focusId}`);
       } else {
         setFocused(focusId);
@@ -164,17 +163,25 @@ export default function CatalogPage({ match: { params } }: any) {
       (e) => {
         setCurrentBlock(parseInt(e.target.value));
         setCurrentDate(undefined);
+        board &&
+          history.push(`/${board.name}/${board.id}?block=${e.target.value}`);
       },
-      [setCurrentBlock]
+      [setCurrentBlock, setCurrentDate, history, board]
     ),
     10,
-    true
+    false
   );
+
+  const onReturnToPresent = useCallback(() => {
+    setCurrentBlock(undefined);
+    setCurrentDate(undefined);
+    board && history.push(`/${board.name}/${board.id}`);
+  }, [setCurrentBlock, setCurrentDate, history, board]);
 
   useEffect(() => {
     if (board && lastBlock) {
       setTimeTravelRange({
-        min: board?.createdAt,
+        min: board?.createdAtBlock,
         max: lastBlock,
       });
     }
@@ -182,6 +189,8 @@ export default function CatalogPage({ match: { params } }: any) {
 
   // Last refreshed
   const refreshLastRefreshedAtRelative = useCallback(() => {
+    const diff = lastRefreshedAt.diffNow();
+    console.log({ diff });
     setLastRefreshedAtRelative(lastRefreshedAt.toRelative() || "");
   }, [lastRefreshedAt, setLastRefreshedAtRelative]);
 
@@ -205,13 +214,15 @@ export default function CatalogPage({ match: { params } }: any) {
         .map((thread: Thread) => (
           <CatalogThread
             onFocus={onFocus}
-            isFocused={focused === thread.id}
+            isFocused={focused === thread.n}
             thread={thread}
             key={thread.id}
           ></CatalogThread>
         )),
     [threads, settings, focused, onFocus, showLowScore]
   );
+
+  useTitle(`/${board?.name}/ - ${board?.title}`)
 
   return (
     <div
@@ -280,34 +291,41 @@ export default function CatalogPage({ match: { params } }: any) {
                         setCurrentDate(DateTime.fromISO(e.target.value));
                         setCurrentBlock(undefined);
                       }}
-                      min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
-                      max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
+                      min={fromBigInt(
+                        timeTravelRange.min.timestamp
+                      ).toISODate()}
+                      max={fromBigInt(
+                        timeTravelRange.max.timestamp
+                      ).toISODate()}
                     ></input>
-                    , {fromBigInt(lastBumpedAt.timestamp).toLocaleString(DateTime.TIME_SIMPLE)}]
+                    ,{" "}
+                    {fromBigInt(lastBumpedAt.timestamp).toLocaleString(
+                      DateTime.TIME_SIMPLE
+                    )}
+                    ]
                   </span>
                 </summary>
                 <div className="text-xs">
-                  <div className="flex center">
+                  <div className="grid grid-cols-4 center text-center">
                     <span className="mx-1">Board creation</span>
                     <input
+                      className="col-span-2"
                       id="timetravel"
                       type="range"
                       min={parseInt(timeTravelRange.min.number)}
                       max={parseInt(timeTravelRange.max.number)}
                       onChange={onTimeTravelByBlock}
-                      value={
-                        currentBlock || lastBlock?.number || ""
-                      }
+                      value={currentBlock || lastBlock?.number || ""}
                     />{" "}
                     <span className="mx-1">Now</span>
                   </div>
-                  <div className="grid center grid-cols-3 text-center">
+                  <div className="grid grid-cols-4 center text-center">
                     <span className="mx-1">
                       {fromBigInt(timeTravelRange.min.timestamp).toLocaleString(
                         DateTime.DATE_SHORT
                       )}
                     </span>
-                    <span>{currentBlock ? `Block n.${currentBlock}` : ""}</span>
+                    <span className="col-span-2" />
                     <span className="mx-1">
                       {fromBigInt(timeTravelRange.max.timestamp).toLocaleString(
                         DateTime.DATE_SHORT
@@ -316,15 +334,15 @@ export default function CatalogPage({ match: { params } }: any) {
                   </div>
                 </div>
               </details>
+              <span className="grid center text-xs ">{`💠${
+                currentBlock || lastBlock?.number || "?"
+              }`}</span>
               {currentBlock ? (
                 <div className="text-xs">
                   [
                   <button
                     className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                    onClick={() => {
-                      setCurrentBlock(undefined);
-                      setCurrentDate(undefined);
-                    }}
+                    onClick={onReturnToPresent}
                   >
                     Return to present
                   </button>
@@ -414,8 +432,8 @@ export default function CatalogPage({ match: { params } }: any) {
                             onClick={() => {
                               !!board &&
                                 history.push(
-                                  `/${board.name}/${board.id}/search/${search}`
-                                )
+                                  `/${board.name}/${board.id}?q=${search}`
+                                );
                             }}
                             className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                           >
@@ -441,9 +459,7 @@ export default function CatalogPage({ match: { params } }: any) {
                 <details className="pb-1">
                   <summary className="text-xs text-gray-600 pb-2">
                     Threads: {threads.length} (Hidden:{" "}
-                    {
-                      threads.length - filteredThreads.length
-                    }
+                    {threads.length - filteredThreads.length}
                     ), Posts: {board?.postCount}
                   </summary>
                   <div className="center grid">

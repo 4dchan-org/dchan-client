@@ -1,11 +1,19 @@
 import { isMaticChainId } from "dchan";
 import { switchChain } from "dchan/chain";
 import useWeb3 from "hooks/useWeb3";
+import { useCallback } from "react";
 import { useState } from "react";
 
 export default function WalletSwitchChain() {
   const { provider, chainId } = useWeb3()
   const [stillStuck, setStillStuck] = useState<boolean>(false);
+  
+  const onSwitchChain = useCallback(async () => {
+    setTimeout(() => {
+      setStillStuck(true);
+    }, 2000);
+    await switchChain();
+  }, [setStillStuck])
 
   return provider && !isMaticChainId(chainId) ? (
     <div className="p-4">
@@ -18,12 +26,7 @@ export default function WalletSwitchChain() {
         [
         <button
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-          onClick={async () => {
-            setTimeout(() => {
-              setStillStuck(true);
-            }, 2000);
-            await switchChain();
-          }}
+          onClick={onSwitchChain}
         >
           Switch chain
         </button>
