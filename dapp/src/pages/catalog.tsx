@@ -187,7 +187,7 @@ export default function CatalogPage({ location, match: { params } }: any) {
     }
   }, [board, lastBlock, setTimeTravelRange]);
 
-  // Last refreshed
+  // AutoRefresh
   const refreshLastRefreshedAtRelative = useCallback(() => {
     const diff = lastRefreshedAt.diffNow();
     console.log({ diff });
@@ -334,9 +334,9 @@ export default function CatalogPage({ location, match: { params } }: any) {
                   </div>
                 </div>
               </details>
-              <span className="grid center text-xs ">{`💠${
+              <abbr className="grid center text-xs" title={`Selected block`}>{`#${
                 currentBlock || lastBlock?.number || "?"
-              }`}</span>
+              }`}</abbr>
               {currentBlock ? (
                 <div className="text-xs">
                   [

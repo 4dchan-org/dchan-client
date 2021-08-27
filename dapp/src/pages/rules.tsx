@@ -17,9 +17,6 @@ export default function RulesPage() {
                   Do not post anything that can get you in trouble with local or global jurisdictions.
                 </li>
                 <li>
-                  You alone assume full responsibility for any content you post and upload.
-                </li>
-                <li>
                   Be decent.
                 </li>
               </ul>
