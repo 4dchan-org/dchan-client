@@ -20,7 +20,10 @@ const CATALOG = gql`
       isNsfw
     }
     createdAt
-    createdAtBlock
+    createdAtBlock {
+      timestamp 
+      number
+    }
     bans {
       ban {
         reason
@@ -53,9 +56,15 @@ const CATALOG = gql`
       name
       isLocked
       isNsfw
-      lastBumpedAt
+      lastBumpedAt {
+        timestamp 
+        number
+      }
       createdAt
-      createdAtBlock
+      createdAtBlock {
+        timestamp 
+        number
+      }
       jannies {
         user {
           address

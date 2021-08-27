@@ -6,7 +6,7 @@ import CatalogThread from "components/catalog/CatalogThread";
 import { useQuery } from "@apollo/react-hooks";
 import CATALOG from "dchan/graphql/queries/catalog";
 import CATALOG_TIMETRAVEL from "dchan/graphql/queries/catalog_tt";
-import { Board, Post, Thread, Timestamp, Block } from "dchan";
+import { Board, Post, Thread, Block } from "dchan";
 import Loading from "components/Loading";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { HashLink, HashLink as Link } from "react-router-hash-link";
@@ -46,6 +46,10 @@ interface BlockByDateVars {
   timestampMin: string;
   timestampMax: string;
 }
+interface TimeTravelRange {
+  min: Block;
+  max: Block;
+}
 
 export default function CatalogPage({ match: { params } }: any) {
   const { boardId: boardIdParam } = params;
@@ -60,10 +64,7 @@ export default function CatalogPage({ match: { params } }: any) {
   const [currentBlock, setCurrentBlock] = useState<number | undefined>(
     params.block ? parseInt(params.block) : undefined
   );
-  const [timeTravelRange, setTimeTravelRange] = useState<{
-    min: Timestamp;
-    max: Timestamp;
-  }>();
+  const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
   const onSearchChange = (e: any) => setSearch(e.target.value);
 
   const variables = {
@@ -121,11 +122,11 @@ export default function CatalogPage({ match: { params } }: any) {
   const [lastRefreshedAt, setLastRefreshedAt] = useState<DateTime>(
     DateTime.now()
   );
-  const [lastBumpedAt, setLastBumpedAt] = useState<DateTime>();
+  const [lastBumpedAt, setLastBumpedAt] = useState<Block>();
   useEffect(() => {
     if (!board) return;
 
-    setLastBumpedAt(fromBigInt(board.lastBumpedAt));
+    setLastBumpedAt(board.lastBumpedAt);
   }, [board, setLastBumpedAt]);
 
   const [lastRefreshedRelative, setLastRefreshedAtRelative] =
@@ -173,14 +174,8 @@ export default function CatalogPage({ match: { params } }: any) {
   useEffect(() => {
     if (board && lastBlock) {
       setTimeTravelRange({
-        min: {
-          block: board?.createdAtBlock,
-          unix: board?.createdAt,
-        },
-        max: {
-          block: lastBlock.number,
-          unix: lastBlock.timestamp,
-        },
+        min: board?.createdAt,
+        max: lastBlock,
       });
     }
   }, [board, lastBlock, setTimeTravelRange]);
@@ -285,10 +280,10 @@ export default function CatalogPage({ match: { params } }: any) {
                         setCurrentDate(DateTime.fromISO(e.target.value));
                         setCurrentBlock(undefined);
                       }}
-                      min={fromBigInt(timeTravelRange.min.unix).toISODate()}
-                      max={fromBigInt(timeTravelRange.max.unix).toISODate()}
+                      min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
+                      max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
                     ></input>
-                    , {lastBumpedAt.toLocaleString(DateTime.TIME_SIMPLE)}]
+                    , {fromBigInt(lastBumpedAt.timestamp).toLocaleString(DateTime.TIME_SIMPLE)}]
                   </span>
                 </summary>
                 <div className="text-xs">
@@ -297,8 +292,8 @@ export default function CatalogPage({ match: { params } }: any) {
                     <input
                       id="timetravel"
                       type="range"
-                      min={parseInt(timeTravelRange.min.block)}
-                      max={parseInt(timeTravelRange.max.block)}
+                      min={parseInt(timeTravelRange.min.number)}
+                      max={parseInt(timeTravelRange.max.number)}
                       onChange={onTimeTravelByBlock}
                       value={
                         currentBlock || lastBlock?.number || ""
@@ -308,13 +303,13 @@ export default function CatalogPage({ match: { params } }: any) {
                   </div>
                   <div className="grid center grid-cols-3 text-center">
                     <span className="mx-1">
-                      {fromBigInt(timeTravelRange.min.unix).toLocaleString(
+                      {fromBigInt(timeTravelRange.min.timestamp).toLocaleString(
                         DateTime.DATE_SHORT
                       )}
                     </span>
                     <span>{currentBlock ? `Block n.${currentBlock}` : ""}</span>
                     <span className="mx-1">
-                      {fromBigInt(timeTravelRange.max.unix).toLocaleString(
+                      {fromBigInt(timeTravelRange.max.timestamp).toLocaleString(
                         DateTime.DATE_SHORT
                       )}
                     </span>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Board, Thread } from "dchan";
 import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -11,6 +11,7 @@ import MaxLengthWatch from "./MaxLengthWatch";
 import AddressLabel from "components/AddressLabel";
 import usePubSub from "hooks/usePubSub";
 import Wallet from "components/Wallet";
+const useFormPersist = require('react-hook-form-persist')
 
 export default function FormPost({
   thread,
@@ -43,7 +44,20 @@ export default function FormPost({
     setValue,
     getValues,
     reset: resetForm,
+    watch,
+    trigger
   } = useForm();
+
+  const formId = thread?.id || board?.id || ""
+  useFormPersist(formId, {watch, setValue}, {
+    storage: window.localStorage,
+    exclude: ['file']
+  });
+  useLayoutEffect(() => {
+      return () => {
+        trigger()
+      }
+  }, [trigger])
 
   const values = getValues();
   const files: FileList = values.file;

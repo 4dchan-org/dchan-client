@@ -1,15 +1,14 @@
 import { Link } from "react-router-dom";
 import { Board } from "dchan";
-import AddressLabel from "components/AddressLabel";
+import IdLabel from "components/IdLabel";
 
 function BoardItem({ id, title, postCount, name, isLocked, isNsfw }: Board) {
   return (
     <tr className="p-4" key={id}>
       <td>
-        <AddressLabel
-          address={id}
-          etherscannable={false}
-        ></AddressLabel>
+        <IdLabel
+          id={id}
+        ></IdLabel>
       </td>
       <td className="px-2">
         <span>

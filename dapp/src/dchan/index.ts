@@ -21,9 +21,8 @@ export type Board = {
     title: string,
     threadCount: string,
     postCount: string,
-    lastBumpedAt: string,
-    createdAt: string,
-    createdAtBlock: string,
+    lastBumpedAt: Block,
+    createdAt: Block,
     isLocked: boolean,
     isNsfw: boolean,
     name: string
@@ -45,8 +44,7 @@ export type Thread = {
     replies: Post[],
     replyCount: string,
     imageCount: string,
-    createdAt: string,
-    createdAtBlock: string,
+    createdAt: Block,
     subject: string,
     score: string
 }
@@ -59,8 +57,7 @@ export type Post = {
     name: string,
     comment: string,
     image: Image,
-    createdAt: string,
-    createdAtBlock: string,
+    createdAt: Block,
     bans: PostBan[],
     score: string,
 }
@@ -101,13 +98,12 @@ export type Image = {
     score: string,
 }
 
-export type Timestamp = {
-    unix: string,
-    block: string
-}
-
 export function shortenAddress(address: string) {
-    return `${address.substring(2, 5)}-${address.substring(address.length - 3)}`
+    let offset = address.indexOf("0x") === 0 ? 2 : 0
+    const shortAddress = `${address.substring(offset, offset + 3)}-${address.substring(address.length - 3)}`
+    
+    console.log({address, shortAddress})
+    return shortAddress
 }
 
 export function backgroundColorAddress(address: string) {

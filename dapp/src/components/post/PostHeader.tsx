@@ -1,3 +1,4 @@
+import AddressLabel from "components/AddressLabel";
 import Menu from "components/Menu";
 import Status from "components/Status";
 import {
@@ -45,7 +46,9 @@ export default function PostHeader({
     n,
     name,
     from: { address },
-    createdAt: createdAtUnix
+    createdAt: {
+      timestamp: createdAtUnix
+    }
   } = post
   const { provider, accounts } = useWeb3();
   const { publish } = usePubSub();
@@ -104,15 +107,7 @@ export default function PostHeader({
       <span className="px-1">
         <details className="inline">
           <summary>
-          (<a
-              style={{ backgroundColor: backgroundColorAddress(address) }}
-              className="font-family-tahoma text-readable-anywhere px-0.5 mx-0.5 rounded whitespace-nowrap"
-              href={`https://polygonscan.com/address/${address}`}
-              target="_blank"
-              rel="noreferrer"
-            ><abbr style={{ textDecoration: "none" }} title={address}>
-                {shortenAddress(address)}
-              </abbr></a>)
+          (<AddressLabel etherscannable={true} address={address} />)
           </summary>
           {provider ? 
           <div className="flex">

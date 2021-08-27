@@ -3,7 +3,7 @@ import HeaderLogo from "components/header/logo";
 import { Board } from "dchan";
 import { Link } from "react-router-dom";
 import Status from "components/Status";
-import AddressLabel from "components/AddressLabel";
+import IdLabel from "components/IdLabel";
 import Menu from "components/Menu";
 import { useState } from "react";
 import { lockBoard, removeBoard, reportBoard, unlockBoard } from "dchan/operations";
@@ -28,10 +28,9 @@ export default function BoardHeader({
 
       <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative">
         <div className="text-xs pb-2">
-          <AddressLabel
-            address={board?.id || "0x0000000000000000000000000000000000000000"}
-            etherscannable={false}
-          ></AddressLabel>
+          <IdLabel
+            id={board?.id || "0x0000000000000000000000000000000000000000"}
+          ></IdLabel>
         </div>
         <div>
           <span className="font-semibold">

@@ -20,7 +20,10 @@ const CATALOG = gql`
       isNsfw
     }
     createdAt
-    createdAtBlock
+    createdAtBlock {
+      timestamp
+      number
+    }
     bans {
       ban {
         reason
@@ -41,8 +44,10 @@ const CATALOG = gql`
     replyCount
     imageCount
     score
-    createdAt
-    createdAtBlock
+    createdAtBlock {
+      timestamp
+      number
+    }
   }
   
   query Catalog($boardId: String!, $limit: Int!, $search: String) {
@@ -53,9 +58,14 @@ const CATALOG = gql`
       name
       isLocked
       isNsfw
-      lastBumpedAt
-      createdAt
-      createdAtBlock
+      lastBumpedAtBlock {
+        timestamp
+        number
+      }
+      createdAtBlock {
+        timestamp
+        number
+      }
       jannies {
         user {
           address
