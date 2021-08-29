@@ -1,10 +1,17 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 
-export default function SearchWidget({ search, setSearch }: any) {
+export default function SearchWidget({ baseUrl, search, setSearch }: {baseUrl: string, search: string, setSearch: any}) {
+  const history = useHistory()
   const onSearchChange = useCallback(
     (e: any) => setSearch(e.target.value),
     [setSearch]
   );
+  
+  useEffect(() => {
+    console.log({search})
+    history.replace(`${baseUrl}${search ? `?s=${search}` : ""}`)
+  }, [baseUrl, search, history]);
 
   return (
     <div className="mx-1 text-center">

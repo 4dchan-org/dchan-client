@@ -18,6 +18,7 @@ import {
   unpinThread,
 } from "dchan/operations";
 import usePubSub from "hooks/usePubSub";
+import useSettings from "hooks/useSettings";
 import useUser from "hooks/useUser";
 import useWeb3 from "hooks/useWeb3";
 import { DateTime } from "luxon";
@@ -50,6 +51,7 @@ export default function PostHeader({
   } = post
   const { provider, accounts } = useWeb3();
   const { publish } = usePubSub();
+  const [settings] = useSettings()
   const { isJanny: fIsJanny } = useUser();
   const isOwner = accounts.length > 0 && accounts[0] === address;
   const [status, setStatus] = useState<string | object>();
@@ -149,8 +151,8 @@ export default function PostHeader({
         ) : (
           <span></span>
         )}
-        {isLowScore(post) ? (
-          <span title="Post hidden due to reports.">⚠️</span>
+        {isLowScore(post, settings?.content?.score_threshold) ? (
+          <span title="Post hidden due to reports. Click to show anyway.">⚠️</span>
         ) : (
           <span></span>
         )}

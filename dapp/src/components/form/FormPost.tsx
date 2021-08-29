@@ -393,7 +393,7 @@ export default function FormPost({
                           className="w-64"
                           type="file"
                           accept="image/*"
-                          {...register("file", { required: !thread })}
+                          {...register("file", { required: false && !thread })}
                           onChange={onFileChange}
                         ></input>
                         {!!files && files.length > 0 ? (
@@ -507,8 +507,8 @@ export default function FormPost({
                     </li>
                     <li>
                       I understand that{" "}
-                      <abbr title="Posts and images can be removed, but it's possible (and likely) that other users will still be able to retrieve them. _The_internet_never_forgets_">
-                        <i>posts cannot be deleted</i>
+                      <abbr title="Posts are stored on the blockchain and images are uploaded to IPFS. This can't be undone. Your posted content will still be available via time travel.">
+                        <i>I won't be able to delete my posts</i>
                       </abbr>
                     </li>
                     {accounts && accounts.length > 0 ? (
@@ -516,7 +516,7 @@ export default function FormPost({
                         and that my address{" "}
                         <AddressLabel address={accounts[0]}></AddressLabel>{" "}
                         <abbr title="When posting, remember that other users will be able to view all past transactions you ever made using this address. Be mindful of the security risks this entails.">
-                          will be made public.
+                          will be public and tied to my posts.
                         </abbr>
                       </li>
                     ) : (

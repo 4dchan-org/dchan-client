@@ -3,6 +3,7 @@ import Loading from "components/Loading";
 import SEARCH_BY_ID from "dchan/graphql/queries/search";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { Router } from "router";
 
 export default function ReferencePage({
   match: {
@@ -26,23 +27,41 @@ export default function ReferencePage({
     if (data) {
       let location = null;
 
-      const { boardCreationEvent, threadCreationEvent, postCreationEvent } =
-        data;
+      const {
+        boardCreationEvent,
+        threadCreationEvent,
+        postCreationEvent,
+        board,
+        thread,
+        post,
+      } = data;
 
       if (boardCreationEvent) {
         const { board } = boardCreationEvent;
         if (board.name && board.id) {
-          location = `/${board.name}/${board.id}`;
+          location = Router.board(board);
         }
       } else if (threadCreationEvent) {
         const { thread } = threadCreationEvent;
         if (thread.board.name && thread.board.id && thread.n) {
-          location = `/${thread.board.name}/${thread.board.id}/${thread.n}`;
+          location = Router.thread(thread);
         }
       } else if (postCreationEvent) {
         const { post } = postCreationEvent;
         if (post.thread.board.name && post.thread.board.id && post.thread.n) {
-          location = `/${post.thread.board.name}/${post.thread.board.id}/${post.thread.n}/${post.n}`;
+          location = Router.post(post);
+        }
+      } else if (board) {
+        if (board.name && board.id) {
+          location = Router.board(board);
+        }
+      } else if (thread) {
+        if (thread.board.name && thread.board.id && thread.n) {
+          location = Router.thread(thread);
+        }
+      } else if (post) {
+        if (post.thread.board.name && post.thread.board.id && post.thread.n) {
+          location = Router.post(post);
         }
       }
 

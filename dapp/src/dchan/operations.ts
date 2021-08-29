@@ -76,7 +76,7 @@ export async function postMessage(
     }
 
     setStatus({
-        progress: "Sending...",
+        progress: "Waiting tx confirmation...",
     });
 
     const result = await sendMessage("post:create", data, accounts[0]);

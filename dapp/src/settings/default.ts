@@ -9,7 +9,8 @@ const DefaultSettings = {
         endpoint: "https://api.thegraph.com/ipfs/api/v0/add"
     },
     content: {
-        score_threshold: 1
+        score_threshold: 1,
+        show_below_threshold: false
     }
 }
 

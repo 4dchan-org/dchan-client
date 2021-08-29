@@ -1,36 +1,51 @@
 import { gql } from "apollo-boost";
 
 const SEARCH_BY_ID = gql`
+  fragment Board on Board {
+    id
+    name
+  }
+
+  fragment Thread on Thread {
+    id
+    n
+    board {
+      ...Board
+    }
+  }
+
+  fragment Post on Post {
+    id
+    n
+    thread {
+      ...Thread
+    }
+  }
+
   query SearchById($id: String!) {
     boardCreationEvent(id: $id) {
       board {
-        id
-        name
+        ...Board
       }
     }
     threadCreationEvent(id: $id) {
       thread {
-        id
-        n
-        board {
-          id
-          name
-        }
+        ...Thread
       }
     }
     postCreationEvent(id: $id) {
       post {
-        id
-        n
-        thread {
-          id
-          n
-          board {
-            id
-            name
-          }
-        }
+        ...Post
       }
+    }
+    board(id: $id) {
+      ...Board
+    }
+    thread(id: $id) {
+      ...Thread
+    }
+    post(id: $id) {
+      ...Post
     }
     user(id: $id) {
       id

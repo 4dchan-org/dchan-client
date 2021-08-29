@@ -16,7 +16,6 @@ import useInterval from "@use-it/interval";
 import { useThrottleCallback } from "@react-hook/throttle";
 import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
 import {
-  isLowScore as isLowScorePost,
   sortByCreatedAt as sortPostsByCreatedAt,
 } from "dchan/entities/post";
 import { fromBigInt } from "dchan/entities/datetime";
@@ -25,8 +24,10 @@ import useSettings from "hooks/useSettings";
 import useLastBlock from "hooks/useLastBlock";
 import { parse as parseQueryString } from "query-string";
 import { isString } from "lodash";
-import {useTitle} from 'react-use';
+import { useTitle } from "react-use";
 import SearchWidget from "components/SearchWidget";
+import { Router } from "router";
+import FilterSettings from "components/FilterSettings";
 interface CatalogData {
   board: Board;
   pinned: Thread[];
@@ -56,12 +57,12 @@ export default function CatalogPage({ location, match: { params } }: any) {
   const { boardId: boardIdParam } = params;
   const query = parseQueryString(location.search);
   const boardId = `0x${boardIdParam}`;
-  const [settings, setSettings] = useSettings();
   const history = useHistory();
-  const [showLowScore, setShowLowScore] = useState<boolean>(false); // @TODO config
+  const s = query.s || query.search
   const [search, setSearch] = useState<string>(
-    isString(query.search) ? query.search : ""
+    isString(s) ? s : ""
   );
+  console.log({query, search})
   const [currentDate, setCurrentDate] = useState<DateTime | undefined>(
     undefined
   );
@@ -163,12 +164,14 @@ export default function CatalogPage({ location, match: { params } }: any) {
       (e) => {
         setCurrentBlock(parseInt(e.target.value));
         setCurrentDate(undefined);
-        history.replace(`/${params.boardName}/0x${params.boardId}?block=${e.target.value}`);
+        history.replace(
+          `/${params.boardName}/0x${params.boardId}?block=${e.target.value}`
+        );
       },
-      [setCurrentBlock, setCurrentDate, history, board]
+      [params, setCurrentBlock, setCurrentDate, history]
     ),
     10,
-    false
+    true
   );
 
   const onReturnToPresent = useCallback(() => {
@@ -188,8 +191,10 @@ export default function CatalogPage({ location, match: { params } }: any) {
 
   // AutoRefresh
   const refreshLastRefreshedAtRelative = useCallback(() => {
-    const diff = lastRefreshedAt.diffNow();
-    console.log({ diff });
+    if (lastRefreshedAt.diffNow().toMillis() === 0) {
+      return;
+    }
+
     setLastRefreshedAtRelative(lastRefreshedAt.toRelative() || "");
   }, [lastRefreshedAt, setLastRefreshedAtRelative]);
 
@@ -201,12 +206,14 @@ export default function CatalogPage({ location, match: { params } }: any) {
     refreshLastRefreshedAtRelative();
   }, 1_000);
 
+  const [settings] = useSettings()
+
   const filteredThreads = useMemo(
     () =>
       threads
         .filter((thread: Thread) => {
           return (
-            showLowScore ||
+            settings?.content?.show_below_threshold ||
             !isLowScoreThread(thread, settings?.content?.score_threshold)
           );
         })
@@ -218,10 +225,15 @@ export default function CatalogPage({ location, match: { params } }: any) {
             key={thread.id}
           ></CatalogThread>
         )),
-    [threads, settings, focused, onFocus, showLowScore]
+    [threads, settings, focused, onFocus]
   );
 
-  useTitle(`/${board?.name}/ - ${board?.title}`)
+  const [baseUrl, setBaseUrl] = useState<string>();
+  useEffect(() => {
+    board && setBaseUrl(Router.board(board));
+  }, [board]);
+
+  useTitle(`/${board?.name}/ - ${board?.title}`);
 
   return (
     <div
@@ -266,6 +278,15 @@ export default function CatalogPage({ location, match: { params } }: any) {
         </div>
         <div className="flex-grow"></div>
         <div className="mx-2 sm:text-center sm:text-right sm:flex sm:items-center sm:justify-end">
+          {baseUrl ? (
+            <SearchWidget
+              baseUrl={baseUrl}
+              search={search}
+              setSearch={setSearch}
+            />
+          ) : (
+            ""
+          )}
           {timeTravelRange && lastBumpedAt ? (
             <span>
               {currentBlock ? (
@@ -333,28 +354,27 @@ export default function CatalogPage({ location, match: { params } }: any) {
                   </div>
                 </div>
               </details>
-              <abbr className="grid center text-xs" title={`Selected block`}>{`#${
-                currentBlock || lastBlock?.number || "?"
-              }`}</abbr>
-              {currentBlock ? (
-                <div className="text-xs">
-                  [
-                  <button
-                    className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                    onClick={onReturnToPresent}
-                  >
-                    Return to present
-                  </button>
-                  ]
-                </div>
-              ) : (
-                ""
-              )}
+              <span className="grid center text-xs">
+                {`Selected block #${currentBlock || lastBlock?.number || "?"}`}
+                {currentBlock ? (
+                  <div className="text-xs">
+                    [
+                    <button
+                      className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                      onClick={onReturnToPresent}
+                    >
+                      Return to present
+                    </button>
+                    ]
+                  </div>
+                ) : (
+                  ""
+                )}
+              </span>
             </span>
           ) : (
             ""
           )}
-          <SearchWidget search={search} setSearch={setSearch} />
         </div>
       </div>
 
@@ -368,27 +388,16 @@ export default function CatalogPage({ location, match: { params } }: any) {
         ) : search ? (
           postSearch && postSearch.length ? (
             <div>
-              <div>
-                <div className="text-center">
-                  <details className="pb-1">
-                    <summary className="text-xs text-gray-600 [y=">
-                      Found: {postSearch.length} posts (Hidden:{" "}
-                      {postSearch.filter((p) => isLowScorePost(p)).length})
-                    </summary>
-                    <div>
-                      <input
-                        id="dchan-input-show-reported"
-                        className="mx-1 text-xs whitespace-nowrap opacity-50 hover:opacity-100"
-                        type="checkbox"
-                        checked={showLowScore}
-                        onChange={() => setShowLowScore(!showLowScore)}
-                      ></input>
-                      <label htmlFor="dchan-input-show-reported">
-                        Show hidden threads
-                      </label>
-                    </div>
-                  </details>
-                </div>
+              <div className="text-center">
+                <FilterSettings
+                  summary={
+                    <span>
+                      Threads: {threads.length} (Hidden:{" "}
+                      {threads.length - filteredThreads.length}
+                      ), Posts: {board?.postCount}
+                    </span>
+                  }
+                />
               </div>
               <div>
                 {sortedPostSearch?.map((post) => (
@@ -400,12 +409,6 @@ export default function CatalogPage({ location, match: { params } }: any) {
                           [
                           <Link
                             to={`/${post.id}`}
-                            onClick={() => {
-                              !!board &&
-                                history.push(
-                                  `/${board.name}/${board.id}?q=${search}`
-                                );
-                            }}
                             className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                           >
                             View
@@ -427,80 +430,15 @@ export default function CatalogPage({ location, match: { params } }: any) {
           ) : (
             <div>
               <div className="text-center">
-                <details className="pb-1">
-                  <summary className="text-xs text-gray-600 pb-2">
-                    Threads: {threads.length} (Hidden:{" "}
-                    {threads.length - filteredThreads.length}
-                    ), Posts: {board?.postCount}
-                  </summary>
-                  <div className="center grid">
-                    <div className="bg-secondary p-2 max-w-sm">
-                      <div className="text-contrast text-xs text-left">
-                        ⚠ By disabling filters, it's possible you may view (and
-                        download) highly disturbing content, or content which
-                        may be illegal in your jurisdiction.
-                        <div>Do so at your own risk.</div>
-                      </div>
-                      <div className="py-2">
-                        <div>
-                          <input
-                            id="dchan-input-show-reported"
-                            className="mx-1 text-xs whitespace-nowrap opacity-50 hover:opacity-100"
-                            type="checkbox"
-                            checked={showLowScore}
-                            onChange={() => setShowLowScore(!showLowScore)}
-                          ></input>
-                          <label htmlFor="dchan-input-show-reported">
-                            Show hidden content
-                          </label>
-                        </div>
-                        <div>
-                          <label htmlFor="dchan-input-show-reported">
-                            Score hide threshold
-                          </label>
-                          <div>
-                            <input
-                              id="dchan-input-show-reported"
-                              className="mx-1 text-xs whitespace-nowrap opacity-50 hover:opacity-100"
-                              type="range"
-                              min={0}
-                              max={1}
-                              step={0.1}
-                              value={settings?.content?.score_threshold}
-                              onChange={(e) =>
-                                setSettings({
-                                  ...settings,
-                                  content: { score_threshold: e.target.value },
-                                })
-                              }
-                            />
-                          </div>
-                          <div className="text-sm">
-                            {
-                              {
-                                "0": "Show everything",
-                                "0.1": "Hide reported content",
-                                "0.2": "Hide reported content",
-                                "0.3": "Hide reported content",
-                                "0.4": "Hide reported content",
-                                "0.5": "Hide reported content",
-                                "0.6": "Hide reported content",
-                                "0.7": "Hide reported content",
-                                "0.8": "Hide reported content",
-                                "0.9": "Hide reported content",
-                                "1": "Only show content with no reports",
-                              }[settings?.content?.score_threshold || "1"]
-                            }
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-xs text-left">
-                        ℹ Content score is estimated based on quantity of user
-                        reports and janitor actions.
-                      </div>
-                    </div>
-                  </div>
-                </details>
+                <FilterSettings
+                  summary={
+                    <span>
+                      Threads: {threads.length} (Hidden:{" "}
+                      {threads.length - filteredThreads.length}
+                      ), Posts: {board?.postCount}
+                    </span>
+                  }
+                />
               </div>
               <div className="grid grid-template-columns-ram-150px place-items-start font-size-090rem px-4 sm:px-8">
                 {filteredThreads}

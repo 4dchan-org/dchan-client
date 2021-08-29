@@ -15,6 +15,7 @@ export type Settings = {
     },
     content: {
         score_threshold: number // from 0 to 1
+        show_below_threshold: boolean
     }
 }
 

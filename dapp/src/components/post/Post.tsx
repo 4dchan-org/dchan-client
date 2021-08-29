@@ -1,6 +1,8 @@
 import IPFSImage from "components/IPFSImage";
 import { BACKLINK_REGEX, Post as DchanPost, Thread } from "dchan";
+import { isLowScore } from "dchan/entities/post";
 import usePubSub from "hooks/usePubSub";
+import useSettings from "hooks/useSettings";
 import { truncate } from "lodash";
 import { ReactElement, useEffect, useRef, useState } from "react";
 import PostBody from "./PostBody";
@@ -26,8 +28,7 @@ export default function Post({
     n,
     image,
     bans,
-    comment,
-    score,
+    comment
   } = post;
 
   useEffect(() => {
@@ -42,7 +43,6 @@ export default function Post({
 
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
 
-  const isLowScore = parseInt(score) / 1_000_000_000 < 1;
   useEffect(() => {
     subscribe(
       "POST_BACKLINK",
@@ -67,11 +67,13 @@ export default function Post({
         });
       });
   }, [post, publish]);
+  const [settings] = useSettings();
+  const canShow = !isLowScore(post, settings?.content?.score_threshold) || settings?.content?.show_below_threshold;
 
   return (
     <details
       className="dchan-post-expand"
-      open={!isLowScore}
+      open={canShow}
       key={id}
       ref={postRef}
     >

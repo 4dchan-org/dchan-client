@@ -10,9 +10,8 @@ import BoardCreationForm from "components/BoardCreationForm";
 import { useState } from "react";
 import SearchWidget from "components/SearchWidget";
 import { parse as parseQueryString } from "query-string";
-import { isString } from "lodash";
-import { useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { isString, uniqBy } from "lodash";
+import { Router } from "router";
 
 interface BoardListData {
   searchByName: Board[];
@@ -29,10 +28,6 @@ export default function BoardListPage({ location }: any) {
   const [search, setSearch] = useState<string>(
     isString(query.search) ? query.search : ""
   );
-  const history = useHistory();
-  useEffect(() => {
-    history.replace(`/_/boards${search ? `?q=${search}` : ""}`);
-  }, [search, history]);
 
   const { loading, data } = useQuery<BoardListData, BoardListVars>(
     BOARDS_LIST,
@@ -47,10 +42,8 @@ export default function BoardListPage({ location }: any) {
 
   const searchResults =
     data && (data.searchByTitle || data.searchByName)
-      ? [...data.searchByName, ...data.searchByTitle]
+      ? uniqBy([...data.searchByName, ...data.searchByTitle], 'id')
       : [];
-
-  console.log({ searchResults });
 
   return (
     <div className="bg-primary min-h-100vh">
@@ -58,7 +51,7 @@ export default function BoardListPage({ location }: any) {
       <div>
         <div>
           <div className="flex center">
-            <SearchWidget search={search} setSearch={setSearch} />
+            <SearchWidget baseUrl={Router.boards()} search={search} setSearch={setSearch} />
           </div>
           {loading ? (
             <div className="center grid">

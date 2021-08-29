@@ -32,13 +32,13 @@ const CatalogThread = ({
   };
 
   const imgClassName = "w-full pointer-events-none shadow-xl object-contain max-h-320px";
-  const [settings] = useSettings() || [undefined]
+  const [settings] = useSettings()
   const isLowScore = isLowScoreThread(thread, settings?.content?.score_threshold)
 
   return (
     <article
       id={id}
-      className="dchan-post justify-self-center relative text-decoration-none leading-4 text-black m-0.5 border-black overflow-hidden min-h-12rem max-h-320px max-w-150px break-word w-full h-full place-items-start"
+      className="dchan-post justify-self-center relative text-decoration-none leading-4 text-black m-0.5 border-black overflow-hidden min-h-12rem max-h-320px max-w-150px break-word w-full h-full place-items-center flex"
       style={
         isFocused
           ? {
@@ -57,13 +57,26 @@ const CatalogThread = ({
       ) : (
         ""
       )}
-      <button onClick={() => onFocus(n)}>
+      <button className="h-full" onClick={() => onFocus(n)}>
         <div
           className={[
+            "relative",
             isFocused ? "bg-tertiary border-bottom-tertiary" : "",
             !isFocused && isLowScore ? "dchan-censor" : "",
           ].join(" ")}
         >
+        <div className="absolute top-0 right-0 z-10">
+          {isPinned ? (
+            <span title="Thread pinned. This might be important.">📌</span>
+          ) : (
+            ""
+          )}
+          {isLocked ? (
+            <span title="Thread locked. You cannot post.">🔒</span>
+          ) : (
+            ""
+          )}
+        </div>
           {ipfsHash && (!isLowScore || isFocused) ? (
             <div>
               <IPFSImage
@@ -98,18 +111,6 @@ const CatalogThread = ({
           </div>
         </div>
       </button>
-      <div className="absolute top-0 right-0">
-        {isPinned ? (
-          <span title="Thread pinned. This might be important.">📌</span>
-        ) : (
-          ""
-        )}
-        {isLocked ? (
-          <span title="Thread locked. You cannot post.">🔒</span>
-        ) : (
-          ""
-        )}
-      </div>
     </article>
   );
 };

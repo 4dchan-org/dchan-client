@@ -62,7 +62,7 @@ export default function BoardList({
     <div className={`${className} grid center`}>
       <table>
         <tbody>
-          {loading? <div className="p-4">Loading...</div> : !boards ? "" : boards.length > 0 ? boards.map(BoardItem) : "No boards"}
+          {loading? <tr><td className="p-4">Loading...</td></tr> : !boards ? "" : boards.length > 0 ? boards.map(BoardItem) : "No boards"}
         </tbody>
       </table>
     </div>
