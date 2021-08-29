@@ -9,7 +9,6 @@ export default function SearchWidget({ baseUrl, search, setSearch }: {baseUrl: s
   );
   
   useEffect(() => {
-    console.log({search})
     history.replace(`${baseUrl}${search ? `?s=${search}` : ""}`)
   }, [baseUrl, search, history]);
 
