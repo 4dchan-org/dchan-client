@@ -17,6 +17,9 @@ const SEARCH_BY_ID = gql`
   fragment Post on Post {
     id
     n
+    board {
+      ...Board
+    }
     thread {
       ...Thread
     }

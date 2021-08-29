@@ -1,4 +1,5 @@
 import { useQuery } from "@apollo/react-hooks";
+import Error from "components/Error";
 import Loading from "components/Loading";
 import SEARCH_BY_ID from "dchan/graphql/queries/search";
 import { useEffect, useState } from "react";
@@ -15,11 +16,12 @@ export default function ReferencePage({
     pollInterval: 5_000,
   });
 
+  const [error, setError] = useState<string>();
   const [stillStuck, setStillStuck] = useState<boolean>(false);
 
   setTimeout(() => {
     setStillStuck(true);
-  }, 5000);
+  }, 10_000);
 
   const history = useHistory();
 
@@ -27,7 +29,7 @@ export default function ReferencePage({
     if (data) {
       let location = null;
 
-      const {
+      let {
         boardCreationEvent,
         threadCreationEvent,
         postCreationEvent,
@@ -36,33 +38,26 @@ export default function ReferencePage({
         post,
       } = data;
 
-      if (boardCreationEvent) {
-        const { board } = boardCreationEvent;
-        if (board.name && board.id) {
-          location = Router.board(board);
-        }
-      } else if (threadCreationEvent) {
-        const { thread } = threadCreationEvent;
-        if (thread.board.name && thread.board.id && thread.n) {
-          location = Router.thread(thread);
-        }
-      } else if (postCreationEvent) {
-        const { post } = postCreationEvent;
-        if (post.thread.board.name && post.thread.board.id && post.thread.n) {
-          location = Router.post(post);
-        }
-      } else if (board) {
-        if (board.name && board.id) {
-          location = Router.board(board);
-        }
+      if (!board && boardCreationEvent) {
+        board = boardCreationEvent;
+      } else if (!thread && threadCreationEvent) {
+        thread = threadCreationEvent;
+      } else if (!post && postCreationEvent) {
+        post = postCreationEvent;
+      }
+
+      console.log({board, thread, post})
+      
+      if (board) {
+        location = Router.board(board);
       } else if (thread) {
-        if (thread.board.name && thread.board.id && thread.n) {
-          location = Router.thread(thread);
-        }
+        location = Router.thread(thread);
       } else if (post) {
-        if (post.thread.board.name && post.thread.board.id && post.thread.n) {
-          location = Router.post(post);
-        }
+        location = Router.post(post);
+      }
+
+      if ((board || thread || post) && !location) {
+        setError("Content missing.");
       }
 
       if (location) {
@@ -73,14 +68,18 @@ export default function ReferencePage({
 
   return (
     <div className="bg-primary center grid w-screen h-screen">
-      <div>
-        <Loading />
+      {error ? (
+        <Error subject={"Not found"} body={error} />
+      ) : (
         <div>
-          {stillStuck
-            ? "The content is being created, or the IDs is invalid."
-            : ""}
+          <Loading />
+          <div>
+            {stillStuck
+              ? "Either the content is still being created, or the IDs is invalid."
+              : ""}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

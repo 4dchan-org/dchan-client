@@ -71,7 +71,7 @@ export default function ThreadPage({
         <Loading></Loading>
       ) : thread ? (
         <div className="font-size-090rem mx-2 sm:mx-4">
-          {[thread.op, ...thread.replies].map((post) => (
+          {thread.replies.map((post) => (
             <Post post={post} thread={thread} key={post.id} />
           ))}
           <div className="flex center">

@@ -62,7 +62,6 @@ export default function CatalogPage({ location, match: { params } }: any) {
   const [search, setSearch] = useState<string>(
     isString(s) ? s : ""
   );
-  console.log({query, search})
   const [currentDate, setCurrentDate] = useState<DateTime | undefined>(
     undefined
   );
@@ -116,7 +115,9 @@ export default function CatalogPage({ location, match: { params } }: any) {
   );
 
   const sortedPostSearch = useMemo(() => {
-    return postSearch ? sortPostsByCreatedAt(postSearch) : undefined;
+    return sortPostsByCreatedAt(postSearch ? postSearch.filter(post => {
+      return post && post.thread && post.board
+    }) : []);
   }, [postSearch]);
 
   const [lastRefreshedAt, setLastRefreshedAt] = useState<DateTime>(

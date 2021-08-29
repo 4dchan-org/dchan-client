@@ -507,7 +507,7 @@ export default function FormPost({
                     </li>
                     <li>
                       I understand that{" "}
-                      <abbr title="Posts are stored on the blockchain and images are uploaded to IPFS. This can't be undone. Your posted content will still be available via time travel.">
+                      <abbr title="Posts are stored on the blockchain and images are uploaded to IPFS. _This_cannot_be_undone_. Your posted content will still be obtainable even after removal.">
                         <i>I won't be able to delete my posts</i>
                       </abbr>
                     </li>
@@ -515,7 +515,7 @@ export default function FormPost({
                       <li>
                         and that my address{" "}
                         <AddressLabel address={accounts[0]}></AddressLabel>{" "}
-                        <abbr title="When posting, remember that other users will be able to view all past transactions you ever made using this address. Be mindful of the security risks this entails.">
+                        <abbr title="Other users will be able to view all past transactions you ever made using this address. Be mindful of the security risks this entails.">
                           will be public and tied to my posts.
                         </abbr>
                       </li>

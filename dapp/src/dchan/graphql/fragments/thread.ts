@@ -12,6 +12,9 @@ const THREAD_FRAGMENT = gql`
     op {
       ...Post
     }
+    board {
+      id
+    }
     subject
     replyCount
     imageCount

@@ -8,6 +8,12 @@ const POST_FRAGMENT = gql`
       id
       address
     }
+    thread {
+      id
+    }
+    board {
+      id
+    }
     name
     comment
     image {
