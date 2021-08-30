@@ -40,7 +40,7 @@ interface ContentVars {
   search: string;
 }
 
-export default function CatalogPage({ location, match: { params } }: any) {
+export default function ContentPage({ location, match: { params } }: any) {
   let { board: boardId } = params;
   boardId = `0x${boardId}`;
 
@@ -51,7 +51,7 @@ export default function CatalogPage({ location, match: { params } }: any) {
 
   const lastBlock = useLastBlock();
   const dateTime = query.date ? DateTime.fromISO(query.date as string) : undefined
-  
+
   const block = parseInt(`${query.block || lastBlock?.number || ""}`)
   const variables = {
     block,
@@ -68,10 +68,10 @@ export default function CatalogPage({ location, match: { params } }: any) {
       pollInterval: 60_000
     }
   );
-console.log({query})
-  const thread = data?.selectedThread[0];
+
   const postSearch = data?.postSearch;
   const board = data?.board;
+  const thread = data?.selectedThread[0];
   const threads = useMemo(
     () => [...(data?.pinned || []), ...(data?.threads || [])],
     [data]
@@ -81,8 +81,8 @@ console.log({query})
     return sortPostsByCreatedAt(
       postSearch
         ? postSearch.filter((post) => {
-            return post && post.thread && post.board;
-          })
+          return post && post.thread && post.board;
+        })
         : []
     );
   }, [postSearch]);
@@ -97,18 +97,18 @@ console.log({query})
     }
   }, [boardId, refetch]);
 
-  const [focused, setFocused] = useState<string>("");
+  const [focused, setFocused] = useState<Thread | undefined>(undefined)
 
   const onFocus = useCallback(
-    (focusId: string) => {
-      if (focused === focusId && !!board && thread) {
-        const url = Router.thread(thread);
+    (newFocused: Thread) => {
+      if (focused === newFocused && !!board) {
+        const url = Router.thread(newFocused);
         url && history.push(url);
       } else {
-        setFocused(focusId);
+        setFocused(newFocused);
       }
     },
-    [thread, board, focused, history, setFocused]
+    [board, focused, history, setFocused]
   );
 
   const [baseUrl, setBaseUrl] = useState<string>();
@@ -116,8 +116,8 @@ console.log({query})
     const newBaseUrl = thread
       ? Router.thread(thread)
       : board
-      ? Router.board(board)
-      : undefined;
+        ? Router.board(board)
+        : undefined;
     !!newBaseUrl && baseUrl !== newBaseUrl && setBaseUrl(newBaseUrl);
   }, [thread, board, baseUrl, setBaseUrl]);
 
@@ -134,8 +134,8 @@ console.log({query})
         })
         .map((thread: Thread) => (
           <CatalogThread
-            onFocus={onFocus}
-            isFocused={focused === thread.n}
+            onFocus={e => onFocus(thread)}
+            isFocused={true === (focused && focused.n === thread.n)}
             thread={thread}
             key={thread.id}
           ></CatalogThread>
@@ -223,6 +223,7 @@ console.log({query})
                 {sortedPostSearch?.map((post) => (
                   <div className="p-2 flex flex-wrap">
                     <PostComponent
+                      key={post.id}
                       post={post}
                       header={
                         <span className="p-2">
@@ -244,7 +245,9 @@ console.log({query})
           ) : (
             "No results"
           )
-        ) : board && threads ? (
+        ) : thread ? ([thread.op, ...thread.replies].map((post) => (
+          <PostComponent post={post} thread={thread} key={post.id} />
+        ))) : (board && threads) ? (
           threads.length === 0 ? (
             <div className="center grid">{`No threads.`}</div>
           ) : (

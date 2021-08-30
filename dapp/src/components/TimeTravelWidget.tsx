@@ -41,8 +41,8 @@ export default function TimeTravelWidget({
     BLOCK_BY_DATE,
     {
       variables: {
-        timestampMin: `${dateTime?.toSeconds()}`,
-        timestampMax: `${(dateTime?.toSeconds() || 0) + 1_000_000}`,
+        timestampMin: `${dateTime.toSeconds().toFixed(0)}`,
+        timestampMax: `${dateTime.toSeconds().toFixed(0) + 1_000_000}`,
       }
     }
   );
@@ -69,7 +69,7 @@ export default function TimeTravelWidget({
 
   useEffect(() => {
     if (dateTime) {
-      const block = bbdData?.blocks?.[0].number || "";
+      const block = bbdData?.blocks?.[0]?.number || "";
       !!block && onBlockChange(block);
     }
   }, [dateTime, bbdData, onBlockChange]);
