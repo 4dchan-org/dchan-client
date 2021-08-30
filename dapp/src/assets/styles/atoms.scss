@@ -72,6 +72,10 @@
     border-bottom: 1px solid var(--tertiary);
 }
 
+.border-highlight {
+    border-color: var(--highlight)
+}
+
 .max-h-150px {
     max-height: 150px;
 }

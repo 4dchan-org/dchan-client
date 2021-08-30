@@ -14,6 +14,7 @@ const THREAD_FRAGMENT = gql`
     }
     board {
       id
+      name
     }
     subject
     replyCount

@@ -10,9 +10,11 @@ const POST_FRAGMENT = gql`
     }
     thread {
       id
+      n
     }
     board {
       id
+      name
     }
     name
     comment

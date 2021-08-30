@@ -68,7 +68,7 @@ export default function CatalogPage({ location, match: { params } }: any) {
       pollInterval: 60_000
     }
   );
-console.log({query})
+
   const thread = data?.selectedThread[0];
   const postSearch = data?.postSearch;
   const board = data?.board;

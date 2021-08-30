@@ -46,8 +46,6 @@ export default function ReferencePage({
         post = postCreationEvent;
       }
 
-      console.log({board, thread, post})
-      
       if (board) {
         location = Router.board(board);
       } else if (thread) {

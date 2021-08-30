@@ -6,12 +6,12 @@ export abstract class Router {
         board,
         thread
     }: Post) {
-        return board && 
+        return board &&
             thread &&
-            board &&
-            board.name &&
-            board.id &&
-            thread.n ? `/${board.name}/${board.id}/${thread.n}/${n}` : undefined
+            !!board &&
+            !!board.name &&
+            !!board.id &&
+            !!thread.n ? `/${board.name}/${board.id}/${thread.n}/${n}` : undefined
     }
 
     public static thread({
@@ -19,16 +19,16 @@ export abstract class Router {
         board
     }: Thread) {
         return board &&
-            board.name &&
-            board.id &&
-            n ? `/${board.name}/${board.id}/${n}` : undefined
+            !!board.name &&
+            !!board.id &&
+            !!n ? `/${board.name}/${board.id}/${n}` : undefined
     }
 
     public static board({
         name,
         id
     }: Board) {
-        return name && id ? `/${name}/${id}` : undefined
+        return !!name && !!id ? `/${name}/${id}` : undefined
     }
 
     public static boards() {
