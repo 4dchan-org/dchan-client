@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import USER_GET from "dchan/graphql/queries/user/get";
 import { Admin, User } from "dchan";
@@ -12,30 +12,31 @@ interface UserVars {
   userId: string;
 }
 
-function useUser() {
+const useUser = () => {
   const { accounts } = useWeb3()
-
+  const userId = accounts.length > 0 ? accounts[0] : ""
   const query = useQuery<UserData, UserVars>(USER_GET, {
-    variables: { userId: accounts.length > 0 ? accounts[0] : "" },
+    variables: { userId },
+    skip: !userId
   })
 
   const { refetch, loading, data } = query
 
-  const isAdmin = () => {
+  const isAdmin = useCallback(() => {
     if(loading) return undefined
     
     const isAdmin = !!(data?.admin?.id)
     
     return isAdmin
-  }
+  }, [loading, data])
 
-  const isJanny = (boardId: string) => {
+  const isJanny = useCallback((boardId: string) => {
     if(loading) return undefined
     
     const isJanny = isAdmin() || !!(data?.user?.jannies?.filter(({id}) => id === boardId).length)
     
     return isJanny
-  }
+  }, [isAdmin, loading, data])
 
   useEffect(() => {
     refetch()

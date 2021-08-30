@@ -34,8 +34,6 @@ export default function TimeTravelWidget({
   baseUrl: string
 }) {
   const now = DateTime.now()
-  const dt = dateTime || now
-  
   const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
   const history = useHistory();
   const lastBlock = useLastBlock();
@@ -43,9 +41,10 @@ export default function TimeTravelWidget({
     BLOCK_BY_DATE,
     {
       variables: {
-        timestampMin: `${dt.toSeconds().toFixed(0)}`,
-        timestampMax: `${dt.toSeconds().toFixed(0) + 1_000_000}`,
-      }
+        timestampMin: `${dateTime?.toSeconds().toFixed(0)}`,
+        timestampMax: `${((dateTime?.toSeconds() || 0) + 1_000_000).toFixed(0)}`,
+      },
+      skip: !dateTime
     }
   );
 
@@ -70,11 +69,11 @@ export default function TimeTravelWidget({
   }, [history, baseUrl]);
 
   useEffect(() => {
-    if (dt) {
+    if (dateTime) {
       const block = bbdData?.blocks?.[0]?.number || "";
       !!block && onBlockChange(block);
     }
-  }, [dt, bbdData, onBlockChange]);
+  }, [dateTime, bbdData, onBlockChange]);
   
   useEffect(() => {
     if (startBlock && lastBlock) {
@@ -85,7 +84,7 @@ export default function TimeTravelWidget({
     }
   }, [startBlock, lastBlock, setTimeTravelRange]);
 
-  const isTimeTraveling = block && lastBlock && `${block}` !== lastBlock?.number
+  const isTimeTraveling = !!(block && lastBlock && `${block}` !== lastBlock?.number)
   
   return timeTravelRange ? (
     <span>
@@ -98,7 +97,7 @@ export default function TimeTravelWidget({
       ) : (
         ""
       )}
-      <details className="mx-1 sm:text-right" open={!!block}>
+      <details className="mx-1 sm:text-right" open={isTimeTraveling}>
         <summary>
           <span className="mx-1 text-xs">
             [
@@ -106,12 +105,12 @@ export default function TimeTravelWidget({
               required
               type="date"
               id="dchan-timetravel-date-input"
-              value={dt.toISODate()}
+              value={(dateTime || now).toISODate()}
               onChange={(e) => onDateChange(e.target.value)}
               min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
               max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
             ></input>
-            , {dt.toLocaleString(DateTime.TIME_SIMPLE)}]
+            , {(dateTime || now).toLocaleString(DateTime.TIME_SIMPLE)}]
           </span>
         </summary>
         <div className="text-xs">
