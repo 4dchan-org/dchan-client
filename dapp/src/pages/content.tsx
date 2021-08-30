@@ -24,6 +24,7 @@ import FilterSettings from "components/FilterSettings";
 import TimeTravelWidget from "components/TimeTravelWidget";
 import { RefreshWidget } from "components/RefreshWidget";
 import { DateTime } from "luxon";
+import { truncate } from "lodash";
 
 interface ContentData {
   board: Board;
@@ -145,7 +146,7 @@ export default function ContentPage({ location, match: { params } }: any) {
 
   const throttledRefresh = useThrottleCallback(refresh, 1, true);
 
-  useTitle(`/${board?.name}/ - ${board?.title}`);
+  useTitle(`/${board?.name}/ - ${board?.title} ${thread ? `- ${truncate([thread.subject, thread.op.comment].filter(t => !!t).join(" - "), {length: 24})}` : ""}`);
 
   return (
     <div
@@ -155,7 +156,7 @@ export default function ContentPage({ location, match: { params } }: any) {
     >
       <BoardHeader board={board}></BoardHeader>
 
-      <FormPost board={board}></FormPost>
+      <FormPost thread={thread} board={board}></FormPost>
 
       <div className="p-2">
         <hr></hr>
@@ -173,7 +174,7 @@ export default function ContentPage({ location, match: { params } }: any) {
             </HashLink>
             ]
           </span>
-          {!block ? <RefreshWidget onRefresh={throttledRefresh} /> : ""}
+          {!query.block ? <RefreshWidget onRefresh={throttledRefresh} /> : ""}
         </div>
         <div className="flex-grow"></div>
         <div className="mx-2 sm:text-center sm:text-right sm:flex sm:items-center sm:justify-end">
@@ -192,7 +193,7 @@ export default function ContentPage({ location, match: { params } }: any) {
             dateTime={dateTime}
             block={block}
             startRangeLabel={
-              "Board creation"
+              params.thread_n ? "Thread creation" : "Board creation"
             }
           />
         </div>

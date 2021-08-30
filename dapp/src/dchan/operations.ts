@@ -32,9 +32,7 @@ type PostCreateData = {
         is_nsfw: boolean;
         is_spoiler: boolean;
     };
-    from: {
-        name: string;
-    };
+    name: string;
     subject: string;
 };
 
@@ -55,9 +53,7 @@ export async function postMessage(
 
     const data: PostCreateData = {
         comment,
-        from: {
-            name,
-        },
+        name,
         subject,
     };
 

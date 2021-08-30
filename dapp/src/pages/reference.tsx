@@ -39,11 +39,11 @@ export default function ReferencePage({
       } = data;
 
       if (!board && boardCreationEvent) {
-        board = boardCreationEvent;
+        board = boardCreationEvent.board;
       } else if (!thread && threadCreationEvent) {
-        thread = threadCreationEvent;
+        thread = threadCreationEvent.thread;
       } else if (!post && postCreationEvent) {
-        post = postCreationEvent;
+        post = postCreationEvent.post;
       }
 
       if (board) {

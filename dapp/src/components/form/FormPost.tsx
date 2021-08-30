@@ -11,7 +11,6 @@ import MaxLengthWatch from "./MaxLengthWatch";
 import AddressLabel from "components/AddressLabel";
 import usePubSub from "hooks/usePubSub";
 import Wallet from "components/Wallet";
-const useFormPersist = require('react-hook-form-persist')
 
 export default function FormPost({
   thread,
@@ -37,6 +36,7 @@ export default function FormPost({
   const [subjectLength, setSubjectLength] = useState<number>(0);
   const [thumbnailB64, setThumbnailB64] = useState<string>();
   const {subscribe} = usePubSub();
+  const form = useForm()
   const {
     register,
     handleSubmit,
@@ -44,15 +44,17 @@ export default function FormPost({
     setValue,
     getValues,
     reset: resetForm,
-    watch,
-    trigger
-  } = useForm();
+    trigger,
+    setFocus,
+    // watch
+  } = form;
 
-  const formId = thread?.id || board?.id || ""
-  useFormPersist(formId, {watch, setValue}, {
-    storage: window.localStorage,
-    exclude: ['file','thread','board','nonce']
-  });
+  // Shit's bugged, leave it
+  // const formId = thread?.id || board?.id || ""
+  // useFormPersist(formId, {watch, setValue}, {
+  //   storage: window.localStorage,
+  //   exclude: ['file','thread','board','nonce']
+  // });
   useLayoutEffect(() => {
       return () => {
         trigger()
@@ -61,6 +63,7 @@ export default function FormPost({
 
   const values = getValues();
   const files: FileList = values.file;
+  const showForm = !!provider && (chainId === "0x89" || chainId === 137)
 
   const onQuote = useCallback(function (msg, data) {
     const { comment } = getValues();
@@ -71,8 +74,9 @@ export default function FormPost({
         !!comment && comment.substr(-1, 1) !== " " ? " " : ""
       }${quote} `
     );
-    formRef.current?.scrollIntoView()
-  }, [getValues, setValue, formRef]);
+    formRef?.current?.scrollIntoView()
+    showForm && setFocus('comment')
+  }, [getValues, setValue, formRef, setFocus, showForm]);
 
   useEffect(() => {
     subscribe("FORM_QUOTE", onQuote);
@@ -99,6 +103,7 @@ export default function FormPost({
         const { transactionHash, logIndex } = events.Message;
         if (board && !thread) {
           const url = `/${transactionHash}-${logIndex}`;
+          console.log({url})
           history.push(url);
         }
       }
@@ -219,7 +224,7 @@ export default function FormPost({
       <Wallet />
 
       <div>
-        {!!provider && (chainId === "0x89" || chainId === 137) ? (
+        {showForm ? (
           <div
             className="grid center w-full text-left sticky top-0 min-h-200px"
             style={{ zIndex: 10000 }}

@@ -5,6 +5,8 @@ import usePubSub from "hooks/usePubSub";
 import useSettings from "hooks/useSettings";
 import { truncate } from "lodash";
 import { ReactElement, useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { Router } from "router";
 import PostBody from "./PostBody";
 import PostHeader from "./PostHeader";
 
@@ -17,6 +19,7 @@ export default function Post({
   thread?: Thread;
   header?: ReactElement;
 }) {
+  const history = useHistory()
   const [focused, setFocused] = useState<boolean>(false);
   const [backlinks, setBacklinks] = useState<object>({});
   const postRef = useRef<HTMLInputElement>(null);
@@ -37,9 +40,11 @@ export default function Post({
       setFocused(isFocused);
       if (isFocused) {
         postRef.current?.scrollIntoView();
+        const url = Router.post(post)
+        url && history.replace(url)
       }
     });
-  }, [post, postRef, setFocused, subscribe]);
+  }, [post, postRef, setFocused, subscribe, history]);
 
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
 
@@ -48,7 +53,7 @@ export default function Post({
       "POST_BACKLINK",
       (_: any, { from, to: { n } }: { from: DchanPost; to: { n: string } }) => {
         `${n}` === `${post.n}` &&
-          setBacklinks({ ...backlinks, [from.id]: true });
+          setBacklinks({ ...backlinks, [from.id]: from });
       }
     );
   }, [backlinks, setBacklinks, post, setFocused, subscribe]);
@@ -84,7 +89,7 @@ export default function Post({
       </summary>
       <article
         id={`${n}`}
-        className="dchan-post text-left w-full"
+        className="dchan-post text-left w-full mx-2"
         dchan-post-from-address={address}
       >
         <div
