@@ -13,6 +13,10 @@ export type Settings = {
     ipfs: {
         endpoint: string
     },
+    autorefresh: {
+        enabled: boolean,
+        seconds: number
+    },
     content: {
         score_threshold: number // from 0 to 1
         show_below_threshold: boolean

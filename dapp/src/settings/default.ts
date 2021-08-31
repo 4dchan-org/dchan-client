@@ -10,7 +10,11 @@ const DefaultSettings = {
     },
     content: {
         score_threshold: 1,
-        show_below_threshold: false
+        show_below_threshold: false,
+    },
+    autorefresh: {
+        enabled: true,
+        seconds: 60
     }
 }
 

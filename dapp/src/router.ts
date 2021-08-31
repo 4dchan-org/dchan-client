@@ -7,11 +7,9 @@ export abstract class Router {
         thread
     }: Post) {
         return board &&
-            thread &&
             !!board &&
             !!board.name &&
-            !!board.id &&
-            !!thread.n ? `/${board.name}/${board.id}/${thread.n}/${n}` : undefined
+            !!board.id ? thread ? `/${board.name}/${board.id}/${thread.n}/${n}` : `/${board.name}/${board.id}/${n}` : undefined
     }
 
     public static thread({
@@ -29,6 +27,10 @@ export abstract class Router {
         id
     }: Board) {
         return !!name && !!id ? `/${name}/${id}` : undefined
+    }
+
+    public static posts() {
+        return `/_/posts`
     }
 
     public static boards() {

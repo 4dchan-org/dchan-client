@@ -12,7 +12,10 @@ import { HashLink, HashLink as Link } from "react-router-hash-link";
 import { useHistory } from "react-router-dom";
 import { useThrottleCallback } from "@react-hook/throttle";
 import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
-import { sortByCreatedAt as sortPostsByCreatedAt } from "dchan/entities/post";
+import {
+  isLowScore as isLowScorePost,
+  sortByCreatedAt as sortPostsByCreatedAt,
+} from "dchan/entities/post";
 import useSettings from "hooks/useSettings";
 import useLastBlock from "hooks/useLastBlock";
 import { parse as parseQueryString } from "query-string";
@@ -25,6 +28,7 @@ import TimeTravelWidget from "components/TimeTravelWidget";
 import { RefreshWidget } from "components/RefreshWidget";
 import { DateTime } from "luxon";
 import { truncate } from "lodash";
+import IdLabel from "components/IdLabel";
 
 interface ContentData {
   board: Board;
@@ -48,12 +52,14 @@ export default function ContentPage({ location, match: { params } }: any) {
   const query = parseQueryString(location.search);
   const history = useHistory();
   const s = query.s || query.search;
-  const [search, setSearch] = useState<string>(isString(s) ? s : "");
+  const search = isString(s) ? s : ""
 
   const lastBlock = useLastBlock();
-  const dateTime = query.date ? DateTime.fromISO(query.date as string) : undefined
+  const dateTime = query.date
+    ? DateTime.fromISO(query.date as string)
+    : undefined;
 
-  const block = parseInt(`${query.block || lastBlock?.number || ""}`)
+  const block = parseInt(`${query.block || lastBlock?.number || ""}`);
   const variables = {
     block,
     board: boardId,
@@ -66,7 +72,7 @@ export default function ContentPage({ location, match: { params } }: any) {
     CONTENT,
     {
       variables,
-      pollInterval: 60_000
+      pollInterval: 60_000,
     }
   );
 
@@ -82,8 +88,8 @@ export default function ContentPage({ location, match: { params } }: any) {
     return sortPostsByCreatedAt(
       postSearch
         ? postSearch.filter((post) => {
-          return post && post.thread && post.board;
-        })
+            return post && post.thread && post.board;
+          })
         : []
     );
   }, [postSearch]);
@@ -98,7 +104,7 @@ export default function ContentPage({ location, match: { params } }: any) {
     }
   }, [boardId, refetch]);
 
-  const [focused, setFocused] = useState<Thread | undefined>(undefined)
+  const [focused, setFocused] = useState<Thread | undefined>(undefined);
 
   const onFocus = useCallback(
     (newFocused: Thread) => {
@@ -117,8 +123,8 @@ export default function ContentPage({ location, match: { params } }: any) {
     const newBaseUrl = thread
       ? Router.thread(thread)
       : board
-        ? Router.board(board)
-        : undefined;
+      ? Router.board(board)
+      : Router.posts();
     !!newBaseUrl && baseUrl !== newBaseUrl && setBaseUrl(newBaseUrl);
   }, [thread, board, baseUrl, setBaseUrl]);
 
@@ -135,7 +141,7 @@ export default function ContentPage({ location, match: { params } }: any) {
         })
         .map((thread: Thread) => (
           <CatalogThread
-            onFocus={e => onFocus(thread)}
+            onFocus={(e) => onFocus(thread)}
             isFocused={true === (focused && focused.n === thread.n)}
             thread={thread}
             key={thread.id}
@@ -146,7 +152,16 @@ export default function ContentPage({ location, match: { params } }: any) {
 
   const throttledRefresh = useThrottleCallback(refresh, 1, true);
 
-  useTitle(`/${board?.name}/ - ${board?.title} ${thread ? `- ${truncate([thread.subject, thread.op.comment].filter(t => !!t).join(" - "), {length: 24})}` : ""}`);
+  useTitle(
+    `/${board?.name}/ - ${board?.title} ${
+      thread
+        ? `- ${truncate(
+            [thread.subject, thread.op.comment].filter((t) => !!t).join(" - "),
+            { length: 24 }
+          )}`
+        : ""
+    }`
+  );
 
   return (
     <div
@@ -160,6 +175,17 @@ export default function ContentPage({ location, match: { params } }: any) {
 
       <div className="p-2">
         <hr></hr>
+      </div>
+
+      <div className="absolute top-0 right-0">
+        {baseUrl ? (
+          <SearchWidget
+            baseUrl={Router.posts()}
+            search={search}
+          />
+        ) : (
+          ""
+        )}
       </div>
 
       <div className="text-center sm:text-left sm:flex">
@@ -178,18 +204,15 @@ export default function ContentPage({ location, match: { params } }: any) {
         </div>
         <div className="flex-grow"></div>
         <div className="mx-2 sm:text-center sm:text-right sm:flex sm:items-center sm:justify-end">
-          {baseUrl ? (
-            <SearchWidget
-              baseUrl={baseUrl}
-              search={search}
-              setSearch={setSearch}
-            />
-          ) : (
-            ""
-          )}
           <TimeTravelWidget
             baseUrl={baseUrl || ""}
-            startBlock={thread ? thread.createdAtBlock : board ? board.createdAtBlock : undefined}
+            startBlock={
+              thread
+                ? thread.createdAtBlock
+                : board
+                ? board.createdAtBlock
+                : undefined
+            }
             dateTime={dateTime}
             block={block}
             startRangeLabel={
@@ -213,9 +236,13 @@ export default function ContentPage({ location, match: { params } }: any) {
                 <FilterSettings
                   summary={
                     <span>
-                      Threads: {threads.length} (Hidden:{" "}
-                      {threads.length - filteredThreads.length}
-                      ), Posts: {board?.postCount}
+                      Found: {postSearch.length} posts (Hidden:{" "}
+                      {
+                        postSearch.filter((p) =>
+                          isLowScorePost(p, settings?.content?.score_threshold)
+                        ).length
+                      }
+                      )
                     </span>
                   }
                 />
@@ -227,15 +254,30 @@ export default function ContentPage({ location, match: { params } }: any) {
                       key={post.id}
                       post={post}
                       header={
-                        <span className="p-2">
-                          [
-                          <Link
-                            to={`/${post.id}`}
-                            className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                          >
-                            View
-                          </Link>
-                          ]
+                        <span>
+                          <span className="p-1">[
+                            <span className="p-1">
+                              <Link
+                                className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                                to={`/${post.board?.name}/${post.board?.id}`}
+                              >
+                                /{post.board?.name}/
+                                <IdLabel
+                                  id={post.board?.id || "0x000000"}
+                                ></IdLabel>
+                              </Link>
+                            </span>]
+                          </span>
+                          <span className="p-1">
+                            [
+                            <Link
+                              to={`/${post.id}`}
+                              className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                            >
+                              View
+                            </Link>
+                            ]
+                          </span>
                         </span>
                       }
                     />
@@ -246,9 +288,11 @@ export default function ContentPage({ location, match: { params } }: any) {
           ) : (
             "No results"
           )
-        ) : thread ? ([thread.op, ...thread.replies].map((post) => (
-          <PostComponent post={post} thread={thread} key={post.id} />
-        ))) : (board && threads) ? (
+        ) : thread ? (
+          [thread.op, ...thread.replies].map((post) => (
+            <PostComponent post={post} thread={thread} key={post.id} />
+          ))
+        ) : board && threads ? (
           threads.length === 0 ? (
             <div className="center grid">{`No threads.`}</div>
           ) : (

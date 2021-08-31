@@ -41,6 +41,7 @@ export default function Post({
       if (isFocused) {
         postRef.current?.scrollIntoView();
         const url = Router.post(post)
+        console.log({post, url})
         url && history.replace(url)
       }
     });

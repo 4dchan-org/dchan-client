@@ -7,7 +7,6 @@ import BOARDS_LIST from "dchan/graphql/queries/boards/list";
 import { useQuery } from "@apollo/react-hooks";
 import { Board } from "dchan";
 import BoardCreationForm from "components/BoardCreationForm";
-import { useState } from "react";
 import SearchWidget from "components/SearchWidget";
 import { parse as parseQueryString } from "query-string";
 import { isString, uniqBy } from "lodash";
@@ -25,10 +24,8 @@ interface BoardListVars {}
 
 export default function BoardListPage({ location }: any) {
   const query = parseQueryString(location.search);
-  const [search, setSearch] = useState<string>(
-    isString(query.search) ? query.search : ""
-  );
-
+  const search = isString(query.s) ? query.s : ""
+  
   const { loading, data } = useQuery<BoardListData, BoardListVars>(
     BOARDS_LIST,
     {
@@ -44,14 +41,13 @@ export default function BoardListPage({ location }: any) {
     data && (data.searchByTitle || data.searchByName)
       ? uniqBy([...data.searchByName, ...data.searchByTitle], 'id')
       : [];
-
   return (
     <div className="bg-primary min-h-100vh">
       <GenericHeader title="Boards"></GenericHeader>
       <div>
         <div>
           <div className="flex center">
-            <SearchWidget baseUrl={Router.boards()} search={search} setSearch={setSearch} />
+            <SearchWidget baseUrl={Router.boards()} search={search} />
           </div>
           {loading ? (
             <div className="center grid">
