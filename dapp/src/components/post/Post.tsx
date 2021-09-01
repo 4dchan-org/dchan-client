@@ -133,7 +133,7 @@ export default function Post({
               ""
             )}
             <div className="py-1">
-              <div className="h-full max-w-max flex flex-wrap text-left sm:items-start">
+              <div className="h-full max-w-max flex flex-wrap sm:flex-nowrap text-left sm:items-start">
                 {!!image ? (
                   <div className="px-2 sm:float-left grid center flex-shrink-0 max-w-100vw sm:max-w-max">
                     <IPFSImage

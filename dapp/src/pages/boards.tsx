@@ -11,10 +11,20 @@ import SearchWidget from "components/SearchWidget";
 import { parse as parseQueryString } from "query-string";
 import { isString, uniqBy } from "lodash";
 import { Router } from "router";
+import { useEffect } from "react";
+import BOARDS_SEARCH from "dchan/graphql/queries/boards/search";
 
-interface BoardListData {
+interface BoardSearchData {
   searchByName: Board[];
   searchByTitle: Board[];
+}
+
+interface BoardSearchVars {
+  searchName: string,
+  searchTitle: string
+}
+
+interface BoardListData {
   mostPopular: Board[];
   lastBumped: Board[];
   lastCreated: Board[];
@@ -26,8 +36,8 @@ export default function BoardListPage({ location }: any) {
   const query = parseQueryString(location.search);
   const search = isString(query.s) ? query.s : ""
   
-  const { loading, data } = useQuery<BoardListData, BoardListVars>(
-    BOARDS_LIST,
+  const searchQuery = useQuery<BoardSearchData, BoardSearchVars>(
+    BOARDS_SEARCH,
     {
       pollInterval: 30_000,
       variables: {
@@ -36,10 +46,21 @@ export default function BoardListPage({ location }: any) {
       },
     }
   );
+  
+  const boardsQuery = useQuery<BoardListData, BoardListVars>(
+    BOARDS_LIST,
+    {
+      pollInterval: 30_000
+    }
+  );
+
+  useEffect(() => {
+    searchQuery.refetch()
+  }, [search, searchQuery])
 
   const searchResults =
-    data && (data.searchByTitle || data.searchByName)
-      ? uniqBy([...data.searchByName, ...data.searchByTitle], 'id')
+    searchQuery?.data && (searchQuery.data.searchByTitle || searchQuery.data.searchByName)
+      ? uniqBy([...searchQuery.data.searchByName, ...searchQuery.data.searchByTitle], 'id')
       : [];
   return (
     <div className="bg-primary min-h-100vh">
@@ -49,7 +70,7 @@ export default function BoardListPage({ location }: any) {
           <div className="flex center">
             <SearchWidget baseUrl={Router.boards()} search={search} />
           </div>
-          {loading ? (
+          {searchQuery?.loading || boardsQuery?.loading ? (
             <div className="center grid">
               <Loading></Loading>
             </div>
@@ -66,13 +87,13 @@ export default function BoardListPage({ location }: any) {
                 )}
               </div>
             </div>
-          ) : (
+          ) : boardsQuery?.data ? (
             <div>
               <div className="center flex">
                 <div>
                   <Card
                     title={<span>Most popular</span>}
-                    body={<BoardList boards={data?.mostPopular} />}
+                    body={<BoardList boards={boardsQuery.data.mostPopular} />}
                   />
                 </div>
               </div>
@@ -80,13 +101,13 @@ export default function BoardListPage({ location }: any) {
                 <span className="px-2">
                   <Card
                     title={<span>Last created</span>}
-                    body={<BoardList boards={data?.lastCreated} />}
+                    body={<BoardList boards={boardsQuery.data.lastCreated} />}
                   />
                 </span>
                 <span className="px-2">
                   <Card
                     title={<span>Last bumped</span>}
-                    body={<BoardList boards={data?.lastBumped} />}
+                    body={<BoardList boards={boardsQuery.data.lastBumped} />}
                   />
                 </span>
               </div>
@@ -96,7 +117,7 @@ export default function BoardListPage({ location }: any) {
                 </div>
               </div>
             </div>
-          )}
+          ) : ""}
         </div>
 
         <Footer></Footer>

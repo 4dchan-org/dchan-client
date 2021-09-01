@@ -1,22 +1,10 @@
 import { gql } from "apollo-boost";
+import BOARD_FRAGMENT from "dchan/graphql/fragments/board";
 
 const BOARDS_LIST = gql`
-  fragment Board on Board {
-    id
-    title
-    postCount
-    name
-    isLocked
-    isNsfw
-  }
-
-  query Boards($searchName: String, $searchTitle: String) {
-    searchByTitle: boardSearch(text: $searchTitle) {
-      ...Board
-    }
-    searchByName: boards(where: {name: $searchName}) {
-      ...Board
-    }
+  ${BOARD_FRAGMENT}
+  
+  query Boards {
     mostPopular: boards(orderBy: postCount, orderDirection: desc, where: {score_gt: "900000000"}) {
       ...Board
     }

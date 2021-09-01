@@ -16,7 +16,7 @@ export default function Status({
           <div className="text-red-600">
             <details>
               <summary>Error</summary>
-              <pre>
+              <pre className="whitespace-pre-wrap">
                 {status.error.message
                   ? status.error.message
                   : JSON.stringify(status.error, null, 2)}

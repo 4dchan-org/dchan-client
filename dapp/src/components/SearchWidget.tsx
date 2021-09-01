@@ -11,7 +11,6 @@ export default function SearchWidget({
   const history = useHistory();
   const [open, setOpen] = useState<boolean>(!!search)
   const setSearch = useCallback((search: string) => {
-    console.log({search})
     history.push(`${baseUrl}${search ? `?s=${search}` : ``}`);
   }, [history, baseUrl]);
   const onClick = useCallback(() => setOpen(true), [setOpen])

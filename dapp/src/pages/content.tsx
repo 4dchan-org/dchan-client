@@ -1,34 +1,27 @@
 import BoardHeader from "components/board/header";
 import FormPost from "components/form/FormPost";
 import Footer from "components/Footer";
-import PostComponent from "components/post/Post";
-import CatalogThread from "components/catalog/CatalogThread";
 import { useQuery } from "@apollo/react-hooks";
 import CONTENT from "dchan/graphql/queries/content";
 import { Board, Post, Thread } from "dchan";
 import Loading from "components/Loading";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { HashLink, HashLink as Link } from "react-router-hash-link";
-import { useHistory } from "react-router-dom";
+import { HashLink } from "react-router-hash-link";
 import { useThrottleCallback } from "@react-hook/throttle";
-import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
-import {
-  isLowScore as isLowScorePost,
-  sortByCreatedAt as sortPostsByCreatedAt,
-} from "dchan/entities/post";
-import useSettings from "hooks/useSettings";
+import { sortByCreatedAt as sortPostsByCreatedAt } from "dchan/entities/post";
 import useLastBlock from "hooks/useLastBlock";
 import { parse as parseQueryString } from "query-string";
 import { isString } from "lodash";
 import { useTitle } from "react-use";
 import SearchWidget from "components/SearchWidget";
 import { Router } from "router";
-import FilterSettings from "components/FilterSettings";
 import TimeTravelWidget from "components/TimeTravelWidget";
 import { RefreshWidget } from "components/RefreshWidget";
 import { DateTime } from "luxon";
 import { truncate } from "lodash";
-import IdLabel from "components/IdLabel";
+import ThreadContentView from "components/ThreadContentView";
+import SearchResultsView from "components/SearchResultsView";
+import BoardCatalogView from "components/BoardCatalogView";
 
 interface ContentData {
   board: Board;
@@ -50,20 +43,21 @@ export default function ContentPage({ location, match: { params } }: any) {
   boardId = `0x${boardId}`;
 
   const query = parseQueryString(location.search);
-  const history = useHistory();
   const s = query.s || query.search;
-  const search = isString(s) ? s : ""
+  const search = isString(s) ? s : "";
 
   const lastBlock = useLastBlock();
   const dateTime = query.date
     ? DateTime.fromISO(query.date as string)
     : undefined;
 
+  const threadN = params.thread_n || "0";
   const block = parseInt(`${query.block || lastBlock?.number || ""}`);
+
   const variables = {
     block,
     board: boardId,
-    thread_n: params.thread_n || "0",
+    thread_n: threadN,
     limit: 25,
     search: search.length > 1 ? `${search}:*` : "",
   };
@@ -97,26 +91,18 @@ export default function ContentPage({ location, match: { params } }: any) {
   const refresh = useCallback(async () => {
     try {
       await refetch({
+        block,
         board: boardId,
+        thread_n: threadN,
       });
     } catch (e) {
       console.error({ refreshError: e });
     }
-  }, [boardId, refetch]);
+  }, [block, threadN, boardId, refetch]);
 
-  const [focused, setFocused] = useState<Thread | undefined>(undefined);
-
-  const onFocus = useCallback(
-    (newFocused: Thread) => {
-      if (focused === newFocused && !!board) {
-        const url = Router.thread(newFocused);
-        url && history.push(url);
-      } else {
-        setFocused(newFocused);
-      }
-    },
-    [board, focused, history, setFocused]
-  );
+  useEffect(() => {
+    refresh();
+  }, [block, refresh]);
 
   const [baseUrl, setBaseUrl] = useState<string>();
   useEffect(() => {
@@ -124,31 +110,9 @@ export default function ContentPage({ location, match: { params } }: any) {
       ? Router.thread(thread)
       : board
       ? Router.board(board)
-      : Router.posts();
+      : undefined;
     !!newBaseUrl && baseUrl !== newBaseUrl && setBaseUrl(newBaseUrl);
   }, [thread, board, baseUrl, setBaseUrl]);
-
-  const [settings] = useSettings();
-
-  const filteredThreads = useMemo(
-    () =>
-      threads
-        .filter((thread: Thread) => {
-          return (
-            settings?.content?.show_below_threshold ||
-            !isLowScoreThread(thread, settings?.content?.score_threshold)
-          );
-        })
-        .map((thread: Thread) => (
-          <CatalogThread
-            onFocus={(e) => onFocus(thread)}
-            isFocused={true === (focused && focused.n === thread.n)}
-            thread={thread}
-            key={thread.id}
-          ></CatalogThread>
-        )),
-    [threads, settings, focused, onFocus]
-  );
 
   const throttledRefresh = useThrottleCallback(refresh, 1, true);
 
@@ -179,10 +143,7 @@ export default function ContentPage({ location, match: { params } }: any) {
 
       <div className="absolute top-0 right-0">
         {baseUrl ? (
-          <SearchWidget
-            baseUrl={Router.posts()}
-            search={search}
-          />
+          <SearchWidget baseUrl={Router.posts()} search={search} />
         ) : (
           ""
         )}
@@ -230,102 +191,11 @@ export default function ContentPage({ location, match: { params } }: any) {
         {loading ? (
           <Loading className="p-4"></Loading>
         ) : search ? (
-          postSearch && postSearch.length ? (
-            <div>
-              <div className="text-center">
-                <FilterSettings
-                  summary={
-                    <span>
-                      Found: {postSearch.length} posts (Hidden:{" "}
-                      {
-                        postSearch.filter((p) =>
-                          isLowScorePost(p, settings?.content?.score_threshold)
-                        ).length
-                      }
-                      )
-                    </span>
-                  }
-                />
-              </div>
-              <div>
-                {sortedPostSearch?.map((post) => (
-                  <div className="p-2 flex flex-wrap">
-                    <PostComponent
-                      key={post.id}
-                      post={post}
-                      header={
-                        <span>
-                          <span className="p-1">[
-                            <span className="p-1">
-                              <Link
-                                className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                                to={`/${post.board?.name}/${post.board?.id}`}
-                              >
-                                /{post.board?.name}/
-                                <IdLabel
-                                  id={post.board?.id || "0x000000"}
-                                ></IdLabel>
-                              </Link>
-                            </span>]
-                          </span>
-                          <span className="p-1">
-                            [
-                            <Link
-                              to={`/${post.id}`}
-                              className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                            >
-                              View
-                            </Link>
-                            ]
-                          </span>
-                        </span>
-                      }
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            "No results"
-          )
+          <SearchResultsView results={sortedPostSearch} />
         ) : thread ? (
-          [thread.op, ...thread.replies].map((post) => (
-            <PostComponent post={post} thread={thread} key={post.id} />
-          ))
-        ) : board && threads ? (
-          threads.length === 0 ? (
-            <div className="center grid">{`No threads.`}</div>
-          ) : (
-            <div>
-              <div className="text-center">
-                <FilterSettings
-                  summary={
-                    <span>
-                      Threads: {threads.length} (Hidden:{" "}
-                      {threads.length - filteredThreads.length}
-                      ), Posts: {board?.postCount}
-                    </span>
-                  }
-                />
-              </div>
-              <div className="grid grid-template-columns-ram-150px place-items-start font-size-090rem px-4 sm:px-8">
-                {filteredThreads}
-              </div>
-
-              <div className="flex center">
-                [
-                <HashLink
-                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                  to="#board-header"
-                >
-                  Top
-                </HashLink>
-                ]
-              </div>
-            </div>
-          )
+          <ThreadContentView thread={thread} />
         ) : (
-          ""
+          <BoardCatalogView board={board} threads={threads} />
         )}
       </div>
 

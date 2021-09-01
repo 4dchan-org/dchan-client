@@ -76,11 +76,11 @@ export function RefreshWidget({ onRefresh }: { onRefresh: () => void }) {
             ></input>
           </div>
           <div>
-            <label htmlFor="dchan-input-show-below-threshold">
+            <label htmlFor="dchan-input-autorefresh-interval">
               Autorefresh interval (seconds)
             </label>
             <input
-              id="dchan-input-show-below-threshold"
+              id="dchan-input-autorefresh-interval"
               className="mx-1 text-xs whitespace-nowrap"
               type="number"
               min="10"

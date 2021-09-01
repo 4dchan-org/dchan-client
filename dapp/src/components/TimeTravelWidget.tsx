@@ -130,13 +130,13 @@ export default function TimeTravelWidget({
           <div className="grid grid-cols-4 center text-center">
             <span className="mx-1">
               {fromBigInt(timeTravelRange.min.timestamp).toLocaleString(
-                DateTime.DATE_SHORT
+                DateTime.DATETIME_SHORT
               )}
             </span>
             <span className="col-span-2" />
             <span className="mx-1">
               {fromBigInt(timeTravelRange.max.timestamp).toLocaleString(
-                DateTime.DATE_SHORT
+                DateTime.DATETIME_SHORT
               )}
             </span>
           </div>

@@ -73,7 +73,7 @@ export default function ReferencePage({
           <Loading />
           <div>
             {stillStuck
-              ? "Either the content is still being created, or the IDs is invalid."
+              ? id.indexOf("-") !== -1 ? "The content is still being indexed, please wait" : "Are you sure it's a valid ID?"
               : ""}
           </div>
         </div>

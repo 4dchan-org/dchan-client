@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { Board, Thread } from "dchan";
 import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -11,6 +17,7 @@ import MaxLengthWatch from "./MaxLengthWatch";
 import AddressLabel from "components/AddressLabel";
 import usePubSub from "hooks/usePubSub";
 import Wallet from "components/Wallet";
+const useFormPersist = require("react-hook-form-persist");
 
 export default function FormPost({
   thread,
@@ -19,11 +26,7 @@ export default function FormPost({
   thread?: Thread;
   board?: Board;
 }) {
-  const {
-    provider,
-    chainId,
-    accounts
-  } = useWeb3();
+  const { provider, chainId, accounts } = useWeb3();
 
   const history = useHistory();
   const formRef = useRef<HTMLFormElement>(null);
@@ -35,86 +38,104 @@ export default function FormPost({
   const [fileSize, setFileSize] = useState<number>(0);
   const [subjectLength, setSubjectLength] = useState<number>(0);
   const [thumbnailB64, setThumbnailB64] = useState<string>();
-  const {subscribe} = usePubSub();
-  const form = useForm()
+  const { subscribe } = usePubSub();
+  const form = useForm();
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
     getValues,
-    reset: resetForm,
+    reset,
     trigger,
     setFocus,
-    // watch
+    watch,
   } = form;
 
-  // Shit's bugged, leave it
-  // const formId = thread?.id || board?.id || ""
-  // useFormPersist(formId, {watch, setValue}, {
-  //   storage: window.localStorage,
-  //   exclude: ['file','thread','board','nonce']
-  // });
+  const formId = thread?.id || board?.id || "form";
+  useFormPersist(
+    formId,
+    { watch, setValue },
+    {
+      storage: window.localStorage,
+      exclude: ["file", "thread", "board", "nonce"],
+      include: ["name"],
+    }
+  );
   useLayoutEffect(() => {
-      return () => {
-        trigger()
-      }
-  }, [trigger])
+    return () => {
+      trigger();
+    };
+  }, [trigger]);
 
   const values = getValues();
   const files: FileList = values.file;
-  const showForm = !!provider && (chainId === "0x89" || chainId === 137)
+  const showForm = !!provider && (chainId === "0x89" || chainId === 137);
 
-  const onQuote = useCallback(function (msg, data) {
-    const { comment } = getValues();
-    const quote = `>>${data}`;
-    setValue(
-      "comment",
-      `${comment}${
-        !!comment && comment.substr(-1, 1) !== " " ? " " : ""
-      }${quote} `
-    );
-    formRef?.current?.scrollIntoView()
-    showForm && setFocus('comment')
-  }, [getValues, setValue, formRef, setFocus, showForm]);
+  const [formDisabled, setFormDisabled] = useState<boolean>(false);
+
+  const onQuote = useCallback(
+    function (msg, data) {
+      const { comment } = getValues();
+      const quote = `>>${data}`;
+      setValue(
+        "comment",
+        `${comment}${
+          !!comment && comment.substr(-1, 1) !== " " ? " " : ""
+        }${quote} `
+      );
+      formRef?.current?.scrollIntoView();
+      showForm && setFocus("comment");
+    },
+    [getValues, setValue, formRef, setFocus, showForm]
+  );
 
   useEffect(() => {
     subscribe("FORM_QUOTE", onQuote);
   }, [subscribe, onQuote]);
 
+  useEffect(() => {
+    setFormDisabled(isSending);
+  }, [isSending, setFormDisabled]);
+
   const updateNonce = useCallback(() => {
     setNonce(uniqueId());
   }, [setNonce]);
 
-  const onSubmit = useCallback(async (data: any) => {
-    setIsSending(true);
-    try {
-      const result = await postMessage(data, accounts, setStatus);
+  const resetForm = useCallback(() => {
+    reset();
+    trigger();
+    updateNonce();
+  }, [reset, trigger, updateNonce]);
 
-      const events = result?.events;
-      
-      if(!!result) {
-        resetForm()
-        trigger()
-        updateNonce()
-      }
+  const onSubmit = useCallback(
+    async (data: any) => {
+      setIsSending(true);
+      try {
+        const result = await postMessage(data, accounts, setStatus);
 
-      if (events && events.Message) {
-        const { transactionHash, logIndex } = events.Message;
-        if (board && !thread) {
+        const events = result?.events;
+
+        console.log({result})
+        if (!!result) {
+          resetForm();
+        }
+
+        if (events && events.Message) {
+          const { transactionHash, logIndex } = events.Message;
           const url = `/${transactionHash}-${logIndex}`;
-          console.log({url})
           history.push(url);
         }
+      } catch (error) {
+        setStatus({ error });
+
+        console.log({ error });
       }
-    } catch (error) {
-      setStatus({ error });
 
-      console.log({ error });
-    }
-
-    setIsSending(false);
-  }, [accounts, board, history, thread, setStatus, setIsSending, resetForm, trigger, updateNonce]);
+      setIsSending(false);
+    },
+    [accounts, history, setStatus, setIsSending, resetForm]
+  );
 
   const refreshThumbnail = useCallback(async () => {
     const files: FileList = getValues().file;
@@ -166,46 +187,49 @@ export default function FormPost({
     }
   }, [getValues, setValue]);
 
-  const pasteHandler = useCallback((event) => {
-    const clipboardData =
-      event.clipboardData || event.originalEvent.clipboardData;
-    const { files, items } = clipboardData;
-    if (!!items && items.length > 0) {
-      const item = items[0];
-      if (item.kind === "file") {
-        const blob = item.getAsFile();
-        const reader = new FileReader();
-        reader.onload = async (event) => {
-          const dataUrl = event?.target?.result;
-          if (isString(dataUrl)) {
-            const mimeType = dataUrl.substring(
-              dataUrl.indexOf(":") + 1,
-              dataUrl.indexOf(";")
-            );
-
-            const file = await fetch(dataUrl)
-              .then((res) => res.arrayBuffer())
-              .then(
-                (buf) =>
-                  new File([buf], `file.${mimeType.split("/")[1]}`, {
-                    type: mimeType,
-                  })
+  const pasteHandler = useCallback(
+    (event) => {
+      const clipboardData =
+        event.clipboardData || event.originalEvent.clipboardData;
+      const { files, items } = clipboardData;
+      if (!!items && items.length > 0) {
+        const item = items[0];
+        if (item.kind === "file") {
+          const blob = item.getAsFile();
+          const reader = new FileReader();
+          reader.onload = async (event) => {
+            const dataUrl = event?.target?.result;
+            if (isString(dataUrl)) {
+              const mimeType = dataUrl.substring(
+                dataUrl.indexOf(":") + 1,
+                dataUrl.indexOf(";")
               );
 
-            const list = new DataTransfer();
-            list.items.add(file);
+              const file = await fetch(dataUrl)
+                .then((res) => res.arrayBuffer())
+                .then(
+                  (buf) =>
+                    new File([buf], `file.${mimeType.split("/")[1]}`, {
+                      type: mimeType,
+                    })
+                );
 
-            setValue("file", list.files);
-            onFileChange();
-          }
-        };
-        reader.readAsDataURL(blob);
+              const list = new DataTransfer();
+              list.items.add(file);
+
+              setValue("file", list.files);
+              onFileChange();
+            }
+          };
+          reader.readAsDataURL(blob);
+        }
+      } else if (!!files && files.length > 0) {
+        setValue("file", files);
+        onFileChange();
       }
-    } else if (!!files && files.length > 0) {
-      setValue("file", files);
-      onFileChange();
-    }
-  }, [onFileChange, setValue]);
+    },
+    [onFileChange, setValue]
+  );
 
   useEventListener("paste", pasteHandler);
 
@@ -235,13 +259,19 @@ export default function FormPost({
               className="grid center bg-primary p-2 pointer-events-auto bg-primary"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <input type="hidden" {...register("nonce")} value={nonce}></input>
+              <input
+                type="hidden"
+                {...register("nonce")}
+                disabled={formDisabled}
+                value={nonce}
+              />
               {!!board ? (
                 <input
                   type="hidden"
                   {...register("board")}
+                  disabled={formDisabled}
                   value={board.id}
-                ></input>
+                />
               ) : (
                 ""
               )}
@@ -249,8 +279,9 @@ export default function FormPost({
                 <input
                   type="hidden"
                   {...register("thread")}
+                  disabled={formDisabled}
                   value={thread.id}
-                ></input>
+                />
               ) : (
                 ""
               )}
@@ -268,11 +299,12 @@ export default function FormPost({
                             type="text"
                             placeholder="Anonymous"
                             {...register("name")}
+                            disabled={formDisabled}
                             onChange={(e) =>
                               setNameLength(e.target.value.length)
                             }
                             maxLength={70}
-                          ></input>
+                          />
                           <MaxLengthWatch maxLength={70} value={nameLength} />
                         </span>
                       </td>
@@ -292,12 +324,13 @@ export default function FormPost({
                               className="dchan-input-subject px-1 border border-solid border-gray focus:border-indigo-300"
                               type="text"
                               {...register("subject")}
+                              disabled={formDisabled}
                               onChange={(e) =>
                                 setSubjectLength(e.target.value.length)
                               }
                               maxLength={140}
                               placeholder={"..."}
-                            ></input>
+                            />
                             <MaxLengthWatch
                               maxLength={140}
                               value={subjectLength}
@@ -332,18 +365,19 @@ export default function FormPost({
                               type="text"
                               placeholder="Anonymous"
                               {...register("name")}
+                              disabled={formDisabled}
                               onChange={(e) =>
                                 setNameLength(e.target.value.length)
                               }
                               maxLength={70}
-                            ></input>
+                            />
                             <MaxLengthWatch maxLength={70} value={nameLength} />
                           </span>
 
                           <button
                             className="dchan-post-submit px-2 mx-1 bg-gray-100 border"
                             type="submit"
-                            disabled={isSending}
+                            disabled={formDisabled}
                           >
                             Post
                           </button>
@@ -366,6 +400,7 @@ export default function FormPost({
                           cols={40}
                           rows={4}
                           {...register("comment", { required: !thread })}
+                          disabled={formDisabled}
                           onChange={(e) =>
                             setCommentLength(e.target.value.length)
                           }
@@ -399,8 +434,9 @@ export default function FormPost({
                           type="file"
                           accept="image/*"
                           {...register("file", { required: false && !thread })}
+                          disabled={formDisabled}
                           onChange={onFileChange}
-                        ></input>
+                        />
                         {!!files && files.length > 0 ? (
                           <div className="flex">
                             {!!thumbnailB64 ? (
@@ -450,7 +486,8 @@ export default function FormPost({
                                   className="mx-1"
                                   type="checkbox"
                                   {...register("is_spoiler")}
-                                ></input>
+                                  disabled={formDisabled}
+                                />
                                 <label
                                   htmlFor="dchan-input-is_spoiler"
                                   className="text-black font-weight-800 font-family-tahoma"
@@ -464,7 +501,8 @@ export default function FormPost({
                                   className="mx-1"
                                   type="checkbox"
                                   {...register("is_nsfw")}
-                                ></input>
+                                  disabled={formDisabled}
+                                />
                                 <label
                                   htmlFor="dchan-input-is_nsfw"
                                   className="text-black font-weight-800 font-family-tahoma"
@@ -493,7 +531,8 @@ export default function FormPost({
                   className="mx-1"
                   type="checkbox"
                   {...register("rulesAccepted", { required: true })}
-                ></input>
+                  disabled={formDisabled}
+                />
                 <label
                   htmlFor="dchan-input-rules"
                   className="text-black font-weight-800 font-family-tahoma"
@@ -512,21 +551,21 @@ export default function FormPost({
                     </li>
                     <li>
                       I understand that{" "}
-                      <abbr title="Posts are stored on the blockchain and images are uploaded to IPFS. _This_cannot_be_undone_. Your posted content will still be obtainable even after removal.">
-                        <i>I won't be able to delete my posts</i>
+                      <abbr title="Other users will be able to view all past transactions you ever made using this address. Be mindful of the security risks this entails.">
+                        <i>my posts will be public and signed by my address</i>
+                        {accounts && accounts.length > 0 ? (
+                          <AddressLabel address={accounts[0]}></AddressLabel>
+                        ) : (
+                          ""
+                        )}{" "}
                       </abbr>
                     </li>
-                    {accounts && accounts.length > 0 ? (
-                      <li>
-                        and that my address{" "}
-                        <AddressLabel address={accounts[0]}></AddressLabel>{" "}
-                        <abbr title="Other users will be able to view all past transactions you ever made using this address. Be mindful of the security risks this entails.">
-                          will be public and tied to my posts.
-                        </abbr>
-                      </li>
-                    ) : (
-                      ""
-                    )}
+                    <li>
+                      and that{" "}
+                      <abbr title="Posts are stored on the blockchain and images are uploaded to IPFS. _This_cannot_be_undone_. Content can be removed, but will still be obtainable.">
+                        <i>I won't be able to delete the content I post.</i>
+                      </abbr>
+                    </li>
                   </ul>
                 </label>
                 {errors.rulesAccepted && (
