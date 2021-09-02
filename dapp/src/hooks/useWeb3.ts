@@ -67,7 +67,7 @@ const useWeb3 = singletonHook({
     } catch(e) {
       console.log({e})
     }
-  }, [web3Modal]);
+  }, [setProvider, setChainId, setAccounts, web3Modal]);
 
   const logoutOfWeb3Modal = useCallback(
     async function () {

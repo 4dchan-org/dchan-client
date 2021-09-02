@@ -22,6 +22,7 @@ import { truncate } from "lodash";
 import ThreadContentView from "components/ThreadContentView";
 import SearchResultsView from "components/SearchResultsView";
 import BoardCatalogView from "components/BoardCatalogView";
+import usePubSub from "hooks/usePubSub";
 
 interface ContentData {
   board: Board;
@@ -40,7 +41,7 @@ interface ContentVars {
 
 export default function ContentPage({ location, match: { params } }: any) {
   let { board: boardId } = params;
-  boardId = `0x${boardId}`;
+  boardId = boardId ? `0x${boardId}` : undefined;
 
   const query = parseQueryString(location.search);
   const s = query.s || query.search;
@@ -51,8 +52,13 @@ export default function ContentPage({ location, match: { params } }: any) {
     ? DateTime.fromISO(query.date as string)
     : undefined;
 
-  const threadN = params.thread_n || "0";
+  const threadN = params.thread_n;
+  const postN = params.post_n;
   const block = parseInt(`${query.block || lastBlock?.number || ""}`);
+  const {publish} = usePubSub()
+  useEffect(() => {
+    postN && publish("POST_FOCUS", `${postN}`)
+  }, [postN, publish]);
 
   const variables = {
     block,
@@ -106,13 +112,13 @@ export default function ContentPage({ location, match: { params } }: any) {
 
   const [baseUrl, setBaseUrl] = useState<string>();
   useEffect(() => {
-    const newBaseUrl = thread
-      ? Router.thread(thread)
-      : board
-      ? Router.board(board)
-      : undefined;
+    const newBaseUrl = params.thread_n
+      ? (thread ? Router.thread(thread) : undefined)
+      : params.board
+      ? (board ? Router.board(board) : undefined)
+      : Router.posts();
     !!newBaseUrl && baseUrl !== newBaseUrl && setBaseUrl(newBaseUrl);
-  }, [thread, board, baseUrl, setBaseUrl]);
+  }, [params, thread, board, baseUrl, setBaseUrl]);
 
   const throttledRefresh = useThrottleCallback(refresh, 1, true);
 
@@ -141,7 +147,7 @@ export default function ContentPage({ location, match: { params } }: any) {
         <hr></hr>
       </div>
 
-      <div className="absolute top-0 right-0">
+      <div className="absolute top-4 sm:top-0 right-4">
         {baseUrl ? (
           <SearchWidget baseUrl={Router.posts()} search={search} />
         ) : (

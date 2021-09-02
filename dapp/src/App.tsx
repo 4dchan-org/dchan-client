@@ -28,7 +28,7 @@ function App() {
           <Route path="/_/admin" component={AdminPage} />
           <Route path="/0x:id" component={ReferencePage} />
           <Route path="/_/posts" component={ContentPage} />
-          <Route path="/:boardName/0x:board/:thread_n/:postN" component={ContentPage} />
+          <Route path="/:boardName/0x:board/:thread_n/:post_n" component={ContentPage} />
           <Route path="/:boardName/0x:board/:thread_n" component={ContentPage} />
           <Route path="/:boardName/0x:board" component={ContentPage} />
           <Route path="/:boardName" component={BoardSearchPage} />
