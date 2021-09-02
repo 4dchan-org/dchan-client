@@ -40,14 +40,13 @@ const useWeb3 = singletonHook({
   const loadWeb3Modal = useCallback(async () => {
     try {
       const newProvider = await web3Modal.connect();
-      console.log({ newProvider })
+      
       setProvider(new Web3Provider(newProvider));
       setChainId(window.ethereum.chainId)
 
       const accounts = await window.ethereum.request({
         method: 'eth_accounts',
       })
-      console.log({ accounts })
       setAccounts(accounts)
 
       window.ethereum.on('accountsChanged', (accounts: []) => {
@@ -55,17 +54,13 @@ const useWeb3 = singletonHook({
           setProvider(undefined)
         }
 
-        console.log({ accounts })
-
         setAccounts(accounts)
       });
       window.ethereum.on('chainChanged', (chainId: string) => {
-        console.log({ chainId })
-
         setChainId(chainId)
       });
-    } catch(e) {
-      console.log({e})
+    } catch(error) {
+      console.error({error})
     }
   }, [setProvider, setChainId, setAccounts, web3Modal]);
 

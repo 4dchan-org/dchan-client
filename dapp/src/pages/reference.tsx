@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 import Error from "components/Error";
 import Loading from "components/Loading";
-import SEARCH_BY_ID from "dchan/graphql/queries/search";
+import SEARCH_BY_ID from "dchan/graphql/queries/search_by_id";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";

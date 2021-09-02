@@ -3,22 +3,27 @@ import { useHistory } from "react-router-dom";
 
 export default function SearchWidget({
   baseUrl,
-  search
+  search,
 }: {
   baseUrl: string;
-  search: string;
+  search?: string;
 }) {
   const history = useHistory();
-  const [open, setOpen] = useState<boolean>(!!search)
-  const setSearch = useCallback((search: string) => {
-    history.push(`${baseUrl}${search ? `?s=${search}` : ``}`);
-  }, [history, baseUrl]);
-  const onClick = useCallback(() => setOpen(true), [setOpen])
+  const [open, setOpen] = useState<boolean>(!!search);
+  const setSearch = useCallback(
+    (search: string) => {
+      history.push(`${baseUrl}${search ? `?s=${search}` : ``}`);
+    },
+    [history, baseUrl]
+  );
+  const onClick = useCallback(() => setOpen(true), [setOpen]);
 
   return (
     <details open={open}>
       <summary>
-        <label htmlFor="dchan-search" onClick={onClick}>🔍</label>
+        <label htmlFor="dchan-search" onClick={onClick}>
+          🔍
+        </label>
       </summary>
       <div className="mx-1 text-center bg-primary">
         <div>Search:</div>
@@ -30,6 +35,7 @@ export default function SearchWidget({
             placeholder="..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            autoFocus={true}
           ></input>
         </div>
         <div className="relative">

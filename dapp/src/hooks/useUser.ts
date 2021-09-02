@@ -30,7 +30,7 @@ const useUser = () => {
     return isAdmin
   }, [loading, data])
 
-  const isJanny = useCallback((boardId: string) => {
+  const isJannyOf = useCallback((boardId: string) => {
     if(loading) return undefined
     
     const isJanny = isAdmin() || !!(data?.user?.jannies?.filter(({id}) => id === boardId).length)
@@ -42,7 +42,7 @@ const useUser = () => {
     refetch()
   }, [refetch])
 
-  return {...query, isJanny, isAdmin }
+  return {...query, isJannyOf, isAdmin }
 }
 
 export default useUser;

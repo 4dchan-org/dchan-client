@@ -5,15 +5,18 @@ import {
 } from "react-router-dom";
 
 import 'assets/styles/index.scss';
-import HomePage from 'pages/home'
+
 import AbusePage from 'pages/abuse'
-import RulesPage from 'pages/rules'
-import ContentPage from 'pages/content'
-import BoardListPage from "pages/boards"
-import BoardSearchPage from "pages/boardSearch"
-import ReferencePage from "pages/reference";
 import AdminPage from "pages/admin";
+import BoardListPage from "pages/boards"
+import BoardPage from "pages/board"
+import BoardSearchPage from "pages/boardSearch"
+import HomePage from 'pages/home'
 import LockBanner from "components/LockBanner";
+import PostSearchPage from "pages/postSearch"
+import ReferencePage from "pages/reference";
+import RulesPage from 'pages/rules'
+import ThreadPage from "pages/thread"
 
 function App() {
   return (
@@ -26,12 +29,12 @@ function App() {
           <Route path="/_/rules" component={RulesPage} />
           <Route path="/_/abuse" component={AbusePage} />
           <Route path="/_/admin" component={AdminPage} />
+          <Route path="/_/posts" component={PostSearchPage} />
           <Route path="/0x:id" component={ReferencePage} />
-          <Route path="/_/posts" component={ContentPage} />
-          <Route path="/:boardName/0x:board/:thread_n/:post_n" component={ContentPage} />
-          <Route path="/:boardName/0x:board/:thread_n" component={ContentPage} />
-          <Route path="/:boardName/0x:board" component={ContentPage} />
-          <Route path="/:boardName" component={BoardSearchPage} />
+          <Route path="/:board_name/0x:board_id/:thread_n/:post_n" component={ThreadPage} />
+          <Route path="/:board_name/0x:board_id/:thread_n" component={ThreadPage} />
+          <Route path="/:board_name/0x:board_id" component={BoardPage} />
+          <Route exact path="/:board_name" component={BoardSearchPage} />
         </Switch>
       </div>
     </Router>

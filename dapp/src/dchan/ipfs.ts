@@ -25,7 +25,7 @@ export async function upload(
                 formData.append("file", file);
                 const ipfsResponse = await fetch(
                     Config.ipfs.endpoint,
-                    { method: "POST", body: formData }
+                    { method: "POST", body: formData, referrer: "" }
                 );
 
                 const ipfs = await ipfsResponse.json();

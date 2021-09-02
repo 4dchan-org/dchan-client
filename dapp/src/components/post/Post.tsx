@@ -78,19 +78,19 @@ export default function Post({
 
   return (
     <details
-      className="dchan-post-expand"
+      className="dchan-post-expand sm:mx-2"
       open={canShow}
       key={id}
       ref={postRef}
     >
-      <summary className="text-left pl-2 opacity-50 z-10" title="Hide/Show">
+      <summary className="text-left opacity-50 z-10" title="Hide/Show">
         <PostHeader thread={thread} post={post}>
           {header}
         </PostHeader>
       </summary>
       <article
         id={`${n}`}
-        className="dchan-post text-left w-full mx-2"
+        className="dchan-post text-left w-full"
         dchan-post-from-address={address}
       >
         <div
@@ -98,7 +98,7 @@ export default function Post({
             focused ? "bg-tertiary" : ""
           } w-full sm:w-auto pb-2 mb-2 px-4 inline-block border-bottom-invisible relative max-w-screen-xl`}
         >
-          <div className="flex flex-wrap center text-center sm:text-left sm:block pl-2">
+          <div className="flex flex-wrap center text-center sm:text-left sm:block">
             <PostHeader thread={thread} post={post} backlinks={backlinks}>
               {header}
             </PostHeader>

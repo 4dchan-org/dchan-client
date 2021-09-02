@@ -1,7 +1,19 @@
 import useWeb3 from "hooks/useWeb3";
+import { useCallback, useState } from "react";
 
 export default function WalletConnect() {
+  const [isConnecting, setIsConnecting] = useState<boolean>(false)
   const { provider, loadWeb3Modal, logoutOfWeb3Modal } = useWeb3();
+
+  const onClick = useCallback(async () => {
+    if (!provider) {
+      setIsConnecting(true)
+      await loadWeb3Modal();
+      setIsConnecting(false)
+    } else {
+      logoutOfWeb3Modal();
+    }
+  }, [provider, loadWeb3Modal, logoutOfWeb3Modal, setIsConnecting])
 
   return (
     <div>
@@ -9,15 +21,9 @@ export default function WalletConnect() {
         [
         <button
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-          onClick={async () => {
-            if (!provider) {
-              await loadWeb3Modal();
-            } else {
-              logoutOfWeb3Modal();
-            }
-          }}
+          onClick={onClick}
         >
-          {!provider ? "Connect Wallet" : "Disconnect Wallet"}
+          {isConnecting ? "Connecting wallet..." : !provider ? "Connect Wallet" : "Disconnect Wallet"}
         </button>
         ]
       </div>

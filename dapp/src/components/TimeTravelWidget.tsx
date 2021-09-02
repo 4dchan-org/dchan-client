@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { Block } from "dchan";
 import { fromBigInt } from "dchan/entities/datetime";
 import BLOCK_BY_DATE from "dchan/graphql/queries/block_by_date";
+import BLOCK_BY_NUMBER from "dchan/graphql/queries/block_by_number";
 import useLastBlock from "hooks/useLastBlock";
 import { DateTime } from "luxon";
 import { useCallback, useEffect, useState } from "react";
@@ -12,7 +13,7 @@ export interface TimeTravelRange {
   max: Block;
 }
 
-interface BlockByDateData {
+interface BlockData {
   blocks: Block[];
 }
 interface BlockByDateVars {
@@ -20,61 +21,91 @@ interface BlockByDateVars {
   timestampMax: string;
 }
 
+interface BlockByNumberVars {
+  number: string
+}
+
 export default function TimeTravelWidget({
   startBlock,
   dateTime,
   block,
   startRangeLabel,
-  baseUrl
+  baseUrl,
 }: {
-  startBlock?: Block,
-  dateTime?: DateTime,
+  startBlock?: Block;
+  dateTime?: DateTime;
   block?: number;
   startRangeLabel: string;
-  baseUrl: string
+  baseUrl: string;
 }) {
-  const now = DateTime.now()
+  const now = DateTime.now();
   const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
   const history = useHistory();
   const lastBlock = useLastBlock();
-  const { data: bbdData } = useQuery<BlockByDateData, BlockByDateVars>(
+  const [timeTraveledToDate, setTimeTraveledToDate] = useState<DateTime | undefined>()
+  const { data: bbdData } = useQuery<BlockData, BlockByDateVars>(
     BLOCK_BY_DATE,
     {
       variables: {
         timestampMin: `${dateTime?.toSeconds().toFixed(0)}`,
-        timestampMax: `${((dateTime?.toSeconds() || 0) + 1_000_000).toFixed(0)}`,
+        timestampMax: `${((dateTime?.toSeconds() || 0) + 1_000_000).toFixed(
+          0
+        )}`,
       },
-      skip: !dateTime
+      skip: !dateTime,
+    }
+  );
+  const { data: bbnData } = useQuery<BlockData, BlockByNumberVars>(
+    BLOCK_BY_NUMBER,
+    {
+      variables: {
+        number: `${block}`
+      },
+      skip: !block,
     }
   );
 
-  const onDateChange = useCallback((date: string) => {
-    const url = !!baseUrl
-      ? !!date
-        ? `${baseUrl}?date=${date}`
-        : `${baseUrl}`
-      : undefined;
+  const onDateChange = useCallback(
+    (date: string) => {
+      const url = !!baseUrl
+        ? !!date
+          ? `${baseUrl}?date=${date}`
+          : `${baseUrl}`
+        : undefined;
 
-    url && history.replace(url);
-  }, [history, baseUrl]);
+      url && history.replace(url);
+    },
+    [history, baseUrl]
+  );
 
-  const onBlockChange = useCallback((block: string) => {
-    const url = !!baseUrl
-      ? !!block
-        ? `${baseUrl}?block=${block}`
-        : `${baseUrl}`
-      : undefined;
+  const onBlockChange = useCallback(
+    (block: string) => {
+      const url = !!baseUrl
+        ? !!block
+          ? `${baseUrl}?block=${block}`
+          : `${baseUrl}`
+        : undefined;
 
-    url && history.replace(url);
-  }, [history, baseUrl]);
+      url && history.replace(url);
+    },
+    [history, baseUrl]
+  );
 
   useEffect(() => {
     if (dateTime) {
-      const block = bbdData?.blocks?.[0]?.number || "";
-      !!block && onBlockChange(block);
+      const b = bbdData?.blocks?.[0];
+      !!b && onBlockChange(b.number);
+      !!b && setTimeTraveledToDate(DateTime.fromSeconds(parseInt(b.timestamp)))
     }
-  }, [dateTime, bbdData, onBlockChange]);
-  
+  }, [dateTime, bbdData, onBlockChange, setTimeTraveledToDate]);
+
+  useEffect(() => {
+    if (block) {
+      const b = bbnData?.blocks?.[0];
+      !!b && setTimeTraveledToDate(DateTime.fromSeconds(parseInt(b.timestamp)))
+    }
+  }, [block, bbnData, setTimeTraveledToDate]);
+
   useEffect(() => {
     if (startBlock && lastBlock) {
       setTimeTravelRange({
@@ -84,7 +115,11 @@ export default function TimeTravelWidget({
     }
   }, [startBlock, lastBlock, setTimeTravelRange]);
 
-  const isTimeTraveling = !!(block && lastBlock && `${block}` !== lastBlock?.number)
+  const isTimeTraveling = !!(
+    block &&
+    lastBlock &&
+    `${block}` !== lastBlock?.number
+  );
   
   return timeTravelRange ? (
     <span>
@@ -105,12 +140,12 @@ export default function TimeTravelWidget({
               required
               type="date"
               id="dchan-timetravel-date-input"
-              value={(dateTime || now).toISODate()}
+              value={(isTimeTraveling && timeTraveledToDate ? timeTraveledToDate : now).toISODate()}
               onChange={(e) => onDateChange(e.target.value)}
               min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
               max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
             ></input>
-            , {(dateTime || now).toLocaleString(DateTime.TIME_SIMPLE)}]
+            , {(isTimeTraveling && timeTraveledToDate ? timeTraveledToDate : now).toLocaleString(DateTime.TIME_SIMPLE)}]
           </span>
         </summary>
         <div className="text-xs">
@@ -129,21 +164,27 @@ export default function TimeTravelWidget({
           </div>
           <div className="grid grid-cols-4 center text-center">
             <span className="mx-1">
-              {fromBigInt(timeTravelRange.min.timestamp).toLocaleString(
-                DateTime.DATETIME_SHORT
-              )}
+              <div>
+                {fromBigInt(timeTravelRange.min.timestamp).toLocaleString(
+                  DateTime.DATETIME_SHORT
+                )}
+              </div>
+              <div>#{timeTravelRange.min.number}</div>
             </span>
             <span className="col-span-2" />
             <span className="mx-1">
-              {fromBigInt(timeTravelRange.max.timestamp).toLocaleString(
-                DateTime.DATETIME_SHORT
-              )}
+              <div>
+                {fromBigInt(timeTravelRange.max.timestamp).toLocaleString(
+                  DateTime.DATETIME_SHORT
+                )}
+              </div>
+              <div>#{timeTravelRange.max.number}</div>
             </span>
           </div>
         </div>
       </details>
       <span className="grid center text-xs">
-        {`Block #${block}`}
+        {`Block #${block || lastBlock?.number || "?"}`}
 
         {isTimeTraveling ? (
           <div className="text-xs">

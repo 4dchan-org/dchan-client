@@ -8,31 +8,15 @@ const THREAD_GET = gql`
   ${THREAD_FRAGMENT}
   ${POST_FRAGMENT}
   
-  query Thread($boardId: String!, $threadN: String!) {
-    board(id: $boardId) {
-      ... Board
+  query Thread($board: String!, $n: String!, $block: Int!) {
+    board(id: $board) {
+      ...Board
     }
-    threads(first: 1, where: {board: $boardId, n: $threadN}) {
-      id
-      subject
-      board {
-        id
-        title
-        name
-        isLocked
-        isNsfw
-      }
-      isPinned
-      isLocked
-      op {
-        ...Post
-      }
-      subject
+    threads(first: 1, where: {board: $board, n: $n}, block: {number: $block}) {
+      ...Thread
       replies(orderBy: n) {
         ...Post
       }
-      replyCount
-      imageCount
     }
   }
 `;

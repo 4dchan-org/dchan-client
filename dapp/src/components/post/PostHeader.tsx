@@ -52,13 +52,13 @@ export default function PostHeader({
   const { provider, accounts } = useWeb3();
   const { publish } = usePubSub();
   const [settings] = useSettings()
-  const { isJanny: fIsJanny } = useUser();
+  const { isJannyOf } = useUser();
   const isOwner = accounts.length > 0 && accounts[0] === address;
   const [status, setStatus] = useState<string | object>();
 
   const createdAt = fromBigInt(createdAtUnix);
 
-  const isJanny = thread?.board?.id ? fIsJanny(thread.board.id) : false;
+  const isJanny = thread?.board?.id ? isJannyOf(thread.board.id) : false;
 
   const replyTo = useCallback(
     (n: number | string) => {

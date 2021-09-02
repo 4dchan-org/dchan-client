@@ -16,8 +16,8 @@ export default function BoardHeader({
   board: Board | undefined
 }) {
   const { accounts } = useWeb3()
-  const { isJanny } = useUser()
-  const bIsJanny = board ? isJanny(board.id) : false
+  const { isJannyOf } = useUser()
+  const isJanny = board ? isJannyOf(board.id) : false
   const [status, setStatus] = useState<string | object>();
 
   return (
@@ -45,7 +45,7 @@ export default function BoardHeader({
               <span></span>
             )}
           </span>
-          {board && bIsJanny ? (
+          {board && isJanny ? (
             <span>
               <span>
                 <Menu>

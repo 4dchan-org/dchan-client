@@ -17,6 +17,7 @@ import MaxLengthWatch from "./MaxLengthWatch";
 import AddressLabel from "components/AddressLabel";
 import usePubSub from "hooks/usePubSub";
 import Wallet from "components/Wallet";
+import useUser from "hooks/useUser";
 const useFormPersist = require("react-hook-form-persist");
 
 export default function FormPost({
@@ -111,25 +112,31 @@ export default function FormPost({
   const onSubmit = useCallback(
     async (data: any) => {
       setIsSending(true);
+
+      let result = null
       try {
-        const result = await postMessage(data, accounts, setStatus);
+        result = await postMessage(data, accounts, setStatus);
+      } catch (error) {
+        result = { error }
+        setStatus(result);
 
+        console.log(result);
+      }
+      
+      console.log({ result })
+      if(result.error) {
+        alert(`Error: ${JSON.stringify(result.error)}`)
+      }
+
+      if (!!result && !result.error) {
+        resetForm();
+      
         const events = result?.events;
-
-        console.log({result})
-        if (!!result) {
-          resetForm();
-        }
-
         if (events && events.Message) {
           const { transactionHash, logIndex } = events.Message;
           const url = `/${transactionHash}-${logIndex}`;
           history.push(url);
         }
-      } catch (error) {
-        setStatus({ error });
-
-        console.log({ error });
       }
 
       setIsSending(false);
@@ -233,12 +240,15 @@ export default function FormPost({
 
   useEventListener("paste", pasteHandler);
 
-  return thread?.isLocked ? (
+  const { isJannyOf } = useUser();
+  const isJanny = board ? isJannyOf(board.id) : false
+
+  return !isJanny && thread?.isLocked ? (
     <div className="text-contrast font-weight-800 font-family-tahoma">
       <div>Thread locked.</div>
       <div>You cannot reply.</div>
     </div>
-  ) : board?.isLocked ? (
+  ) : !isJanny && board?.isLocked ? (
     <div className="text-contrast font-weight-800 font-family-tahoma">
       <div>Board locked.</div>
       <div>You cannot post.</div>
