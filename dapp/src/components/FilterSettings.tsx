@@ -75,8 +75,7 @@ export default function FilterSettings({ summary }: { summary: ReactElement }) {
             </div>
           </div>
           <div className="text-xs text-left">
-            ℹ Content score is estimated based on quantity of user reports and
-            janitor actions.
+            ℹ Content score is based on quantity of user reports.
           </div>
         </div>
       </div>

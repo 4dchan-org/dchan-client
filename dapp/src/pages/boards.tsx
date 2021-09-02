@@ -20,8 +20,8 @@ interface BoardSearchData {
 }
 
 interface BoardSearchVars {
-  searchName: string,
-  searchTitle: string
+  searchName: string;
+  searchTitle: string;
 }
 
 interface BoardListData {
@@ -34,34 +34,37 @@ interface BoardListVars {}
 
 export default function BoardListPage({ location }: any) {
   const query = parseQueryString(location.search);
-  const search = isString(query.s) ? query.s : ""
-  
-  const searchQuery = useQuery<BoardSearchData, BoardSearchVars>(
-    BOARDS_SEARCH,
-    {
-      pollInterval: 30_000,
-      variables: {
-        searchName: search,
-        searchTitle: search.length > 1 ? `${search}:*` : "",
-      },
-    }
-  );
-  
-  const boardsQuery = useQuery<BoardListData, BoardListVars>(
-    BOARDS_LIST,
-    {
-      pollInterval: 30_000
-    }
-  );
+  const search = isString(query.s) ? query.s : "";
+
+  const {
+    refetch: searchRefetch,
+    data: searchData,
+    loading: searchLoading,
+  } = useQuery<BoardSearchData, BoardSearchVars>(BOARDS_SEARCH, {
+    pollInterval: 30_000,
+    variables: {
+      searchName: search,
+      searchTitle: search.length > 1 ? `${search}:*` : "",
+    },
+    skip: !search,
+  });
+
+  const { data: boardsData, loading: boardsLoading } = useQuery<
+    BoardListData,
+    BoardListVars
+  >(BOARDS_LIST, {
+    pollInterval: 30_000,
+  });
 
   useEffect(() => {
-    searchQuery.refetch()
-  }, [search, searchQuery])
+    searchRefetch();
+  }, [search, searchRefetch]);
 
   const searchResults =
-    searchQuery?.data && (searchQuery.data.searchByTitle || searchQuery.data.searchByName)
-      ? uniqBy([...searchQuery.data.searchByName, ...searchQuery.data.searchByTitle], 'id')
+    searchData && (searchData.searchByTitle || searchData.searchByName)
+      ? uniqBy([...searchData.searchByName, ...searchData.searchByTitle], "id")
       : [];
+
   return (
     <div className="bg-primary min-h-100vh">
       <GenericHeader title="Boards"></GenericHeader>
@@ -70,7 +73,7 @@ export default function BoardListPage({ location }: any) {
           <div className="flex center">
             <SearchWidget baseUrl={Router.boards()} search={search} />
           </div>
-          {searchQuery?.loading || boardsQuery?.loading ? (
+          {searchLoading || boardsLoading ? (
             <div className="center grid">
               <Loading></Loading>
             </div>
@@ -87,13 +90,13 @@ export default function BoardListPage({ location }: any) {
                 )}
               </div>
             </div>
-          ) : boardsQuery?.data ? (
+          ) : boardsData ? (
             <div>
               <div className="center flex">
                 <div>
                   <Card
                     title={<span>Most popular</span>}
-                    body={<BoardList boards={boardsQuery.data.mostPopular} />}
+                    body={<BoardList boards={boardsData.mostPopular} />}
                   />
                 </div>
               </div>
@@ -101,13 +104,13 @@ export default function BoardListPage({ location }: any) {
                 <span className="px-2">
                   <Card
                     title={<span>Last created</span>}
-                    body={<BoardList boards={boardsQuery.data.lastCreated} />}
+                    body={<BoardList boards={boardsData.lastCreated} />}
                   />
                 </span>
                 <span className="px-2">
                   <Card
                     title={<span>Last bumped</span>}
-                    body={<BoardList boards={boardsQuery.data.lastBumped} />}
+                    body={<BoardList boards={boardsData.lastBumped} />}
                   />
                 </span>
               </div>
@@ -117,7 +120,9 @@ export default function BoardListPage({ location }: any) {
                 </div>
               </div>
             </div>
-          ) : ""}
+          ) : (
+            ""
+          )}
         </div>
 
         <Footer></Footer>

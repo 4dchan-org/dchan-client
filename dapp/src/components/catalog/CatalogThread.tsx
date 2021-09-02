@@ -118,7 +118,7 @@ const CatalogThread = ({
               {isFocused &&
                 replies &&
                 [...replies].reverse().map((post) => (
-                  <div className="mt-1 p-1 border-0 border-t border-black border-solid text-xs text-left">
+                  <div className="mt-1 p-1 border-0 border-t border-black border-solid text-xs text-left" key={post.id}>
                     <div>{DateTime.fromSeconds(parseInt(post.createdAtBlock.timestamp)).toRelative()}</div>
                     <Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500" to={Router.post(post) || ""}><PostBody>{post.comment}</PostBody></Link>
                   </div>

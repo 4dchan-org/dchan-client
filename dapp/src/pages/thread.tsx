@@ -52,8 +52,6 @@ export default function ThreadPage({ location, match: { params } }: any) {
     refetch();
   }, [block, refetch]);
 
-  console.log({ thread, block });
-
   return (
     <div className="bg-primary min-h-100vh">
       <ContentHeader

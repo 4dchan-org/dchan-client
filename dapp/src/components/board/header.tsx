@@ -35,7 +35,7 @@ export default function BoardHeader({
         <div>
           <span className="font-semibold">
             <Link to={board ? `/${board.name}/${board.id}` : "#"}>
-              /{board?.name || "-"}/ - {board?.title || "-"}
+              /{board?.name || "?"}/ - {board?.title || "..."}
             </Link>
           </span>
           <span>
