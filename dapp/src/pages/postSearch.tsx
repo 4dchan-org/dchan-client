@@ -10,7 +10,7 @@ import { useEffect, useMemo } from "react";
 import { isLowScore, sortByCreatedAt } from "dchan/entities/post";
 import POST_SEARCH from "dchan/graphql/queries/post_search";
 import { Post } from "dchan";
-import FilterSettings from "components/FilterSettings";
+import ContentSettings from "components/ContentSettings";
 import PostComponent from "components/post/Post";
 import { Link } from "react-router-dom";
 import IdLabel from "components/IdLabel";
@@ -76,13 +76,13 @@ export default function PostSearchPage({ location, match: { params } }: any) {
         {results && results.length ? (
           <div>
             <div className="text-center">
-              <FilterSettings
+              <ContentSettings
                 summary={
                   <span>
                     Found: {results.length} posts (Hidden:{" "}
                     {
                       results.filter((p) =>
-                        isLowScore(p, settings?.content?.score_threshold)
+                        isLowScore(p, settings?.content_filter?.score_threshold)
                       ).length
                     }
                     )

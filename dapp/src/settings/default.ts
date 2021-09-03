@@ -8,7 +8,11 @@ const DefaultSettings = {
     ipfs: {
         endpoint: "https://api.thegraph.com/ipfs/api/v0/add"
     },
-    content: {
+    content_view: {
+        board_mode: "catalog",
+        board_sort_threads_by: "lastBumpedAt"
+    },
+    content_filter: {
         score_threshold: 1,
         show_below_threshold: false,
     },

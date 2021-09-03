@@ -151,7 +151,7 @@ export default function PostHeader({
         ) : (
           <span></span>
         )}
-        {isLowScore(post, settings?.content?.score_threshold) ? (
+        {isLowScore(post, settings?.content_filter?.score_threshold) ? (
           <span title="Post hidden due to reports. Click to show anyway.">⚠️</span>
         ) : (
           <span></span>

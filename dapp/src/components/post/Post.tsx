@@ -74,7 +74,7 @@ export default function Post({
       });
   }, [post, publish]);
   const [settings] = useSettings();
-  const canShow = !isLowScore(post, settings?.content?.score_threshold) || settings?.content?.show_below_threshold;
+  const canShow = !isLowScore(post, settings?.content_filter?.score_threshold) || settings?.content_filter?.show_below_threshold;
 
   return (
     <details

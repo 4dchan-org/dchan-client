@@ -17,7 +17,11 @@ export type Settings = {
         enabled: boolean,
         seconds: number
     },
-    content: {
+    content_view: {
+        board_mode: string,
+        board_sort_threads_by: string
+    },
+    content_filter: {
         score_threshold: number // from 0 to 1
         show_below_threshold: boolean
     }

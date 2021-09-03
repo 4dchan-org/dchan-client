@@ -40,7 +40,7 @@ const CatalogThread = ({
   const [settings] = useSettings();
   const isLowScore = isLowScoreThread(
     thread,
-    settings?.content?.score_threshold
+    settings?.content_filter?.score_threshold
   );
 
   return (

@@ -10,7 +10,7 @@ import { HashLink } from "react-router-hash-link";
 import { Router } from "router";
 import CatalogThread from "./catalog/CatalogThread";
 import ContentHeader from "./ContentHeader";
-import FilterSettings from "./FilterSettings";
+import ContentSettings from "./ContentSettings";
 interface BoardCatalogData {
   board: Board;
   pinned: Thread[];
@@ -33,10 +33,11 @@ export default function BoardCatalogView({
   const [settings] = useSettings();
   const [focused, setFocused] = useState<Thread | undefined>(undefined);
   const history = useHistory();
-
+  const orderBy = settings?.content_view?.board_sort_threads_by || "lastBumpedAt"
   const variables = {
     board: boardId,
     block,
+    orderBy
   }
 
   const { refetch, data } = useQuery<BoardCatalogData, BoardCatalogVars>(
@@ -67,15 +68,15 @@ export default function BoardCatalogView({
 
   useEffect(() => {
     refetch();
-  }, [block, refetch]);
+  }, [block, orderBy, refetch]);
 
   const filteredThreads = useMemo(
     () =>
       (threads || [])
         .filter((thread: Thread) => {
           return (
-            settings?.content?.show_below_threshold ||
-            !isLowScore(thread, settings?.content?.score_threshold)
+            settings?.content_filter?.show_below_threshold ||
+            !isLowScore(thread, settings?.content_filter?.score_threshold)
           );
         })
         .map((thread: Thread) => (
@@ -99,7 +100,7 @@ export default function BoardCatalogView({
         ) : (
           <div>
             <div className="text-center">
-              <FilterSettings
+              <ContentSettings
                 summary={
                   <span>
                     Threads: {threads.length} (Hidden:{" "}
