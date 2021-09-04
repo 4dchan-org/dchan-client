@@ -2,10 +2,12 @@ import { useThrottleCallback } from "@react-hook/throttle";
 import { Block, Board, Thread } from "dchan";
 import useLastBlock from "hooks/useLastBlock";
 import { DateTime } from "luxon";
+import { ReactElement } from "react";
 import { useEffect, useState } from "react";
-import { HashLink } from "react-router-hash-link";
 import { Router } from "router";
+import Anchor from "./Anchor";
 import BoardHeader from "./board/header";
+import ContentSettings from "./ContentSettings";
 import FormPost from "./form/FormPost";
 import { RefreshWidget } from "./RefreshWidget";
 import SearchWidget from "./SearchWidget";
@@ -18,12 +20,14 @@ export default function ContentHeader({
   baseUrl,
   block,
   dateTime,
+  summary,
   onRefresh = () => {},
 }: {
   board?: Board;
   thread?: Thread;
   search?: string;
   baseUrl?: string;
+  summary: ReactElement;
   block?: number;
   dateTime?: DateTime;
   onRefresh?: () => void;
@@ -53,23 +57,18 @@ export default function ContentHeader({
 
       <div className="text-center sm:text-left sm:flex">
         <div className="mx-2 flex center">
-          <span className="mx-1">
-            [
-            <HashLink
-              className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-              to="#bottom"
-            >
-              Bottom
-            </HashLink>
-            ]
-          </span>
+          <Anchor to="#bottom" label="Bottom" />
+
           {!block || (lastBlock && `${lastBlock.number}` === `${block}`) ? (
             <RefreshWidget onRefresh={throttledRefresh} />
           ) : (
             ""
           )}
         </div>
-        <div className="flex-grow"></div>
+        <div className="flex-grow center grid">
+          
+          <ContentSettings summary={summary} />
+          </div>
         <div className="mx-2 sm:text-center sm:text-right sm:flex sm:items-center sm:justify-end">
           <TimeTravelWidget
             baseUrl={baseUrl || ""}

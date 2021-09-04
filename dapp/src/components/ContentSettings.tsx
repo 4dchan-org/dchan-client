@@ -5,12 +5,12 @@ export default function ContentSettings({ summary }: { summary: ReactElement }) 
   const [settings, setSettings] = useSettings();
 
   return (
-    <details className="pb-1">
-      <summary className="text-xs text-gray-600 pb-2">{summary}</summary>
-      <div className="center grid">
+    <details className="">
+      <summary className="text-xs text-gray-600">{summary}</summary>
+      <div>
         <details>
           <summary>View settings</summary>
-          <div className="bg-secondary p-2 max-w-sm center grid">
+          <div className="bg-secondary p-2 max-w-sm">
             <div>
               <label className="px-2" htmlFor="dchan-input-view-mode">
                 Board view mode

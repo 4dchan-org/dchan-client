@@ -9,6 +9,8 @@ import { useEffect } from "react";
 import { Router } from "router";
 import PostComponent from "components/post/Post";
 import useLastBlock from "hooks/useLastBlock";
+import Loading from "components/Loading";
+import Anchor from "components/Anchor";
 
 interface ThreadContentData {
   board: Board;
@@ -37,16 +39,17 @@ export default function ThreadPage({ location, match: { params } }: any) {
     n: params.thread_n,
   };
 
-  const { refetch, data } = useQuery<ThreadContentData, ThreadContentVars>(
-    THREAD_GET,
-    {
-      variables,
-      pollInterval: 60_000,
-    }
-  );
+  const { refetch, data, loading } = useQuery<
+    ThreadContentData,
+    ThreadContentVars
+  >(THREAD_GET, {
+    variables,
+    pollInterval: 60_000,
+  });
 
   const thread = data?.threads?.[0];
   const board = data?.board;
+  const posts = thread ? [thread.op, ...thread.replies] : [];
 
   useEffect(() => {
     refetch();
@@ -60,14 +63,29 @@ export default function ThreadPage({ location, match: { params } }: any) {
         block={block}
         dateTime={dateTime}
         baseUrl={thread ? Router.thread(thread) : undefined}
+        summary={
+          loading ? <span>...</span> : <span>Posts: {posts.length}</span>
+        }
       />
 
       <div>
-        {thread
-          ? [thread.op, ...thread.replies].map((post) => (
-              <PostComponent post={post} thread={thread} key={post.id} />
-            ))
-          : ""}
+        {loading ? (
+          <div className="center grid">
+            <Loading></Loading>
+          </div>
+        ) : posts ? (
+          <div>
+            <div>
+              {posts.map((post) => (
+                <PostComponent post={post} thread={thread} key={post.id} />
+              ))}
+            </div>
+
+            <Anchor to="#board-header" label="Top" />
+          </div>
+        ) : (
+          ""
+        )}
       </div>
 
       <Footer showContentDisclaimer={true}></Footer>

@@ -14,16 +14,13 @@ interface ChanStatusVars {
 }
 
 export default function LockBanner() {
-  const [settings] = useSettings()
-  const { data } = useQuery<ChanStatusData, ChanStatusVars>(
-    CHAN_STATUS,
-    {
-      variables: {
-        id: settings?.contract?.address || "",
-      },
-      skip: !settings?.contract?.address
-    }
-  );
+  const [settings] = useSettings();
+  const { data } = useQuery<ChanStatusData, ChanStatusVars>(CHAN_STATUS, {
+    variables: {
+      id: settings?.contract?.address || "",
+    },
+    skip: !settings?.contract?.address,
+  });
 
   return data?.chanStatus?.isLocked ? (
     <div className="bg-primary relative" style={{ height: "100000vh" }}>
@@ -43,7 +40,6 @@ export default function LockBanner() {
           }
         />
       </div>
-      <div className="absolute bottom-0 w-screen text-center">Congratulations, you won the prize. Don't interact with the website, your actions will be disregarded while dchan is locked.</div>
     </div>
   ) : (
     <span></span>

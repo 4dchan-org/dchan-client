@@ -10,11 +10,11 @@ import { useEffect, useMemo } from "react";
 import { isLowScore, sortByCreatedAt } from "dchan/entities/post";
 import POST_SEARCH from "dchan/graphql/queries/post_search";
 import { Post } from "dchan";
-import ContentSettings from "components/ContentSettings";
 import PostComponent from "components/post/Post";
 import { Link } from "react-router-dom";
 import IdLabel from "components/IdLabel";
 import { Router } from "router";
+import Loading from "components/Loading";
 
 interface SearchData {
   postSearch: Post[];
@@ -42,10 +42,13 @@ export default function PostSearchPage({ location, match: { params } }: any) {
     search: search.length > 1 ? `${search}:*` : "",
   };
 
-  const { refetch, data } = useQuery<SearchData, SearchVars>(POST_SEARCH, {
-    variables,
-    pollInterval: 60_000,
-  });
+  const { refetch, data, loading } = useQuery<SearchData, SearchVars>(
+    POST_SEARCH,
+    {
+      variables,
+      pollInterval: 60_000,
+    }
+  );
 
   const postSearch = data?.postSearch;
 
@@ -70,26 +73,30 @@ export default function PostSearchPage({ location, match: { params } }: any) {
         block={block}
         search={search}
         baseUrl={Router.posts()}
+        summary={
+          results ? (
+            <span>
+              Found: {results.length} posts (Hidden:{" "}
+              {
+                results.filter((p) =>
+                  isLowScore(p, settings?.content_filter?.score_threshold)
+                ).length
+              }
+              )
+            </span>
+          ) : (
+            <span>...</span>
+          )
+        }
       />
 
       <div>
-        {results && results.length ? (
+        {loading ? (
+          <div className="center grid">
+            <Loading />
+          </div>
+        ) : results && results.length ? (
           <div>
-            <div className="text-center">
-              <ContentSettings
-                summary={
-                  <span>
-                    Found: {results.length} posts (Hidden:{" "}
-                    {
-                      results.filter((p) =>
-                        isLowScore(p, settings?.content_filter?.score_threshold)
-                      ).length
-                    }
-                    )
-                  </span>
-                }
-              />
-            </div>
             <div>
               {results?.map((post) => (
                 <div className="p-2 flex flex-wrap">
