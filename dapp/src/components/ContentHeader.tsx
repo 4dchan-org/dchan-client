@@ -33,7 +33,7 @@ export default function ContentHeader({
   dateTime?: DateTime;
   onRefresh: () => void;
 }) {
-  const lastBlock = useLastBlock();
+  const { lastBlock } = useLastBlock();
   const throttledRefresh = useThrottleCallback(onRefresh, 1, true);
   const [startBlock, setStartBlock] = useState<Block | undefined>();
   useEffect(() => {

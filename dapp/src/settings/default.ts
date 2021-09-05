@@ -10,7 +10,7 @@ const DefaultSettings = {
     },
     content_view: {
         board_page_size: 100,
-        board_mode: "catalog",
+        board_view_mode: "catalog",
         board_sort_threads_by: "lastBumpedAt"
     },
     content_filter: {

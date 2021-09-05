@@ -29,7 +29,7 @@ export default function PostSearchPage({ location, match: { params } }: any) {
   const s = query.s || query.search;
   const search = isString(s) ? s : "";
 
-  const lastBlock = useLastBlock();
+  const { lastBlock } = useLastBlock();
 
   const dateTime = query.date
     ? DateTime.fromISO(query.date as string)

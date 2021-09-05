@@ -28,7 +28,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
   board_id = board_id ? `0x${board_id}` : undefined;
 
   const {publish} = usePubSub()
-  const lastBlock = useLastBlock();
+  const { lastBlock } = useLastBlock();
   const query = parseQueryString(location.search);
   const block = parseInt(`${query.block || lastBlock?.number || "0"}`);
   const dateTime = query.date

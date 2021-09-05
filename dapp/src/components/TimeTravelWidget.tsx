@@ -41,7 +41,7 @@ export default function TimeTravelWidget({
   const now = DateTime.now();
   const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
   const history = useHistory();
-  const lastBlock = useLastBlock();
+  const { lastBlock } = useLastBlock();
   const [timeTraveledToDate, setTimeTraveledToDate] = useState<DateTime | undefined>()
   const { data: bbdData } = useQuery<BlockData, BlockByDateVars>(
     BLOCK_BY_DATE,

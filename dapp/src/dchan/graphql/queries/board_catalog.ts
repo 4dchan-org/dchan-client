@@ -14,6 +14,9 @@ const BOARD_CATALOG = gql`
     }
     pinned: threads(where: {board: $board, isPinned: true}, orderBy: lastBumpedAt, orderDirection: desc, block: {number: $block}) {
       ...Thread
+      replies(first: 3, orderBy: n, orderDirection: desc) {
+        ...Post
+      }
     }
     threads(where: {board: $board, isPinned: false}, orderBy: $orderBy, orderDirection: desc, first: 100, block: {number: $block}) {
       ...Thread

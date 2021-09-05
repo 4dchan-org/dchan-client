@@ -60,11 +60,11 @@ export default function ReferencePage({
       }
 
       if (board) {
-        location = `${Router.board(board)}?block=${board.createdAtBlock.number}`;
+        location = `${Router.board(board)}`;
       } else if (thread) {
-        location = `${Router.thread(thread)}?block=${thread.createdAtBlock.number}`;
+        location = `${Router.thread(thread)}`;
       } else if (post) {
-        location = `${Router.post(post)}?block=${post.createdAtBlock.number}`;
+        location = `${Router.post(post)}`;
       }
 
       if ((board || thread || post) && !location) {

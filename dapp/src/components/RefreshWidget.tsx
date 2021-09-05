@@ -42,7 +42,9 @@ export function RefreshWidget({ onRefresh }: { onRefresh: () => void }) {
   }, 1_000);
 
   return (
-    <span className="mx-1 flex items-start">
+    <span className="mx-1 flex items-start relative">
+      <div className="text-xs text-gray-400 hover:text-gray-600 absolute left-4 right-0" style={{top: "-1rem"}}>Last refreshed</div>
+      <div>
       <details>
         <summary>
           [
@@ -50,7 +52,7 @@ export function RefreshWidget({ onRefresh }: { onRefresh: () => void }) {
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
             onClick={refresh}
           >
-            {lastRefreshedRelative}
+            {lastRefreshedRelative || "Refreshing..."}
           </button>
           ]
         </summary>
@@ -97,7 +99,7 @@ export function RefreshWidget({ onRefresh }: { onRefresh: () => void }) {
             ></input>
           </div>
         </div>
-      </details>
+      </details></div>
     </span>
   );
 }

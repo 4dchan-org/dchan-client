@@ -22,6 +22,7 @@ export default function BoardViewSettings() {
                 },
               });
             }}
+            value={settings?.content_view?.board_view_mode}
           >
             <option value={"catalog"}>{"Catalog"}</option>
             <option value={"threads"}>{"Threads"}</option> 
