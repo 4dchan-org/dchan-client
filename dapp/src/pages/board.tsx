@@ -14,6 +14,7 @@ import Loading from "components/Loading";
 import Anchor from "components/Anchor";
 import BoardCatalogView from "components/BoardCatalogView";
 import Post from "components/post/Post";
+import { Link } from "react-router-dom";
 interface BoardCatalogData {
   board: Board;
   pinned: Thread[];
@@ -112,10 +113,37 @@ export default function BoardPage({ location, match: { params } }: any) {
                     <div>
                       {threads.map((thread) => {
                         return (
-                          <div className="border-solid border-bottom border-bottom-secondary py-2 border-top-1">
-                            {[thread.op, ...thread.replies].map((post) => (
-                              <Post post={post} thread={thread} key={post.id} />
-                            ))}
+                          <div className="border-solid border-black py-2 border-t border-secondary">
+                            {
+                              // @HACK
+                              [...thread.replies, thread.op]
+                                .reverse()
+                                .map((post) => (
+                                  <Post
+                                    post={post}
+                                    thread={thread}
+                                    key={post.id}
+                                    header={
+                                      post.id === thread.id ? (
+                                        <span>
+                                          <span className="p-1">
+                                            [
+                                            <Link
+                                              to={`/${post.id}`}
+                                              className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                                            >
+                                              Reply
+                                            </Link>
+                                            ]
+                                          </span>
+                                        </span>
+                                      ) : (
+                                        <span />
+                                      )
+                                    }
+                                  />
+                                ))
+                            }
                           </div>
                         );
                       })}

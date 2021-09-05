@@ -1,7 +1,6 @@
 import { Thread } from "dchan";
 import IPFSImage from "components/IPFSImage";
 import PostBody from "components/post/PostBody";
-import LowScoreDisclaimer from "components/LowScoreDisclaimer";
 import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
 import useSettings from "hooks/useSettings";
 import { Link } from "react-router-dom";
@@ -55,13 +54,20 @@ const CatalogThread = ({
               zIndex: 900,
               marginLeft: "-2rem",
               marginRight: "-2rem",
-              width: "14rem"
+              width: "14rem",
             }
           : {}
       }
     >
       {isLowScore && !isFocused ? (
-        <LowScoreDisclaimer onClick={() => onFocus(n)}></LowScoreDisclaimer>
+        <button
+          onClick={() => onFocus(n)}
+          className="absolute text-2xl text-gray-800 top-0 left-0 right-0 bottom-0"
+        >
+          <div>⚠️</div>
+          <div>Post hidden due to reports.</div>
+          <div className="text-sm text-gray-600">Click to show anyway.</div>
+        </button>
       ) : (
         ""
       )}
@@ -118,9 +124,21 @@ const CatalogThread = ({
               {isFocused &&
                 replies &&
                 [...replies].reverse().map((post) => (
-                  <div className="mt-1 p-1 border-0 border-t border-black border-solid text-xs text-left" key={post.id}>
-                    <div>{DateTime.fromSeconds(parseInt(post.createdAtBlock.timestamp)).toRelative()}</div>
-                    <Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500" to={Router.post(post) || ""}><PostBody>{post.comment}</PostBody></Link>
+                  <div
+                    className="mt-1 p-1 border-0 border-t border-black border-solid text-xs text-left"
+                    key={post.id}
+                  >
+                    <div>
+                      {DateTime.fromSeconds(
+                        parseInt(post.createdAtBlock.timestamp)
+                      ).toRelative()}
+                    </div>
+                    <Link
+                      className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                      to={Router.post(post) || ""}
+                    >
+                      <PostBody>{post.comment}</PostBody>
+                    </Link>
                   </div>
                 ))}
             </div>

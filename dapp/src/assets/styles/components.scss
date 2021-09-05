@@ -57,10 +57,8 @@
         opacity: 1;
         z-index: 9001;
         position: relative;
-    }
-
-    &:not(:hover)::before {
-        opacity: 0.1;
+        padding: 0.2rem;
+        font-size: 0.75rem;
     }
 }
 

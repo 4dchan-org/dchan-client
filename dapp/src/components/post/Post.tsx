@@ -4,6 +4,7 @@ import { isLowScore } from "dchan/entities/post";
 import usePubSub from "hooks/usePubSub";
 import useSettings from "hooks/useSettings";
 import { truncate } from "lodash";
+import { useCallback } from "react";
 import { ReactElement, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
@@ -19,8 +20,9 @@ export default function Post({
   thread?: Thread;
   header?: ReactElement;
 }) {
-  const history = useHistory()
-  const [focused, setFocused] = useState<boolean>(false);
+  const history = useHistory();
+  const [showAnyway, setShowAnyway] = useState<boolean>(false);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
   const [backlinks, setBacklinks] = useState<object>({});
   const postRef = useRef<HTMLInputElement>(null);
   const { publish, subscribe } = usePubSub();
@@ -31,21 +33,25 @@ export default function Post({
     n,
     image,
     bans,
-    comment
+    comment,
   } = post;
+
+  const onFocus = useCallback(() => {
+    setIsFocused(true);
+    postRef.current?.scrollIntoView();
+    const url = Router.post(post);
+    url && history.replace(url);
+  }, [post, postRef, history, setIsFocused]);
 
   useEffect(() => {
     subscribe("POST_FOCUS", (_: any, n: string) => {
-      const isFocused = `${n}` === `${post.n}`;
-      setFocused(isFocused);
-      if (isFocused) {
-        postRef.current?.scrollIntoView();
-        const url = Router.post(post)
-        console.log({post, url})
-        url && history.replace(url)
+      const newIsFocused = `${n}` === `${post.n}`;
+      setIsFocused(newIsFocused);
+      if (newIsFocused) {
+        onFocus();
       }
     });
-  }, [post, postRef, setFocused, subscribe, history]);
+  }, [post, setIsFocused, subscribe, onFocus]);
 
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
 
@@ -57,7 +63,7 @@ export default function Post({
           setBacklinks({ ...backlinks, [from.id]: from });
       }
     );
-  }, [backlinks, setBacklinks, post, setFocused, subscribe]);
+  }, [backlinks, setBacklinks, post, setIsFocused, subscribe]);
   const isOp = id === thread?.id;
 
   useEffect(() => {
@@ -74,11 +80,18 @@ export default function Post({
       });
   }, [post, publish]);
   const [settings] = useSettings();
-  const canShow = !isLowScore(post, settings?.content_filter?.score_threshold) || settings?.content_filter?.show_below_threshold;
-
+  const bIsLowScore = isLowScore(
+    post,
+    settings?.content_filter?.score_threshold
+  );
+  const canShow =
+    !bIsLowScore ||
+    settings?.content_filter?.show_below_threshold ||
+    showAnyway;
+  console.log({ bIsLowScore });
   return (
     <details
-      className="dchan-post-expand sm:mx-2"
+      className="dchan-post-expand sm:mx-2 text-left"
       open={canShow}
       key={id}
       ref={postRef}
@@ -95,7 +108,7 @@ export default function Post({
       >
         <div
           className={`${!isOp ? "bg-secondary" : ""} ${
-            focused ? "bg-tertiary" : ""
+            isFocused ? "bg-tertiary" : ""
           } w-full sm:w-auto pb-2 mb-2 px-4 inline-block border-bottom-invisible relative max-w-screen-xl`}
         >
           <div className="flex flex-wrap center text-center sm:text-left sm:block">
@@ -103,74 +116,86 @@ export default function Post({
               {header}
             </PostHeader>
           </div>
-          <div>
-            {!!image ? (
-              <div className="text-center sm:text-left">
-                <span>
-                  File:{" "}
-                  <span className="text-xs">
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-blue-600 max-w-64"
-                      href={ipfsUrl}
-                      title={image.name}
-                    >
-                      {truncate(image.name, {
-                        length: 32,
-                        omission: "...",
-                      })}
-                    </a>
-                    {/* <a className="text-blue-600" href={ipfsUrl} download={`ipfs_${image.id}.${image.name}`}>📥</a> */}
-                    <span>
-                      , {Math.trunc(parseInt(image.byteSize) * 0.001)}kb
+
+          {!canShow ? (
+            <button
+              onClick={() => setShowAnyway(true)}
+              className="text-2xl text-gray-800"
+            >
+              <div>⚠️</div>
+              <div>Post hidden due to reports.</div>
+              <div className="text-sm text-gray-600">Click to show anyway.</div>
+            </button>
+          ) : (
+            <div>
+              {!!image ? (
+                <div className="text-center sm:text-left">
+                  <span>
+                    File:{" "}
+                    <span className="text-xs">
+                      <a
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 max-w-64"
+                        href={ipfsUrl}
+                        title={image.name}
+                      >
+                        {truncate(image.name, {
+                          length: 32,
+                          omission: "...",
+                        })}
+                      </a>
+                      {/* <a className="text-blue-600" href={ipfsUrl} download={`ipfs_${image.id}.${image.name}`}>📥</a> */}
+                      <span>
+                        , {Math.trunc(parseInt(image.byteSize) * 0.001)}kb
+                      </span>
+                      {/* <span>{image.resolution.height}x{image.resolution.width}</span> */}
                     </span>
-                    {/* <span>{image.resolution.height}x{image.resolution.width}</span> */}
                   </span>
-                </span>
-              </div>
-            ) : (
-              ""
-            )}
-            <div className="py-1">
-              <div className="h-full max-w-max flex flex-wrap sm:flex-nowrap text-left sm:items-start">
-                {!!image ? (
-                  <div className="px-2 sm:float-left grid center flex-shrink-0 max-w-100vw sm:max-w-max">
-                    <IPFSImage
-                      hash={image.ipfsHash}
-                      isSpoiler={image.isSpoiler}
-                      isNsfw={image.isNsfw}
-                      thumbnail={true}
-                      expandable={true}
-                    ></IPFSImage>
-                  </div>
-                ) : (
-                  ""
-                )}
-
-                <span>
-                  <div>
-                    {isOp && thread ? (
-                      <span className="font-semibold">{thread.subject}</span>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div>
-                    <PostBody>{comment}</PostBody>
-                  </div>
-
-                  {bans.length > 0 ? (
-                    <div className="text-xl font-bold text-contrast whitespace-nowrap">
-                      ( USER WAS BANNED FOR THIS POST )
+                </div>
+              ) : (
+                ""
+              )}
+              <div className="py-1">
+                <div className="h-full max-w-max flex flex-wrap sm:flex-nowrap text-left sm:items-start">
+                  {!!image ? (
+                    <div className="px-2 sm:float-left grid center flex-shrink-0 max-w-100vw sm:max-w-max">
+                      <IPFSImage
+                        hash={image.ipfsHash}
+                        isSpoiler={image.isSpoiler}
+                        isNsfw={image.isNsfw}
+                        thumbnail={true}
+                        expandable={true}
+                      ></IPFSImage>
                     </div>
                   ) : (
                     ""
                   )}
-                </span>
+
+                  <span>
+                    <div>
+                      {isOp && thread ? (
+                        <span className="font-semibold">{thread.subject}</span>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                    <div>
+                      <PostBody>{comment}</PostBody>
+                    </div>
+
+                    {bans.length > 0 ? (
+                      <div className="text-xl font-bold text-contrast whitespace-nowrap">
+                        ( USER WAS BANNED FOR THIS POST )
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>{" "}
+          )}
         </div>
       </article>
     </details>
