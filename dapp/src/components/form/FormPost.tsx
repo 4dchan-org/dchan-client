@@ -85,8 +85,12 @@ export default function FormPost({
           !!comment && comment.substr(-1, 1) !== " " ? " " : ""
         }${quote} `
       );
-      formRef?.current?.scrollIntoView();
-      showForm && setFocus("comment");
+      try {
+        formRef?.current?.scrollIntoView();
+        showForm && setFocus("comment");
+      } catch(e) {
+        console.error({e})
+      }
     },
     [getValues, setValue, formRef, setFocus, showForm]
   );

@@ -67,9 +67,13 @@ export default function Post({
   const isOp = id === thread?.id;
 
   useEffect(() => {
+    console.log({comment: post.comment})
     post.comment
       .match(BACKLINK_REGEX)
-      ?.map((comment) => comment.replace(/&gt;/g, ""))
+      ?.map((comment) => {
+        console.log({comment})
+        return comment.replace(/>/g, "")
+      })
       .forEach((n) => {
         publish("POST_BACKLINK", {
           from: post,
@@ -79,6 +83,7 @@ export default function Post({
         });
       });
   }, [post, publish]);
+
   const [settings] = useSettings();
   const bIsLowScore = isLowScore(
     post,
@@ -88,7 +93,7 @@ export default function Post({
     !bIsLowScore ||
     settings?.content_filter?.show_below_threshold ||
     showAnyway;
-  console.log({ bIsLowScore });
+
   return (
     <details
       className="dchan-post-expand sm:mx-2 text-left"

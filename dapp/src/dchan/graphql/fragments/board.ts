@@ -4,6 +4,7 @@ const BOARD_FRAGMENT = gql`
   fragment Board on Board{
     id
     title
+    threadCount
     postCount
     name
     isLocked

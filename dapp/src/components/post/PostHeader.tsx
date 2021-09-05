@@ -132,14 +132,6 @@ export default function PostHeader({
           {n}
         </button>
       </span>
-      <span className="dchan-backlinks">
-        {postBacklinks?.map((post) => (
-          <button
-            className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-            onClick={() => focusPost(post.n)}
-          >{`>>${post.n}`}</button>
-        ))}
-      </span>
       <span>
         {isOp && isPinned ? (
           <span title="Thread pinned. This might be important.">📌</span>
@@ -157,9 +149,6 @@ export default function PostHeader({
           <span></span>
         )}
       </span>
-      {
-        children
-      }
       {accounts && accounts[0] ? (
         <Menu>
           {canLock ? (
@@ -231,6 +220,17 @@ export default function PostHeader({
       ) : (
         ""
       )}
+      {
+        children
+      }
+      <span className="dchan-backlinks text-sm">
+        {postBacklinks?.map((post) => (
+          <button
+            className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-1"
+            onClick={() => focusPost(post.n)}
+          >{`>>${post.n}`}</button>
+        ))}
+      </span>
       <Status status={status}></Status>
     </span>
   );

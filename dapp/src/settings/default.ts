@@ -11,7 +11,8 @@ const DefaultSettings = {
     content_view: {
         board_page_size: 100,
         board_view_mode: "catalog",
-        board_sort_threads_by: "lastBumpedAt"
+        board_sort_threads_by: "lastBumpedAt",
+        board_sort_direction: "desc"
     },
     content_filter: {
         score_threshold: 1,

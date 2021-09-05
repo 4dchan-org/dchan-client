@@ -67,7 +67,27 @@ export default function BoardViewSettings() {
             <option value={"lastBumpedAt"}>{"Last bumped at"}</option>
             <option value={"replyCount"}>{"Reply count"}</option>
             <option value={"imageCount"}>{"File count"}</option>
-            <option value={"postsPerMinute"}>{"Posts per minute"}</option>
+          </select>
+        </div>
+        <div>
+          <label className="px-2" htmlFor="dchan-input-view-mode">
+            Sort direction
+          </label>
+          <select
+            id="dchan-input-view-mode"
+            onChange={(e) => {
+              setSettings({
+                ...settings,
+                content_view: {
+                  ...settings?.content_view,
+                  board_sort_direction: e.target.value,
+                },
+              });
+            }}
+            value={settings?.content_view?.board_sort_direction}
+          >
+            <option value={"asc"}>{"Ascending"}</option>
+            <option value={"desc"}>{"Descending"}</option>
           </select>
         </div>
       </div>

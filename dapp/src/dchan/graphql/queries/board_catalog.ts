@@ -8,19 +8,19 @@ const BOARD_CATALOG = gql`
   ${THREAD_FRAGMENT}
   ${POST_FRAGMENT}
   
-  query BoardCatalog($board: String!, $block: Int!, $orderBy: String!) {
+  query BoardCatalog($board: String!, $block: Int!, $orderBy: String!, $orderDirection: String!, $limit: Int!, $skip: Int!) {
     board(id: $board, block: {number: $block}) {
       ...Board
     }
-    pinned: threads(where: {board: $board, isPinned: true}, orderBy: lastBumpedAt, orderDirection: desc, block: {number: $block}) {
+    pinned: threads(where: {board: $board, isPinned: true}, orderBy: lastBumpedAt, orderDirection: $orderDirection, block: {number: $block}) {
       ...Thread
-      replies(first: 3, orderBy: n, orderDirection: desc) {
+      replies(first: 3, orderBy: n, orderDirection: $orderDirection) {
         ...Post
       }
     }
-    threads(where: {board: $board, isPinned: false}, orderBy: $orderBy, orderDirection: desc, first: 100, block: {number: $block}) {
+    threads(where: {board: $board, isPinned: false}, orderBy: $orderBy, orderDirection: $orderDirection, first: $limit, skip: $skip, block: {number: $block}) {
       ...Thread
-      replies(first: 3, orderBy: n, orderDirection: desc) {
+      replies(first: 3, orderBy: n, orderDirection: $orderDirection) {
         ...Post
       }
     }

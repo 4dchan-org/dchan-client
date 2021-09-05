@@ -14,7 +14,7 @@ import Loading from "components/Loading";
 import Anchor from "components/Anchor";
 import BoardCatalogView from "components/BoardCatalogView";
 import Post from "components/post/Post";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 interface BoardCatalogData {
   board: Board;
   pinned: Thread[];
@@ -23,6 +23,8 @@ interface BoardCatalogData {
 interface BoardCatalogVars {
   board: string;
   block: number;
+  limit: number;
+  skip: number;
 }
 
 export default function BoardPage({ location, match: { params } }: any) {
@@ -31,18 +33,25 @@ export default function BoardPage({ location, match: { params } }: any) {
 
   const { lastBlock } = useLastBlock();
   const query = parseQueryString(location.search);
+  const page = parseInt(`${query.page || "0"}`);
   const block = parseInt(`${query.block || lastBlock?.number || "0"}`);
   const dateTime = query.date
     ? DateTime.fromISO(query.date as string)
     : undefined;
 
+  const history = useHistory()
   const [settings] = useSettings();
   const orderBy =
     settings?.content_view?.board_sort_threads_by || "lastBumpedAt";
+  const limit = parseInt(`${settings?.content_view?.board_page_size || "100"}`)
+
   const variables = {
     board: board_id,
     block,
     orderBy,
+    orderDirection: settings?.content_view?.board_sort_direction || "desc",
+    limit,
+    skip: limit * page
   };
 
   const { refetch, data, loading } = useQuery<
@@ -71,8 +80,7 @@ export default function BoardPage({ location, match: { params } }: any) {
   });
 
   const boardMode = settings?.content_view?.board_view_mode;
-
-  console.log({ boardMode });
+  const maxPage = Math.ceil(board ? parseInt(`${board.threadCount}`) / limit : 0)
 
   return (
     <div className="bg-primary min-h-100vh">
@@ -151,13 +159,31 @@ export default function BoardPage({ location, match: { params } }: any) {
                   ),
                 }[boardMode || "catalog"] ||
                   `Invalid view mode: "${boardMode}"`}
-
-                <Anchor to="#board-header" label="Top" />
               </div>
             )
           ) : (
             <div />
           )}
+
+          {board ? <div>
+            <div>
+              <span>{page > 0 ? <Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2" to={`${Router.board(board)}?page=${0}${block ? `&block=${block}` : ""}`}>&lt;&lt;</Link> : ""}</span>
+              <span>{page > 0 ? <Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2" to={`${Router.board(board)}?page=${page - 1}${block ? `&block=${block}` : ""}`}>&lt;</Link> : ""}</span>
+              <span>[<button className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2" onClick={() => {
+                const input = prompt(`Page number: (range: 0-${maxPage})`)
+                const newPage = parseInt(input || "")
+                if (isNaN(newPage) || newPage < 0 || newPage > maxPage) {
+                  alert(`Invalid page number: ${input}`)
+                } else {
+                  history.push(`${Router.board(board)}?page=${newPage}${block ? `&block=${block}` : ""}`)
+                }
+              }}>Page {page} of {maxPage}</button>]</span>
+              <span>{page < maxPage ? <Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2" to={`${Router.board(board)}?page=${page + 1}${block ? `&block=${block}` : ""}`}>&gt;</Link> : ""}</span>
+              <span>{page < maxPage ? <Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2" to={`${Router.board(board)}?page=${maxPage}${block ? `&block=${block}` : ""}`}>&gt;&gt;</Link> : ""}</span>
+            </div>
+          </div> : ""}
+
+          <Anchor to="#board-header" label="Top" />
         </div>
       </div>
 
