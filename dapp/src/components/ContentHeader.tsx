@@ -7,11 +7,12 @@ import { useEffect, useState } from "react";
 import { Router } from "router";
 import Anchor from "./Anchor";
 import BoardHeader from "./board/header";
-import ContentSettings from "./ContentSettings";
 import FormPost from "./form/FormPost";
 import { RefreshWidget } from "./RefreshWidget";
 import SearchWidget from "./SearchWidget";
 import TimeTravelWidget from "./TimeTravelWidget";
+import BoardViewSettings from "./settings/BoardViewSettings";
+import FilterSettings from "./settings/FilterSettings";
 
 export default function ContentHeader({
   board,
@@ -21,7 +22,7 @@ export default function ContentHeader({
   block,
   dateTime,
   summary,
-  onRefresh = () => {},
+  onRefresh,
 }: {
   board?: Board;
   thread?: Thread;
@@ -30,7 +31,7 @@ export default function ContentHeader({
   summary: ReactElement;
   block?: number;
   dateTime?: DateTime;
-  onRefresh?: () => void;
+  onRefresh: () => void;
 }) {
   const lastBlock = useLastBlock();
   const throttledRefresh = useThrottleCallback(onRefresh, 1, true);
@@ -66,9 +67,14 @@ export default function ContentHeader({
           )}
         </div>
         <div className="flex-grow center grid">
-          
-          <ContentSettings summary={summary} />
-          </div>
+          <details className="">
+            <summary className="text-xs text-gray-600">{summary}</summary>
+            <div>
+              {!thread ? <BoardViewSettings /> : ""}
+              <FilterSettings />
+            </div>
+          </details>
+        </div>
         <div className="mx-2 sm:text-center sm:text-right sm:flex sm:items-center sm:justify-end">
           <TimeTravelWidget
             baseUrl={baseUrl || ""}

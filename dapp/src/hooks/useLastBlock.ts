@@ -10,7 +10,7 @@ interface LastBlockVars {
 
 export default function useLastBlock() {
   const { data } = useQuery<LastBlockData, LastBlockVars>(BLOCK_LATEST, {
-    pollInterval: 60_000
+    pollInterval: 10_000
   })
 
   return data?.blocks[0]

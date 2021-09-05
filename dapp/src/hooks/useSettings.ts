@@ -18,6 +18,7 @@ export type Settings = {
         seconds: number
     },
     content_view: {
+        board_page_size: number,
         board_mode: string,
         board_sort_threads_by: string
     },

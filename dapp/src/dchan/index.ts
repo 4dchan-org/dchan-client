@@ -29,6 +29,11 @@ export type Board = {
     jannies: BoardJanny[]
 }
 
+export type BoardCreationEvent = {
+    id: string,
+    board: Board
+}
+
 export type BoardJanny = {
     id: string
     user: User
@@ -50,6 +55,11 @@ export type Thread = {
     score: string
 }
 
+export type ThreadCreationEvent = {
+    id: string,
+    thread: Thread
+}
+
 export type Post = {
     id: string,
     board: Board | null,
@@ -62,6 +72,11 @@ export type Post = {
     createdAtBlock: Block,
     bans: PostBan[],
     score: string,
+}
+
+export type PostCreationEvent = {
+    id: string,
+    post: Post
 }
 
 export type PostBan = {

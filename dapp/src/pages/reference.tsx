@@ -1,17 +1,30 @@
 import { useQuery } from "@apollo/react-hooks";
 import Error from "components/Error";
 import Loading from "components/Loading";
+import { Board, BoardCreationEvent, Post, PostCreationEvent, Thread, ThreadCreationEvent } from "dchan";
 import SEARCH_BY_ID from "dchan/graphql/queries/search_by_id";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
+
+interface SearchData {
+  boardCreationEvent: BoardCreationEvent,
+  threadCreationEvent: ThreadCreationEvent,
+  postCreationEvent: PostCreationEvent,
+  board: Board,
+  thread: Thread,
+  post: Post
+}
+interface SearchVars {
+  id: string;
+}
 
 export default function ReferencePage({
   match: {
     params: { id },
   },
 }: any) {
-  const { data } = useQuery<any, any>(SEARCH_BY_ID, {
+  const { data } = useQuery<SearchData, SearchVars>(SEARCH_BY_ID, {
     variables: { id: `0x${id}` },
     pollInterval: 5_000,
   });
@@ -35,7 +48,7 @@ export default function ReferencePage({
         postCreationEvent,
         board,
         thread,
-        post,
+        post
       } = data;
 
       if (!board && boardCreationEvent) {
@@ -47,11 +60,11 @@ export default function ReferencePage({
       }
 
       if (board) {
-        location = Router.board(board);
+        location = `${Router.board(board)}?block=${board.createdAtBlock.number}`;
       } else if (thread) {
-        location = Router.thread(thread);
+        location = `${Router.thread(thread)}?block=${thread.createdAtBlock.number}`;
       } else if (post) {
-        location = Router.post(post);
+        location = `${Router.post(post)}?block=${post.createdAtBlock.number}`;
       }
 
       if ((board || thread || post) && !location) {
@@ -59,7 +72,7 @@ export default function ReferencePage({
       }
 
       if (location) {
-        history.replace(location);
+        history.push(location);
       }
     }
   }, [history, data]);

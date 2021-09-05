@@ -11,6 +11,7 @@ import PostComponent from "components/post/Post";
 import useLastBlock from "hooks/useLastBlock";
 import Loading from "components/Loading";
 import Anchor from "components/Anchor";
+import usePubSub from "hooks/usePubSub";
 
 interface ThreadContentData {
   board: Board;
@@ -26,6 +27,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
   let { board_id } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 
+  const {publish} = usePubSub()
   const lastBlock = useLastBlock();
   const query = parseQueryString(location.search);
   const block = parseInt(`${query.block || lastBlock?.number || "0"}`);
@@ -33,10 +35,12 @@ export default function ThreadPage({ location, match: { params } }: any) {
     ? DateTime.fromISO(query.date as string)
     : undefined;
 
+  const post_n = params.post_n || ""
+
   const variables = {
     block,
     board: board_id,
-    n: params.thread_n,
+    n: params.thread_n
   };
 
   const { refetch, data, loading } = useQuery<
@@ -52,7 +56,13 @@ export default function ThreadPage({ location, match: { params } }: any) {
   const posts = thread ? [thread.op, ...thread.replies] : [];
 
   useEffect(() => {
-    refetch();
+    post_n && publish("POST_FOCUS", `${post_n}`)
+  }, [post_n, loading, publish]);
+
+  useEffect(() => {
+    refetch({
+      block
+    });
   }, [block, refetch]);
 
   return (
@@ -66,6 +76,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
         summary={
           loading ? <span>...</span> : <span>Posts: {posts.length}</span>
         }
+        onRefresh={refetch}
       />
 
       <div>

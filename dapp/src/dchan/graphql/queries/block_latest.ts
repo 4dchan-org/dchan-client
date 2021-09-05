@@ -6,7 +6,7 @@ const BLOCK_LATEST = gql`
         timestamp
         number
     }
-}
+  }
 `;
 
 export default BLOCK_LATEST

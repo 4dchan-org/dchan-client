@@ -118,28 +118,29 @@ export default function FormPost({
         result = await postMessage(data, accounts, setStatus);
       } catch (error) {
         result = { error }
+
+        // @HACK Trust wallet fix
+        if(result.error.message.match(/failed.*check.*transaction.*receipt/i)) {
+          delete result.error
+        }
+        
         setStatus(result);
 
         console.log(result);
       }
-      
-      console.log({ result })
-      if(result.error) {
-        alert(`Error: ${JSON.stringify(result.error)}`)
-      }
+
+      setIsSending(false);
 
       if (!!result && !result.error) {
         resetForm();
-      
-        const events = result?.events;
-        if (events && events.Message) {
-          const { transactionHash, logIndex } = events.Message;
-          const url = `/${transactionHash}-${logIndex}`;
-          history.push(url);
-        }
       }
-
-      setIsSending(false);
+      
+      const events = result?.events;
+      if (events && events.Message) {
+        const { transactionHash, logIndex } = events.Message;
+        const url = `/${transactionHash}-${logIndex}`;
+        history.push(url);
+      }
     },
     [accounts, history, setStatus, setIsSending, resetForm]
   );

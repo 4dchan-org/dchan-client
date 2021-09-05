@@ -1,3 +1,4 @@
+import { isString } from "lodash";
 import Spinner from "./Spinner";
 
 export type SetStatus = React.Dispatch<React.SetStateAction<any>>;
@@ -12,7 +13,7 @@ export default function Status({
   return status ? (
     <div className={className + " inline-block text-xs"}>
       <div className="bg-secondary px-1 border border-black">
-        {status.error ? (
+        {!!status.error ? (
           <div className="text-red-600">
             <details>
               <summary>Error</summary>
@@ -32,9 +33,9 @@ export default function Status({
           <div className="text-green-600">
             <span className="px-2">{status.success}</span>
           </div>
-        ) : (
+        ) : isString(status) ? (
           status
-        )}
+        ) : JSON.stringify(status) === "{}" ? "?" : JSON.stringify(status)}
       </div>
     </div>
   ) : (

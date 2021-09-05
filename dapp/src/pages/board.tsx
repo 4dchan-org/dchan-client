@@ -115,6 +115,7 @@ export default function BoardPage({ location, match: { params } }: any) {
               </span>
             )
           }
+          onRefresh={refetch}
         />
         <div>
           {loading ? (

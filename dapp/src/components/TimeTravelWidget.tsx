@@ -134,7 +134,7 @@ export default function TimeTravelWidget({
       )}
       <details className="mx-1 sm:text-right" open={isTimeTraveling}>
         <summary>
-          <span className="mx-1 text-xs">
+          <span className="mx-1 text-xs text-left">
             [
             <input
               required
@@ -145,7 +145,7 @@ export default function TimeTravelWidget({
               min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
               max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
             ></input>
-            , {(isTimeTraveling && timeTraveledToDate ? timeTraveledToDate : now).toLocaleString(DateTime.TIME_SIMPLE)}]
+            , <span className="inline-block min-w-3rem">{(isTimeTraveling && timeTraveledToDate ? timeTraveledToDate : now).toLocaleString(DateTime.TIME_SIMPLE)}</span>]
           </span>
         </summary>
         <div className="text-xs">

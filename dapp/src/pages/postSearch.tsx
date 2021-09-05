@@ -88,6 +88,7 @@ export default function PostSearchPage({ location, match: { params } }: any) {
             <span>...</span>
           )
         }
+        onRefresh={refetch}
       />
 
       <div>
