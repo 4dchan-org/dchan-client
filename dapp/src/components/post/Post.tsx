@@ -1,5 +1,6 @@
 import IPFSImage from "components/IPFSImage";
-import { BACKLINK_REGEX, Post as DchanPost, Thread } from "dchan";
+import { BACKLINK_REGEX } from "dchan/regexps";
+import { Post as DchanPost, Thread } from "dchan";
 import { isLowScore } from "dchan/entities/post";
 import usePubSub from "hooks/usePubSub";
 import useSettings from "hooks/useSettings";
@@ -15,10 +16,12 @@ export default function Post({
   post,
   thread,
   header,
+  enableBacklinks = false
 }: {
   post: DchanPost;
   thread?: Thread;
   header?: ReactElement;
+  enableBacklinks?: boolean
 }) {
   const history = useHistory();
   const [showAnyway, setShowAnyway] = useState<boolean>(false);
@@ -56,14 +59,14 @@ export default function Post({
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
 
   useEffect(() => {
-    subscribe(
+    enableBacklinks && subscribe(
       "POST_BACKLINK",
       (_: any, { from, to: { n } }: { from: DchanPost; to: { n: string } }) => {
         `${n}` === `${post.n}` &&
           setBacklinks({ ...backlinks, [from.id]: from });
       }
     );
-  }, [backlinks, setBacklinks, post, setIsFocused, subscribe]);
+  }, [enableBacklinks, backlinks, setBacklinks, post, setIsFocused, subscribe]);
   const isOp = id === thread?.id;
 
   useEffect(() => {

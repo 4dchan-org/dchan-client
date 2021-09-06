@@ -32,9 +32,9 @@ interface BoardListData {
 
 interface BoardListVars {}
 
-export default function BoardListPage({ location }: any) {
+export default function BoardListPage({ location, match: { params } }: any) {
   const query = parseQueryString(location.search);
-  const search = isString(query.s) ? query.s : "";
+  const search = `${params?.board_name || ""}` || (isString(query.s) ? query.s : "");
 
   const {
     refetch: searchRefetch,

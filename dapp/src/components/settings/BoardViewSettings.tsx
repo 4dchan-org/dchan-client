@@ -2,7 +2,7 @@ import useSettings from "hooks/useSettings";
 
 export default function BoardViewSettings() {
   const [settings, setSettings] = useSettings();
-
+console.log({settings})
   return (
     <details>
       <summary>View settings</summary>
@@ -36,13 +36,13 @@ export default function BoardViewSettings() {
             id="dchan-input-page-size"
             type="number"
             min={1}
-            value={settings?.content_view?.board_page_size}
+            value={settings?.content_view?.page_size}
             onChange={(e) => {
               setSettings({
                 ...settings,
                 content_view: {
                   ...settings?.content_view,
-                  board_page_size: e.target.value,
+                  page_size: e.target.value,
                 },
               });
             }} />

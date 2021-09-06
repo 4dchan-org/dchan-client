@@ -12,6 +12,9 @@ const THREAD_GET = gql`
     board(id: $board) {
       ...Board
     }
+    posts(first: 1, where: {board: $board, n: $n}, block: {number: $block}) {
+      ...Post
+    }
     threads(first: 1, where: {board: $board, n: $n}, block: {number: $block}) {
       ...Thread
       replies(orderBy: n) {

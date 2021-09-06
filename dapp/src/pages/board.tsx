@@ -15,6 +15,7 @@ import Anchor from "components/Anchor";
 import BoardCatalogView from "components/BoardCatalogView";
 import Post from "components/post/Post";
 import { Link, useHistory } from "react-router-dom";
+import { useTitle } from "react-use";
 interface BoardCatalogData {
   board: Board;
   pinned: Thread[];
@@ -39,11 +40,11 @@ export default function BoardPage({ location, match: { params } }: any) {
     ? DateTime.fromISO(query.date as string)
     : undefined;
 
-  const history = useHistory()
+  const history = useHistory();
   const [settings] = useSettings();
   const orderBy =
     settings?.content_view?.board_sort_threads_by || "lastBumpedAt";
-  const limit = parseInt(`${settings?.content_view?.board_page_size || "100"}`)
+  const limit = parseInt(`${settings?.content_view?.page_size || "100"}`);
 
   const variables = {
     board: board_id,
@@ -51,7 +52,7 @@ export default function BoardPage({ location, match: { params } }: any) {
     orderBy,
     orderDirection: settings?.content_view?.board_sort_direction || "desc",
     limit,
-    skip: limit * page
+    skip: limit * page,
   };
 
   const { refetch, data, loading } = useQuery<
@@ -80,7 +81,16 @@ export default function BoardPage({ location, match: { params } }: any) {
   });
 
   const boardMode = settings?.content_view?.board_view_mode;
-  const maxPage = Math.ceil(board ? parseInt(`${board.threadCount}`) / limit : 0)
+  const maxPage = Math.max(
+    Math.ceil(board ? parseInt(`${board.threadCount}`) / limit : 0) - 1,
+    0
+  );
+
+  useTitle(
+    board
+      ? `/${board.name}/ - dchan.network - [${board.id}]`
+      : `/${board_id}/ - Loading... - dchan.network`
+  );
 
   return (
     <div className="bg-primary min-h-100vh">
@@ -105,7 +115,7 @@ export default function BoardPage({ location, match: { params } }: any) {
         />
         <div>
           {loading ? (
-            <div className="center grid">
+            <div className="center grid min-h-50vh">
               <Loading />
             </div>
           ) : board && threads ? (
@@ -122,36 +132,41 @@ export default function BoardPage({ location, match: { params } }: any) {
                       {threads.map((thread) => {
                         return (
                           <div className="border-solid border-black py-2 border-t border-secondary">
-                            {
-                              // @HACK
-                              [...thread.replies, thread.op]
-                                .reverse()
-                                .map((post) => (
-                                  <Post
-                                    post={post}
-                                    thread={thread}
-                                    key={post.id}
-                                    header={
-                                      post.id === thread.id ? (
-                                        <span>
-                                          <span className="p-1">
-                                            [
-                                            <Link
-                                              to={`/${post.id}`}
-                                              className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                                            >
-                                              Reply
-                                            </Link>
-                                            ]
-                                          </span>
-                                        </span>
-                                      ) : (
-                                        <span />
-                                      )
-                                    }
-                                  />
-                                ))
-                            }
+                            <Post
+                              post={thread.op}
+                              thread={thread}
+                              key={thread.op.id}
+                              header={
+                                <span>
+                                  <span className="p-1">
+                                    [
+                                    <Link
+                                      to={`/${thread.id}`}
+                                      className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                                    >
+                                      Reply
+                                    </Link>
+                                    ]
+                                  </span>
+                                </span>
+                              }
+                            />
+                            <div className="text-left px-2">
+                              {parseInt(thread.replyCount) >
+                              1 + thread.replies.length ? (
+                                <Link
+                                  to={`/${thread.id}`}
+                                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                                >
+                                  + {parseInt(thread.replyCount) - thread.replies.length} replies omitted
+                                </Link>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                            {[...thread.replies].reverse().map((post) => (
+                              <Post post={post} thread={thread} key={post.id} />
+                            ))}
                           </div>
                         );
                       })}
@@ -159,31 +174,102 @@ export default function BoardPage({ location, match: { params } }: any) {
                   ),
                 }[boardMode || "catalog"] ||
                   `Invalid view mode: "${boardMode}"`}
+
+                <Anchor to="#board-header" label="Top" />
               </div>
             )
           ) : (
             <div />
           )}
 
-          {board ? <div>
+          {board ? (
             <div>
-              <span>{page > 0 ? <Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2" to={`${Router.board(board)}?page=${0}${block ? `&block=${block}` : ""}`}>&lt;&lt;</Link> : ""}</span>
-              <span>{page > 0 ? <Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2" to={`${Router.board(board)}?page=${page - 1}${block ? `&block=${block}` : ""}`}>&lt;</Link> : ""}</span>
-              <span>[<button className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2" onClick={() => {
-                const input = prompt(`Page number: (range: 0-${maxPage})`)
-                const newPage = parseInt(input || "")
-                if (isNaN(newPage) || newPage < 0 || newPage > maxPage) {
-                  alert(`Invalid page number: ${input}`)
-                } else {
-                  history.push(`${Router.board(board)}?page=${newPage}${block ? `&block=${block}` : ""}`)
-                }
-              }}>Page {page} of {maxPage}</button>]</span>
-              <span>{page < maxPage ? <Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2" to={`${Router.board(board)}?page=${page + 1}${block ? `&block=${block}` : ""}`}>&gt;</Link> : ""}</span>
-              <span>{page < maxPage ? <Link className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2" to={`${Router.board(board)}?page=${maxPage}${block ? `&block=${block}` : ""}`}>&gt;&gt;</Link> : ""}</span>
+              <div>
+                <span>
+                  {page > 0 ? (
+                    <Link
+                      className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
+                      to={`${Router.board(board)}?page=${0}${
+                        block ? `&block=${block}` : ""
+                      }`}
+                    >
+                      &lt;&lt;
+                    </Link>
+                  ) : (
+                    ""
+                  )}
+                </span>
+                <span>
+                  {page > 0 ? (
+                    <Link
+                      className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
+                      to={`${Router.board(board)}?page=${page - 1}${
+                        block ? `&block=${block}` : ""
+                      }`}
+                    >
+                      &lt;
+                    </Link>
+                  ) : (
+                    ""
+                  )}
+                </span>
+                <span>
+                  [
+                  <button
+                    className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
+                    onClick={() => {
+                      const input = prompt(
+                        `Page number: (range: 0-${maxPage})`
+                      );
+                      const newPage = parseInt(input || "");
+                      if (isNaN(newPage) || newPage < 0 || newPage > maxPage) {
+                        alert(`Invalid page number: ${input}`);
+                      } else {
+                        history.push(
+                          `${Router.board(board)}?page=${newPage}${
+                            block ? `&block=${block}` : ""
+                          }`
+                        );
+                      }
+                    }}
+                  >
+                    Page {page} of {maxPage}
+                  </button>
+                  ]
+                </span>
+                <span>
+                  {page < maxPage ? (
+                    <Link
+                      className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
+                      to={`${Router.board(board)}?page=${page + 1}${
+                        block ? `&block=${block}` : ""
+                      }`}
+                    >
+                      &gt;
+                    </Link>
+                  ) : (
+                    ""
+                  )}
+                </span>
+                <span>
+                  {page < maxPage ? (
+                    <Link
+                      className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
+                      to={`${Router.board(board)}?page=${maxPage}${
+                        block ? `&block=${block}` : ""
+                      }`}
+                    >
+                      &gt;&gt;
+                    </Link>
+                  ) : (
+                    ""
+                  )}
+                </span>
+              </div>
             </div>
-          </div> : ""}
-
-          <Anchor to="#board-header" label="Top" />
+          ) : (
+            ""
+          )}
         </div>
       </div>
 

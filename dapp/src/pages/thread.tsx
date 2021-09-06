@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 import ContentHeader from "components/ContentHeader";
 import Footer from "components/Footer";
-import { Board, Thread } from "dchan";
+import { Board, Post, Thread } from "dchan";
 import THREAD_GET from "dchan/graphql/queries/thread_get";
 import { DateTime } from "luxon";
 import { parse as parseQueryString } from "query-string";
@@ -12,10 +12,13 @@ import useLastBlock from "hooks/useLastBlock";
 import Loading from "components/Loading";
 import Anchor from "components/Anchor";
 import usePubSub from "hooks/usePubSub";
+import { useHistory } from "react-router-dom";
+import { useTitle } from "react-use";
 
 interface ThreadContentData {
   board: Board;
   threads: Thread[];
+  posts: Post[];
 }
 interface ThreadContentVars {
   board: string;
@@ -27,6 +30,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
   let { board_id } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 
+  const history = useHistory()
   const {publish} = usePubSub()
   const { lastBlock } = useLastBlock();
   const query = parseQueryString(location.search);
@@ -51,9 +55,15 @@ export default function ThreadPage({ location, match: { params } }: any) {
     pollInterval: 60_000,
   });
 
+  const post = data?.posts?.[0];
   const thread = data?.threads?.[0];
   const board = data?.board;
   const posts = thread ? [thread.op, ...thread.replies] : [];
+
+  useEffect(() => {
+    const url = post ? Router.post(post) : undefined
+    url && history.replace(url)
+  }, [history, post])
 
   useEffect(() => {
     post_n && publish("POST_FOCUS", `${post_n}`)
@@ -64,6 +74,8 @@ export default function ThreadPage({ location, match: { params } }: any) {
       block
     });
   }, [block, refetch]);
+
+  useTitle(board && thread ? `/${board.name}/ - ${thread.subject || thread.op.comment} - dchan.network - [${thread.id}]` : `/${board_id}/ - Loading... - dchan.network`)
 
   return (
     <div className="bg-primary min-h-100vh">
@@ -82,9 +94,9 @@ export default function ThreadPage({ location, match: { params } }: any) {
       <div>
         {loading ? (
           <div className="center grid">
-            <Loading></Loading>
+            <Loading />
           </div>
-        ) : posts ? (
+        ) : posts && thread ? (
           <div>
             <div>
               {posts.map((post) => (
@@ -95,11 +107,11 @@ export default function ThreadPage({ location, match: { params } }: any) {
             <Anchor to="#board-header" label="Top" />
           </div>
         ) : (
-          ""
+          "Post not found."
         )}
       </div>
 
-      <Footer showContentDisclaimer={true}></Footer>
+      <Footer showContentDisclaimer={!!posts && !!thread}></Footer>
     </div>
   );
 }

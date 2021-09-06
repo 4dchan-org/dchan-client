@@ -9,7 +9,7 @@ const DefaultSettings = {
         endpoint: "https://api.thegraph.com/ipfs/api/v0/add"
     },
     content_view: {
-        board_page_size: 100,
+        page_size: 25,
         board_view_mode: "catalog",
         board_sort_threads_by: "lastBumpedAt",
         board_sort_direction: "desc"

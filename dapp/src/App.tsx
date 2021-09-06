@@ -10,7 +10,6 @@ import AbusePage from 'pages/abuse'
 import AdminPage from "pages/admin";
 import BoardListPage from "pages/boards"
 import BoardPage from "pages/board"
-import BoardSearchPage from "pages/boardSearch"
 import HomePage from 'pages/home'
 import LockBanner from "components/LockBanner";
 import PostSearchPage from "pages/postSearch"
@@ -34,7 +33,7 @@ function App() {
           <Route path="/:board_name/0x:board_id/:thread_n/:post_n" component={ThreadPage} />
           <Route path="/:board_name/0x:board_id/:thread_n" component={ThreadPage} />
           <Route path="/:board_name/0x:board_id" component={BoardPage} />
-          <Route exact path="/:board_name" component={BoardSearchPage} />
+          <Route exact path="/:board_name" component={BoardListPage} />
         </Switch>
       </div>
     </Router>

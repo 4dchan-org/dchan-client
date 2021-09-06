@@ -72,7 +72,7 @@ export default function ReferencePage({
       }
 
       if (location) {
-        history.push(location);
+        history.replace(location);
       }
     }
   }, [history, data]);
