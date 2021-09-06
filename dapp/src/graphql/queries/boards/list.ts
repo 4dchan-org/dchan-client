@@ -1,5 +1,5 @@
 import { gql } from "apollo-boost";
-import BOARD_FRAGMENT from "dchan/graphql/fragments/board";
+import BOARD_FRAGMENT from "graphql/fragments/board";
 
 const BOARDS_LIST = gql`
   ${BOARD_FRAGMENT}

@@ -39,7 +39,7 @@ export default function FormPost({
   const [fileSize, setFileSize] = useState<number>(0);
   const [subjectLength, setSubjectLength] = useState<number>(0);
   const [thumbnailB64, setThumbnailB64] = useState<string>();
-  const { subscribe } = usePubSub();
+  const { subscribe, unsubscribe } = usePubSub();
   const form = useForm();
   const {
     register,
@@ -96,8 +96,12 @@ export default function FormPost({
   );
 
   useEffect(() => {
-    subscribe("FORM_QUOTE", onQuote);
-  }, [subscribe, onQuote]);
+    const sub = subscribe("FORM_QUOTE", onQuote);
+
+    return () => {
+      unsubscribe(sub)
+    }
+  });
 
   useEffect(() => {
     setFormDisabled(isSending);

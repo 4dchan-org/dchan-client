@@ -28,7 +28,7 @@ export default function Post({
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [backlinks, setBacklinks] = useState<object>({});
   const postRef = useRef<HTMLInputElement>(null);
-  const { publish, subscribe } = usePubSub();
+  const { publish, subscribe, unsubscribe } = usePubSub();
 
   let {
     id,
@@ -47,34 +47,37 @@ export default function Post({
   }, [post, postRef, history, setIsFocused]);
 
   useEffect(() => {
-    subscribe("POST_FOCUS", (_: any, n: string) => {
+    const sub = subscribe("POST_FOCUS", (_: any, n: string) => {
       const newIsFocused = `${n}` === `${post.n}`;
       setIsFocused(newIsFocused);
       if (newIsFocused) {
         onFocus();
       }
     });
-  }, [post, setIsFocused, subscribe, onFocus]);
 
-  const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
+    return () => {
+      unsubscribe(sub)
+    }
+  });
 
   useEffect(() => {
-    enableBacklinks && subscribe(
+    let sub = enableBacklinks ? subscribe(
       "POST_BACKLINK",
       (_: any, { from, to: { n } }: { from: DchanPost; to: { n: string } }) => {
         `${n}` === `${post.n}` &&
           setBacklinks({ ...backlinks, [from.id]: from });
       }
-    );
-  }, [enableBacklinks, backlinks, setBacklinks, post, setIsFocused, subscribe]);
-  const isOp = id === thread?.id;
+    ) : false
+
+    return () => {
+      !!sub && unsubscribe(sub)
+    }
+  });
 
   useEffect(() => {
-    console.log({comment: post.comment})
     post.comment
       .match(BACKLINK_REGEX)
       ?.map((comment) => {
-        console.log({comment})
         return comment.replace(/>/g, "")
       })
       .forEach((n) => {
@@ -87,6 +90,8 @@ export default function Post({
       });
   }, [post, publish]);
 
+  const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
+  const isOp = id === thread?.id;
   const [settings] = useSettings();
   const bIsLowScore = isLowScore(
     post,

@@ -1,8 +1,8 @@
 import { useQuery } from "@apollo/react-hooks";
 import { Block } from "dchan";
 import { fromBigInt } from "dchan/entities/datetime";
-import BLOCK_BY_DATE from "dchan/graphql/queries/block_by_date";
-import BLOCK_BY_NUMBER from "dchan/graphql/queries/block_by_number";
+import BLOCK_BY_DATE from "graphql/queries/block_by_date";
+import BLOCK_BY_NUMBER from "graphql/queries/block_by_number";
 import useLastBlock from "hooks/useLastBlock";
 import { DateTime } from "luxon";
 import { useCallback, useEffect, useState } from "react";

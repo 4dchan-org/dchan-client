@@ -7,14 +7,12 @@ export default function AbusePage() {
       <div className="grid bg-primary">
         <Card
           title={<div className="">Abuse (DMCA/CSAM)</div>}
-          body={
-            <div className="text-left p-4">
+        >
+        <div className="text-left p-4">
 This is a decentralized application: the content shown here is not hosted on this website's servers, but is instead retrieved via <a className="text-blue-600 visited:text-purple-600 hover:text-blue-500" href="https://ipfs.io/" rel="nofollow">IPFS</a>.
 <br />
 Please refer to the IPFS Gateway Service's <a className="text-blue-600 visited:text-purple-600 hover:text-blue-500" href="https://ipfs.io/legal/" rel="nofollow">legal page</a> to report any offending content.
-            </div>
-          }
-        />
+        </div></Card>
 
         <SimpleFooter />
       </div>

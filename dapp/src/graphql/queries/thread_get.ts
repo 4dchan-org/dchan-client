@@ -1,7 +1,7 @@
 import { gql } from "apollo-boost";
-import BOARD_FRAGMENT from 'dchan/graphql/fragments/board';
-import POST_FRAGMENT from "dchan/graphql/fragments/post";
-import THREAD_FRAGMENT from "dchan/graphql/fragments/thread";
+import BOARD_FRAGMENT from 'graphql/fragments/board';
+import POST_FRAGMENT from "graphql/fragments/post";
+import THREAD_FRAGMENT from "graphql/fragments/thread";
 
 const THREAD_GET = gql`
   ${BOARD_FRAGMENT}

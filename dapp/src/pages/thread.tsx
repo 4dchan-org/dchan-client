@@ -2,18 +2,18 @@ import { useQuery } from "@apollo/react-hooks";
 import ContentHeader from "components/ContentHeader";
 import Footer from "components/Footer";
 import { Board, Post, Thread } from "dchan";
-import THREAD_GET from "dchan/graphql/queries/thread_get";
+import THREAD_GET from "graphql/queries/thread_get";
 import { DateTime } from "luxon";
 import { parse as parseQueryString } from "query-string";
 import { useEffect } from "react";
 import { Router } from "router";
 import PostComponent from "components/post/Post";
-import useLastBlock from "hooks/useLastBlock";
 import Loading from "components/Loading";
 import Anchor from "components/Anchor";
 import usePubSub from "hooks/usePubSub";
 import { useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
+import THREAD_GET_LAST_BLOCK from "graphql/queries/thread_get_last_block";
 
 interface ThreadContentData {
   board: Board;
@@ -32,25 +32,25 @@ export default function ThreadPage({ location, match: { params } }: any) {
 
   const history = useHistory()
   const {publish} = usePubSub()
-  const { lastBlock } = useLastBlock();
+
   const query = parseQueryString(location.search);
-  const block = parseInt(`${query.block || lastBlock?.number || "0"}`);
+  const block = parseInt(`${query.block}`);
   const dateTime = query.date
     ? DateTime.fromISO(query.date as string)
     : undefined;
 
   const post_n = params.post_n || ""
 
-  const variables = {
-    block,
+  let variables = {
     board: board_id,
-    n: params.thread_n
+    n: params.thread_n,
+    block
   };
-
+  
   const { refetch, data, loading } = useQuery<
     ThreadContentData,
     ThreadContentVars
-  >(THREAD_GET, {
+  >(!!block ? THREAD_GET : THREAD_GET_LAST_BLOCK, {
     variables,
     pollInterval: 60_000,
   });

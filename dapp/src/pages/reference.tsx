@@ -1,19 +1,26 @@
 import { useQuery } from "@apollo/react-hooks";
 import Error from "components/Error";
 import Loading from "components/Loading";
-import { Board, BoardCreationEvent, Post, PostCreationEvent, Thread, ThreadCreationEvent } from "dchan";
-import SEARCH_BY_ID from "dchan/graphql/queries/search_by_id";
+import {
+  Board,
+  BoardCreationEvent,
+  Post,
+  PostCreationEvent,
+  Thread,
+  ThreadCreationEvent,
+} from "dchan";
+import SEARCH_BY_ID from "graphql/queries/search_by_id";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
 
 interface SearchData {
-  boardCreationEvent: BoardCreationEvent,
-  threadCreationEvent: ThreadCreationEvent,
-  postCreationEvent: PostCreationEvent,
-  board: Board,
-  thread: Thread,
-  post: Post
+  boardCreationEvent: BoardCreationEvent;
+  threadCreationEvent: ThreadCreationEvent;
+  postCreationEvent: PostCreationEvent;
+  board: Board;
+  thread: Thread;
+  post: Post;
 }
 interface SearchVars {
   id: string;
@@ -48,7 +55,7 @@ export default function ReferencePage({
         postCreationEvent,
         board,
         thread,
-        post
+        post,
       } = data;
 
       if (!board && boardCreationEvent) {
@@ -80,13 +87,18 @@ export default function ReferencePage({
   return (
     <div className="bg-primary center grid w-screen h-screen">
       {error ? (
-        <Error subject={"Not found"} body={error} />
+        <Error subject={"Not found"}>
+          <span>{error}</span>
+        </Error>
       ) : (
         <div>
           <Loading />
+          <div className="text-xs">{`0x${id}`}</div>
           <div>
             {stillStuck
-              ? id.indexOf("-") !== -1 ? "The content is still being indexed, please wait" : "Are you sure it's a valid ID?"
+              ? id.indexOf("-") !== -1
+                ? "The requested content is (probably) still being indexed, please wait..."
+                : "Are you sure it's a valid ID?"
               : ""}
           </div>
         </div>

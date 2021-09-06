@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/react-hooks";
-import CHAN_STATUS from "dchan/graphql/queries/chan_status";
+import CHAN_STATUS from "graphql/queries/chan_status";
 import poopieSrc from "assets/images/poopie.png";
 import Card from "./Card";
 import useSettings from "hooks/useSettings";
@@ -25,20 +25,17 @@ export default function LockBanner() {
   return data?.chanStatus?.isLocked ? (
     <div className="bg-primary relative" style={{ height: "100000vh" }}>
       <div className="center grid">
-        <Card
-          title={<div className="text-red-500 text-4xl">UH OH</div>}
-          body={
-            <div className="center grid">
-              <img src={poopieSrc} alt="poopie" />
-              <div className="p-4">
-                <div className="text-md">
-                  Someone made a stinky and dchan got locked.
-                </div>
-                <div className="text-sm">Hopefully it wasn't you.</div>
+        <Card title={<div className="text-red-500 text-4xl">UH OH</div>}>
+          <div className="center grid">
+            <img src={poopieSrc} alt="poopie" />
+            <div className="p-4">
+              <div className="text-md">
+                Someone made a stinky and dchan got locked.
               </div>
+              <div className="text-sm">Hopefully it wasn't you.</div>
             </div>
-          }
-        />
+          </div>
+        </Card>
       </div>
     </div>
   ) : (

@@ -3,22 +3,15 @@ import IPFSImage from "components/IPFSImage";
 import PostBody from "components/post/PostBody";
 import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
 import useSettings from "hooks/useSettings";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Router } from "router";
 import { DateTime } from "luxon";
+import { useEffect, useState } from "react";
+import usePubSub from "hooks/usePubSub";
 
-const CatalogThread = ({
-  thread,
-  isFocused,
-  onFocus,
-}: {
-  thread: Thread;
-  isFocused: boolean;
-  onFocus: (id: string) => void;
-}) => {
+const CatalogThread = ({ thread }: { thread: Thread }) => {
   const {
     id,
-    n,
     isPinned,
     isLocked,
     subject,
@@ -42,6 +35,26 @@ const CatalogThread = ({
     settings?.content_filter?.score_threshold
   );
 
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const history = useHistory();
+  const { publish, subscribe, unsubscribe } = usePubSub();
+  
+  useEffect(() => {
+    const sub = subscribe("THREAD_FOCUS", (_: any, id: string) => {
+      const previousFocused = !!isFocused
+      const newIsFocused = `${id}` === `${thread.id}`;
+      setIsFocused(newIsFocused);
+      if (previousFocused && newIsFocused) {
+        const url = Router.thread(thread);
+        url && history.push(url);
+      }
+    });
+
+    return () => {
+      unsubscribe(sub)
+    }
+  });
+
   return (
     <article
       id={id}
@@ -61,7 +74,7 @@ const CatalogThread = ({
     >
       {isLowScore && !isFocused ? (
         <button
-          onClick={() => onFocus(n)}
+          onClick={() => publish("THREAD_FOCUS", id)}
           className="absolute text-2xl text-gray-800 top-0 left-0 right-0 bottom-0"
         >
           <div>⚠️</div>
@@ -71,7 +84,7 @@ const CatalogThread = ({
       ) : (
         ""
       )}
-      <button className="h-full w-full" onClick={() => onFocus(n)}>
+      <button className="h-full w-full" onClick={() => publish("THREAD_FOCUS", id)}>
         <div
           className={[
             "relative",

@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 import { LABEL_CLASSNAME } from "components/AddressLabel";
 import { backgroundColorAddress, Board } from "dchan";
-import BOARDS_LIST_MOST_POPULAR from "dchan/graphql/queries/boards/list_most_popular";
+import BOARDS_LIST_MOST_POPULAR from "graphql/queries/boards/list_most_popular";
 import { Link } from "react-router-dom";
 
 interface BoardListData {

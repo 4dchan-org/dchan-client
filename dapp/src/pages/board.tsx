@@ -5,7 +5,7 @@ import { DateTime } from "luxon";
 import { Board, Thread } from "dchan";
 import { useEffect, useMemo } from "react";
 import { Router } from "router";
-import BOARD_CATALOG from "dchan/graphql/queries/board_catalog";
+import BOARD_CATALOG from "graphql/queries/board_catalog";
 import useSettings from "hooks/useSettings";
 import { useQuery } from "@apollo/react-hooks";
 import { isLowScore } from "dchan/entities/thread";

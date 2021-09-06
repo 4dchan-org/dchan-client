@@ -1,3 +1,4 @@
+import GasPriceWidget from "./GasPriceWidget";
 import WalletAccount from "./wallet/WalletAccount";
 import WalletConnect from "./wallet/WalletConnect";
 import WalletSwitchChain from "./wallet/WalletSwitchChain";
@@ -8,6 +9,7 @@ export default function Wallet() {
       <WalletConnect />
       <WalletAccount />
       <WalletSwitchChain />
+      <GasPriceWidget />
     </span>
   );
 }

@@ -3,7 +3,7 @@ import BoardList from "components/board/list";
 import GenericHeader from "components/header/generic";
 import Card from "components/Card";
 import Loading from "components/Loading";
-import BOARDS_LIST from "dchan/graphql/queries/boards/list";
+import BOARDS_LIST from "graphql/queries/boards/list";
 import { useQuery } from "@apollo/react-hooks";
 import { Board } from "dchan";
 import BoardCreationForm from "components/BoardCreationForm";
@@ -12,7 +12,7 @@ import { parse as parseQueryString } from "query-string";
 import { isString, uniqBy } from "lodash";
 import { Router } from "router";
 import { useEffect } from "react";
-import BOARDS_SEARCH from "dchan/graphql/queries/boards/search";
+import BOARDS_SEARCH from "graphql/queries/boards/search";
 
 interface BoardSearchData {
   searchByName: Board[];
@@ -34,7 +34,8 @@ interface BoardListVars {}
 
 export default function BoardListPage({ location, match: { params } }: any) {
   const query = parseQueryString(location.search);
-  const search = `${params?.board_name || ""}` || (isString(query.s) ? query.s : "");
+  const search =
+    `${params?.board_name || ""}` || (isString(query.s) ? query.s : "");
 
   const {
     refetch: searchRefetch,
@@ -81,10 +82,9 @@ export default function BoardListPage({ location, match: { params } }: any) {
             <div className="center flex">
               <div className="p-2">
                 {searchResults.length > 0 ? (
-                  <Card
-                    title={<span>Results for "{search}"</span>}
-                    body={<BoardList boards={searchResults} />}
-                  />
+                  <Card title={<span>Results for "{search}"</span>}>
+                    <BoardList boards={searchResults} />
+                  </Card>
                 ) : (
                   "No boards found"
                 )}
@@ -94,24 +94,21 @@ export default function BoardListPage({ location, match: { params } }: any) {
             <div>
               <div className="center flex">
                 <div>
-                  <Card
-                    title={<span>Most popular</span>}
-                    body={<BoardList boards={boardsData.mostPopular} />}
-                  />
+                  <Card title={<span>Most popular</span>}>
+                    <BoardList boards={boardsData.mostPopular} />
+                  </Card>
                 </div>
               </div>
               <div className="center flex flex-wrap">
                 <span className="px-2">
-                  <Card
-                    title={<span>Last created</span>}
-                    body={<BoardList boards={boardsData.lastCreated} />}
-                  />
+                  <Card title={<span>Last created</span>}>
+                    <BoardList boards={boardsData.lastCreated} />
+                  </Card>
                 </span>
                 <span className="px-2">
-                  <Card
-                    title={<span>Last bumped</span>}
-                    body={<BoardList boards={boardsData.lastBumped} />}
-                  />
+                  <Card title={<span>Last bumped</span>}>
+                    <BoardList boards={boardsData.lastBumped} />
+                  </Card>
                 </span>
               </div>
               <div className="center flex">

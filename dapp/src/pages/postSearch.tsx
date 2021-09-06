@@ -8,7 +8,7 @@ import useSettings from "hooks/useSettings";
 import { useQuery } from "@apollo/react-hooks";
 import { useEffect, useMemo } from "react";
 import { isLowScore, sortByCreatedAt } from "dchan/entities/post";
-import POST_SEARCH from "dchan/graphql/queries/post_search";
+import POST_SEARCH from "graphql/queries/post_search";
 import { Post } from "dchan";
 import PostComponent from "components/post/Post";
 import { Link } from "react-router-dom";

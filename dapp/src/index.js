@@ -7,7 +7,7 @@ import "./index.css";
 import App from "./App";
 
 import reportWebVitals from './reportWebVitals';
-import client from "dchan/graphql/client";
+import client from "graphql/clients/dchan";
 
 ReactDOM.render(
   <React.StrictMode>

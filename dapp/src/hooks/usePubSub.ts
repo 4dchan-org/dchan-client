@@ -1,13 +1,15 @@
-import { publish, subscribe } from "pubsub-js"
+import { publish, subscribe, unsubscribe } from "pubsub-js"
 import { singletonHook } from "react-singleton-hook"
 
 const usePubSub = singletonHook({
     publish,
-    subscribe
+    subscribe,
+    unsubscribe
 }, () => {
     return {
         publish,
-        subscribe
+        subscribe,
+        unsubscribe
     }
 })
 

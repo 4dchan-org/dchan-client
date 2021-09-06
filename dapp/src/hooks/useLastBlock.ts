@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/react-hooks";
-import BLOCK_LATEST from "dchan/graphql/queries/block_latest";
+import BLOCK_LATEST from "graphql/queries/block_latest";
 import { Block } from "dchan";
 
 interface LastBlockData {

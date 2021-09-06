@@ -2,7 +2,7 @@ import useSettings from "hooks/useSettings";
 
 export default function BoardViewSettings() {
   const [settings, setSettings] = useSettings();
-console.log({settings})
+  
   return (
     <details>
       <summary>View settings</summary>
