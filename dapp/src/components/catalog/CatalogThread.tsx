@@ -9,7 +9,7 @@ import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
 import usePubSub from "hooks/usePubSub";
 
-const CatalogThread = ({ thread }: { thread: Thread }) => {
+const CatalogThread = ({ thread, block }: { thread: Thread, block?: number }) => {
   const {
     id,
     isPinned,
@@ -38,7 +38,7 @@ const CatalogThread = ({ thread }: { thread: Thread }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const history = useHistory();
   const { publish, subscribe, unsubscribe } = usePubSub();
-  
+
   useEffect(() => {
     const sub = subscribe("THREAD_FOCUS", (_: any, id: string) => {
       const previousFocused = !!isFocused
@@ -46,7 +46,7 @@ const CatalogThread = ({ thread }: { thread: Thread }) => {
       setIsFocused(newIsFocused);
       if (previousFocused && newIsFocused) {
         const url = Router.thread(thread);
-        url && history.push(url);
+        url && history.push(`${url}${block ? `?block=${block}` : ""}`);
       }
     });
 
@@ -62,13 +62,13 @@ const CatalogThread = ({ thread }: { thread: Thread }) => {
       style={
         isFocused
           ? {
-              maxHeight: "initial",
-              maxWidth: "initial",
-              zIndex: 900,
-              marginLeft: "-2rem",
-              marginRight: "-2rem",
-              width: "14rem",
-            }
+            maxHeight: "initial",
+            maxWidth: "initial",
+            zIndex: 900,
+            marginLeft: "-2rem",
+            marginRight: "-2rem",
+            width: "14rem",
+          }
           : {}
       }
     >
@@ -112,7 +112,7 @@ const CatalogThread = ({ thread }: { thread: Thread }) => {
                 expandable={false}
                 thumbnail={false}
                 isSpoiler={isSpoiler}
-                isNsfw={isNsfw}
+                isNsfw={isNsfw || thread.board?.isNsfw || false}
               />
             </div>
           ) : (
@@ -148,7 +148,8 @@ const CatalogThread = ({ thread }: { thread: Thread }) => {
                     </div>
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                      to={Router.post(post) || ""}
+                      to={`${Router.post(post) || ""}${block ? `?block=${block}` : ""
+                        }`}
                     >
                       <PostBody>{post.comment}</PostBody>
                     </Link>

@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 import { Thread } from "dchan";
 import THREADS_LIST_MOST_POPULAR from "graphql/queries/threads/list_most_popular";
-import BoardCatalogView from "./BoardCatalogView";
+import CatalogView from "./CatalogView";
 import Card from "./Card";
 import Loading from "./Loading";
 
@@ -15,7 +15,7 @@ export default function PopularThreadsCard() {
 
   return (
     <Card className="w-100vw max-w-initial p-2" title={<span>Popular threads</span>}>
-      {loading ? <Loading /> : <BoardCatalogView threads={data?.threads || []} />}
+      {loading ? <Loading /> : <CatalogView threads={data?.threads || []} />}
     </Card>
   );
 }

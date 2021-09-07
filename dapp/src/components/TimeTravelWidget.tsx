@@ -22,7 +22,7 @@ interface BlockByDateVars {
 }
 
 interface BlockByNumberVars {
-  number: string
+  number: string;
 }
 
 export default function TimeTravelWidget({
@@ -42,7 +42,9 @@ export default function TimeTravelWidget({
   const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
   const history = useHistory();
   const { lastBlock } = useLastBlock();
-  const [timeTraveledToDate, setTimeTraveledToDate] = useState<DateTime | undefined>()
+  const [timeTraveledToDate, setTimeTraveledToDate] = useState<
+    DateTime | undefined
+  >();
   const { data: bbdData } = useQuery<BlockData, BlockByDateVars>(
     BLOCK_BY_DATE,
     {
@@ -59,7 +61,7 @@ export default function TimeTravelWidget({
     BLOCK_BY_NUMBER,
     {
       variables: {
-        number: `${block}`
+        number: `${block}`,
       },
       skip: !block,
     }
@@ -95,14 +97,14 @@ export default function TimeTravelWidget({
     if (dateTime) {
       const b = bbdData?.blocks?.[0];
       !!b && onBlockChange(b.number);
-      !!b && setTimeTraveledToDate(DateTime.fromSeconds(parseInt(b.timestamp)))
+      !!b && setTimeTraveledToDate(DateTime.fromSeconds(parseInt(b.timestamp)));
     }
   }, [dateTime, bbdData, onBlockChange, setTimeTraveledToDate]);
 
   useEffect(() => {
     if (block) {
       const b = bbnData?.blocks?.[0];
-      !!b && setTimeTraveledToDate(DateTime.fromSeconds(parseInt(b.timestamp)))
+      !!b && setTimeTraveledToDate(DateTime.fromSeconds(parseInt(b.timestamp)));
     }
   }, [block, bbnData, setTimeTraveledToDate]);
 
@@ -120,7 +122,7 @@ export default function TimeTravelWidget({
     lastBlock &&
     `${block}` !== lastBlock?.number
   );
-  
+
   return timeTravelRange ? (
     <span>
       {isTimeTraveling ? (
@@ -140,12 +142,22 @@ export default function TimeTravelWidget({
               required
               type="date"
               id="dchan-timetravel-date-input"
-              value={(isTimeTraveling && timeTraveledToDate ? timeTraveledToDate : now).toISODate()}
+              value={(isTimeTraveling && timeTraveledToDate
+                ? timeTraveledToDate
+                : now
+              ).toISODate()}
               onChange={(e) => onDateChange(e.target.value)}
               min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
               max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
             ></input>
-            , <span className="inline-block min-w-3rem">{(isTimeTraveling && timeTraveledToDate ? timeTraveledToDate : now).toLocaleString(DateTime.TIME_SIMPLE)}</span>]
+            ,{" "}
+            <span className="inline-block min-w-3rem">
+              {(isTimeTraveling && timeTraveledToDate
+                ? timeTraveledToDate
+                : now
+              ).toLocaleString(DateTime.TIME_SIMPLE)}
+            </span>
+            ]
           </span>
         </summary>
         <div className="text-xs">
@@ -184,7 +196,26 @@ export default function TimeTravelWidget({
         </div>
       </details>
       <span className="grid center text-xs">
-        {`Block #${block || lastBlock?.number || "?"}`}
+        <button
+          className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+          onClick={() => {
+            const input = prompt(
+              `Block number: (range: ${timeTravelRange.min.number}-${timeTravelRange.max.number})`
+            );
+            const newBlock = parseInt(input || "");
+            if (
+              isNaN(newBlock) ||
+              newBlock < parseInt(timeTravelRange.min.number) ||
+              newBlock > parseInt(timeTravelRange.max.number)
+            ) {
+              input !== null && alert(`Invalid page number: ${input}`);
+            } else {
+              history.push(`${baseUrl}?block=${newBlock}`);
+            }
+          }}
+        >
+          {`Block #${block || lastBlock?.number || "?"}`}
+        </button>
 
         {isTimeTraveling ? (
           <div className="text-xs">

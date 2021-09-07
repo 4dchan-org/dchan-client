@@ -143,9 +143,8 @@ export default function Post({
             <div>
               {!!image ? (
                 <div className="text-center sm:text-left">
-                  <span>
-                    File:{" "}
-                    <span className="text-xs">
+                  <span className="text-sm">
+                    <span>
                       <a
                         target="_blank"
                         rel="noreferrer"
@@ -158,11 +157,10 @@ export default function Post({
                           omission: "...",
                         })}
                       </a>
-                      {/* <a className="text-blue-600" href={ipfsUrl} download={`ipfs_${image.id}.${image.name}`}>📥</a> */}
-                      <span>
-                        , {Math.trunc(parseInt(image.byteSize) * 0.001)}kb
+                      <span className="px-1">
+                        ({Math.trunc(parseInt(image.byteSize) * 0.001)}kb)
                       </span>
-                      {/* <span>{image.resolution.height}x{image.resolution.width}</span> */}
+                      <span className="px-1 text-gray-400 hover:text-gray-600"><small>{image.ipfsHash}</small></span>
                     </span>
                   </span>
                 </div>

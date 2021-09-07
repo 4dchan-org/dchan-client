@@ -18,6 +18,7 @@ import AddressLabel from "components/AddressLabel";
 import usePubSub from "hooks/usePubSub";
 import Wallet from "components/Wallet";
 import useUser from "hooks/useUser";
+import Menu from "components/Menu";
 const useFormPersist = require("react-hook-form-persist");
 
 export default function FormPost({
@@ -88,8 +89,8 @@ export default function FormPost({
       try {
         formRef?.current?.scrollIntoView();
         showForm && setFocus("comment");
-      } catch(e) {
-        console.error({e})
+      } catch (e) {
+        console.error({ e });
       }
     },
     [getValues, setValue, formRef, setFocus, showForm]
@@ -99,8 +100,8 @@ export default function FormPost({
     const sub = subscribe("FORM_QUOTE", onQuote);
 
     return () => {
-      unsubscribe(sub)
-    }
+      unsubscribe(sub);
+    };
   });
 
   useEffect(() => {
@@ -121,17 +122,19 @@ export default function FormPost({
     async (data: any) => {
       setIsSending(true);
 
-      let result = null
+      let result = null;
       try {
         result = await postMessage(data, accounts, setStatus);
       } catch (error) {
-        result = { error }
+        result = { error };
 
         // @HACK Trust wallet fix
-        if(result.error.message.match(/failed.*check.*transaction.*receipt/i)) {
-          delete result.error
+        if (
+          result.error.message.match(/failed.*check.*transaction.*receipt/i)
+        ) {
+          delete result.error;
         }
-        
+
         setStatus(result);
 
         console.log(result);
@@ -142,7 +145,7 @@ export default function FormPost({
       if (!!result && !result.error) {
         resetForm();
       }
-      
+
       const events = result?.events;
       if (events && events.Message) {
         const { transactionHash, logIndex } = events.Message;
@@ -250,7 +253,28 @@ export default function FormPost({
   useEventListener("paste", pasteHandler);
 
   const { isJannyOf } = useUser();
-  const isJanny = board ? isJannyOf(board.id) : false
+  const isJanny = board ? isJannyOf(board.id) : false;
+
+  const formPostOptions = () => (
+    <Menu>
+      <div>Options:</div>
+      <div>
+        <input
+          id="dchan-input-sage"
+          className="mx-1"
+          type="checkbox"
+          {...register("sage")}
+          disabled={formDisabled}
+        />
+        <label
+          htmlFor="dchan-input-sage"
+          className="text-black font-weight-800 font-family-tahoma"
+        >
+          <abbr title="Does not bump the thread">sage</abbr>
+        </label>
+      </div>
+    </Menu>
+  );
 
   return !isJanny && thread?.isLocked ? (
     <div className="text-contrast font-weight-800 font-family-tahoma">
@@ -364,6 +388,9 @@ export default function FormPost({
                             Post
                           </button>
 
+                          {/* @TODO dedup */}
+                          {formPostOptions()}
+
                           <Status status={status}></Status>
                         </div>
                       </td>
@@ -400,6 +427,8 @@ export default function FormPost({
                           >
                             Post
                           </button>
+
+                          {formPostOptions()}
 
                           <Status status={status}></Status>
                         </div>

@@ -12,6 +12,7 @@ type PostCreateInput = {
     name: string;
     subject: string;
     comment: string;
+    sage: boolean;
 };
 
 type BoardCreateInput = {
@@ -23,6 +24,7 @@ type PostCreateData = {
     board?: string;
     thread?: string;
     comment: string;
+    sage?: boolean;
     file?: {
         byte_size: number;
         ipfs: {
@@ -33,7 +35,7 @@ type PostCreateData = {
         is_spoiler: boolean;
     };
     name: string;
-    subject: string;
+    subject?: string;
 };
 
 export async function postMessage(
@@ -41,7 +43,7 @@ export async function postMessage(
     accounts: any,
     setStatus: SetStatus
 ) {
-    const { board, thread, comment, name, subject } = input;
+    const { board, thread, comment, name, subject, sage } = input;
 
     let file: IpfsUploadResult | undefined;
     if (input.file.length > 0) {
@@ -54,7 +56,6 @@ export async function postMessage(
     const data: PostCreateData = {
         comment,
         name,
-        subject,
     };
 
     if (!!file) {
@@ -64,11 +65,21 @@ export async function postMessage(
             is_spoiler: input.is_spoiler,
         };
     }
+
     if (!!thread) {
+        // Reply to thread
         data.thread = thread;
+    } else {
+        // Include subject in thread creation
+        data.subject = subject
     }
+
     if (!!board) {
         data.board = board;
+    }
+
+    if (sage) {
+        data.sage = true
     }
 
     setStatus({

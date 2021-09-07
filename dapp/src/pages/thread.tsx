@@ -61,12 +61,12 @@ export default function ThreadPage({ location, match: { params } }: any) {
   const posts = thread ? [thread.op, ...thread.replies] : [];
 
   useEffect(() => {
-    const url = post ? Router.post(post) : undefined
-    url && history.replace(url)
-  }, [history, post])
+    const url = !thread && post ? Router.post(post) : undefined
+    url && history.replace(`${url}${block ? `?block=${block}` : ""}`)
+  }, [history, thread, block, post])
 
   useEffect(() => {
-    post_n && publish("POST_FOCUS", `${post_n}`)
+    post_n && !loading && publish("POST_FOCUS", `${post_n}`)
   }, [post_n, loading, publish]);
 
   useEffect(() => {
