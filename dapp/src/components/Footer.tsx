@@ -74,19 +74,24 @@ export default function Footer({
               </a>
             </div>
           </div>
-          <div className="text-right px-6 text-xs text-gray-600">
-            <div>v0.0.1</div>
-            <IPFSClientWidget />
+          <div className="text-right px-6 text-xs text-gray-600 flex">
+            <div className="m-2">
+              <IPFSClientWidget />
+            </div>
             <div>
-              <a
-                className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                href="//github.com/dchan-network/dchan-client/issues/new"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Report a bug
-              </a>
-            </div></div>
+              <div>v0.0.1</div>
+              <div>
+                <a
+                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                  href="//github.com/dchan-network/dchan-client/issues/new"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Report a bug
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </footer>
     </div>

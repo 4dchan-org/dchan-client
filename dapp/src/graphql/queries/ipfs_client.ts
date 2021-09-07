@@ -5,6 +5,11 @@ const IPFS_CLIENT = gql`
     clients(first: 1, orderBy: publishedAt, orderDirection: desc) {
       id
       ipfsHash
+      version
+      publishedAtBlock {
+        timestamp
+        number
+      }
     }
   }  
 `;
