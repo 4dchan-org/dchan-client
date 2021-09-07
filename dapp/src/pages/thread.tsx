@@ -100,7 +100,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
           <div>
             <div>
               {posts.map((post) => (
-                <PostComponent post={post} thread={thread} key={post.id} />
+                <PostComponent post={post} thread={thread} key={post.id} enableBacklinks={true} />
               ))}
             </div>
 

@@ -120,7 +120,7 @@ export default function BoardPage({ location, match: { params } }: any) {
             </div>
           ) : board && threads ? (
             threads.length === 0 ? (
-              <div className="center grid">{`No threads.`}</div>
+              <div className="center grid p-8">{`No threads.`}</div>
             ) : (
               <div>
                 {{

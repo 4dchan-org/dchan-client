@@ -122,7 +122,7 @@ export default function BoardListPage({ location, match: { params } }: any) {
           )}
         </div>
 
-        <Footer></Footer>
+        <Footer />
       </div>
     </div>
   );

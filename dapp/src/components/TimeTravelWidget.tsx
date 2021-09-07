@@ -125,17 +125,17 @@ export default function TimeTravelWidget({
 
   return timeTravelRange ? (
     <span>
-      {isTimeTraveling ? (
-        <div className="mx-1 text-xs">
-          <abbr title="You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date.">
-            Time traveled to
-          </abbr>
-        </div>
-      ) : (
-        ""
-      )}
       <details className="mx-1 sm:text-right" open={isTimeTraveling}>
         <summary>
+          <span className="mx-1 text-xs bg-primary">
+            {isTimeTraveling ? (
+              <abbr title="You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date.">
+                Time traveled to
+              </abbr>
+            ) : (
+              ""
+            )}
+          </span>
           <span className="mx-1 text-xs text-left">
             [
             <input
@@ -160,7 +160,7 @@ export default function TimeTravelWidget({
             ]
           </span>
         </summary>
-        <div className="text-xs">
+        <div className="text-xs bg-primary">
           <div className="grid grid-cols-4 center text-center">
             <span className="mx-1">{startRangeLabel}</span>
             <input

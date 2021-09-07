@@ -4,21 +4,33 @@ import { Link } from "react-router-dom";
 import useWeb3 from "hooks/useWeb3";
 import { sendMessage } from "dchan";
 import WalletConnect from "components/wallet/WalletConnect";
+import useUser from "hooks/useUser";
 
 export default function AdminPage() {
+  const { isAdmin } = useUser();
   const { accounts } = useWeb3();
 
   const adminClaim = async () => {
-    await sendMessage("admin:claim", {}, accounts[0])
-  }
+    await sendMessage("admin:claim", {}, accounts[0]);
+  };
+
+  const clientPublish = async () => {
+    const ipfs_hash = prompt("IPFS hash?");
+    const version = prompt("Version?");
+    const valid = !!ipfs_hash && !!version;
+    alert(
+      `${valid ? "Publishing" : "Invalid"} '${ipfs_hash}', version '${version}'`
+    );
+    (await valid) && sendMessage("client:publish", { ipfs_hash, version }, accounts[0]);
+  };
 
   const chanLock = async () => {
-    await sendMessage("chan:lock", {}, accounts[0])
-  }
+    await sendMessage("chan:lock", {}, accounts[0]);
+  };
 
   const chanUnlock = async () => {
-    await sendMessage("chan:unlock", {}, accounts[0])
-  }
+    await sendMessage("chan:unlock", {}, accounts[0]);
+  };
 
   return (
     <div className="bg-primary min-h-100vh">
@@ -26,18 +38,33 @@ export default function AdminPage() {
 
       <WalletConnect></WalletConnect>
 
-      <div className="center grid">
-        <button onClick={adminClaim}>Claim</button>
-      </div>
+      {isAdmin() ? (
+        <div>
+          <div className="center grid">
+            <button onClick={clientPublish}>Publish Client</button>
+          </div>
 
-      <div className="center grid">
-        <button onClick={chanLock}>Lock</button>
-        <button onClick={chanUnlock}>Unlock</button>
-      </div>
-      
-      <Link className="m-4 text-blue-600 visited:text-purple-600 hover:text-blue-500" to="/">Home</Link>
+          <div className="center grid">
+            <button onClick={adminClaim}>Claim Admin</button>
+          </div>
 
-      <Footer></Footer>
+          <div className="center grid">
+            <button onClick={chanLock}>Lock</button>
+            <button onClick={chanUnlock}>Unlock</button>
+          </div>
+
+          <Link
+            className="m-4 text-blue-600 visited:text-purple-600 hover:text-blue-500"
+            to="/"
+          >
+            Home
+          </Link>
+
+          <Footer />
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

@@ -108,6 +108,13 @@ export type Image = {
     score: string,
 }
 
+export type Client = {
+    id: string,
+    version: string,
+    ipfsHash: string,
+    publishedAtBlock: Block
+}
+
 export function shortenAddress(address: string) {
     let offset = address.indexOf("0x") === 0 ? 2 : 0
     const shortAddress = `${address.substring(offset, offset + 3)}-${address.substring(address.length - 3)}`

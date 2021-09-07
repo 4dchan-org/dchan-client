@@ -294,7 +294,6 @@ export default function FormPost({
         {showForm ? (
           <div
             className="grid center w-full text-left sticky top-0 min-h-200px"
-            style={{ zIndex: 10000 }}
           >
             <form
               ref={formRef}

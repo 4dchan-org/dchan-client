@@ -25,11 +25,6 @@ import { DateTime } from "luxon";
 import { ReactElement, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 
-(window as any).quotePost = function (quoting: any) {
-  console.log({ quoting });
-  PubSub.publish("FORM_QUOTE", quoting);
-};
-
 export default function PostHeader({
   post,
   thread,
@@ -221,7 +216,7 @@ export default function PostHeader({
       ) : (
         ""
       )}
-      <span className="px-0.5 text-xs opacity-50 hover:opacity-100">
+      <span className="px-0.5 text-xs opacity-10 hover:opacity-100">
         <Link to={`/${post.id}`} title="Permalink">
           🔗
         </Link>

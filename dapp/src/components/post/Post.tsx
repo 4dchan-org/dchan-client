@@ -81,12 +81,14 @@ export default function Post({
         return comment.replace(/>/g, "")
       })
       .forEach((n) => {
-        publish("POST_BACKLINK", {
+        const backlink = {
           from: post,
           to: {
             n,
           },
-        });
+        }
+
+        publish("POST_BACKLINK", backlink);
       });
   }, [post, publish]);
 
@@ -102,9 +104,9 @@ export default function Post({
     settings?.content_filter?.show_below_threshold ||
     showAnyway;
 
-  return (
+  return (<div className="flex">{!isOp ? <span className="pl-2 text-secondary">&gt;&gt;</span> : ""}
     <details
-      className="dchan-post-expand sm:mx-2 text-left"
+      className="dchan-post-expand sm:mx-2 text-left inline"
       open={canShow}
       key={id}
       ref={postRef}
@@ -209,6 +211,6 @@ export default function Post({
           )}
         </div>
       </article>
-    </details>
+    </details></div>
   );
 }

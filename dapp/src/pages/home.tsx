@@ -55,7 +55,7 @@ export default function HomePage() {
 
       <PopularThreadsCard />
 
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 }

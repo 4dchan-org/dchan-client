@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import polygonSrc from "assets/images/polygon.png";
 import thegraphSrc from "assets/images/thegraph.png";
+import IPFSClientWidget from "./IPFSClientWidget";
 
 export default function Footer({
   showContentDisclaimer = false,
@@ -41,11 +42,11 @@ export default function Footer({
               </a>
             </div>
           </div>
-          <div className="justify-center flex flex-grow mt-1">
-            <details>
+          <div className="justify-center flex flex-grow h-6 items-end">
+            <details className="bg-primary">
               <summary>
                 <Link
-                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white border-t-0"
+                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white"
                   to="/_/rules"
                   rel="noreferrer"
                 >
@@ -64,7 +65,7 @@ export default function Footer({
             </details>
             <div>
               <a
-                className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white border-t-0"
+                className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white"
                 href="//github.com/dchan-network"
                 target="_blank"
                 rel="noreferrer"
@@ -75,6 +76,7 @@ export default function Footer({
           </div>
           <div className="text-right px-6 text-xs text-gray-600">
             <div>v0.0.1</div>
+            <IPFSClientWidget />
             <div>
               <a
                 className="text-blue-600 visited:text-purple-600 hover:text-blue-500"

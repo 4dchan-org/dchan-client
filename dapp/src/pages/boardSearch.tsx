@@ -32,7 +32,7 @@ export default function BoardListPage({
         </Card>
       </div>
 
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 }

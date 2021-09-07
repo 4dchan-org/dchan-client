@@ -8,7 +8,7 @@ export default function Anchor({
   to: string
 }) {
   return (
-    <div className="flex center">
+    <div>
       [
       <HashLink
         className="text-blue-600 visited:text-purple-600 hover:text-blue-500"

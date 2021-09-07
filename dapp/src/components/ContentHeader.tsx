@@ -52,12 +52,21 @@ export default function ContentHeader({
         <hr></hr>
       </div>
 
-      <div className="absolute top-4 sm:top-0 right-4">
+      <div className="fixed z-20 top-4 right-4 opacity-50 hover:opacity-100 flex flex-wrap">
+        <TimeTravelWidget
+          baseUrl={baseUrl || ""}
+          startBlock={startBlock}
+          dateTime={dateTime}
+          block={block}
+          startRangeLabel={
+            thread ? "Thread creation" : board ? "Board creation" : "?"
+          }
+        />
         <SearchWidget baseUrl={Router.posts()} search={search} />
       </div>
 
-      <div className="text-center sm:text-left sm:flex">
-        <div className="mx-2 flex center">
+      <div className="text-center sm:text-left grid sm:grid-cols-3">
+        <div className="mx-2 flex justify-center sm:justify-start">
           <Anchor to="#bottom" label="Bottom" />
 
           {!block || (lastBlock && `${lastBlock.number}` === `${block}`) ? (
@@ -74,17 +83,6 @@ export default function ContentHeader({
               <FilterSettings />
             </div>
           </details>
-        </div>
-        <div className="mx-2 sm:text-center sm:text-right sm:flex sm:items-center sm:justify-end">
-          <TimeTravelWidget
-            baseUrl={baseUrl || ""}
-            startBlock={startBlock}
-            dateTime={dateTime}
-            block={block}
-            startRangeLabel={
-              thread ? "Thread creation" : board ? "Board creation" : "?"
-            }
-          />
         </div>
       </div>
 
