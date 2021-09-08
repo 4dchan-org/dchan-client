@@ -20,7 +20,7 @@ export default function Footer({
         ) : (
           ""
         )}
-        <div className="flex items-start grid-cols-3 mt-1 border-t border-black text-xs relative w-100vw overflow-visible">
+        <div className="grid items-start grid-cols-3 mt-1 border-t border-black text-xs relative w-100vw overflow-visible">
           <div className="text-left px-6">
             <div>Powered by</div>
             <div className="flex m-1">
@@ -42,7 +42,7 @@ export default function Footer({
               </a>
             </div>
           </div>
-          <div className="justify-center flex flex-grow h-6 items-end">
+          <div className="justify-center flex h-6 items-end">
             <details className="bg-primary">
               <summary>
                 <Link
@@ -74,10 +74,7 @@ export default function Footer({
               </a>
             </div>
           </div>
-          <div className="text-right px-6 text-xs text-gray-600 flex">
-            <div className="m-2">
-              <IPFSClientWidget />
-            </div>
+          <div className="justify-end text-right px-6 text-xs text-gray-600 flex">
             <div>
               <div>v0.0.1</div>
               <div>
@@ -89,6 +86,9 @@ export default function Footer({
                 >
                   Report a bug
                 </a>
+              </div>
+              <div>
+                <IPFSClientWidget />
               </div>
             </div>
           </div>

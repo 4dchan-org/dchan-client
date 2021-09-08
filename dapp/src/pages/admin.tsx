@@ -15,13 +15,14 @@ export default function AdminPage() {
   };
 
   const clientPublish = async () => {
-    const ipfs_hash = prompt("IPFS hash?");
-    const version = prompt("Version?");
+    const ipfs_hash = prompt("IPFS hash?")
+    const version = prompt("Version?")
+    const channel = prompt("Channel?") || ""
     const valid = !!ipfs_hash && !!version;
     alert(
-      `${valid ? "Publishing" : "Invalid"} '${ipfs_hash}', version '${version}'`
+      `${valid ? "Publishing" : "Invalid"} '${ipfs_hash}', version '${version}' on channel '${channel}'`
     );
-    (await valid) && sendMessage("client:publish", { ipfs_hash, version }, accounts[0]);
+    (await valid) && sendMessage("client:publish", { ipfs_hash, version, channel }, accounts[0]);
   };
 
   const chanLock = async () => {
