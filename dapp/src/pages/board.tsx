@@ -131,7 +131,7 @@ export default function BoardPage({ location, match: { params } }: any) {
                     <div>
                       {threads.map((thread) => {
                         return (
-                          <div className="border-solid border-black py-2 border-t border-secondary">
+                          <div className="border-solid border-black py-2 border-b border-secondary">
                             <Post
                               post={thread.op}
                               thread={thread}
@@ -141,8 +141,9 @@ export default function BoardPage({ location, match: { params } }: any) {
                                   <span className="p-1">
                                     [
                                     <Link
-                                      to={`${Router.thread(thread)}${block ? `?block=${block}` : ""
-                                        }`}
+                                      to={`${Router.thread(thread)}${
+                                        block ? `?block=${block}` : ""
+                                      }`}
                                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                                     >
                                       Reply
@@ -151,24 +152,33 @@ export default function BoardPage({ location, match: { params } }: any) {
                                   </span>
                                 </span>
                               }
-                            />
-                            <div className="text-left px-2">
-                              {parseInt(thread.replyCount) >
+                            >
+                              <div className="text-left pl-8">
+                                {parseInt(thread.replyCount) >
                                 1 + thread.replies.length ? (
-                                <Link
-                                  to={`${Router.thread(thread)}${block ? `?block=${block}` : ""
+                                  <Link
+                                    to={`${Router.thread(thread)}${
+                                      block ? `?block=${block}` : ""
                                     }`}
-                                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                                >
-                                  + {parseInt(thread.replyCount) - thread.replies.length} replies omitted
-                                </Link>
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                            {[...thread.replies].reverse().map((post) => (
-                              <Post post={post} thread={thread} key={post.id} />
-                            ))}
+                                    className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                                  >
+                                    +{" "}
+                                    {parseInt(thread.replyCount) -
+                                      thread.replies.length}{" "}
+                                    replies omitted
+                                  </Link>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                              {[...thread.replies].reverse().map((post) => (
+                                <Post
+                                  post={post}
+                                  thread={thread}
+                                  key={post.id}
+                                />
+                              ))}
+                            </Post>
                           </div>
                         );
                       })}
@@ -176,8 +186,6 @@ export default function BoardPage({ location, match: { params } }: any) {
                   ),
                 }[boardMode || "catalog"] ||
                   `Invalid view mode: "${boardMode}"`}
-
-                <Anchor to="#board-header" label="Top" />
               </div>
             )
           ) : (
@@ -191,8 +199,9 @@ export default function BoardPage({ location, match: { params } }: any) {
                   {page > 0 ? (
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
-                      to={`${Router.board(board)}?page=${0}${block ? `&block=${block}` : ""
-                        }`}
+                      to={`${Router.board(board)}?page=${0}${
+                        block ? `&block=${block}` : ""
+                      }`}
                     >
                       &lt;&lt;
                     </Link>
@@ -204,8 +213,9 @@ export default function BoardPage({ location, match: { params } }: any) {
                   {page > 0 ? (
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
-                      to={`${Router.board(board)}?page=${page - 1}${block ? `&block=${block}` : ""
-                        }`}
+                      to={`${Router.board(board)}?page=${page - 1}${
+                        block ? `&block=${block}` : ""
+                      }`}
                     >
                       &lt;
                     </Link>
@@ -226,7 +236,8 @@ export default function BoardPage({ location, match: { params } }: any) {
                         alert(`Invalid page number: ${input}`);
                       } else {
                         history.push(
-                          `${Router.board(board)}?page=${newPage}${block ? `&block=${block}` : ""
+                          `${Router.board(board)}?page=${newPage}${
+                            block ? `&block=${block}` : ""
                           }`
                         );
                       }
@@ -240,8 +251,9 @@ export default function BoardPage({ location, match: { params } }: any) {
                   {page < maxPage ? (
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
-                      to={`${Router.board(board)}?page=${page + 1}${block ? `&block=${block}` : ""
-                        }`}
+                      to={`${Router.board(board)}?page=${page + 1}${
+                        block ? `&block=${block}` : ""
+                      }`}
                     >
                       &gt;
                     </Link>
@@ -253,8 +265,9 @@ export default function BoardPage({ location, match: { params } }: any) {
                   {page < maxPage ? (
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
-                      to={`${Router.board(board)}?page=${maxPage}${block ? `&block=${block}` : ""
-                        }`}
+                      to={`${Router.board(board)}?page=${maxPage}${
+                        block ? `&block=${block}` : ""
+                      }`}
                     >
                       &gt;&gt;
                     </Link>
@@ -263,6 +276,8 @@ export default function BoardPage({ location, match: { params } }: any) {
                   )}
                 </span>
               </div>
+
+              <Anchor to="#board-header" label="Top" />
             </div>
           ) : (
             ""

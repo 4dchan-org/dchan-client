@@ -9,18 +9,24 @@ import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
 import usePubSub from "hooks/usePubSub";
 
-const CatalogThread = ({ thread, block }: { thread: Thread, block?: number }) => {
+const CatalogThread = ({
+  thread,
+  block,
+}: {
+  thread: Thread;
+  block?: number;
+}) => {
   const {
     id,
     isPinned,
     isLocked,
     subject,
-    op: { comment, image },
+    op,
     replyCount,
     imageCount,
     replies,
   } = thread;
-
+  const { image } = op;
   const { ipfsHash, isNsfw, isSpoiler } = image || {
     ipfsHash: "",
     isNsfw: false,
@@ -41,7 +47,7 @@ const CatalogThread = ({ thread, block }: { thread: Thread, block?: number }) =>
 
   useEffect(() => {
     const sub = subscribe("THREAD_FOCUS", (_: any, id: string) => {
-      const previousFocused = !!isFocused
+      const previousFocused = !!isFocused;
       const newIsFocused = `${id}` === `${thread.id}`;
       setIsFocused(newIsFocused);
       if (previousFocused && newIsFocused) {
@@ -51,8 +57,8 @@ const CatalogThread = ({ thread, block }: { thread: Thread, block?: number }) =>
     });
 
     return () => {
-      unsubscribe(sub)
-    }
+      unsubscribe(sub);
+    };
   });
 
   return (
@@ -62,13 +68,13 @@ const CatalogThread = ({ thread, block }: { thread: Thread, block?: number }) =>
       style={
         isFocused
           ? {
-            maxHeight: "initial",
-            maxWidth: "initial",
-            zIndex: 900,
-            marginLeft: "-2rem",
-            marginRight: "-2rem",
-            width: "14rem",
-          }
+              maxHeight: "initial",
+              maxWidth: "initial",
+              zIndex: 900,
+              marginLeft: "-2rem",
+              marginRight: "-2rem",
+              width: "14rem",
+            }
           : {}
       }
     >
@@ -84,7 +90,10 @@ const CatalogThread = ({ thread, block }: { thread: Thread, block?: number }) =>
       ) : (
         ""
       )}
-      <button className="h-full w-full" onClick={() => publish("THREAD_FOCUS", id)}>
+      <button
+        className="h-full w-full"
+        onClick={() => publish("THREAD_FOCUS", id)}
+      >
         <div
           className={[
             "relative",
@@ -131,9 +140,8 @@ const CatalogThread = ({ thread, block }: { thread: Thread, block?: number }) =>
                   minWidth: isFocused ? "12rem" : "initial",
                   textAlign: "center",
                 }}
-              >
-                {comment}
-              </PostBody>
+                post={op}
+              />
               {isFocused &&
                 replies &&
                 [...replies].reverse().map((post) => (
@@ -148,10 +156,11 @@ const CatalogThread = ({ thread, block }: { thread: Thread, block?: number }) =>
                     </div>
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                      to={`${Router.post(post) || ""}${block ? `?block=${block}` : ""
-                        }`}
+                      to={`${Router.post(post) || ""}${
+                        block ? `?block=${block}` : ""
+                      }`}
                     >
-                      <PostBody>{post.comment}</PostBody>
+                      <PostBody post={post} />
                     </Link>
                   </div>
                 ))}
