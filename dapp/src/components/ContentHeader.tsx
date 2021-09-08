@@ -52,17 +52,22 @@ export default function ContentHeader({
         <hr></hr>
       </div>
 
-      <div className="fixed z-20 top-4 right-4 opacity-50 hover:opacity-100 flex flex-wrap">
-        <TimeTravelWidget
-          baseUrl={baseUrl || ""}
-          startBlock={startBlock}
-          dateTime={dateTime}
-          block={block}
-          startRangeLabel={
-            thread ? "Thread creation" : board ? "Board creation" : "?"
-          }
-        />
-        <SearchWidget baseUrl={Router.posts()} search={search} />
+      <div className="fixed z-20 top-0 right-4 opacity-50 hover:opacity-100 flex flex-wrap text-right">
+        <details open={true}>
+          <summary></summary>
+          <div className="bg-primary">
+            <TimeTravelWidget
+              baseUrl={baseUrl || ""}
+              startBlock={startBlock}
+              dateTime={dateTime}
+              block={block}
+              startRangeLabel={
+                thread ? "Thread creation" : board ? "Board creation" : "?"
+              }
+            />
+            <SearchWidget baseUrl={Router.posts()} search={search} />
+          </div>
+        </details>
       </div>
 
       <div className="text-center sm:text-left grid sm:grid-cols-3">
@@ -75,8 +80,8 @@ export default function ContentHeader({
             ""
           )}
         </div>
-        <div className="flex-grow center grid">
-          <details className="">
+        <div className="center grid">
+          <details>
             <summary className="text-xs text-gray-600">{summary}</summary>
             <div>
               {!thread ? <BoardViewSettings /> : ""}

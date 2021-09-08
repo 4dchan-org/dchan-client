@@ -124,10 +124,10 @@ export default function TimeTravelWidget({
   );
 
   return timeTravelRange ? (
-    <span>
+    <span className="bg-primary">
       <details className="mx-1 sm:text-right" open={isTimeTraveling}>
         <summary>
-          <span className="mx-1 text-xs bg-primary">
+          <span className="mx-1 text-xs">
             {isTimeTraveling ? (
               <abbr title="You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date.">
                 Time traveled to
