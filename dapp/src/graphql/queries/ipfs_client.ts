@@ -1,15 +1,15 @@
 import { gql } from "apollo-boost";
+import CLIENT_FRAGMENT from "graphql/fragments/client";
 
 const IPFS_CLIENT = gql`
+  ${CLIENT_FRAGMENT}
+
   query IPFSClient {
-    clients(first: 1, orderBy: publishedAt, orderDirection: desc) {
-      id
-      ipfsHash
-      version
-      publishedAtBlock {
-        timestamp
-        number
-      }
+    dev: clients(first: 1, orderBy: publishedAt, orderDirection: desc, where: {channel: ""}) {
+      ...Client
+    }
+    stable: clients(first: 1, orderBy: publishedAt, orderDirection: desc, where: {channel: "stable"}) {
+      ...Client
     }
   }  
 `;
