@@ -8,13 +8,16 @@ import { Router } from "router";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
 import usePubSub from "hooks/usePubSub";
+import BoardLink from "components/BoardLink";
 
 const CatalogThread = ({
   thread,
   block,
+  showBoard = false,
 }: {
   thread: Thread;
   block?: number;
+  showBoard?: boolean;
 }) => {
   const {
     id,
@@ -25,6 +28,7 @@ const CatalogThread = ({
     replyCount,
     imageCount,
     replies,
+    board,
   } = thread;
   const { image } = op;
   const { ipfsHash, isNsfw, isSpoiler } = image || {
@@ -128,6 +132,13 @@ const CatalogThread = ({
             ""
           )}
           <div className="p-1">
+            {showBoard && board ? (
+              <div>
+                /<BoardLink board={board} />/
+              </div>
+            ) : (
+              ""
+            )}
             <div>
               R:<strong>{replyCount}</strong>, I:<strong>{imageCount}</strong>
             </div>

@@ -15,7 +15,7 @@ export default function PopularThreadsCard() {
 
   return (
     <Card className="w-100vw max-w-initial p-2" title={<span>Popular threads</span>}>
-      {loading ? <Loading /> : <CatalogView threads={data?.threads || []} />}
+      {loading ? <Loading /> : <CatalogView threads={data?.threads || []} showBoard={true} />}
     </Card>
   );
 }

@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/react-hooks";
-import { LABEL_CLASSNAME } from "components/AddressLabel";
-import { backgroundColorAddress, Board } from "dchan";
+import BoardLink from "components/BoardLink";
+import { Board } from "dchan";
 import BOARDS_LIST_MOST_POPULAR from "graphql/queries/boards/list_most_popular";
 import { Link } from "react-router-dom";
 
@@ -32,17 +32,7 @@ export default function HeaderNavigation() {
         {!!boards &&
           boards.map((board) => (
             <span className="dchan-navigation-board" key={board.id}>
-              <Link
-                style={{ backgroundColor: backgroundColorAddress(board.id) }}
-                className={
-                  LABEL_CLASSNAME +
-                  " text-blue-600 visited:text-purple-600 hover:text-blue-500 hover:text-opacity-100"
-                }
-                title={board.title}
-                to={`/${board.name}/${board.id}`}
-              >
-                {board.name}
-              </Link>
+              <BoardLink board={board} />
             </span>
           ))}
         ][
