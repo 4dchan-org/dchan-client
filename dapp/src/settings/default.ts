@@ -10,7 +10,6 @@ const DefaultSettings = {
     },
     content_view: {
         page_size: 25,
-        board_view_mode: "catalog",
         board_sort_threads_by: "lastBumpedAt",
         board_sort_direction: "desc"
     },

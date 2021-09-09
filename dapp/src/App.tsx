@@ -30,6 +30,7 @@ function App() {
           <Route path="/_/admin" component={AdminPage} />
           <Route path="/_/posts" component={PostSearchPage} />
           <Route path="/0x:id" component={ReferencePage} />
+          <Route path="/:board_name/0x:board_id/:view_mode(catalog)" component={BoardPage} />
           <Route path="/:board_name/0x:board_id/:thread_n/:post_n" component={ThreadPage} />
           <Route path="/:board_name/0x:board_id/:thread_n" component={ThreadPage} />
           <Route path="/:board_name/0x:board_id" component={BoardPage} />

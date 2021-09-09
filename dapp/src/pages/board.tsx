@@ -30,13 +30,16 @@ interface BoardCatalogVars {
 
 export default function BoardPage({ location, match: { params } }: any) {
   let { board_id } = params;
+  const boardMode = `${params.view_mode || "index"}`;
   board_id = board_id ? `0x${board_id}` : undefined;
 
   const { lastBlock } = useLastBlock();
   const query = parseQueryString(location.search);
   const page = parseInt(`${query.page || "0"}`);
-  const queriedBlock = parseInt(`${query.block}`)
-  const block = !isNaN(queriedBlock) ? queriedBlock : parseInt(`${lastBlock?.number || "0"}`);
+  const queriedBlock = parseInt(`${query.block}`);
+  const block = !isNaN(queriedBlock)
+    ? queriedBlock
+    : parseInt(`${lastBlock?.number || "0"}`);
   const dateTime = query.date
     ? DateTime.fromISO(query.date as string)
     : undefined;
@@ -81,7 +84,6 @@ export default function BoardPage({ location, match: { params } }: any) {
     );
   });
 
-  const boardMode = settings?.content_view?.board_view_mode;
   const maxPage = Math.max(
     Math.ceil(board ? parseInt(`${board.threadCount}`) / limit : 0) - 1,
     0
@@ -100,7 +102,7 @@ export default function BoardPage({ location, match: { params } }: any) {
           board={board}
           block={queriedBlock}
           dateTime={dateTime}
-          baseUrl={board ? Router.board(board) : undefined}
+          baseUrl={board ? Router.board(board, boardMode) : undefined}
           summary={
             loading ? (
               <span>...</span>
@@ -124,69 +126,80 @@ export default function BoardPage({ location, match: { params } }: any) {
               <div className="center grid p-8">{`No threads.`}</div>
             ) : (
               <div>
-                {{
-                  catalog: (
-                    <CatalogView threads={filteredThreads} block={queriedBlock} />
-                  ),
-                  threads: (
-                    <div>
-                      {threads.map((thread) => {
-                        return (
-                          <div className="border-solid border-black py-2 border-b border-secondary" key={thread.id}>
-                            <Post
-                              post={thread.op}
-                              thread={thread}
-                              key={thread.op.id}
-                              header={
-                                <span>
-                                  <span className="p-1">
-                                    [
+                {
+                  {
+                    catalog: (
+                      <CatalogView
+                        threads={filteredThreads}
+                        block={queriedBlock}
+                      />
+                    ),
+                    index: (
+                      <div>
+                        {threads.map((thread) => {
+                          return (
+                            <div
+                              className="border-solid border-black py-2 border-b border-secondary"
+                              key={thread.id}
+                            >
+                              <Post
+                                post={thread.op}
+                                thread={thread}
+                                key={thread.op.id}
+                                header={
+                                  <span>
+                                    <span className="p-1">
+                                      [
+                                      <Link
+                                        to={`${Router.thread(thread)}${
+                                          queriedBlock
+                                            ? `?block=${queriedBlock}`
+                                            : ""
+                                        }`}
+                                        className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                                      >
+                                        Reply
+                                      </Link>
+                                      ]
+                                    </span>
+                                  </span>
+                                }
+                              >
+                                <div className="text-left pl-8">
+                                  {parseInt(thread.replyCount) >
+                                  1 + thread.replies.length ? (
                                     <Link
                                       to={`${Router.thread(thread)}${
-                                        queriedBlock ? `?block=${queriedBlock}` : ""
+                                        queriedBlock
+                                          ? `?block=${queriedBlock}`
+                                          : ""
                                       }`}
                                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                                     >
-                                      Reply
+                                      +{" "}
+                                      {parseInt(thread.replyCount) -
+                                        thread.replies.length}{" "}
+                                      replies omitted
                                     </Link>
-                                    ]
-                                  </span>
-                                </span>
-                              }
-                            >
-                              <div className="text-left pl-8">
-                                {parseInt(thread.replyCount) >
-                                1 + thread.replies.length ? (
-                                  <Link
-                                    to={`${Router.thread(thread)}${
-                                      queriedBlock ? `?block=${queriedBlock}` : ""
-                                    }`}
-                                    className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                                  >
-                                    +{" "}
-                                    {parseInt(thread.replyCount) -
-                                      thread.replies.length}{" "}
-                                    replies omitted
-                                  </Link>
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                              {[...thread.replies].reverse().map((post) => (
-                                <Post
-                                  post={post}
-                                  thread={thread}
-                                  key={post.id}
-                                />
-                              ))}
-                            </Post>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ),
-                }[boardMode || "catalog"] ||
-                  `Invalid view mode: "${boardMode}"`}
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                                {[...thread.replies].reverse().map((post) => (
+                                  <Post
+                                    post={post}
+                                    thread={thread}
+                                    key={post.id}
+                                  />
+                                ))}
+                              </Post>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ),
+                  }[boardMode]
+                }
               </div>
             )
           ) : (
@@ -195,12 +208,13 @@ export default function BoardPage({ location, match: { params } }: any) {
 
           {board ? (
             <div>
-              <div>
+              <hr/>
+              <div className="p-2">
                 <span>
                   {page > 0 ? (
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
-                      to={`${Router.board(board)}?page=${0}${
+                      to={`${Router.board(board, boardMode)}?page=${0}${
                         queriedBlock ? `&block=${queriedBlock}` : ""
                       }`}
                     >
@@ -214,7 +228,7 @@ export default function BoardPage({ location, match: { params } }: any) {
                   {page > 0 ? (
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
-                      to={`${Router.board(board)}?page=${page - 1}${
+                      to={`${Router.board(board, boardMode)}?page=${page - 1}${
                         queriedBlock ? `&block=${queriedBlock}` : ""
                       }`}
                     >
@@ -237,7 +251,7 @@ export default function BoardPage({ location, match: { params } }: any) {
                         alert(`Invalid page number: ${input}`);
                       } else {
                         history.push(
-                          `${Router.board(board)}?page=${newPage}${
+                          `${Router.board(board, boardMode)}?page=${newPage}${
                             queriedBlock ? `&block=${queriedBlock}` : ""
                           }`
                         );
@@ -252,7 +266,7 @@ export default function BoardPage({ location, match: { params } }: any) {
                   {page < maxPage ? (
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
-                      to={`${Router.board(board)}?page=${page + 1}${
+                      to={`${Router.board(board, boardMode)}?page=${page + 1}${
                         queriedBlock ? `&block=${queriedBlock}` : ""
                       }`}
                     >
@@ -266,7 +280,7 @@ export default function BoardPage({ location, match: { params } }: any) {
                   {page < maxPage ? (
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
-                      to={`${Router.board(board)}?page=${maxPage}${
+                      to={`${Router.board(board, boardMode)}?page=${maxPage}${
                         queriedBlock ? `&block=${queriedBlock}` : ""
                       }`}
                     >

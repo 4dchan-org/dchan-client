@@ -19,7 +19,6 @@ export type Settings = {
     },
     content_view: {
         page_size: number,
-        board_view_mode: string,
         board_sort_threads_by: string,
         board_sort_direction: string
     },

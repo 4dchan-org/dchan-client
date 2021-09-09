@@ -13,6 +13,7 @@ import SearchWidget from "./SearchWidget";
 import TimeTravelWidget from "./TimeTravelWidget";
 import BoardViewSettings from "./settings/BoardViewSettings";
 import FilterSettings from "./settings/FilterSettings";
+import { Link } from "react-router-dom";
 
 export default function ContentHeader({
   board,
@@ -70,9 +71,37 @@ export default function ContentHeader({
         </details>
       </div>
 
-      <div className="text-center sm:text-left grid sm:grid-cols-3">
-        <div className="mx-2 flex justify-center sm:justify-start">
-          <Anchor to="#bottom" label="Bottom" />
+      <div className="text-center sm:text-left grid md:grid-cols-3">
+        <div className="mx-2 flex flex-wrap sm:flex-nowrap justify-center md:justify-start items-center">
+          <span className="whitespace-nowrap sm:flex">
+            {!!board ? (
+              <span>
+                <span>
+                  [
+                  <Link
+                    className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                    to={`${Router.board(board)}`}
+                  >
+                    Index
+                  </Link>
+                  ]
+                </span>
+                <span>
+                  [
+                  <Link
+                    className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                    to={`${Router.board(board)}/catalog`}
+                  >
+                    Catalog
+                  </Link>
+                  ]
+                </span>
+              </span>
+            ) : (
+              ""
+            )}
+            <Anchor to="#bottom" label="Bottom" />
+          </span>
 
           {!block || (lastBlock && `${lastBlock.number}` === `${block}`) ? (
             <RefreshWidget onRefresh={throttledRefresh} />

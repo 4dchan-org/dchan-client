@@ -9,27 +9,6 @@ export default function BoardViewSettings() {
       <div className="bg-secondary p-2 max-w-sm">
         <div>
           <label className="px-2" htmlFor="dchan-input-view-mode">
-            Board view mode
-          </label>
-          <select
-            id="dchan-input-view-mode"
-            onChange={(e) => {
-              setSettings({
-                ...settings,
-                content_view: {
-                  ...settings?.content_view,
-                  board_view_mode: e.target.value,
-                },
-              });
-            }}
-            value={settings?.content_view?.board_view_mode}
-          >
-            <option value={"catalog"}>{"Catalog"}</option>
-            <option value={"threads"}>{"Threads"}</option> 
-          </select>
-        </div>
-        <div>
-          <label className="px-2" htmlFor="dchan-input-view-mode">
             Page size
           </label>
           <input

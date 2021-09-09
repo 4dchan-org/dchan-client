@@ -1,14 +1,6 @@
 import { shortenAddress, backgroundColorAddress } from "dchan";
 
 export default function AddressLabel({ address, className = "", etherscannable = true } : {className?: string, address: string, etherscannable?: boolean}) {
-  !!window?.ethereum?.getBalance && window.ethereum.getBalance(address, function(err: any, result: string) {
-    if (err) {
-      console.log(err)
-    } else {
-      console.log(result)
-    }
-  })
-
   return (
     <a
       style={{ backgroundColor: backgroundColorAddress(address) }}

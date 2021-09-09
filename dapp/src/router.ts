@@ -25,8 +25,8 @@ export abstract class Router {
     public static board({
         name,
         id
-    }: Board) {
-        return !!name && !!id ? `/${name}/${id}` : undefined
+    }: Board, viewMode?: string) {
+        return !!name && !!id ? `/${name}/${id}${viewMode === "catalog" ? "/catalog" : ""}` : undefined
     }
 
     public static posts() {
