@@ -8,8 +8,7 @@ export default function FilterSettings() {
       <summary>Filter settings</summary>
       <div className="bg-secondary p-2 max-w-sm center grid">
         <div className="text-contrast text-xs text-center">
-          ⚠ By disabling/changing filters, it's possible you may view (and
-          download) highly disturbing content, or content which may be illegal
+          ⚠ By disabling/changing filters, it's possible you may view/download highly disturbing content, or content which may be illegal
           in your jurisdiction.
           <div>Do so at your own risk.</div>
         </div>
@@ -79,7 +78,7 @@ export default function FilterSettings() {
           </div>
         </div>
         <div className="text-xs text-left">
-          ℹ Content score is based on quantity of user reports.
+          ℹ Content score is based on quantity of user reports. Experimental feature, may be abusable.
         </div>
       </div>
     </details>

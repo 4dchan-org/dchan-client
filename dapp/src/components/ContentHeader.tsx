@@ -113,11 +113,11 @@ export default function ContentHeader({
           <details>
             <summary className="text-xs text-gray-600">{summary}</summary>
             <div>
-              {!thread ? <BoardViewSettings /> : ""}
               <FilterSettings />
             </div>
           </details>
         </div>
+        <div className="flex justify-end">{!thread ? <BoardViewSettings /> : ""}</div>
       </div>
 
       <div className="p-2">
