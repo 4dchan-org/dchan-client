@@ -31,7 +31,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
   board_id = board_id ? `0x${board_id}` : undefined;
 
   const history = useHistory()
-  const {publish} = usePubSub()
+  const {subscribe, publish, unsubscribe} = usePubSub()
 
   const query = parseQueryString(location.search);
   const block = parseInt(`${query.block}`);
@@ -68,6 +68,18 @@ export default function ThreadPage({ location, match: { params } }: any) {
   useEffect(() => {
     post_n && !loading && publish("POST_FOCUS", `${post_n}`)
   }, [post_n, loading, publish]);
+
+  useEffect(() => {
+    const sub = subscribe("POST_FOCUS", (_: any, n: string) => {
+      if(0 === posts.filter(post => post.n === n).length) {
+        board && history.replace(`${Router.board(board)}/${n}`)
+      }
+    });
+
+    return () => {
+      unsubscribe(sub);
+    };
+  });
 
   useEffect(() => {
     refetch({

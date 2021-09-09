@@ -35,7 +35,8 @@ export default function BoardPage({ location, match: { params } }: any) {
   const { lastBlock } = useLastBlock();
   const query = parseQueryString(location.search);
   const page = parseInt(`${query.page || "0"}`);
-  const block = parseInt(`${query.block || lastBlock?.number || "0"}`);
+  const queriedBlock = parseInt(`${query.block}`)
+  const block = !isNaN(queriedBlock) ? queriedBlock : parseInt(`${lastBlock?.number || "0"}`);
   const dateTime = query.date
     ? DateTime.fromISO(query.date as string)
     : undefined;
@@ -97,7 +98,7 @@ export default function BoardPage({ location, match: { params } }: any) {
       <div>
         <ContentHeader
           board={board}
-          block={block}
+          block={queriedBlock}
           dateTime={dateTime}
           baseUrl={board ? Router.board(board) : undefined}
           summary={
@@ -125,13 +126,13 @@ export default function BoardPage({ location, match: { params } }: any) {
               <div>
                 {{
                   catalog: (
-                    <CatalogView threads={filteredThreads} block={block} />
+                    <CatalogView threads={filteredThreads} block={queriedBlock} />
                   ),
                   threads: (
                     <div>
                       {threads.map((thread) => {
                         return (
-                          <div className="border-solid border-black py-2 border-b border-secondary">
+                          <div className="border-solid border-black py-2 border-b border-secondary" key={thread.id}>
                             <Post
                               post={thread.op}
                               thread={thread}
@@ -142,7 +143,7 @@ export default function BoardPage({ location, match: { params } }: any) {
                                     [
                                     <Link
                                       to={`${Router.thread(thread)}${
-                                        block ? `?block=${block}` : ""
+                                        queriedBlock ? `?block=${queriedBlock}` : ""
                                       }`}
                                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                                     >
@@ -158,7 +159,7 @@ export default function BoardPage({ location, match: { params } }: any) {
                                 1 + thread.replies.length ? (
                                   <Link
                                     to={`${Router.thread(thread)}${
-                                      block ? `?block=${block}` : ""
+                                      queriedBlock ? `?block=${queriedBlock}` : ""
                                     }`}
                                     className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                                   >
@@ -200,7 +201,7 @@ export default function BoardPage({ location, match: { params } }: any) {
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
                       to={`${Router.board(board)}?page=${0}${
-                        block ? `&block=${block}` : ""
+                        queriedBlock ? `&block=${queriedBlock}` : ""
                       }`}
                     >
                       &lt;&lt;
@@ -214,7 +215,7 @@ export default function BoardPage({ location, match: { params } }: any) {
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
                       to={`${Router.board(board)}?page=${page - 1}${
-                        block ? `&block=${block}` : ""
+                        queriedBlock ? `&block=${queriedBlock}` : ""
                       }`}
                     >
                       &lt;
@@ -237,7 +238,7 @@ export default function BoardPage({ location, match: { params } }: any) {
                       } else {
                         history.push(
                           `${Router.board(board)}?page=${newPage}${
-                            block ? `&block=${block}` : ""
+                            queriedBlock ? `&block=${queriedBlock}` : ""
                           }`
                         );
                       }
@@ -252,7 +253,7 @@ export default function BoardPage({ location, match: { params } }: any) {
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
                       to={`${Router.board(board)}?page=${page + 1}${
-                        block ? `&block=${block}` : ""
+                        queriedBlock ? `&block=${queriedBlock}` : ""
                       }`}
                     >
                       &gt;
@@ -266,7 +267,7 @@ export default function BoardPage({ location, match: { params } }: any) {
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
                       to={`${Router.board(board)}?page=${maxPage}${
-                        block ? `&block=${block}` : ""
+                        queriedBlock ? `&block=${queriedBlock}` : ""
                       }`}
                     >
                       &gt;&gt;

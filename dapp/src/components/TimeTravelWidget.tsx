@@ -170,7 +170,7 @@ export default function TimeTravelWidget({
               min={parseInt(timeTravelRange.min.number)}
               max={parseInt(timeTravelRange.max.number)}
               onChange={(e) => onBlockChange(e.target.value)}
-              value={block}
+              value={block || lastBlock?.number}
             />{" "}
             <span className="mx-1">Now</span>
           </div>

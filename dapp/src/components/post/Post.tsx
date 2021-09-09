@@ -92,7 +92,7 @@ export default function Post({
         const backlink = {
           from: post,
           to: {
-            n,
+            n: n.trim(),
           },
         };
 

@@ -83,7 +83,7 @@ export default function FormPost({
       setValue(
         "comment",
         `${comment}${
-          !!comment && comment.substr(-1, 1) !== " " ? " " : ""
+          !!comment && comment.substr(-1, 1).match(/\w/) ? " " : ""
         }${quote} `
       );
       try {
