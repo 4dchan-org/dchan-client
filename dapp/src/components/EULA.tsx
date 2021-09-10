@@ -44,13 +44,13 @@ export default function EULA() {
               </div>
 
               <div className="p-2">
-                The content of this website is for mature audiences only and may
+                * The content of this website is for mature audiences only and may
                 not be suitable for minors. If you are a minor or it is illegal
                 for you to access mature images and language, do not proceed.
               </div>
 
               <div className="p-2">
-                Content is presented to you AS IS, with no warranty, express or
+                * Content is presented to you AS IS, with no warranty, express or
                 implied.
                 <br />
                 By clicking "I Agree," you agree to accept full responsibility
