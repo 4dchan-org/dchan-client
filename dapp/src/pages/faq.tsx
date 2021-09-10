@@ -2,6 +2,33 @@ import Card from "components/Card";
 import SimpleFooter from "components/SimpleFooter";
 import { useTitle } from "react-use";
 
+function TheGraph() {
+  return (
+    <span>
+      <a
+        className="text-blue-600 visited:text-purple-600"
+        href="//thegraph.com/"
+        target="_blank"
+        rel="noreferrer"
+      >
+        The Graph
+      </a>{" "}
+      <span className="text-xs">
+        (ticker:{" "}
+        <a
+          className="text-blue-600 visited:text-purple-600"
+          href="//www.coingecko.com/en/coins/the-graph"
+          target="_blank"
+          rel="noreferrer"
+        >
+          GRT
+        </a>
+        )
+      </span>
+    </span>
+  );
+}
+
 export default function FAQPage() {
   useTitle(`FAQ - dchan.network`);
 
@@ -21,67 +48,33 @@ export default function FAQPage() {
             <div className="pb-2">
               <strong>Q: Decentralized?</strong>
               <div>
-                Unlike legacy pre-Web3 imageboards, none of the displayed
-                content is hosted on the server that served you this client.
-                Instead, dchan's posts and images are respectively stored on
-                Polygon's blockchain and on IPFS, using{" "}
-                <a
-                  className="text-blue-600 visited:text-purple-600"
-                  href="//thegraph.com/"
-                  target="_blank"
-                >
-                  The Graph
-                </a>{" "}
-                <span className="text-xs">
-                  (ticker:{" "}
-                  <a
-                    className="text-blue-600 visited:text-purple-600"
-                    href="//www.coingecko.com/en/coins/the-graph"
-                    target="_blank"
-                  >
-                    GRT
-                  </a>
-                  )
-                </span>{" "}
-                to index and serve the content in a decentralized manner.
+                dchan is a Web3 imageboard whose posts and images are
+                respectively stored on Polygon's blockchain and on IPFS, using{" "}
+                <TheGraph /> to index and serve the content in a decentralized
+                manner.
               </div>
             </div>
 
             <div className="pb-2">
               <strong>Q: Uncensorable?</strong>
               <div>
-                Since dchan users write their posts on the blockchain, there is
-                no way for anyone, including the original poster, to ever delete
-                it. dchan's admins and janitors are able to remove the content
-                from view, but the content will still be retrievable.
+                Since dchan users write their posts on the blockchain and upload
+                their images to IPFS, there is no way for anyone, including the
+                original poster and dchan's admins, to ever delete any of that
+                content. dchan's admins and janitors are able to remove any
+                offending content from view, but the content will still be
+                retrievable.
               </div>
             </div>
 
             <div className="pb-2">
               <strong>Q: Time-Traveling?</strong>
               <div>
-                <a
-                  className="text-blue-600 visited:text-purple-600"
-                  href="//thegraph.com/"
-                  target="_blank"
-                >
-                  The Graph
-                </a>{" "}
-                <span className="text-xs">
-                  (ticker:{" "}
-                  <a
-                    className="text-blue-600 visited:text-purple-600"
-                    href="//www.coingecko.com/en/coins/the-graph"
-                    target="_blank"
-                  >
-                    GRT
-                  </a>
-                  )
-                </span>{" "}
-                is capable of obtaining data as it was at any point in time, and
-                dchan makes use of this to allow you to read dchan's boards and
-                threads exactly as they were whenever in the past. This also
-                means that there is no need for an archive, as it is built in.
+                <TheGraph /> is capable of obtaining data as it was at any point
+                in time, and dchan makes use of this to allow you to read
+                dchan's boards and threads exactly as they were whenever in the
+                past. This also means that there is no need for an archive, as
+                it is already built in the protocol.
               </div>
             </div>
 
@@ -98,14 +91,22 @@ export default function FAQPage() {
             <div className="pb-2">
               <strong>Q: Pseudonymous users?</strong>
               <div>
-                Due to its implementation, posts are written directly on the
-                blockchain and are therefore plainly tied to the address sending
-                the transaction, making it impossible to prevent other users
-                from finding out what address posted a specific post. In order
-                to avoid creating a sense of false anonymity, dchan's posts
-                include that information to uniquely identify the poster,
-                effectively acting as a pseudonym. Users can still choose a name
-                to sign their posts with, with the default being "Anonymous".
+                Since posts are written directly on the blockchain, they are
+                therefore plainly tied to the address sending the transaction,
+                making it impossible to prevent other users from finding out
+                what address posted a specific post. In order to avoid creating
+                a sense of false anonymity, dchan's posts publicize the poster's
+                address, effectively acting as the poster's unique public
+                pseudonym.
+              </div>
+            </div>
+
+            <div className="pb-2">
+              <strong>Q: Do you sell tokens?</strong>
+              <div>
+                dchan does not require any token to function (except MATIC for
+                sending txs, as previously mentioned), so no tokens are sold.
+                tl;dr Token not needed.
               </div>
             </div>
 
@@ -119,19 +120,33 @@ export default function FAQPage() {
                   className="text-blue-600 visited:text-purple-600"
                   href="https://matic.supply/"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   the faucet
                 </a>
-                , which will let you post ~10 times with the base gas price.
+                , which will let you post a couple times.
               </div>
             </div>
 
             <div className="pb-2">
-              <strong>Q: Do you sell tokens?</strong>
+              <strong>Q: How do I post?</strong>
               <div>
-                dchan does not require any token to function (except MATIC for
-                sending txs, as previously mentioned), so no tokens are sold.
-                tl;dr Token not needed.
+                You'll need to install{" "}
+                <a
+                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                  href="//metamask.io"
+                >
+                  Metamask
+                </a>{" "}
+                (if you're on Desktop) or{" "}
+                <a
+                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                  href="//trustwallet.com/"
+                >
+                  Trust Wallet
+                </a>{" "}
+                (if you're on Mobile). Connect your wallet to this website and then you'll be
+                able to post.
               </div>
             </div>
 
@@ -153,73 +168,16 @@ export default function FAQPage() {
             <div className="pb-2">
               <strong>Q: Why did you do this?</strong>
               <div>
-                dchan was born in a /biz/ thread after some anon pitched the
-                idea to use{" "}
-                <a
-                  className="text-blue-600 visited:text-purple-600"
-                  href="//thegraph.com/"
-                  target="_blank"
-                >
-                  The Graph
-                </a>{" "}
-                <span className="text-xs">
-                  (ticker:{" "}
-                  <a
-                    className="text-blue-600 visited:text-purple-600"
-                    href="//www.coingecko.com/en/coins/the-graph"
-                    target="_blank"
-                  >
-                    GRT
-                  </a>
-                  )
-                </span>{" "}
-                to create a decentralized imageboard. It was mainly a technical
-                challenge to see if it was possible. And it was. And thanks to how good{" "}
-                <a
-                  className="text-blue-600 visited:text-purple-600"
-                  href="//thegraph.com/"
-                  target="_blank"
-                >
-                  The Graph
-                </a>{" "}
-                <span className="text-xs">
-                  (ticker:{" "}
-                  <a
-                    className="text-blue-600 visited:text-purple-600"
-                    href="//www.coingecko.com/en/coins/the-graph"
-                    target="_blank"
-                  >
-                    GRT
-                  </a>
-                  )
-                </span>{" "}
-                is, it was easy too. Took me a month to build this, 80% of
-                which was spent on the client.
+                dchan was born in a 4chan /biz/ thread after some anon pitched the
+                idea to use <TheGraph /> to create a decentralized imageboard.
+                It was mainly a technical challenge to see if it was possible.
+                And it was.
               </div>
             </div>
 
             <div className="pb-2">
               <strong>
-                Q: What is{" "}
-                <a
-                  className="text-blue-600 visited:text-purple-600"
-                  href="//thegraph.com/"
-                  target="_blank"
-                >
-                  The Graph
-                </a>{" "}
-                <span className="text-xs">
-                  (ticker:{" "}
-                  <a
-                    className="text-blue-600 visited:text-purple-600"
-                    href="//www.coingecko.com/en/coins/the-graph"
-                    target="_blank"
-                  >
-                    GRT
-                  </a>
-                  )
-                </span>{" "}
-                anyway?
+                Q: What is <TheGraph /> anyway?
               </strong>
               <div>
                 It's a decentralized network that allows you to read the
@@ -228,19 +186,19 @@ export default function FAQPage() {
                   className="text-blue-600 visited:text-purple-600"
                   href="//thegraph.com/"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   Go to their website
                 </a>{" "}
-                to learn more. Long story short, if you're a developer reading this and you don't
-                own any
+                to learn more. If you're a developer and you don't own any
                 <a
                   className="text-blue-600 visited:text-purple-600"
                   href="//www.coingecko.com/en/coins/the-graph"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   GRT
-                </a>{" "}
-                yet, you're fucking it up.
+                </a>, you've fucked up.
               </div>
             </div>
 
