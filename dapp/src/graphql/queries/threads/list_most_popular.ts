@@ -5,7 +5,7 @@ const THREADS_LIST_MOST_POPULAR = gql`
   ${THREAD_FRAGMENT}
 
   query Threads {
-    threads(orderBy: replyCount, orderDirection: desc, limit: 10) {
+    threads(orderBy: replyCount, orderDirection: desc, first: 10) {
       ...Thread
     }
   }

@@ -25,6 +25,9 @@ export type Settings = {
     content_filter: {
         score_threshold: number // from 0 to 1
         show_below_threshold: boolean
+    },
+    eula: {
+        agreed: boolean
     }
 }
 
