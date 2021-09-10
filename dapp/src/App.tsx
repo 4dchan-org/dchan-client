@@ -15,6 +15,7 @@ import LockBanner from "components/LockBanner";
 import PostSearchPage from "pages/postSearch"
 import ReferencePage from "pages/reference";
 import RulesPage from 'pages/rules'
+import FAQPage from 'pages/faq'
 import ThreadPage from "pages/thread"
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/_/boards" component={BoardListPage} />
+          <Route path="/_/faq" component={FAQPage} />
           <Route path="/_/rules" component={RulesPage} />
           <Route path="/_/abuse" component={AbusePage} />
           <Route path="/_/admin" component={AdminPage} />

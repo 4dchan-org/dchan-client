@@ -64,6 +64,15 @@ export default function Footer({
               </div>
             </details>
             <div>
+              <Link
+                className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white"
+                to="/_/faq"
+                rel="noreferrer"
+              >
+                FAQ
+              </Link>
+            </div>
+            <div>
               <a
                 className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white"
                 href="//github.com/dchan-network"

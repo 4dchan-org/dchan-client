@@ -82,7 +82,7 @@ export default function FormPost({
       const quote = `>>${data}`;
       setValue(
         "comment",
-        `${comment}${
+        `${comment || ""}${
           !!comment && comment.substr(-1, 1).match(/\w/) ? " " : ""
         }${quote} `
       );
