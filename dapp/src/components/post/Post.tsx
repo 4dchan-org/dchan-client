@@ -136,7 +136,7 @@ export default function Post({
         ref={postRef}
       >
         <summary
-          className="text-left opacity-50 z-10 whitespace-nowrap"
+          className="text-left opacity-50 z-10 whitespace-nowrap max-w-95vw overflow-hidden"
           title="Hide/Show"
         >
           <PostHeader thread={thread} post={post}>
@@ -156,14 +156,15 @@ export default function Post({
               isFocused ? "bg-tertiary" : ""
             } w-full sm:w-auto pb-2 mb-2 px-4 inline-block border-bottom-invisible relative max-w-screen-xl`}
           >
-            <div className="flex flex-wrap center text-center sm:text-left sm:block">
+            <div className="flex sm:flex-wrap center text-center sm:text-left sm:block">
               {isOp && thread ? (
                 <button
-                  className={
+                  className={`inline-block ${
                     favorite
                       ? "opacity-60 hover:opacity-80"
-                      : "opacity-20 hover:opacity-40"
+                      : "opacity-20 hover:opacity-40"}`
                   }
+                  title={favorite ? "Remove from favorites" : "Add to favorites"}
                   onClick={onFavorite}
                 >
                   ⭐

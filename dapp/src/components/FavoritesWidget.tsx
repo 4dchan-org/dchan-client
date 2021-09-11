@@ -3,6 +3,7 @@ import { useThrottleCallback } from "@react-hook/throttle";
 import { Thread } from "dchan";
 import THREADS_LIST_FAVORITES from "graphql/queries/threads/list_favorites";
 import useFavorites from "hooks/useFavorites";
+import { truncate } from "lodash";
 import { useCallback, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Router } from "router";
@@ -42,9 +43,7 @@ export default function FavoritesWidget() {
           "Loading..."
         ) : ids.length > 0 && threads ? (
           <div>
-            <div className="mb-2">
-              <button onClick={onRefresh}>🔃</button> Favorite threads:
-            </div>
+            <div className="mb-2">Favorite threads:</div>
             <div className="text-sm">
               {threads.map((thread: Thread) => {
                 const board = thread.board;
@@ -52,25 +51,40 @@ export default function FavoritesWidget() {
                 return (
                   <div>
                     <button onClick={() => onRemove(thread)}>✖</button>{" "}
+                    {board ? (
+                      <span>
+                        /<BoardLink board={board} />/
+                      </span>
+                    ) : (
+                      ""
+                    )}
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                       to={`${Router.thread(thread)}`}
                     >
-                      ({thread.replyCount}) -{" "}
-                      {board ? (
-                        <span>
-                          /<BoardLink board={board} />/
-                        </span>
-                      ) : (
-                        ""
-                      )}{" "}
-                      - {thread.subject || thread.op.comment}{" "}
+                      {" "}
+                      - ({thread.replyCount}) -{" "}
+                      {truncate(thread.subject || thread.op.comment, {
+                        length: 32,
+                      })}{" "}
                       {thread.isLocked ? "🔒" : ""}{" "}
                       {thread.isPinned ? "📌" : ""}
                     </Link>
                   </div>
                 );
               })}
+            </div>
+            <div>
+              <div className="text-xs">
+                [
+                <button
+                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                  onClick={onRefresh}
+                >
+                  Refresh
+                </button>
+                ]
+              </div>
             </div>
           </div>
         ) : (

@@ -90,7 +90,7 @@ export default function PostHeader({
   const canLock = isOp && (isOwner || isJanny);
   const postBacklinks: Post[] = backlinks ? Object.values(backlinks) : [];
   return (
-    <span>
+    <span className="max-w-95vw">
       <span className="px-0.5 whitespace-nowrap">
         <span className="text-accent font-bold">
           {!name || "" === name ? "Anonymous" : name}
