@@ -58,7 +58,6 @@ export default function ReferencePage({ match: { params } }: any) {
       }
 
       if (location) {
-        console.log({ location });
         history.replace(location);
       }
     }

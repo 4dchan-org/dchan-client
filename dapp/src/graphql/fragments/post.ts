@@ -11,6 +11,12 @@ const POST_FRAGMENT = gql`
     thread {
       id
       n
+      op {
+        from {
+          id
+          address
+        }
+      }
     }
     board {
       id

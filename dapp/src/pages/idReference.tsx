@@ -38,6 +38,8 @@ export default function IdReferencePage({ match: { params } }: any) {
 
   const id = `0x${params.id}`;
 
+  console.log({id})
+
   const { data } = useQuery<IdSearchData, IdSearchVars>(SEARCH_BY_ID, {
     variables: { id },
     pollInterval: 5_000,
@@ -71,6 +73,8 @@ export default function IdReferencePage({ match: { params } }: any) {
       } else if (post) {
         location = `${Router.post(post)}`;
       }
+
+      console.log({board, thread, post})
 
       if ((board || thread || post) && !location) {
         setError(
