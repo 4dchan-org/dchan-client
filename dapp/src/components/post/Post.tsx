@@ -47,12 +47,12 @@ export default function Post({
     setIsFocused(true);
     postRef.current?.scrollIntoView();
     const url = Router.post(post);
-    url && history.replace(url);
+    url && history.push(url);
   }, [post, postRef, history, setIsFocused]);
 
   useEffect(() => {
-    const sub = subscribe("POST_FOCUS", (_: any, n: string) => {
-      const newIsFocused = `${n}` === `${post.n}`;
+    const sub = subscribe("POST_FOCUS", (_: any, focusedPost: DchanPost) => {
+      const newIsFocused = post.id === focusedPost.id
       setIsFocused(newIsFocused);
       if (newIsFocused) {
         onFocus();

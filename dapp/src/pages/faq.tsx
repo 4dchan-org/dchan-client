@@ -92,9 +92,9 @@ export default function FAQPage() {
               <strong>Q: Pseudonymous users?</strong>
               <div>
                 Since posts are written directly on the blockchain, they are
-                therefore plainly tied to the address sending the transaction,
+                plainly tied to the address sending the transaction,
                 making it impossible to prevent other users from finding out
-                what address posted a specific post. In order to avoid creating
+                what address posted a specific post. Therefore, in order to avoid creating
                 a sense of false anonymity, dchan's posts publicize the poster's
                 address, effectively acting as the poster's unique public
                 pseudonym.
@@ -190,7 +190,7 @@ export default function FAQPage() {
                 >
                   Go to their website
                 </a>{" "}
-                to learn more. If you're a developer and you don't own any
+                to learn more. If you're a developer and you don't own any{" "}
                 <a
                   className="text-blue-600 visited:text-purple-600"
                   href="//www.coingecko.com/en/coins/the-graph"

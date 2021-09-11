@@ -15,6 +15,7 @@ import FAQPage from "pages/faq";
 import ThreadPage from "pages/thread";
 import useSettings from "hooks/useSettings";
 import EULA from "components/EULA";
+import IdReferencePage from "pages/idReference";
 
 function App() {
   const [settings] = useSettings();
@@ -33,17 +34,22 @@ function App() {
           <Route path="/_/abuse" component={AbusePage} />
           <Route path="/_/admin" component={AdminPage} />
           <Route path="/_/posts" component={PostSearchPage} />
-          <Route path="/0x:id" component={ReferencePage} />
+          <Route path="/0x:id/:post_n" component={ReferencePage} />
+          <Route path="/0x:id" component={IdReferencePage} />
           <Route
             path="/:board_name/0x:board_id/:view_mode(catalog)"
             component={BoardPage}
           />
           <Route
-            path="/:board_name/0x:board_id/:thread_n/:post_n"
+            path="/:board_name/0x:board_id/0x:user_id/:thread_n/0x:focus_user_id/:focus_post_n"
             component={ThreadPage}
           />
           <Route
-            path="/:board_name/0x:board_id/:thread_n"
+            path="/:board_name/0x:board_id/0x:user_id/:thread_n/:post_n"
+            component={ThreadPage}
+          />
+          <Route
+            path="/:board_name/0x:board_id/0x:user_id/:thread_n"
             component={ThreadPage}
           />
           <Route path="/:board_name/0x:board_id" component={BoardPage} />

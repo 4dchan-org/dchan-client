@@ -1,84 +1,64 @@
 import { useQuery } from "@apollo/react-hooks";
 import Error from "components/Error";
 import Loading from "components/Loading";
-import {
-  Board,
-  BoardCreationEvent,
-  Post,
-  PostCreationEvent,
-  Thread,
-  ThreadCreationEvent,
-} from "dchan";
-import SEARCH_BY_ID from "graphql/queries/search_by_id";
+import { Post, Thread } from "dchan";
+import SEARCH_BY_REF from "graphql/queries/search_by_ref";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
 
-interface SearchData {
-  boardCreationEvent: BoardCreationEvent;
-  threadCreationEvent: ThreadCreationEvent;
-  postCreationEvent: PostCreationEvent;
-  board: Board;
-  thread: Thread;
-  post: Post;
+interface RefSearchData {
+  threads: Thread[];
+  posts: Post[];
 }
-interface SearchVars {
+interface RefSearchVars {
   id: string;
+  post_n: string;
 }
 
-export default function ReferencePage({
-  match: {
-    params: { id },
-  },
-}: any) {
-  const { data } = useQuery<SearchData, SearchVars>(SEARCH_BY_ID, {
-    variables: { id: `0x${id}` },
-    pollInterval: 5_000,
-  });
-
+export default function ReferencePage({ match: { params } }: any) {
   const [error, setError] = useState<string>();
-  const [stillStuck, setStillStuck] = useState<boolean>(false);
-
-  setTimeout(() => {
-    setStillStuck(true);
-  }, 10_000);
 
   const history = useHistory();
+
+  const id = `0x${params.id}`;
+  const post_n = params.post_n;
+
+  const { loading, data } = useQuery<RefSearchData, RefSearchVars>(
+    SEARCH_BY_REF,
+    {
+      variables: { id, post_n },
+    }
+  );
 
   useEffect(() => {
     if (data) {
       let location = null;
+      let thread = null;
+      let post = null;
 
-      let {
-        boardCreationEvent,
-        threadCreationEvent,
-        postCreationEvent,
-        board,
-        thread,
-        post,
-      } = data;
+      let { threads, posts } = data;
 
-      if (!board && boardCreationEvent) {
-        board = boardCreationEvent.board;
-      } else if (!thread && threadCreationEvent) {
-        thread = threadCreationEvent.thread;
-      } else if (!post && postCreationEvent) {
-        post = postCreationEvent.post;
+      if (threads && threads.length > 0) {
+        thread = threads[0];
+      } else if (posts && posts.length > 0) {
+        post = posts[0];
       }
 
-      if (board) {
-        location = `${Router.board(board)}`;
-      } else if (thread) {
+      if (thread) {
         location = `${Router.thread(thread)}`;
       } else if (post) {
         location = `${Router.post(post)}`;
       }
 
-      if ((board || thread || post) && !location) {
-        setError("Content missing.");
+      if ((thread || post) && !location) {
+        setError(
+          "Content not found. It may have been deleted, or the ID is invalid."
+        );
       }
 
       if (location) {
+        console.log({ location });
         history.replace(location);
       }
     }
@@ -92,14 +72,15 @@ export default function ReferencePage({
         </Error>
       ) : (
         <div>
-          <Loading />
-          <div className="text-xs">{`0x${id}`}</div>
-          <div>
-            {stillStuck
-              ? id.indexOf("-") !== -1
-                ? "The requested content is (probably) still being indexed, please wait..."
-                : "Are you sure it's a valid ID?"
-              : ""}
+          {loading ? (
+            <Loading />
+          ) : (
+            <Error subject="Content not found">
+              <span>It may have been deleted, or the ID is invalid.</span>
+            </Error>
+          )}
+          <div className="text-xs">
+            {id}/{post_n}
           </div>
         </div>
       )}

@@ -16,13 +16,17 @@ export default function PopularBoardsCard() {
   return (
     <Card className="min-w-32rem p-2" title={<span>Popular boards</span>}>
       <div>
-        <Link
-          className="text-blue-600 visited:text-purple-600 hover:text-blue-500 py-1 px-4"
-          to="/_/boards"
-        >
-          All boards
-        </Link>
         <BoardList loading={loading} boards={data?.boards}></BoardList>
+        <div className="p-4">
+          [
+          <Link
+            className="text-blue-600 visited:text-purple-600 hover:text-blue-500 py-1 px-4"
+            to="/_/boards"
+          >
+            More boards
+          </Link>
+          ]
+        </div>
       </div>
     </Card>
   );

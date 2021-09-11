@@ -4,22 +4,26 @@ export abstract class Router {
     public static post({
         n,
         board,
-        thread
+        thread,
+        from
     }: Post) {
+        const fromId = thread?.op?.from?.id
+
         return board &&
             !!board &&
             !!board.name &&
-            !!board.id ? thread ? `/${board.name}/${board.id}/${thread.n}/${n}` : `/${board.name}/${board.id}/${n}` : undefined
+            !!board.id && thread && fromId ? `/${board.name}/${board.id}/${fromId}/${thread.n}/${from.id}/${n}` : undefined
     }
 
     public static thread({
         n,
+        op,
         board
     }: Thread) {
         return board &&
             !!board.name &&
             !!board.id &&
-            !!n ? `/${board.name}/${board.id}/${n}` : undefined
+            !!n ? `/${board.name}/${board.id}/${op.from.id}/${n}` : undefined
     }
 
     public static board({

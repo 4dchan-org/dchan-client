@@ -51,8 +51,8 @@ export default function PostHeader({
   const isJanny = thread?.board?.id ? isJannyOf(thread.board.id) : false;
 
   const replyTo = useCallback(
-    (n: number | string) => {
-      publish("FORM_QUOTE", `${n}`);
+    (from: string, n: number | string) => {
+      publish("FORM_QUOTE", {from, n});
     },
     [publish]
   );
@@ -74,8 +74,8 @@ export default function PostHeader({
   );
 
   const focusPost = useCallback(
-    (n: number | string) => {
-      publish("POST_FOCUS", `${n}`);
+    (post: Post) => {
+      publish("POST_FOCUS", post);
     },
     [publish]
   );
@@ -122,10 +122,10 @@ export default function PostHeader({
         {createdAt.toRelative()})
       </span>
       <span className="px-0.5 on-parent-target-font-bold font-family-tahoma whitespace-nowrap">
-        <button onClick={() => focusPost(post.n)} title="Link to this post">
+        <button onClick={() => focusPost(post)} title="Link to this post">
           No.
         </button>
-        <button title="Reply to this post" onClick={() => replyTo(post.n)}>
+        <button title="Reply to this post" onClick={() => replyTo(post.from.id, post.n)}>
           {n}
         </button>
       </span>
@@ -229,7 +229,7 @@ export default function PostHeader({
         {postBacklinks?.map((post) => (
           <button
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-1"
-            onClick={() => focusPost(post.n)}
+            onClick={() => focusPost(post)}
             key={post.id}
           >{`>>${post.n}`}</button>
         ))}

@@ -12,6 +12,12 @@ const SEARCH_BY_ID = gql`
     board {
       ...Board
     }
+    op {
+      from {
+        id
+        address
+      }
+    }
   }
 
   fragment Post on Post {

@@ -77,9 +77,12 @@ export default function FormPost({
   const [formDisabled, setFormDisabled] = useState<boolean>(false);
 
   const onQuote = useCallback(
-    function (msg, data) {
+    function (msg, {
+      from,
+      n
+    }) {
       const { comment } = getValues();
-      const quote = `>>${data}`;
+      const quote = `>>${from}/${n}`;
       setValue(
         "comment",
         `${comment || ""}${
@@ -593,9 +596,16 @@ export default function FormPost({
                         <Link
                           to="/_/rules"
                           target="_blank"
-                          className="text-blue-600 visited:text-purple-600 hover:text-blue-140"
+                          className="text-blue-600 visited:text-purple-600 hover:text-blue-400"
                         >
                           rules
+                        </Link>{" "}and the{" "}
+                        <Link
+                          to="/_/faq"
+                          target="_blank"
+                          className="text-blue-600 visited:text-purple-600 hover:text-blue-400"
+                        >
+                          FAQ
                         </Link>{" "}
                         before posting.
                       </li>

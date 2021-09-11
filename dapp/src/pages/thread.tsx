@@ -5,7 +5,7 @@ import { Board, Post, Thread } from "dchan";
 import THREAD_GET from "graphql/queries/thread_get";
 import { DateTime } from "luxon";
 import { parse as parseQueryString } from "query-string";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Router } from "router";
 import PostComponent from "components/post/Post";
 import Loading from "components/Loading";
@@ -30,8 +30,8 @@ export default function ThreadPage({ location, match: { params } }: any) {
   let { board_id } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 
-  const history = useHistory()
-  const {subscribe, publish, unsubscribe} = usePubSub()
+  const history = useHistory();
+  const { publish } = usePubSub();
 
   const query = parseQueryString(location.search);
   const block = parseInt(`${query.block}`);
@@ -39,14 +39,15 @@ export default function ThreadPage({ location, match: { params } }: any) {
     ? DateTime.fromISO(query.date as string)
     : undefined;
 
-  const post_n = params.post_n || ""
+  const focus_user_id = params.focus_user_id ? `0x${params.focus_user_id}` : "";
+  const focus_post_n = params.focus_post_n || "";
 
   let variables = {
     board: board_id,
     n: params.thread_n,
-    block
+    block,
   };
-  
+
   const { refetch, data, loading } = useQuery<
     ThreadContentData,
     ThreadContentVars
@@ -58,36 +59,45 @@ export default function ThreadPage({ location, match: { params } }: any) {
   const post = data?.posts?.[0];
   const thread = data?.threads?.[0];
   const board = data?.board;
-  const posts = thread ? [thread.op, ...thread.replies] : [];
+  const posts = useMemo(
+    () => (thread ? [thread.op, ...thread.replies] : []),
+    [thread]
+  );
 
   useEffect(() => {
-    const url = !thread && post ? Router.post(post) : undefined
-    url && history.replace(`${url}${block ? `?block=${block}` : ""}`)
-  }, [history, thread, block, post])
+    const url = !thread && post ? Router.post(post) : undefined;
+    console.log({thread, post, url})
+    url && history.replace(`${url}${block ? `?block=${block}` : ""}`);
+  }, [history, thread, block, post]);
 
   useEffect(() => {
-    post_n && !loading && publish("POST_FOCUS", `${post_n}`)
-  }, [post_n, loading, publish]);
-
-  useEffect(() => {
-    const sub = subscribe("POST_FOCUS", (_: any, n: string) => {
-      if(0 === posts.filter(post => post.n === n).length) {
-        board && history.replace(`${Router.board(board)}/${n}`)
-      }
-    });
-
-    return () => {
-      unsubscribe(sub);
-    };
-  });
+    const filtered = !loading
+      ? posts.filter(
+          (post) => post.from.id === focus_user_id && post.n === focus_post_n
+        )
+      : [];
+    const focusedPost = filtered.length > 0 ? filtered[0] : null;
+    console.log({ focusedPost, posts, focus_user_id, focus_post_n });
+    if (focusedPost) {
+      publish("POST_FOCUS", focusedPost);
+    } else if (!loading && focus_user_id && focus_post_n) {
+      history.replace(`/${focus_user_id}/${focus_post_n}`);
+    }
+  }, [posts, focus_user_id, focus_post_n, loading, publish, history]);
 
   useEffect(() => {
     refetch({
-      block
+      block,
     });
   }, [block, refetch]);
 
-  useTitle(board && thread ? `/${board.name}/ - ${thread.subject || thread.op.comment} - dchan.network - [${thread.id}]` : `/${board_id}/ - Loading... - dchan.network`)
+  useTitle(
+    board && thread
+      ? `/${board.name}/ - ${
+          thread.subject || thread.op.comment
+        } - dchan.network - [${thread.id}]`
+      : `/${board_id}/ - Loading... - dchan.network`
+  );
 
   return (
     <div className="bg-primary min-h-100vh">
@@ -112,7 +122,12 @@ export default function ThreadPage({ location, match: { params } }: any) {
           <div>
             <div>
               {posts.map((post) => (
-                <PostComponent post={post} thread={thread} key={post.id} enableBacklinks={true} />
+                <PostComponent
+                  post={post}
+                  thread={thread}
+                  key={post.id}
+                  enableBacklinks={true}
+                />
               ))}
             </div>
 
