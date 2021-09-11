@@ -14,6 +14,7 @@ import TimeTravelWidget from "./TimeTravelWidget";
 import BoardViewSettings from "./settings/BoardViewSettings";
 import FilterSettings from "./settings/FilterSettings";
 import { Link } from "react-router-dom";
+import FavoritesWidget from "./FavoritesWidget";
 
 export default function ContentHeader({
   board,
@@ -67,6 +68,7 @@ export default function ContentHeader({
               }
             />
             <SearchWidget baseUrl={Router.posts()} search={search} />
+            <FavoritesWidget />
           </div>
         </details>
       </div>

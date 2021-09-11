@@ -23,7 +23,8 @@ const DefaultSettings = {
     },
     eula: {
         agreed: false
-    }
+    },
+    favorites: {}
 }
 
 export default DefaultSettings

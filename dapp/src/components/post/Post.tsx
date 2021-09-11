@@ -12,6 +12,7 @@ import { Router } from "router";
 import PostBody from "./PostBody";
 import PostHeader from "./PostHeader";
 import sanitize from "sanitize-html";
+import useFavorites from "hooks/useFavorites";
 
 export default function Post({
   children,
@@ -112,6 +113,18 @@ export default function Post({
     settings?.content_filter?.show_below_threshold ||
     showAnyway;
 
+  const { isFavorite, addFavorite, removeFavorite } = useFavorites();
+  const favorite = thread && isFavorite ? isFavorite(thread) : false;
+
+  const onFavorite = useCallback(() => {
+    if (thread && removeFavorite && addFavorite) {
+      if (favorite) {
+        removeFavorite(thread);
+      } else {
+        addFavorite(thread);
+      }
+    }
+  }, [addFavorite, removeFavorite, thread, favorite]);
   return (
     <div className="flex">
       {!isOp ? <span className="pl-2 text-secondary">&gt;&gt;</span> : ""}
@@ -143,6 +156,21 @@ export default function Post({
             } w-full sm:w-auto pb-2 mb-2 px-4 inline-block border-bottom-invisible relative max-w-screen-xl`}
           >
             <div className="flex flex-wrap center text-center sm:text-left sm:block">
+              {isOp && thread ? (
+                <button
+                  className={
+                    favorite
+                      ? "opacity-60 hover:opacity-80"
+                      : "opacity-20 hover:opacity-40"
+                  }
+                  onClick={onFavorite}
+                >
+                  ⭐
+                </button>
+              ) : (
+                <span></span>
+              )}
+
               <PostHeader thread={thread} post={post} backlinks={backlinks}>
                 {header}
               </PostHeader>
@@ -190,7 +218,11 @@ export default function Post({
                   ""
                 )}
                 <div className="y-1">
-                  <div className={`h-full max-w-max flex flex-wrap sm:flex-nowrap text-left sm:items-start ${isOp ? `pb-2` : ""}`}>
+                  <div
+                    className={`h-full max-w-max flex flex-wrap sm:flex-nowrap text-left sm:items-start ${
+                      isOp ? `pb-2` : ""
+                    }`}
+                  >
                     {!!image ? (
                       <div className="overflow-auto px-2 sm:float-left grid center flex-shrink-0 max-w-100vw sm:max-w-max">
                         <IPFSImage

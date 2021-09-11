@@ -1,11 +1,7 @@
 import AddressLabel from "components/AddressLabel";
 import Menu from "components/Menu";
 import Status from "components/Status";
-import {
-  Post,
-  sendTip,
-  Thread,
-} from "dchan";
+import { Post, sendTip, Thread } from "dchan";
 import { fromBigInt } from "dchan/entities/datetime";
 import { isLowScore } from "dchan/entities/post";
 import {
@@ -29,25 +25,23 @@ export default function PostHeader({
   post,
   thread,
   backlinks,
-  children
+  children,
 }: {
   post: Post;
   thread?: Thread;
   backlinks?: object;
-  children?: ReactElement
+  children?: ReactElement;
 }) {
   const {
     id,
     n,
     name,
     from: { address },
-    createdAtBlock: {
-      timestamp: createdAtUnix
-    }
-  } = post
+    createdAtBlock: { timestamp: createdAtUnix },
+  } = post;
   const { provider, accounts } = useWeb3();
   const { publish } = usePubSub();
-  const [settings] = useSettings()
+  const [settings] = useSettings();
   const { isJannyOf } = useUser();
   const isOwner = accounts.length > 0 && accounts[0] === address;
   const [status, setStatus] = useState<string | object>();
@@ -79,9 +73,12 @@ export default function PostHeader({
     [accounts]
   );
 
-  const focusPost = useCallback((n: number | string) => {
-    publish("POST_FOCUS", `${n}`)
-  }, [publish]);
+  const focusPost = useCallback(
+    (n: number | string) => {
+      publish("POST_FOCUS", `${n}`);
+    },
+    [publish]
+  );
 
   const isPinned = thread?.isPinned;
   const isLocked = thread?.isLocked;
@@ -92,7 +89,6 @@ export default function PostHeader({
   const canBan = isJanny;
   const canLock = isOp && (isOwner || isJanny);
   const postBacklinks: Post[] = backlinks ? Object.values(backlinks) : [];
-
   return (
     <span>
       <span className="px-0.5 whitespace-nowrap">
@@ -103,17 +99,22 @@ export default function PostHeader({
       <span className="px-1">
         <details className="inline">
           <summary>
-          (<AddressLabel etherscannable={true} address={address} />)
+            (<AddressLabel etherscannable={true} address={address} />)
           </summary>
-          {provider ? 
-          <div className="flex">
-            (<button
-              className="text-blue-600 visited:text-purple-600 hover:text-blue-500 flex-grow"
-              onClick={() => onSendTip(address)}
-            >
-              💸 Tip
-            </button>)
-          </div> : ""}
+          {provider ? (
+            <div className="flex">
+              (
+              <button
+                className="text-blue-600 visited:text-purple-600 hover:text-blue-500 flex-grow"
+                onClick={() => onSendTip(address)}
+              >
+                💸 Tip
+              </button>
+              )
+            </div>
+          ) : (
+            ""
+          )}
         </details>
       </span>
       <span className="px-0.5 whitespace-nowrap text-xs">
@@ -140,7 +141,9 @@ export default function PostHeader({
           <span></span>
         )}
         {isLowScore(post, settings?.content_filter?.score_threshold) ? (
-          <span title="Post hidden due to reports. Click to show anyway.">⚠️</span>
+          <span title="Post hidden due to reports. Click to show anyway.">
+            ⚠️
+          </span>
         ) : (
           <span></span>
         )}
@@ -221,9 +224,7 @@ export default function PostHeader({
           🔗
         </Link>
       </span>
-      {
-        children
-      }
+      {children}
       <span className="dchan-backlinks text-sm">
         {postBacklinks?.map((post) => (
           <button

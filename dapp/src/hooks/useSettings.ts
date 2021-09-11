@@ -28,6 +28,9 @@ export type Settings = {
     },
     eula: {
         agreed: boolean
+    },
+    favorites: {
+        [key: string]: boolean
     }
 }
 

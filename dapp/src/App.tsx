@@ -19,7 +19,9 @@ import EULA from "components/EULA";
 function App() {
   const [settings] = useSettings();
 
-  return settings?.eula?.agreed ? (
+  return settings?.eula?.agreed === false ? (
+    <EULA />
+  ) : (
     <Router basename="/">
       <LockBanner />
       <div className="App text-center">
@@ -49,8 +51,6 @@ function App() {
         </Switch>
       </div>
     </Router>
-  ) : (
-    <EULA />
   );
 }
 
