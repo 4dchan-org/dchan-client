@@ -13,6 +13,7 @@ import PostBody from "./PostBody";
 import PostHeader from "./PostHeader";
 import sanitize from "sanitize-html";
 import useFavorites from "hooks/useFavorites";
+import { isArray } from "lodash";
 
 export default function Post({
   children,
@@ -51,8 +52,8 @@ export default function Post({
   }, [post, postRef, history, setIsFocused]);
 
   useEffect(() => {
-    const sub = subscribe("POST_FOCUS", (_: any, focusedPost: DchanPost) => {
-      const newIsFocused = post.id === focusedPost.id
+    const sub = subscribe("POST_FOCUS", (_: any, focusedPost: DchanPost | DchanPost[]) => {
+      const newIsFocused = isArray(focusedPost) ? !!focusedPost.find(p => post.id === p.id) : post.id === focusedPost.id
       setIsFocused(newIsFocused);
       if (newIsFocused) {
         onFocus();

@@ -71,15 +71,14 @@ export default function ThreadPage({ location, match: { params } }: any) {
   }, [history, thread, block, post]);
 
   useEffect(() => {
-    const filtered = !loading
+    const filtered = !loading && (focus_user_id || focus_post_n)
       ? posts.filter(
-          (post) => post.from.id === focus_user_id && post.n === focus_post_n
+          (post) => (!focus_user_id || post.from.id === focus_user_id) && (!focus_post_n || post.n === focus_post_n)
         )
       : [];
-    const focusedPost = filtered.length > 0 ? filtered[0] : null;
-    console.log({ focusedPost, posts, focus_user_id, focus_post_n });
-    if (focusedPost) {
-      publish("POST_FOCUS", focusedPost);
+    
+    if (filtered.length > 0) {
+      publish("POST_FOCUS", filtered)
     } else if (!loading && focus_user_id && focus_post_n) {
       history.replace(`/${focus_user_id}/${focus_post_n}`);
     }

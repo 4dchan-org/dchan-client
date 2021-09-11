@@ -45,6 +45,14 @@ function App() {
             component={ThreadPage}
           />
           <Route
+            path="/:board_name/0x:board_id/0x:user_id/:thread_n/0x:focus_user_id"
+            component={ThreadPage}
+          />
+          <Route
+            path="/:board_name/0x:board_id/0x:user_id/:thread_n/:focus_post_n"
+            component={ThreadPage}
+          />
+          <Route
             path="/:board_name/0x:board_id/0x:user_id/:thread_n/:post_n"
             component={ThreadPage}
           />
