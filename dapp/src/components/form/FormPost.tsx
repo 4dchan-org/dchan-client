@@ -276,134 +276,63 @@ export default function FormPost({
     </Menu>
   );
 
-  return !isJanny && thread?.isLocked ? (
-    <div className="text-contrast font-weight-800 font-family-tahoma">
-      <div>Thread locked.</div>
-      <div>You cannot reply.</div>
-    </div>
-  ) : !isJanny && board?.isLocked ? (
-    <div className="text-contrast font-weight-800 font-family-tahoma">
-      <div>Board locked.</div>
-      <div>You cannot post.</div>
-    </div>
-  ) : (
+  return (
     <div>
       <Wallet />
-
-      <div>
-        {showForm ? (
-          <div
-            className="grid center w-full text-left sticky top-0 min-h-200px"
-          >
-            <form
-              ref={formRef}
-              id="dchan-post-form"
-              className="grid center bg-primary p-2 pointer-events-auto bg-primary"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <input
-                type="hidden"
-                {...register("nonce")}
-                disabled={formDisabled}
-                value={nonce}
-              />
-              {!!board ? (
+      {!isJanny && thread?.isLocked ? (
+        <div className="text-contrast font-weight-800 font-family-tahoma">
+          <div>Thread locked.</div>
+          <div>You cannot reply.</div>
+        </div>
+      ) : !isJanny && board?.isLocked ? (
+        <div className="text-contrast font-weight-800 font-family-tahoma">
+          <div>Board locked.</div>
+          <div>You cannot post.</div>
+        </div>
+      ) : (
+        <div>
+          {showForm ? (
+            <div className="grid center w-full text-left sticky top-0 min-h-200px">
+              <form
+                ref={formRef}
+                id="dchan-post-form"
+                className="grid center bg-primary p-2 pointer-events-auto bg-primary"
+                onSubmit={handleSubmit(onSubmit)}
+              >
                 <input
                   type="hidden"
-                  {...register("board")}
+                  {...register("nonce")}
                   disabled={formDisabled}
-                  value={board.id}
+                  value={nonce}
                 />
-              ) : (
-                ""
-              )}
-              {!!thread ? (
-                <input
-                  type="hidden"
-                  {...register("thread")}
-                  disabled={formDisabled}
-                  value={thread.id}
-                />
-              ) : (
-                ""
-              )}
-              <table>
-                <tbody>
-                  {!thread ? (
-                    <tr>
-                      <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
-                        Name
-                      </td>
-                      <td>
-                        <span className="relative">
-                          <input
-                            className="dchan-input-name px-1 border border-solid border-gray focus:border-indigo-300"
-                            type="text"
-                            placeholder="Anonymous"
-                            {...register("name")}
-                            disabled={formDisabled}
-                            onChange={(e) =>
-                              setNameLength(e.target.value.length)
-                            }
-                            maxLength={70}
-                          />
-                          <MaxLengthWatch maxLength={70} value={nameLength} />
-                        </span>
-                      </td>
-                    </tr>
-                  ) : (
-                    <tr></tr>
-                  )}
-                  {!thread ? (
-                    <tr>
-                      <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
-                        Subject
-                      </td>
-                      <td>
-                        <div className="flex items-center justify-start">
-                          <span className="relative">
-                            <input
-                              className="dchan-input-subject px-1 border border-solid border-gray focus:border-indigo-300"
-                              type="text"
-                              {...register("subject")}
-                              disabled={formDisabled}
-                              onChange={(e) =>
-                                setSubjectLength(e.target.value.length)
-                              }
-                              maxLength={140}
-                              placeholder={"..."}
-                            />
-                            <MaxLengthWatch
-                              maxLength={140}
-                              value={subjectLength}
-                            />
-                          </span>
-
-                          <button
-                            className="dchan-post-submit px-2 mx-1 bg-gray-100 border"
-                            type="submit"
-                            disabled={isSending}
-                          >
-                            Post
-                          </button>
-
-                          {/* @TODO dedup */}
-                          {formPostOptions()}
-
-                          <Status status={status}></Status>
-                        </div>
-                      </td>
-                    </tr>
-                  ) : (
-                    <tr></tr>
-                  )}
-                  {thread ? (
-                    <tr>
-                      <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
-                        Name
-                      </td>
-                      <td>
-                        <div className="flex items-center justify-start">
+                {!!board ? (
+                  <input
+                    type="hidden"
+                    {...register("board")}
+                    disabled={formDisabled}
+                    value={board.id}
+                  />
+                ) : (
+                  ""
+                )}
+                {!!thread ? (
+                  <input
+                    type="hidden"
+                    {...register("thread")}
+                    disabled={formDisabled}
+                    value={thread.id}
+                  />
+                ) : (
+                  ""
+                )}
+                <table>
+                  <tbody>
+                    {!thread ? (
+                      <tr>
+                        <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
+                          Name
+                        </td>
+                        <td>
                           <span className="relative">
                             <input
                               className="dchan-input-name px-1 border border-solid border-gray focus:border-indigo-300"
@@ -418,215 +347,292 @@ export default function FormPost({
                             />
                             <MaxLengthWatch maxLength={70} value={nameLength} />
                           </span>
+                        </td>
+                      </tr>
+                    ) : (
+                      <tr></tr>
+                    )}
+                    {!thread ? (
+                      <tr>
+                        <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
+                          Subject
+                        </td>
+                        <td>
+                          <div className="flex items-center justify-start">
+                            <span className="relative">
+                              <input
+                                className="dchan-input-subject px-1 border border-solid border-gray focus:border-indigo-300"
+                                type="text"
+                                {...register("subject")}
+                                disabled={formDisabled}
+                                onChange={(e) =>
+                                  setSubjectLength(e.target.value.length)
+                                }
+                                maxLength={140}
+                                placeholder={"..."}
+                              />
+                              <MaxLengthWatch
+                                maxLength={140}
+                                value={subjectLength}
+                              />
+                            </span>
 
-                          <button
-                            className="dchan-post-submit px-2 mx-1 bg-gray-100 border"
-                            type="submit"
+                            <button
+                              className="dchan-post-submit px-2 mx-1 bg-gray-100 border"
+                              type="submit"
+                              disabled={isSending}
+                            >
+                              Post
+                            </button>
+
+                            {/* @TODO dedup */}
+                            {formPostOptions()}
+
+                            <Status status={status}></Status>
+                          </div>
+                        </td>
+                      </tr>
+                    ) : (
+                      <tr></tr>
+                    )}
+                    {thread ? (
+                      <tr>
+                        <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
+                          Name
+                        </td>
+                        <td>
+                          <div className="flex items-center justify-start">
+                            <span className="relative">
+                              <input
+                                className="dchan-input-name px-1 border border-solid border-gray focus:border-indigo-300"
+                                type="text"
+                                placeholder="Anonymous"
+                                {...register("name")}
+                                disabled={formDisabled}
+                                onChange={(e) =>
+                                  setNameLength(e.target.value.length)
+                                }
+                                maxLength={70}
+                              />
+                              <MaxLengthWatch
+                                maxLength={70}
+                                value={nameLength}
+                              />
+                            </span>
+
+                            <button
+                              className="dchan-post-submit px-2 mx-1 bg-gray-100 border"
+                              type="submit"
+                              disabled={formDisabled}
+                            >
+                              Post
+                            </button>
+
+                            {formPostOptions()}
+
+                            <Status status={status}></Status>
+                          </div>
+                        </td>
+                      </tr>
+                    ) : (
+                      <tr></tr>
+                    )}
+                    <tr>
+                      <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
+                        Comment
+                      </td>
+                      <td>
+                        <span className="relative">
+                          <textarea
+                            className="dchan-input-comment px-1 font-sans border border-solid border-gray focus:border-indigo-300"
+                            cols={40}
+                            rows={4}
+                            {...register("comment", { required: !thread })}
                             disabled={formDisabled}
-                          >
-                            Post
-                          </button>
-
-                          {formPostOptions()}
-
-                          <Status status={status}></Status>
-                        </div>
+                            onChange={(e) =>
+                              setCommentLength(e.target.value.length)
+                            }
+                            maxLength={2000}
+                            placeholder={"..."}
+                          ></textarea>
+                          <MaxLengthWatch
+                            className="pr-4"
+                            maxLength={2000}
+                            value={commentLength}
+                          />
+                        </span>
+                        {errors.comment && (
+                          <div className="px-1 text-contrast">
+                            This field is required
+                          </div>
+                        )}
                       </td>
                     </tr>
-                  ) : (
-                    <tr></tr>
-                  )}
-                  <tr>
-                    <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
-                      Comment
-                    </td>
-                    <td>
-                      <span className="relative">
-                        <textarea
-                          className="dchan-input-comment px-1 font-sans border border-solid border-gray focus:border-indigo-300"
-                          cols={40}
-                          rows={4}
-                          {...register("comment", { required: !thread })}
-                          disabled={formDisabled}
-                          onChange={(e) =>
-                            setCommentLength(e.target.value.length)
-                          }
-                          maxLength={2000}
-                          placeholder={"..."}
-                        ></textarea>
-                        <MaxLengthWatch
-                          className="pr-4"
-                          maxLength={2000}
-                          value={commentLength}
-                        />
-                      </span>
-                      {errors.comment && (
+                    <tr>
+                      <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
+                        File
+                      </td>
+                      <td className="flex text-xs">
+                        <div className="flex-grow mx-0.5">
+                          <span className="text-xs float-right bg-primary">
+                            (1000kb max)
+                          </span>
+                          <input
+                            className="w-64"
+                            type="file"
+                            accept="image/*"
+                            {...register("file", {
+                              required: false && !thread,
+                            })}
+                            disabled={formDisabled}
+                            onChange={onFileChange}
+                          />
+                          {!!files && files.length > 0 ? (
+                            <div className="flex">
+                              {!!thumbnailB64 ? (
+                                <details className="mx-0.5" open={true}>
+                                  <summary>🖼</summary>
+                                  <img
+                                    alt=""
+                                    className="max-h-24 max-w-24"
+                                    src={thumbnailB64}
+                                  ></img>
+                                  <span
+                                    className={`text-xs ${
+                                      fileSize > 1000 ? "text-contrast" : ""
+                                    }`}
+                                  >
+                                    {Math.round(fileSize)} kb
+                                  </span>
+                                </details>
+                              ) : (
+                                ""
+                              )}
+                              <span>
+                                <button
+                                  className="dchan-input-file-rename mx-0.5"
+                                  title="Rename file"
+                                  type="button"
+                                  onClick={fileRename}
+                                >
+                                  ✎
+                                </button>
+                                <button
+                                  className="dchan-input-file-remove mx-0.5"
+                                  title="Remove file"
+                                  type="button"
+                                  onClick={fileRemove}
+                                >
+                                  ❌
+                                </button>
+                              </span>
+                              <details className="mx-0.5">
+                                <summary className="marker-closed-hide">
+                                  ⚙️
+                                </summary>
+                                <div>
+                                  <input
+                                    id="dchan-input-is_spoiler"
+                                    className="mx-1"
+                                    type="checkbox"
+                                    {...register("is_spoiler")}
+                                    disabled={formDisabled}
+                                  />
+                                  <label
+                                    htmlFor="dchan-input-is_spoiler"
+                                    className="text-black font-weight-800 font-family-tahoma"
+                                  >
+                                    Spoiler
+                                  </label>
+                                </div>
+                                <div>
+                                  <input
+                                    id="dchan-input-is_nsfw"
+                                    className="mx-1"
+                                    type="checkbox"
+                                    {...register("is_nsfw")}
+                                    disabled={formDisabled}
+                                  />
+                                  <label
+                                    htmlFor="dchan-input-is_nsfw"
+                                    className="text-black font-weight-800 font-family-tahoma"
+                                  >
+                                    NSFW
+                                  </label>
+                                </div>
+                              </details>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </td>
+                      {errors.file && (
                         <div className="px-1 text-contrast">
                           This field is required
                         </div>
                       )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
-                      File
-                    </td>
-                    <td className="flex text-xs">
-                      <div className="flex-grow mx-0.5">
-                        <span className="text-xs float-right bg-primary">
-                          (1000kb max)
-                        </span>
-                        <input
-                          className="w-64"
-                          type="file"
-                          accept="image/*"
-                          {...register("file", { required: false && !thread })}
-                          disabled={formDisabled}
-                          onChange={onFileChange}
-                        />
-                        {!!files && files.length > 0 ? (
-                          <div className="flex">
-                            {!!thumbnailB64 ? (
-                              <details className="mx-0.5" open={true}>
-                                <summary>🖼</summary>
-                                <img
-                                  alt=""
-                                  className="max-h-24 max-w-24"
-                                  src={thumbnailB64}
-                                ></img>
-                                <span
-                                  className={`text-xs ${
-                                    fileSize > 1000 ? "text-contrast" : ""
-                                  }`}
-                                >
-                                  {Math.round(fileSize)} kb
-                                </span>
-                              </details>
-                            ) : (
-                              ""
-                            )}
-                            <span>
-                              <button
-                                className="dchan-input-file-rename mx-0.5"
-                                title="Rename file"
-                                type="button"
-                                onClick={fileRename}
-                              >
-                                ✎
-                              </button>
-                              <button
-                                className="dchan-input-file-remove mx-0.5"
-                                title="Remove file"
-                                type="button"
-                                onClick={fileRemove}
-                              >
-                                ❌
-                              </button>
-                            </span>
-                            <details className="mx-0.5">
-                              <summary className="marker-closed-hide">
-                                ⚙️
-                              </summary>
-                              <div>
-                                <input
-                                  id="dchan-input-is_spoiler"
-                                  className="mx-1"
-                                  type="checkbox"
-                                  {...register("is_spoiler")}
-                                  disabled={formDisabled}
-                                />
-                                <label
-                                  htmlFor="dchan-input-is_spoiler"
-                                  className="text-black font-weight-800 font-family-tahoma"
-                                >
-                                  Spoiler
-                                </label>
-                              </div>
-                              <div>
-                                <input
-                                  id="dchan-input-is_nsfw"
-                                  className="mx-1"
-                                  type="checkbox"
-                                  {...register("is_nsfw")}
-                                  disabled={formDisabled}
-                                />
-                                <label
-                                  htmlFor="dchan-input-is_nsfw"
-                                  className="text-black font-weight-800 font-family-tahoma"
-                                >
-                                  NSFW
-                                </label>
-                              </div>
-                            </details>
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    </td>
-                    {errors.file && (
-                      <div className="px-1 text-contrast">
-                        This field is required
-                      </div>
-                    )}
-                  </tr>
-                </tbody>
-              </table>
-              <div className="p-1 text-xs flex center">
-                <input
-                  id="dchan-input-rules"
-                  className="mx-1"
-                  type="checkbox"
-                  {...register("rulesAccepted", { required: true })}
-                  disabled={formDisabled}
-                />
-                <label
-                  htmlFor="dchan-input-rules"
-                  className="text-black font-weight-800 font-family-tahoma"
-                >
-                  <ul>
-                    <li>
-                      I've read the{" "}
-                      <Link
-                        to="/_/rules"
-                        target="_blank"
-                        className="text-blue-600 visited:text-purple-600 hover:text-blue-140"
-                      >
-                        rules
-                      </Link>{" "}
-                      before posting.
-                    </li>
-                    <li>
-                      I understand that{" "}
-                      <abbr title="Other users will be able to view all past transactions you ever made using this address. Be mindful of the security risks this entails.">
-                        <i>my posts will be public and signed by my address</i>
-                        {accounts && accounts.length > 0 ? (
-                          <AddressLabel address={accounts[0]}></AddressLabel>
-                        ) : (
-                          ""
-                        )}{" "}
-                      </abbr>
-                    </li>
-                    <li>
-                      and that{" "}
-                      <abbr title="Posts are stored on the blockchain and images are uploaded to IPFS. _This_cannot_be_undone_. Content can be removed, but will still be obtainable.">
-                        <i>I won't be able to delete the content I post.</i>
-                      </abbr>
-                    </li>
-                  </ul>
-                </label>
-                {errors.rulesAccepted && (
-                  <div className="px-1 text-contrast">
-                    This field is required
-                  </div>
-                )}
-              </div>
-            </form>
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
+                    </tr>
+                  </tbody>
+                </table>
+                <div className="p-1 text-xs flex center">
+                  <input
+                    id="dchan-input-rules"
+                    className="mx-1"
+                    type="checkbox"
+                    {...register("rulesAccepted", { required: true })}
+                    disabled={formDisabled}
+                  />
+                  <label
+                    htmlFor="dchan-input-rules"
+                    className="text-black font-weight-800 font-family-tahoma"
+                  >
+                    <ul>
+                      <li>
+                        I've read the{" "}
+                        <Link
+                          to="/_/rules"
+                          target="_blank"
+                          className="text-blue-600 visited:text-purple-600 hover:text-blue-140"
+                        >
+                          rules
+                        </Link>{" "}
+                        before posting.
+                      </li>
+                      <li>
+                        I understand that{" "}
+                        <abbr title="Other users will be able to view all past transactions you ever made using this address. Be mindful of the security risks this entails.">
+                          <i>
+                            my posts will be public and signed by my address
+                          </i>
+                          {accounts && accounts.length > 0 ? (
+                            <AddressLabel address={accounts[0]}></AddressLabel>
+                          ) : (
+                            ""
+                          )}{" "}
+                        </abbr>
+                      </li>
+                      <li>
+                        and that{" "}
+                        <abbr title="Posts are stored on the blockchain and images are uploaded to IPFS. _This_cannot_be_undone_. Content can be removed, but will still be obtainable.">
+                          <i>I won't be able to delete the content I post.</i>
+                        </abbr>
+                      </li>
+                    </ul>
+                  </label>
+                  {errors.rulesAccepted && (
+                    <div className="px-1 text-contrast">
+                      This field is required
+                    </div>
+                  )}
+                </div>
+              </form>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+      )}
     </div>
   );
 }

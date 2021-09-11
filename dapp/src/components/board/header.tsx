@@ -33,17 +33,17 @@ export default function BoardHeader({
           ></IdLabel>
         </div>
         <div>
-          <span className="font-semibold">
-            <Link to={board ? `/${board.name}/${board.id}` : "#"}>
-              /{board?.name || "?"}/ - {board?.title || "..."}
-            </Link>
-          </span>
           <span>
             {board?.isLocked ? (
               <span title="Board locked. You cannot reply anymore.">🔒</span>
             ) : (
               <span></span>
             )}
+          </span>{" "}
+          <span className="font-semibold">
+            <Link to={board ? `/${board.name}/${board.id}` : "#"}>
+              /{board?.name || "?"}/ - {board?.title || "..."}
+            </Link>
           </span>
           {board && isJanny ? (
             <span>
