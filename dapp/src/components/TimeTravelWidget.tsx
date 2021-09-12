@@ -5,8 +5,9 @@ import BLOCK_BY_DATE from "graphql/queries/block_by_date";
 import BLOCK_BY_NUMBER from "graphql/queries/block_by_number";
 import useLastBlock from "hooks/useLastBlock";
 import { DateTime } from "luxon";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { useHistory } from "react-router-dom";
+import _ from "lodash";
 
 export interface TimeTravelRange {
   min: Block;
@@ -45,6 +46,7 @@ export default function TimeTravelWidget({
   const [timeTraveledToDate, setTimeTraveledToDate] = useState<
     DateTime | undefined
   >();
+  const [currentBlock, setCurrentBlock] = useState(block || lastBlock?.number);
   const { data: bbdData } = useQuery<BlockData, BlockByDateVars>(
     BLOCK_BY_DATE,
     {
@@ -61,9 +63,9 @@ export default function TimeTravelWidget({
     BLOCK_BY_NUMBER,
     {
       variables: {
-        number: `${block}`,
+        number: `${currentBlock}`,
       },
-      skip: !block,
+      skip: !currentBlock,
     }
   );
 
@@ -80,7 +82,7 @@ export default function TimeTravelWidget({
     [history, baseUrl]
   );
 
-  const onBlockChange = useCallback(
+  const handleBlockChange = useCallback(
     (block: string) => {
       const url = !!baseUrl
         ? !!block
@@ -93,20 +95,43 @@ export default function TimeTravelWidget({
     [history, baseUrl]
   );
 
+  const debouncedBlockChange = useMemo(
+    () => _.debounce(handleBlockChange, 300),
+    [handleBlockChange]
+  );
+
+  const onBlockChange = useCallback(
+    (block: string) => {
+      setCurrentBlock(parseInt(block));
+      debouncedBlockChange(block);
+    },
+    [setCurrentBlock, debouncedBlockChange]
+  );
+
+  const onReturnToPresent = useCallback(
+    () => {
+      setCurrentBlock(lastBlock?.number);
+      handleBlockChange("");
+    },
+    [setCurrentBlock, lastBlock, handleBlockChange]
+  );
+
   useEffect(() => {
     if (dateTime) {
       const b = bbdData?.blocks?.[0];
-      !!b && onBlockChange(b.number);
+      !!b && handleBlockChange(b.number);
       !!b && setTimeTraveledToDate(DateTime.fromSeconds(parseInt(b.timestamp)));
     }
-  }, [dateTime, bbdData, onBlockChange, setTimeTraveledToDate]);
+  }, [dateTime, bbdData, handleBlockChange, setTimeTraveledToDate]);
 
   useEffect(() => {
-    if (block) {
+    if (currentBlock) {
       const b = bbnData?.blocks?.[0];
       !!b && setTimeTraveledToDate(DateTime.fromSeconds(parseInt(b.timestamp)));
+    } else if (!!(block || lastBlock?.number)) {
+      setCurrentBlock(block || lastBlock?.number);
     }
-  }, [block, bbnData, setTimeTraveledToDate]);
+  }, [currentBlock, lastBlock, bbnData, setTimeTraveledToDate, setCurrentBlock, block]);
 
   useEffect(() => {
     if (startBlock && lastBlock) {
@@ -170,7 +195,7 @@ export default function TimeTravelWidget({
               min={parseInt(timeTravelRange.min.number)}
               max={parseInt(timeTravelRange.max.number)}
               onChange={(e) => onBlockChange(e.target.value)}
-              value={block || lastBlock?.number}
+              value={currentBlock}
             />{" "}
             <span className="mx-1">Now</span>
           </div>
@@ -214,7 +239,7 @@ export default function TimeTravelWidget({
             }
           }}
         >
-          {`Block #${block || lastBlock?.number || "?"}`}
+          {`Block #${currentBlock || "?"}`}
         </button>
 
         {isTimeTraveling ? (
@@ -222,7 +247,7 @@ export default function TimeTravelWidget({
             [
             <button
               className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-              onClick={() => onBlockChange("")}
+              onClick={onReturnToPresent}
             >
               Return to present
             </button>
