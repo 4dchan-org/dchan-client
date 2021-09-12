@@ -20,7 +20,7 @@ export default function PostBody({post, style = {}}: {style?: any, post: Post}) 
     
     return (
       <div
-        className="inline-block text-left break-words font-sans"
+        className="inline-block text-left break-words font-sans text-sm"
         style={style}
         dangerouslySetInnerHTML={{
           __html

@@ -42,7 +42,7 @@ export function RefreshWidget({ onRefresh }: { onRefresh: () => void }) {
   }, 1_000);
 
   return (
-    <span className="mx-1 flex items-start relative whitespace-nowrap">
+    <span className="mx-4 flex items-start relative whitespace-nowrap">
       <div>
         <details>
           <summary>

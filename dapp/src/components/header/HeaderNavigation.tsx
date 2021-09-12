@@ -18,7 +18,7 @@ export default function HeaderNavigation() {
 
   const boards = data?.boards;
   return (
-    <div className="text-sm">
+    <div className="text-sm py-1 border-solid border-secondary border-0 border-b-2">
       [
       <Link
         className="text-blue-600 visited:text-purple-600 hover:text-blue-500"

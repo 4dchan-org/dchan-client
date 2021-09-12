@@ -113,7 +113,7 @@ export default function ContentHeader({
         </div>
         <div className="center grid">
           <details>
-            <summary className="text-xs text-gray-600">{summary}</summary>
+            <summary className="py-2 text-xs text-gray-600">{summary}</summary>
             <div>
               <FilterSettings />
             </div>

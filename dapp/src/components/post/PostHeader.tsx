@@ -121,7 +121,7 @@ export default function PostHeader({
         {createdAt.toLocaleString(DateTime.DATETIME_SHORT)} (
         {createdAt.toRelative()})
       </span>
-      <span className="px-0.5 on-parent-target-font-bold font-family-tahoma whitespace-nowrap">
+      <span className="px-0.5 on-parent-target-font-bold text-sm whitespace-nowrap">
         <button onClick={() => focusPost(post)} title="Link to this post">
           No.
         </button>
