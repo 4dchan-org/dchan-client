@@ -15,26 +15,27 @@ interface UserVars {
 const useUser = () => {
   const { accounts } = useWeb3()
   const userId = accounts.length > 0 ? accounts[0] : ""
+
   const query = useQuery<UserData, UserVars>(USER_GET, {
-    variables: { userId },
+    variables: { userId: `0x${userId.substr(2, 3)}${userId.substr(-3, 3)}` },
     skip: !userId
   })
 
   const { refetch, loading, data } = query
 
   const isAdmin = useCallback(() => {
-    if(loading) return undefined
-    
+    if (loading) return undefined
+
     const isAdmin = !!(data?.admin?.id)
-    
+
     return isAdmin
   }, [loading, data])
 
   const isJannyOf = useCallback((boardId: string) => {
-    if(loading) return undefined
-    
-    const isJanny = isAdmin() || !!(data?.user?.jannies?.filter(({id}) => id === boardId).length)
-    
+    if (loading) return undefined
+
+    const isJanny = isAdmin() || !!(data?.user?.jannies?.filter(({ board }) => board?.id === boardId).length)
+
     return isJanny
   }, [isAdmin, loading, data])
 
@@ -42,7 +43,7 @@ const useUser = () => {
     refetch()
   }, [refetch])
 
-  return {...query, isJannyOf, isAdmin }
+  return { ...query, isJannyOf, isAdmin }
 }
 
 export default useUser;
