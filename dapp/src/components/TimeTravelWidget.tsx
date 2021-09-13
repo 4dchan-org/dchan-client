@@ -147,16 +147,9 @@ export default function TimeTravelWidget({
     [changeDate]
   );
 
-  const handleNumberChange = useCallback(
-    (block: string) => {
-      changeNumber(block);
-    },
-    [changeNumber]
-  );
-
   const debouncedNumberChange = useMemo(
-    () => _.debounce(handleNumberChange, 300),
-    [handleNumberChange]
+    () => _.debounce(changeNumber, 300),
+    [changeNumber]
   );
 
   const onNumberChange = useCallback(
