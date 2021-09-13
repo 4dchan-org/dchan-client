@@ -73,6 +73,7 @@ export default function Post({
             _: any,
             { from, to: { n } }: { from: DchanPost; to: { n: string } }
           ) => {
+            console.log({from, n});
             `${n}` === `${post.n}` &&
               setBacklinks({ ...backlinks, [from.id]: from });
           }
@@ -90,10 +91,12 @@ export default function Post({
       ?.map((comment) => {
         return comment.replace(/>/g, "");
       })
-      .forEach((n) => {
+      .forEach((blMatch) => {
+        const [userId, n] = blMatch.split("/")
         const backlink = {
           from: post,
           to: {
+            userId: userId.trim(),
             n: n.trim(),
           },
         };
@@ -156,7 +159,7 @@ export default function Post({
               isFocused ? "bg-tertiary" : ""
             } w-full sm:w-auto pb-2 mb-2 px-4 inline-block border-bottom-invisible relative max-w-screen-xl`}
           >
-            <div className="flex sm:flex-wrap center text-center sm:text-left sm:block">
+            <div className="flex sm:flex-wrap center text-center sm:text-left sm:block max-w-90vw">
               {isOp && thread ? (
                 <button
                   className={`inline-block ${

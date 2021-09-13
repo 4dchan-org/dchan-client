@@ -60,11 +60,12 @@ export default function PostHeader({
   const onSendTip = useCallback(
     async (to: string, amount?: number) => {
       try {
-        amount = amount ? amount : parseInt(prompt("How much? (MATIC)") || "");
+        amount = amount ? amount : parseFloat(prompt("How much? (MATIC)") || "");
         if (isNaN(amount)) {
           alert("Invalid amount");
           return;
         }
+        console.log({amount})
         await sendTip(accounts[0], to, amount);
       } catch (e) {
         console.error({ onSendTipError: e });
