@@ -102,7 +102,7 @@ export default function TimeTravelWidget({
 
   const onBlockChange = useCallback(
     (block: string) => {
-      setCurrentBlock(parseInt(block));
+      setCurrentBlock(block);
       debouncedBlockChange(block);
     },
     [setCurrentBlock, debouncedBlockChange]
