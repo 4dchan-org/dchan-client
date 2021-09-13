@@ -9,16 +9,17 @@ interface UserData {
   user?: User;
 }
 interface UserVars {
+  address: string;
   userId: string;
 }
 
 const useUser = () => {
   const { accounts } = useWeb3()
-  const userId = accounts.length > 0 ? accounts[0] : ""
+  const address = accounts.length > 0 ? accounts[0] : ""
 
   const query = useQuery<UserData, UserVars>(USER_GET, {
-    variables: { userId: `0x${userId.substr(2, 3)}${userId.substr(-3, 3)}` },
-    skip: !userId
+    variables: { address, userId: `0x${address.substr(2, 3)}${address.substr(-3, 3)}` },
+    skip: !address
   })
 
   const { refetch, loading, data } = query
