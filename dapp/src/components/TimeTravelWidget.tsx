@@ -74,10 +74,10 @@ export default function TimeTravelWidget({
   const changeBlock = useCallback(
     (block: Block) => {
       setTraveledBlock(block);
-      setTimeTraveledToNumber(`${block.number}`);
+      //setTimeTraveledToNumber(`${block.number}`);
       setTimeTraveledToDate(DateTime.fromSeconds(parseInt(block.timestamp)));
     },
-    [setTraveledBlock, setTimeTraveledToNumber, setTimeTraveledToDate]
+    [setTraveledBlock, setTimeTraveledToDate]
   );
 
   const changeDate = useCallback(
@@ -90,11 +90,12 @@ export default function TimeTravelWidget({
             : undefined;
 
           url && history.replace(url);
+          setTimeTraveledToNumber(`${b.number}`);
           changeBlock(b);
         }
       });
     },
-    [changeBlock, history, baseUrl]
+    [changeBlock, setTimeTraveledToNumber, history, baseUrl]
   );
 
   const changeNumber = useCallback(
@@ -126,6 +127,7 @@ export default function TimeTravelWidget({
       } else if (timeTraveledToNumber != null) {
         changeNumber(timeTraveledToNumber);
       } else if (lastBlock != null) {
+        setTimeTraveledToNumber(lastBlock.number);
         changeNumber(lastBlock.number);
       }
     }
