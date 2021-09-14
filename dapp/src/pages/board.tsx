@@ -72,8 +72,7 @@ export default function BoardPage({ location, match: { params } }: any) {
     BoardCatalogData,
     BoardCatalogVars
   >(BOARD_CATALOG, {
-    variables,
-    pollInterval: 60_000,
+    variables
   });
 
   const { data: boardData } = useQuery<
@@ -136,7 +135,7 @@ export default function BoardPage({ location, match: { params } }: any) {
           onRefresh={refetch}
         />
         <div>
-          {loading ? (
+          {loading && !data ? (
             <div className="center grid min-h-50vh">
               <Loading />
             </div>

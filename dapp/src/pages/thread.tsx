@@ -52,8 +52,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
     ThreadContentData,
     ThreadContentVars
   >(!!block ? THREAD_GET : THREAD_GET_LAST_BLOCK, {
-    variables,
-    pollInterval: 60_000,
+    variables
   });
 
   const post = data?.posts?.[0];
@@ -112,7 +111,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
       />
 
       <div>
-        {loading ? (
+        {loading && !data ? (
           <div className="center grid">
             <Loading />
           </div>
