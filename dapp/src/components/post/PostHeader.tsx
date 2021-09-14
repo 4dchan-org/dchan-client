@@ -52,7 +52,7 @@ export default function PostHeader({
 
   const replyTo = useCallback(
     (from: string, n: number | string) => {
-      publish("FORM_QUOTE", {from, n});
+      publish("FORM_QUOTE", { from, n });
     },
     [publish]
   );
@@ -60,12 +60,13 @@ export default function PostHeader({
   const onSendTip = useCallback(
     async (to: string, amount?: number) => {
       try {
-        amount = amount ? amount : parseFloat(prompt("How much? (MATIC)") || "");
+        amount = amount
+          ? amount
+          : parseFloat(prompt("How much? (MATIC)") || "");
         if (isNaN(amount)) {
           alert("Invalid amount");
           return;
         }
-        console.log({amount})
         await sendTip(accounts[0], to, amount);
       } catch (e) {
         console.error({ onSendTipError: e });
@@ -98,25 +99,19 @@ export default function PostHeader({
         </span>
       </span>
       <span className="px-1">
-        <details className="inline">
-          <summary>
-            (<AddressLabel etherscannable={true} address={address} />)
-          </summary>
-          {provider ? (
-            <div className="flex">
-              (
-              <button
-                className="text-blue-600 visited:text-purple-600 hover:text-blue-500 flex-grow"
-                onClick={() => onSendTip(address)}
-              >
-                💸 Tip
-              </button>
-              )
-            </div>
-          ) : (
-            ""
-          )}
-        </details>
+        (ID: <AddressLabel etherscannable={true} address={address} />
+        {provider ? (
+          <button
+            className="text-blue-600 visited:text-purple-600 hover:text-blue-500 flex-grow opacity-10 hover:opacity-100"
+            title="Send MATIC tip"
+            onClick={() => onSendTip(address)}
+          >
+            💸
+          </button>
+        ) : (
+          ""
+        )}
+        )
       </span>
       <span className="px-0.5 whitespace-nowrap text-xs">
         {createdAt.toLocaleString(DateTime.DATETIME_SHORT)} (
@@ -126,7 +121,10 @@ export default function PostHeader({
         <button onClick={() => focusPost(post)} title="Link to this post">
           No.
         </button>
-        <button title="Reply to this post" onClick={() => replyTo(post.from.id, post.n)}>
+        <button
+          title="Reply to this post"
+          onClick={() => replyTo(post.from.id, post.n)}
+        >
           {n}
         </button>
       </span>
