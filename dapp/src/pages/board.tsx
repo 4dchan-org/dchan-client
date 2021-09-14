@@ -39,7 +39,6 @@ interface BoardVars {
 
 export default function BoardPage({ location, match: { params } }: any) {
   let { board_id } = params;
-  const boardMode = `${params.view_mode || "index"}`;
   board_id = board_id ? `0x${board_id}` : undefined;
 
   const { lastBlock } = useLastBlock();
@@ -55,6 +54,7 @@ export default function BoardPage({ location, match: { params } }: any) {
 
   const history = useHistory();
   const [settings] = useSettings();
+  const boardMode: string = params.view_mode || settings?.content_view?.board_default_view_mode || "catalog"
   const orderBy =
     settings?.content_view?.board_sort_threads_by || "lastBumpedAt";
   const limit = parseInt(`${settings?.content_view?.page_size || "100"}`);

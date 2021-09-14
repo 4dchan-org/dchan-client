@@ -82,7 +82,7 @@ export default function ContentHeader({
                   [
                   <Link
                     className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                    to={`${Router.board(board)}`}
+                    to={`${Router.board(board)}/index`}
                   >
                     Index
                   </Link>

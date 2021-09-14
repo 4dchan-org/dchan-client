@@ -37,7 +37,7 @@ function App() {
           <Route path="/0x:id/:post_n" component={ReferencePage} />
           <Route path="/0x:id" component={IdReferencePage} />
           <Route
-            path="/:board_name/0x:board_id/:view_mode(catalog)"
+            path="/:board_name/0x:board_id/:view_mode(index|catalog)"
             component={BoardPage}
           />
           <Route

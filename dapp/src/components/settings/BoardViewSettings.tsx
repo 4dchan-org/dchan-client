@@ -53,7 +53,8 @@ export default function BoardViewSettings() {
             </div>
           </span>
         </summary>
-        <span>
+
+        <div>
           <label className="px-2" htmlFor="dchan-input-view-mode">
             Page size
           </label>
@@ -72,7 +73,28 @@ export default function BoardViewSettings() {
               });
             }}
           />
-        </span>
+        </div>
+        <div>
+          <label className="px-2" htmlFor="dchan-input-view-mode">
+            Default board view mode
+          </label>
+          <select
+            id="dchan-input-view-mode"
+            onChange={(e) => {
+              setSettings({
+                ...settings,
+                content_view: {
+                  ...settings?.content_view,
+                  board_default_view_mode: e.target.value,
+                },
+              });
+            }}
+            value={settings?.content_view?.board_default_view_mode}
+          >
+            <option value={"catalog"}>{"Catalog"}</option>
+            <option value={"index"}>{"Index"}</option>
+          </select>
+        </div>
       </details>
     </span>
   );
