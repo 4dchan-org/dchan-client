@@ -385,7 +385,7 @@ export default function FormPost({
                               type="submit"
                               disabled={isSending}
                             >
-                              Post
+                              New thread
                             </button>
 
                             {/* @TODO dedup */}
@@ -428,7 +428,7 @@ export default function FormPost({
                               type="submit"
                               disabled={formDisabled}
                             >
-                              Post
+                              Post reply
                             </button>
 
                             {formPostOptions()}
