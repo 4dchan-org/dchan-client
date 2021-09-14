@@ -66,7 +66,6 @@ export default function ThreadPage({ location, match: { params } }: any) {
 
   useEffect(() => {
     const url = !thread && post ? Router.post(post) : undefined;
-    console.log({thread, post, url})
     url && history.replace(`${url}${block ? `?block=${block}` : ""}`);
   }, [history, thread, block, post]);
 

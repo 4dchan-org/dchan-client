@@ -13,6 +13,7 @@ type PostCreateInput = {
     subject: string;
     comment: string;
     sage: boolean;
+    nonce: string;
 };
 
 type BoardCreateInput = {
@@ -36,6 +37,7 @@ type PostCreateData = {
     };
     name: string;
     subject?: string;
+    nonce: string;
 };
 
 type JannyGrantData = {
@@ -53,7 +55,7 @@ export async function postMessage(
     accounts: any,
     setStatus: SetStatus
 ) {
-    const { board, thread, comment, name, subject, sage } = input;
+    const { board, thread, comment, name, subject, sage, nonce } = input;
 
     let file: IpfsUploadResult | undefined;
     if (input.file.length > 0) {
@@ -66,6 +68,7 @@ export async function postMessage(
     const data: PostCreateData = {
         comment,
         name,
+        nonce
     };
 
     if (!!file) {

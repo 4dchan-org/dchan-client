@@ -98,7 +98,7 @@ export default function PostHeader({
           {!name || "" === name ? "Anonymous" : name}
         </span>
       </span>
-      <span className="px-1">
+      <span className="px-1 whitespace-nowrap text-sm">
         (ID: <AddressLabel etherscannable={true} address={address} />
         {provider ? (
           <button

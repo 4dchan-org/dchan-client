@@ -73,7 +73,6 @@ export default function Post({
             _: any,
             { from, to: { n } }: { from: DchanPost; to: { n: string } }
           ) => {
-            console.log({from, n});
             `${n}` === `${post.n}` &&
               setBacklinks({ ...backlinks, [from.id]: from });
           }

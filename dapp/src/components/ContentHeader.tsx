@@ -48,7 +48,7 @@ export default function ContentHeader({
     <div>
       <BoardHeader board={board}></BoardHeader>
 
-      <FormPost thread={thread} board={board}></FormPost>
+      <FormPost baseUrl={baseUrl} thread={thread} board={board}></FormPost>
 
       <div className="p-2">
         <hr></hr>

@@ -6,7 +6,7 @@ import Status from "components/Status";
 import IdLabel from "components/IdLabel";
 import Menu from "components/Menu";
 import { useState } from "react";
-import { grantJanny, revokeJanny, lockBoard, removeBoard, unlockBoard } from "dchan/operations";
+import { lockBoard, removeBoard, unlockBoard } from "dchan/operations";
 import useUser from "hooks/useUser";
 import useWeb3 from "hooks/useWeb3";
 

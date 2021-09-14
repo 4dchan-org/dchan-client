@@ -16,6 +16,7 @@ import CatalogView from "components/CatalogView";
 import Post from "components/post/Post";
 import { Link, useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
+import BOARD_GET from "graphql/queries/boards/get";
 interface BoardCatalogData {
   board: Board;
   pinned: Thread[];
@@ -26,6 +27,14 @@ interface BoardCatalogVars {
   block: number;
   limit: number;
   skip: number;
+}
+
+interface BoardData {
+  board: Board;
+}
+interface BoardVars {
+  board: string;
+  block: number;
 }
 
 export default function BoardPage({ location, match: { params } }: any) {
@@ -67,7 +76,17 @@ export default function BoardPage({ location, match: { params } }: any) {
     pollInterval: 60_000,
   });
 
-  const board = data?.board;
+  const { data: boardData } = useQuery<
+    BoardData,
+    BoardVars
+  >(BOARD_GET, {
+    variables: {
+      board: board_id,
+      block
+    }
+  });
+
+  const board = boardData?.board;
   const threads = useMemo(
     () => [...(data?.pinned || []), ...(data?.threads || [])],
     [data]
