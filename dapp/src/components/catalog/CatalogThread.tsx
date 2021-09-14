@@ -66,120 +66,126 @@ const CatalogThread = forwardRef(({
   });
 
   return (
-    <article
-      ref={ref}
-      className="dchan-post justify-self-center relative text-decoration-none leading-4 text-black m-0.5 border-black overflow-hidden min-h-12rem max-h-320px max-w-150px break-word w-full h-full place-items-center flex"
-      style={
-        isFocused
-          ? {
-              maxHeight: "initial",
-              maxWidth: "initial",
-              zIndex: 900,
-              marginLeft: "-2rem",
-              marginRight: "-2rem",
-              width: "14rem",
-            }
-          : {}
-      }
-    >
-      {isLowScore && !isFocused ? (
-        <button
-          onClick={() => publish("THREAD_FOCUS", id)}
-          className="absolute text-2xl text-gray-800 top-0 left-0 right-0 bottom-0"
-        >
-          <div>⚠️</div>
-          <div>Post hidden due to reports.</div>
-          <div className="text-sm text-gray-600">Click to show anyway.</div>
-        </button>
-      ) : (
-        ""
-      )}
-      <button
-        className="h-full w-full"
-        onClick={() => publish("THREAD_FOCUS", id)}
+    <div className="relative max-w-150px w-full">
+      <article
+        ref={ref}
+        id={id}
+        className="dchan-post justify-self-center text-decoration-none leading-4 text-black m-0.5 border-black overflow-hidden max-w-150px break-word w-full place-items-center flex"
+        style={
+          isFocused
+            ? {
+                maxWidth: "initial",
+                zIndex: 900,
+                marginLeft: "-2rem",
+                marginRight: "-2rem",
+                width: "14rem",
+                position: "absolute",
+              }
+            : {
+                minHeight: "20rem",
+                position: "relative",
+              }
+        }
       >
-        <div
-          className={[
-            "relative",
-            isFocused ? "bg-tertiary border border-black" : "",
-            !isFocused && isLowScore ? "dchan-censor" : "",
-          ].join(" ")}
+        {isLowScore && !isFocused ? (
+          <button
+            onClick={() => publish("THREAD_FOCUS", id)}
+            className="absolute text-2xl text-gray-800 top-0 left-0 right-0 bottom-0"
+          >
+            <div>⚠️</div>
+            <div>Post hidden due to reports.</div>
+            <div className="text-sm text-gray-600">Click to show anyway.</div>
+          </button>
+        ) : (
+          ""
+        )}
+        <button
+          className="h-full w-full"
+          onClick={() => publish("THREAD_FOCUS", id)}
         >
-          <div className="absolute top-0 right-0 z-10">
-            {isPinned ? (
-              <span title="Thread pinned. This might be important.">📌</span>
-            ) : (
-              ""
-            )}
-            {isLocked ? (
-              <span title="Thread locked. You cannot post.">🔒</span>
-            ) : (
-              ""
-            )}
-          </div>
-          {ipfsHash && (!isLowScore || isFocused) ? (
-            <div>
-              <IPFSImage
-                className={imgClassName}
-                hash={ipfsHash}
-                expandable={false}
-                thumbnail={false}
-                isSpoiler={isSpoiler}
-                isNsfw={isNsfw || thread.board?.isNsfw || false}
-              />
+          <div
+            className={[
+              !isFocused ? "absolute top-0 right-0" : "relative top-0 z-10 bg-tertiary border border-black h-full",
+              !isFocused && isLowScore ? "dchan-censor" : "",
+            ].join(" ")}
+            style={{maxHeight: "initial"}}
+          >
+            <div className="absolute top-0 right-0 z-10">
+              {isPinned ? (
+                <span title="Thread pinned. This might be important.">📌</span>
+              ) : (
+                ""
+              )}
+              {isLocked ? (
+                <span title="Thread locked. You cannot post.">🔒</span>
+              ) : (
+                ""
+              )}
             </div>
-          ) : (
-            ""
-          )}
-          <div className="p-1">
-            {showBoard && board ? (
+            {ipfsHash && (!isLowScore || isFocused) ? (
               <div>
-                /<BoardLink board={board} />/
+                <IPFSImage
+                  className={imgClassName}
+                  hash={ipfsHash}
+                  expandable={false}
+                  thumbnail={false}
+                  isSpoiler={isSpoiler}
+                  isNsfw={isNsfw || thread.board?.isNsfw || false}
+                />
               </div>
             ) : (
               ""
             )}
-            <div>
-              R:<strong>{replyCount}</strong>, I:<strong>{imageCount}</strong>
-            </div>
-            <div className="word-wrap">
+            <div className="p-1">
+              {showBoard && board ? (
+                <div>
+                  /<BoardLink board={board} />/
+                </div>
+              ) : (
+                ""
+              )}
               <div>
-                <strong>{subject}</strong>
+                R:<strong>{replyCount}</strong>, I:<strong>{imageCount}</strong>
               </div>
-              <PostBody
-                style={{
-                  minWidth: isFocused ? "12rem" : "initial",
-                  textAlign: "center",
-                }}
-                post={op}
-              />
-              {isFocused &&
-                replies &&
-                [...replies].reverse().map((post) => (
-                  <div
-                    className="mt-1 p-1 border-0 border-t border-black border-solid text-xs text-left"
-                    key={post.id}
-                  >
-                    <div>
-                      {DateTime.fromSeconds(
-                        parseInt(post.createdAtBlock.timestamp)
-                      ).toRelative()}
-                    </div>
-                    <Link
-                      className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                      to={`${Router.post(post) || ""}${
-                        block ? `?block=${block}` : ""
-                      }`}
+              <div className="word-wrap">
+                <div>
+                  <strong>{subject}</strong>
+                </div>
+                <PostBody
+                  style={{
+                    minWidth: isFocused ? "12rem" : "initial",
+                    textAlign: "center",
+                  }}
+                  post={op}
+                />
+                {isFocused &&
+                  replies &&
+                  [...replies].reverse().map((post) => (
+                    <div
+                      className="mt-1 p-1 border-0 border-t border-black border-solid text-xs text-left"
+                      key={post.id}
                     >
-                      <PostBody post={post} />
-                    </Link>
-                  </div>
-                ))}
+                      <div>
+                        {DateTime.fromSeconds(
+                          parseInt(post.createdAtBlock.timestamp)
+                        ).toRelative()}
+                      </div>
+                      <Link
+                        className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                        to={`${Router.post(post) || ""}${
+                          block ? `?block=${block}` : ""
+                        }`}
+                      >
+                        <PostBody post={post} />
+                      </Link>
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
-        </div>
-      </button>
-    </article>
+        </button>
+      </article>
+    </div>
   );
 });
 
