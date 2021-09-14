@@ -170,6 +170,33 @@ export default function TimeTravelWidget({
     [setTimeTraveledToNumber, lastBlock, changeNumber]
   );
 
+  const onInputBlockNumber = useCallback(
+    () => {
+      if (timeTravelRange == null) {
+        return;
+      }
+      const input = prompt(
+        `Block number: (range: ${timeTravelRange.min.number}-${timeTravelRange.max.number})`,
+        timeTraveledToNumber
+      );
+      if (input === null) {
+        return;
+      }
+      const newBlock = parseInt(input || "");
+      if (
+        isNaN(newBlock) ||
+        newBlock < parseInt(timeTravelRange.min.number) ||
+        newBlock > parseInt(timeTravelRange.max.number)
+      ) {
+        alert(`Invalid page number: ${input}`);
+      } else {
+        setTimeTraveledToNumber(input);
+        changeNumber(input);
+      }
+    },
+    [timeTravelRange, timeTraveledToNumber, setTimeTraveledToNumber, changeNumber]
+  );
+
   const isTimeTraveling = !!(
     block &&
     lastBlock &&
@@ -251,21 +278,7 @@ export default function TimeTravelWidget({
       <span className="grid center text-xs">
         <button
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-          onClick={() => {
-            const input = prompt(
-              `Block number: (range: ${timeTravelRange.min.number}-${timeTravelRange.max.number})`
-            );
-            const newBlock = parseInt(input || "");
-            if (
-              isNaN(newBlock) ||
-              newBlock < parseInt(timeTravelRange.min.number) ||
-              newBlock > parseInt(timeTravelRange.max.number)
-            ) {
-              input !== null && alert(`Invalid page number: ${input}`);
-            } else {
-              history.push(`${baseUrl}?block=${newBlock}`);
-            }
-          }}
+          onClick={onInputBlockNumber}
         >
           {`Block #${timeTraveledToNumber || "?"}`}
         </button>
