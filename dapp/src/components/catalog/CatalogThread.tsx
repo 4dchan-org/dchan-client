@@ -6,11 +6,11 @@ import useSettings from "hooks/useSettings";
 import { Link, useHistory } from "react-router-dom";
 import { Router } from "router";
 import { DateTime } from "luxon";
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef, ForwardedRef } from "react";
 import usePubSub from "hooks/usePubSub";
 import BoardLink from "components/BoardLink";
 
-const CatalogThread = ({
+const CatalogThread = forwardRef(({
   thread,
   block,
   showBoard = false,
@@ -18,7 +18,7 @@ const CatalogThread = ({
   thread: Thread;
   block?: number;
   showBoard?: boolean;
-}) => {
+}, ref?: ForwardedRef<HTMLElement>) => {
   const {
     id,
     isPinned,
@@ -67,7 +67,7 @@ const CatalogThread = ({
 
   return (
     <article
-      id={id}
+      ref={ref}
       className="dchan-post justify-self-center relative text-decoration-none leading-4 text-black m-0.5 border-black overflow-hidden min-h-12rem max-h-320px max-w-150px break-word w-full h-full place-items-center flex"
       style={
         isFocused
@@ -181,6 +181,6 @@ const CatalogThread = ({
       </button>
     </article>
   );
-};
+});
 
 export default CatalogThread;
