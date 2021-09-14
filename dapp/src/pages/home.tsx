@@ -1,6 +1,7 @@
 import logo from "assets/images/dchan.png";
 import Card from "components/Card";
 import Footer from "components/Footer";
+import LatestPostsCard from "components/LatestPostsCard";
 import PopularBoardsCard from "components/PopularBoardsCard";
 import PopularThreadsCard from "components/PopularThreadsCard";
 import { useTitle } from "react-use";
@@ -54,6 +55,8 @@ export default function HomePage() {
       </div>
 
       <PopularThreadsCard />
+      
+      <LatestPostsCard />
 
       <Footer />
     </div>
