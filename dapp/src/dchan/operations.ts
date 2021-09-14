@@ -38,6 +38,16 @@ type PostCreateData = {
     subject?: string;
 };
 
+type JannyGrantData = {
+    board: string;
+    user: string;
+};
+
+type JannyRevokeData = {
+    board: string;
+    user: string;
+};
+
 export async function postMessage(
     input: PostCreateInput,
     accounts: any,
@@ -343,6 +353,42 @@ export async function unbanUser(id: string, accounts: any, setStatus: SetStatus)
 
         setStatus({
             success: "Unbanned"
+        });
+    } catch (error) {
+        setStatus({ error });
+
+        console.error({ error });
+    }
+}
+
+export async function grantJanny(data: JannyGrantData, accounts: any, setStatus: SetStatus) {
+    try {
+        setStatus({
+            progress: "Granting janny..."
+        });
+
+        await sendMessage("janny:grant", data, accounts[0]);
+
+        setStatus({
+            success: "Granted"
+        });
+    } catch (error) {
+        setStatus({ error });
+
+        console.error({ error });
+    }
+}
+
+export async function revokeJanny(data: JannyRevokeData, accounts: any, setStatus: SetStatus) {
+    try {
+        setStatus({
+            progress: "Revoking janny..."
+        });
+
+        await sendMessage("janny:revoke", data, accounts[0]);
+
+        setStatus({
+            success: "Revoked"
         });
     } catch (error) {
         setStatus({ error });
