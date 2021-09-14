@@ -92,13 +92,13 @@ export default function PostHeader({
   const canLock = isOp && (isOwner || isJanny);
   const postBacklinks: Post[] = backlinks ? Object.values(backlinks) : [];
   return (
-    <span className="max-w-95vw">
+    <span className="max-w-95vw inline-flex flex-wrap items-center">
       <span className="px-0.5 whitespace-nowrap">
         <span className="text-accent font-bold">
           {!name || "" === name ? "Anonymous" : name}
         </span>
       </span>
-      <span className="px-1">
+      <span className="px-1 whitespace-nowrap text-sm">
         (ID: <AddressLabel etherscannable={true} address={address} />
         {provider ? (
           <button

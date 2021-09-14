@@ -12,7 +12,7 @@ export abstract class Router {
         return board &&
             !!board &&
             !!board.name &&
-            !!board.id && thread && fromId ? `/${board.name}/${board.id}/${fromId}/${thread.n}/${from.id}/${n}` : undefined
+            !!board.id ? thread && fromId ? `/${board.name}/${board.id}/${fromId}/${thread.n}/${from.id}/${n}` : `/${board.name}/${board.id}/${from.id}/${n}` : undefined
     }
 
     public static thread({

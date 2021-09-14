@@ -2,6 +2,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -22,9 +23,11 @@ import Menu from "components/Menu";
 const useFormPersist = require("react-hook-form-persist");
 
 export default function FormPost({
+  baseUrl,
   thread,
   board,
 }: {
+  baseUrl?: string; // @HACK this is only needed to keep track of when to reset the form
   thread?: Thread;
   board?: Board;
 }) {
@@ -54,7 +57,7 @@ export default function FormPost({
     watch,
   } = form;
 
-  const formId = thread?.id || board?.id || "form";
+  const formId = useMemo(() => thread?.id || board?.id || "form", [thread, board]);
   useFormPersist(
     formId,
     { watch, setValue },
@@ -77,10 +80,7 @@ export default function FormPost({
   const [formDisabled, setFormDisabled] = useState<boolean>(false);
 
   const onQuote = useCallback(
-    function (msg, {
-      from,
-      n
-    }) {
+    function (msg, { from, n }) {
       const { comment } = getValues();
       const quote = `>>${from}/${n}`;
       setValue(
@@ -252,6 +252,14 @@ export default function FormPost({
     },
     [onFileChange, setValue]
   );
+
+  const [currentBaseUrl, setCurrentBaseUrl] = useState<string | undefined>(baseUrl);
+  useEffect(() => {
+    if(baseUrl && baseUrl !== currentBaseUrl) {
+      setCurrentBaseUrl(baseUrl)
+      resetForm()
+    }
+  }, [baseUrl, currentBaseUrl, setCurrentBaseUrl, resetForm])
 
   useEventListener("paste", pasteHandler);
 
@@ -599,7 +607,8 @@ export default function FormPost({
                           className="text-blue-600 visited:text-purple-600 hover:text-blue-400"
                         >
                           rules
-                        </Link>{" "}and the{" "}
+                        </Link>{" "}
+                        and the{" "}
                         <Link
                           to="/_/faq"
                           target="_blank"

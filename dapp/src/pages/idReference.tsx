@@ -74,8 +74,6 @@ export default function IdReferencePage({ match: { params } }: any) {
         location = `${Router.post(post)}`;
       }
 
-      console.log({board, thread, post})
-
       if ((board || thread || post) && !location) {
         setError(
           "Content not found. It may have been deleted, or the ID is invalid."

@@ -47,16 +47,33 @@ export default function WalletAccount() {
             ></img>
             )
             {balance !== undefined && balance < 0.0005 ? (
-              <div>
-                <a
-                  href="https://matic.supply/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
-                >
-                  <div>Need Matic?</div>
-                  <div>Free faucet: https://matic.supply</div>
-                </a>
+              <div className="p-4">
+                <div>Need Matic?</div>
+                <div>
+                  Free faucets:
+                  <ul>
+                    <li>
+                      <a
+                        href="https://matic.supply/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
+                      >
+                        https://matic.supply
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://macncheese.finance/matic-polygon-mainnet-faucet.php"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
+                      >
+                        https://macncheese.finance
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             ) : (
               ""

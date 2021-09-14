@@ -13,6 +13,7 @@ type PostCreateInput = {
     subject: string;
     comment: string;
     sage: boolean;
+    nonce: string;
 };
 
 type BoardCreateInput = {
@@ -36,6 +37,17 @@ type PostCreateData = {
     };
     name: string;
     subject?: string;
+    nonce: string;
+};
+
+type JannyGrantData = {
+    board: string;
+    user: string;
+};
+
+type JannyRevokeData = {
+    board: string;
+    user: string;
 };
 
 export async function postMessage(
@@ -43,7 +55,7 @@ export async function postMessage(
     accounts: any,
     setStatus: SetStatus
 ) {
-    const { board, thread, comment, name, subject, sage } = input;
+    const { board, thread, comment, name, subject, sage, nonce } = input;
 
     let file: IpfsUploadResult | undefined;
     if (input.file.length > 0) {
@@ -56,6 +68,7 @@ export async function postMessage(
     const data: PostCreateData = {
         comment,
         name,
+        nonce
     };
 
     if (!!file) {
@@ -343,6 +356,42 @@ export async function unbanUser(id: string, accounts: any, setStatus: SetStatus)
 
         setStatus({
             success: "Unbanned"
+        });
+    } catch (error) {
+        setStatus({ error });
+
+        console.error({ error });
+    }
+}
+
+export async function grantJanny(data: JannyGrantData, accounts: any, setStatus: SetStatus) {
+    try {
+        setStatus({
+            progress: "Granting janny..."
+        });
+
+        await sendMessage("janny:grant", data, accounts[0]);
+
+        setStatus({
+            success: "Granted"
+        });
+    } catch (error) {
+        setStatus({ error });
+
+        console.error({ error });
+    }
+}
+
+export async function revokeJanny(data: JannyRevokeData, accounts: any, setStatus: SetStatus) {
+    try {
+        setStatus({
+            progress: "Revoking janny..."
+        });
+
+        await sendMessage("janny:revoke", data, accounts[0]);
+
+        setStatus({
+            success: "Revoked"
         });
     } catch (error) {
         setStatus({ error });

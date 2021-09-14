@@ -59,7 +59,7 @@ export default function ContentHeader({
     <div>
       <BoardHeader board={board}></BoardHeader>
 
-      <FormPost thread={thread} board={board}></FormPost>
+      <FormPost baseUrl={baseUrl} thread={thread} board={board}></FormPost>
 
       <div className="p-2">
         <hr></hr>
@@ -93,7 +93,7 @@ export default function ContentHeader({
                   [
                   <Link
                     className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                    to={`${Router.board(board)}${timeTravelURL}`}
+                    to={`${Router.board(board)}/index${timeTravelURL}`}
                   >
                     Index
                   </Link>

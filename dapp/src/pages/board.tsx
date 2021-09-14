@@ -16,6 +16,7 @@ import CatalogView from "components/CatalogView";
 import Post from "components/post/Post";
 import { Link, useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
+import BOARD_GET from "graphql/queries/boards/get";
 interface BoardCatalogData {
   board: Board;
   pinned: Thread[];
@@ -28,9 +29,16 @@ interface BoardCatalogVars {
   skip: number;
 }
 
+interface BoardData {
+  board: Board;
+}
+interface BoardVars {
+  board: string;
+  block: number;
+}
+
 export default function BoardPage({ location, match: { params } }: any) {
   let { board_id } = params;
-  const boardMode = `${params.view_mode || "index"}`;
   board_id = board_id ? `0x${board_id}` : undefined;
 
   const { lastBlock } = useLastBlock();
@@ -46,6 +54,7 @@ export default function BoardPage({ location, match: { params } }: any) {
 
   const history = useHistory();
   const [settings] = useSettings();
+  const boardMode: string = params.view_mode || settings?.content_view?.board_default_view_mode || "catalog"
   const orderBy =
     settings?.content_view?.board_sort_threads_by || "lastBumpedAt";
   const limit = parseInt(`${settings?.content_view?.page_size || "100"}`);
@@ -63,11 +72,20 @@ export default function BoardPage({ location, match: { params } }: any) {
     BoardCatalogData,
     BoardCatalogVars
   >(BOARD_CATALOG, {
-    variables,
-    pollInterval: 60_000,
+    variables
   });
 
-  const board = data?.board;
+  const { data: boardData } = useQuery<
+    BoardData,
+    BoardVars
+  >(BOARD_GET, {
+    variables: {
+      board: board_id,
+      block
+    }
+  });
+
+  const board = boardData?.board;
   const threads = useMemo(
     () => [...(data?.pinned || []), ...(data?.threads || [])],
     [data]
@@ -117,7 +135,7 @@ export default function BoardPage({ location, match: { params } }: any) {
           onRefresh={refetch}
         />
         <div>
-          {loading ? (
+          {loading && !data ? (
             <div className="center grid min-h-50vh">
               <Loading />
             </div>

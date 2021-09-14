@@ -23,6 +23,9 @@ const SEARCH_BY_REF = gql`
   fragment Post on Post {
     id
     n
+    from {
+      id
+    }
     board {
       ...Board
     }
