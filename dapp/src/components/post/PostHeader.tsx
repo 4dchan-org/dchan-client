@@ -47,6 +47,15 @@ export default function PostHeader({
   const [status, setStatus] = useState<string | object>();
 
   const createdAt = fromBigInt(createdAtUnix);
+  const relativeTime = createdAt.toRelative();
+  const formattedDate = `${
+    // @ts-ignore
+    createdAt.toLocaleString({day: "2-digit", month: "2-digit", year: "2-digit"})
+  }(${
+    createdAt.weekdayShort
+  })${
+    createdAt.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+  }`;
 
   const isJanny = thread?.board?.id ? isJannyOf(thread.board.id) : false;
 
@@ -113,9 +122,8 @@ export default function PostHeader({
         )}
         )
       </span>
-      <span className="px-0.5 whitespace-nowrap text-xs">
-        {createdAt.toLocaleString(DateTime.DATETIME_SHORT)} (
-        {createdAt.toRelative()})
+      <span className="px-0.5 whitespace-nowrap text-sm" title={relativeTime !== null ? relativeTime : undefined}>
+        {formattedDate}
       </span>
       <span className="px-0.5 on-parent-target-font-bold text-sm whitespace-nowrap">
         <button onClick={() => focusPost(post)} title="Link to this post">
