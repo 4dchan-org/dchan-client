@@ -1,3 +1,4 @@
+import AddressLabel from "components/AddressLabel";
 import Card from "components/Card";
 import SimpleFooter from "components/SimpleFooter";
 import { useTitle } from "react-use";
@@ -102,15 +103,6 @@ export default function FAQPage() {
             </div>
 
             <div className="pb-2">
-              <strong>Q: Do you sell tokens?</strong>
-              <div>
-                dchan does not require any token to function (except MATIC for
-                sending txs, as previously mentioned), so no tokens are sold.
-                tl;dr Token not needed.
-              </div>
-            </div>
-
-            <div className="pb-2">
               <strong>Q: Is it free?</strong>
               <div>
                 Yes, but you'll still need to pay the MATIC gas fee for your
@@ -125,6 +117,15 @@ export default function FAQPage() {
                   the faucet
                 </a>
                 , which will let you post a couple times.
+              </div>
+            </div>
+
+            <div className="pb-2">
+              <strong>Q: Do you sell tokens?</strong>
+              <div>
+                dchan does not require any token to function (except MATIC for
+                sending txs), so no tokens are sold. For now.
+                tl;dr Token not needed.
               </div>
             </div>
 
@@ -190,21 +191,13 @@ export default function FAQPage() {
                 >
                   Go to their website
                 </a>{" "}
-                to learn more. If you're a developer and you don't own any{" "}
-                <a
-                  className="text-blue-600 visited:text-purple-600"
-                  href="//www.coingecko.com/en/coins/the-graph"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  GRT
-                </a>, you've fucked up.
+                to learn more.
               </div>
             </div>
 
             <div>
               <strong>Q: Who are you?</strong>
-              <div>I am anonymous.</div>
+              <div>I am <AddressLabel address={"0x22a973417575E3EA73dD26220aeFe78c16742b33"} /></div>
             </div>
           </div>
         </Card>
