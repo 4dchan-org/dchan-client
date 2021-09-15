@@ -130,15 +130,15 @@ export default function Post({
   }, [addFavorite, removeFavorite, thread, favorite]);
   return (
     <div className="flex">
-      {!isOp ? <span className="pl-2 text-secondary">&gt;&gt;</span> : ""}
+      {!isOp ? <span className="md:px-2 px-1 text-secondary">&gt;&gt;</span> : ""}
       <details
-        className="dchan-post-expand sm:mx-2 text-left inline"
+        className="dchan-post-expand mr-3 text-left inline"
         open={canShow}
         key={id}
         ref={postRef}
       >
         <summary
-          className="text-left opacity-50 z-10 whitespace-nowrap max-w-95vw overflow-hidden"
+          className="text-left opacity-50 z-10 whitespace-nowrap overflow-hidden"
           title="Hide/Show"
         >
           <PostHeader thread={thread} post={post}>
@@ -150,15 +150,15 @@ export default function Post({
         </summary>
         <article
           id={`${n}`}
-          className="dchan-post text-left w-full"
+          className="dchan-post text-left w-full "
           dchan-post-from-address={address}
         >
           <div
-            className={`${!isOp ? "bg-secondary" : ""} ${
+            className={`${!isOp ? "bg-secondary max-w-90vw" : "max-w-100vw"} ${
               isFocused ? "bg-tertiary" : ""
-            } w-full sm:w-auto pb-2 mb-2 px-4 inline-block border-bottom-invisible relative max-w-screen-xl`}
+            } pb-2 mb-2 px-4 inline-block border-bottom-invisible relative`}
           >
-            <div className="flex sm:flex-wrap center text-center sm:text-left sm:block max-w-90vw">
+            <div className="flex sm:flex-wrap center text-center sm:text-left sm:block max-w-100vw">
               {isOp && thread ? (
                 <button
                   className={`inline-block ${
@@ -194,28 +194,29 @@ export default function Post({
             ) : (
               <div>
                 {!!image ? (
-                  <div className="text-center sm:text-left">
-                    <span className="text-sm">
-                      <span>
-                        <a
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-blue-600 max-w-64"
-                          href={ipfsUrl}
-                          title={image.name}
-                        >
-                          {truncate(image.name, {
-                            length: 32,
-                            omission: "...",
-                          })}
-                        </a>
-                        <span className="px-1">
-                          ({Math.trunc(parseInt(image.byteSize) * 0.001)}kb)
-                        </span>
-                        <span className="px-1 text-gray-400 hover:text-gray-600">
-                          <small>{image.ipfsHash}</small>
-                        </span>
-                      </span>
+                  <div className="text-left text-sm truncate">
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-blue-600 max-w-64"
+                      href={ipfsUrl}
+                      title={image.name}
+                    >
+                      {truncate(image.name, {
+                        length: 32,
+                        omission: "...",
+                      })}
+                    </a>
+                    <span className="px-1">
+                      ({Math.trunc(parseInt(image.byteSize) * 0.001)}kb)
+                    </span>
+                    <span className="px-1 text-gray-400 hover:text-gray-600">
+                      <small>
+                        {image.ipfsHash /*truncate(image.ipfsHash, {
+                          length: 16,
+                          omission: "...",
+                        })*/}
+                      </small>
                     </span>
                   </div>
                 ) : (
@@ -223,25 +224,24 @@ export default function Post({
                 )}
                 <div className="y-1">
                   <div
-                    className={`h-full max-w-max flex flex-wrap sm:flex-nowrap text-left sm:items-start ${
+                    className={`h-full sm:flex-nowrap text-left sm:items-start max-w-90vw ${
                       isOp ? `pb-2` : ""
                     }`}
                   >
-                    {!!image ? (
-                      <div className="overflow-auto px-2 sm:float-left grid center flex-shrink-0 max-w-100vw sm:max-w-max">
-                        <IPFSImage
-                          hash={image.ipfsHash}
-                          isSpoiler={image.isSpoiler}
-                          isNsfw={image.isNsfw}
-                          thumbnail={true}
-                          expandable={true}
-                        ></IPFSImage>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-
                     <span>
+                      {!!image ? (
+                        <div className="overflow-auto px-2 float-left grid center flex-shrink-0 max-w-100vw sm:max-w-max">
+                          <IPFSImage
+                            hash={image.ipfsHash}
+                            isSpoiler={image.isSpoiler}
+                            isNsfw={image.isNsfw}
+                            thumbnail={true}
+                            expandable={true}
+                          ></IPFSImage>
+                        </div>
+                      ) : (
+                        ""
+                      )}
                       <div>
                         {isOp && thread ? (
                           <span className="font-semibold">
@@ -251,9 +251,10 @@ export default function Post({
                           ""
                         )}
                       </div>
-                      <div>
-                        <PostBody post={post} />
-                      </div>
+                      <PostBody
+                        style={{margin: "0.5rem"}}
+                        post={post}
+                      />
 
                       {bans.length > 0 ? (
                         <div className="text-xl font-bold text-contrast whitespace-nowrap">
