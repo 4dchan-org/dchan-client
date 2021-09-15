@@ -22,16 +22,12 @@ export default function BoardHeader({
 
   return (
     <header id="board-header">
-      <HeaderNavigation></HeaderNavigation>
-
       <HeaderLogo></HeaderLogo>
 
-      <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative">
-        <div className="text-xs pb-2">
-          <IdLabel
-            id={board?.id || "0x0000000000000000000000000000000000000000"}
-          ></IdLabel>
-        </div>
+      <HeaderNavigation></HeaderNavigation>
+
+      <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative" style={{paddingTop: "20px"}}>
+        
         <div>
           <span>
             {board?.isLocked ? (
@@ -41,9 +37,9 @@ export default function BoardHeader({
             )}
           </span>{" "}
           <span className="font-semibold">
-            <Link to={board ? `/${board.name}/${board.id}` : "#"}>
+            <p>
               /{board?.name || "?"}/ - {board?.title || "..."}
-            </Link>
+            </p>
           </span>
           {board && isJanny ? (
             <span>

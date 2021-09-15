@@ -19,14 +19,17 @@ export default function SearchWidget({
   const onClick = useCallback(() => setOpen(true), [setOpen]);
 
   return (
-    <details open={open}>
+    <details open={open} style={{textAlign: "left"}}>
       <summary>
-        <label htmlFor="dchan-search" onClick={onClick}>
+        <label htmlFor="dchan-search" onClick={onClick} style={{fontSize: "15px"}}>
           🔍
         </label>
+        <label htmlFor="dchan-favorites" onClick={onClick} style={{fontSize: "15px", paddingLeft: "5px"}}>
+          Search
+        </label>
       </summary>
-      <div className="mx-1 text-center bg-primary">
-        <div>Search:</div>
+      <div className="mx-1 text-center bg-secondary">
+        <div>Board Search:</div>
         <div>
           <input
             id="dchan-search"

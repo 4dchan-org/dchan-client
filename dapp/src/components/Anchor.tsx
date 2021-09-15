@@ -8,11 +8,12 @@ export default function Anchor({
   to: string
 }) {
   return (
-    <div>
+    <div style={{margin: "2px"}}>
       [
       <HashLink
         className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
         to={to}
+        style={{fontSize: "15px", padding: "4px"}}
       >
         {label}
       </HashLink>

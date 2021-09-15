@@ -6,7 +6,7 @@ import { LABEL_CLASSNAME } from "./AddressLabel";
 export default function BoardLink({ board }: { board: Board }) {
   return (
     <Link
-      style={{ backgroundColor: backgroundColorAddress(board.id) }}
+      style={{ backgroundColor: backgroundColorAddress(board.id) + "80", padding: "3px 5px 1px", color: "white"}}
       className={
         LABEL_CLASSNAME +
         " text-blue-600 visited:text-purple-600 hover:text-blue-500 hover:text-opacity-100"

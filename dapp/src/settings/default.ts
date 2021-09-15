@@ -25,7 +25,12 @@ const DefaultSettings = {
     eula: {
         agreed: false
     },
-    favorites: {}
+    favorites: {},
+    connection: {
+        provider: false,
+        chainid: "",
+        accounts: [""]
+    }
 }
 
 export default DefaultSettings

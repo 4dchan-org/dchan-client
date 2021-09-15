@@ -32,13 +32,16 @@ export default function FavoritesWidget() {
   const onRemove = removeFavorite ? removeFavorite : () => {};
 
   return favorites ? (
-    <details open={open}>
+    <details open={open} style={{textAlign: "left"}}>
       <summary>
-        <label htmlFor="dchan-favorites" onClick={onClick}>
+        <label htmlFor="dchan-favorites" onClick={onClick} style={{fontSize: "20px", paddingRight: "5px"}}>
           ⭐
         </label>
+        <label htmlFor="dchan-favorites" onClick={onClick} style={{fontSize: "15px"}}>
+          Favorites
+        </label>
       </summary>
-      <div className="mx-1 text-center bg-primary">
+      <div className="mx-1 text-center bg-secondary">
         {loading ? (
           "Loading..."
         ) : ids.length > 0 && threads ? (

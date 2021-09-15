@@ -124,10 +124,12 @@ export default function TimeTravelWidget({
   );
 
   return timeTravelRange ? (
-    <span className="bg-primary">
-      <details className="mx-1 sm:text-right" open={isTimeTraveling}>
-        <summary>
-          <span className="mx-1 text-xs">
+    <span className="bg-secondary"  style={{textAlign: "left"}}>
+      <details className="sm:text-left" open={isTimeTraveling} style={{display: "inline-block"}}>
+        <summary style={{fontSize: "15px"}}>
+          🗓 Date Selector
+          <br /> 
+          <span className="text-xs">
             {isTimeTraveling ? (
               <abbr title="You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date.">
                 Time traveled to
@@ -149,6 +151,7 @@ export default function TimeTravelWidget({
               onChange={(e) => onDateChange(e.target.value)}
               min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
               max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
+              className="bg-secondary"
             ></input>
             ,{" "}
             <span className="inline-block min-w-3rem">
@@ -181,7 +184,7 @@ export default function TimeTravelWidget({
                   DateTime.DATETIME_SHORT
                 )}
               </div>
-              <div>#{timeTravelRange.min.number}</div>
+              <div>Block #{timeTravelRange.min.number}</div>
             </span>
             <span className="col-span-2" />
             <span className="mx-1">
@@ -190,7 +193,7 @@ export default function TimeTravelWidget({
                   DateTime.DATETIME_SHORT
                 )}
               </div>
-              <div>#{timeTravelRange.max.number}</div>
+              <div>Block #{timeTravelRange.max.number}</div>
             </span>
           </div>
         </div>

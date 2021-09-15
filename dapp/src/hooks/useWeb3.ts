@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { Web3Provider } from "@ethersproject/providers";
 import { singletonHook } from 'react-singleton-hook';
 import Web3Modal from "web3modal";
+import useSettings from "./useSettings";
 
 const NETWORK_NAME = "matic";
 
@@ -35,6 +36,7 @@ const useWeb3 = singletonHook({
   const [provider, setProvider] = useState<Web3Provider>();
   const [chainId, setChainId] = useState<string | number>();
   const [accounts, setAccounts] = useState<string[]>([]);
+  const [settings, setSettings] = useSettings();
 
   // Open wallet selection modal.
   const loadWeb3Modal = useCallback(async () => {
@@ -59,6 +61,23 @@ const useWeb3 = singletonHook({
       window.ethereum.on('chainChanged', (chainId: string) => {
         setChainId(chainId)
       });
+
+      useCallback(() => {
+        setSettings({ 
+                  ...settings,
+                  connection: {
+                    ...settings?.connection,
+                    provider: new Web3Provider(newProvider),
+                    chainid: "test"
+                  },
+                });
+    }, [settings, setSettings])
+      
+
+
+
+
+
     } catch(error) {
       console.error({error})
     }

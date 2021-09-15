@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { singletonHook } from "react-singleton-hook";
+import { Web3Provider } from "@ethersproject/providers";
 import DefaultSettings from "settings/default";
 import useLocalStorage from "./useLocalStorage";
 
@@ -31,7 +32,12 @@ export type Settings = {
         agreed: boolean
     },
     favorites: {
-        [key: string]: boolean
+        [key: string]: boolean 
+    },
+    connection: {
+        provider: boolean
+        chainid: string
+        accounts: string[]
     }
 }
 

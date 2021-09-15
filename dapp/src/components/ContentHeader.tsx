@@ -54,10 +54,10 @@ export default function ContentHeader({
         <hr></hr>
       </div>
 
-      <div className="fixed z-20 top-0 right-4 opacity-50 hover:opacity-100 flex flex-wrap text-right">
-        <details open={true}>
-          <summary></summary>
-          <div className="bg-primary">
+      <div className="fixed z-20 top-0 right-4 opacity-100 flex flex-wrap text-right">
+        <details open={false}>
+          <summary style={{fontSize: "14px"}}>Options</summary>
+          <div className="bg-secondary" style={{padding: "20px", border: "dashed gray"}}>
             <TimeTravelWidget
               baseUrl={baseUrl || ""}
               startBlock={startBlock}
@@ -75,34 +75,37 @@ export default function ContentHeader({
 
       <div className="text-center sm:text-left grid md:grid-cols-3">
         <div className="mx-2 flex flex-wrap sm:flex-nowrap justify-center md:justify-start items-center">
-          <span className="whitespace-nowrap sm:flex">
+          <span className="whitespace-nowrap sm:flex items-center">
             {!!board ? (
               <span>
-                <span>
+                <span  style={{margin: "2px"}}>
                   [
                   <Link
                     className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                     to={`${Router.board(board)}/index`}
+                    style={{fontSize: "15px", padding: "4px"}}
                   >
                     Index
                   </Link>
                   ]
                 </span>
-                <span>
+                <span  style={{margin: "2px"}}>
                   [
                   <Link
                     className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                     to={`${Router.board(board)}/catalog`}
+                    style={{fontSize: "15px", padding: "4px"}}
                   >
                     Catalog
                   </Link>
                   ]
                 </span>
+                
               </span>
             ) : (
               ""
             )}
-            <Anchor to="#bottom" label="Bottom" />
+          <Anchor to="#bottom" label="Bottom" />
           </span>
 
           {!block || (lastBlock && `${lastBlock.number}` === `${block}`) ? (
