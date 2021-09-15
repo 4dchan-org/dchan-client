@@ -171,7 +171,14 @@ const CatalogThread = ({
                         block ? `?block=${block}` : ""
                       }`}
                     >
-                      <PostBody post={post} />
+                      <PostBody
+                        style={{
+                          maxHeight: "3.75rem",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                        post={post}
+                      />
                     </Link>
                   </div>
                 ))}
