@@ -232,7 +232,7 @@ export default function PostHeader({
         </Link>
       </span>
       {children}
-      <span className="dchan-backlinks text-sm">
+      <span className="dchan-backlinks text-sm text-left">
         {postBacklinks?.map((post) => (
           <button
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-1"
