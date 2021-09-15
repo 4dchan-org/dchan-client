@@ -6,11 +6,10 @@ import useSettings from "hooks/useSettings";
 import { Link, useHistory } from "react-router-dom";
 import { Router } from "router";
 import { DateTime } from "luxon";
-import { useEffect, useState, forwardRef, ForwardedRef } from "react";
-import usePubSub from "hooks/usePubSub";
+import { useState, useCallback } from "react";
 import BoardLink from "components/BoardLink";
 
-const CatalogThread = forwardRef(({
+const CatalogThread = ({
   thread,
   block,
   showBoard = false,
@@ -18,7 +17,7 @@ const CatalogThread = forwardRef(({
   thread: Thread;
   block?: number;
   showBoard?: boolean;
-}, ref?: ForwardedRef<HTMLElement>) => {
+}) => {
   const {
     id,
     isPinned,
@@ -47,28 +46,32 @@ const CatalogThread = forwardRef(({
 
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const history = useHistory();
-  const { publish, subscribe, unsubscribe } = usePubSub();
 
-  useEffect(() => {
-    const sub = subscribe("THREAD_FOCUS", (_: any, id: string) => {
-      const previousFocused = !!isFocused;
-      const newIsFocused = `${id}` === `${thread.id}`;
-      setIsFocused(newIsFocused);
-      if (previousFocused && newIsFocused) {
-        const url = Router.thread(thread);
-        url && history.push(`${url}${block ? `?block=${block}` : ""}`);
-      }
-    });
+  const openThread = useCallback(
+    () => {
+      const url = Router.thread(thread);
+      url && history.push(`${url}${block ? `?block=${block}` : ""}`);
+    },
+    [thread, history, block]
+  );
 
-    return () => {
-      unsubscribe(sub);
-    };
-  });
+  const focusThread = useCallback(
+    () => {
+      setIsFocused(true);
+    },
+    [setIsFocused]
+  );
+
+  const defocusThread = useCallback(
+    () => {
+      setIsFocused(false);
+    },
+    [setIsFocused]
+  );
 
   return (
     <div className="relative max-w-150px w-full">
       <article
-        ref={ref}
         id={id}
         className="dchan-post justify-self-center text-decoration-none leading-4 text-black m-0.5 border-black overflow-hidden max-w-150px break-word w-full place-items-center flex"
         style={
@@ -86,10 +89,12 @@ const CatalogThread = forwardRef(({
                 position: "relative",
               }
         }
+        onMouseEnter={focusThread}
+        onMouseLeave={defocusThread}
       >
         {isLowScore && !isFocused ? (
           <button
-            onClick={() => publish("THREAD_FOCUS", id)}
+            onClick={focusThread}
             className="absolute text-2xl text-gray-800 top-0 left-0 right-0 bottom-0"
           >
             <div>⚠️</div>
@@ -101,7 +106,7 @@ const CatalogThread = forwardRef(({
         )}
         <button
           className="h-full w-full"
-          onClick={() => publish("THREAD_FOCUS", id)}
+          onClick={openThread}
         >
           <div
             className={[
@@ -187,6 +192,6 @@ const CatalogThread = forwardRef(({
       </article>
     </div>
   );
-});
+};
 
 export default CatalogThread;
