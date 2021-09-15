@@ -212,10 +212,7 @@ export default function Post({
                     </span>
                     <span className="px-1 text-gray-400 hover:text-gray-600">
                       <small>
-                        {image.ipfsHash /*truncate(image.ipfsHash, {
-                          length: 16,
-                          omission: "...",
-                        })*/}
+                        {image.ipfsHash}
                       </small>
                     </span>
                   </div>
