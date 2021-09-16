@@ -43,7 +43,7 @@ export default function BoardPage({ location, match: { params } }: any) {
 
   const { lastBlock } = useLastBlock();
   const query = parseQueryString(location.search);
-  const page = parseInt(`${query.page || "0"}`);
+  const page = parseInt(`${query.page || "1"}`);
   const queriedBlock = parseInt(`${query.block}`);
   const block = !isNaN(queriedBlock)
     ? queriedBlock
@@ -65,7 +65,7 @@ export default function BoardPage({ location, match: { params } }: any) {
     orderBy,
     orderDirection: settings?.content_view?.board_sort_direction || "desc",
     limit,
-    skip: limit * page,
+    skip: limit * (page-1),
   };
 
   const { refetch, data, loading } = useQuery<
@@ -103,8 +103,8 @@ export default function BoardPage({ location, match: { params } }: any) {
   });
 
   const maxPage = Math.max(
-    Math.ceil(board ? parseInt(`${board.threadCount}`) / limit : 0) - 1,
-    0
+    Math.ceil(board ? parseInt(`${board.threadCount}`) / limit : 0),
+    1
   );
 
   useTitle(
@@ -229,10 +229,10 @@ export default function BoardPage({ location, match: { params } }: any) {
               <hr/>
               <div className="p-2">
                 <span>
-                  {page > 0 ? (
+                  {page > 1 ? (
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
-                      to={`${Router.board(board, boardMode)}?page=${0}${
+                      to={`${Router.board(board, boardMode)}?page=1${
                         queriedBlock ? `&block=${queriedBlock}` : ""
                       }`}
                     >
@@ -243,7 +243,7 @@ export default function BoardPage({ location, match: { params } }: any) {
                   )}
                 </span>
                 <span>
-                  {page > 0 ? (
+                  {page > 1 ? (
                     <Link
                       className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
                       to={`${Router.board(board, boardMode)}?page=${page - 1}${
@@ -262,10 +262,10 @@ export default function BoardPage({ location, match: { params } }: any) {
                     className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
                     onClick={() => {
                       const input = prompt(
-                        `Page number: (range: 0-${maxPage})`
+                        `Page number: (range: 1-${maxPage})`
                       );
                       const newPage = parseInt(input || "");
-                      if (isNaN(newPage) || newPage < 0 || newPage > maxPage) {
+                      if (isNaN(newPage) || newPage < 1 || newPage > (maxPage)) {
                         alert(`Invalid page number: ${input}`);
                       } else {
                         history.push(
