@@ -3,7 +3,7 @@ import { Block, Board, Thread } from "dchan";
 import useLastBlock from "hooks/useLastBlock";
 import { DateTime } from "luxon";
 import { ReactElement } from "react";
-import { useEffect, useState, useCallback, SyntheticEvent } from "react";
+import { useEffect, useState, } from "react";
 import { Router } from "router";
 import Anchor from "./Anchor";
 import BoardHeader from "./board/header";
@@ -55,16 +55,6 @@ export default function ContentHeader({
     ? `?${Object.entries(timeTravelParameters).map(x => (x[0] + "=" + x[1])).join("&")}`
     : "";
 
-  
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-  const onToggle = useCallback(
-    (event: SyntheticEvent) => {
-      event.preventDefault();
-      setIsOpen(!isOpen);
-    },
-    [isOpen, setIsOpen]
-  );
-  
   return (
     <div>
       <BoardHeader board={board}></BoardHeader>
