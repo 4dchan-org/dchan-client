@@ -44,15 +44,6 @@ export default function ContentHeader({
     );
   }, [thread, board, setStartBlock]);
 
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-  const onToggle = useCallback(
-    (event: SyntheticEvent) => {
-      event.preventDefault();
-      setIsOpen(!isOpen);
-    },
-    [isOpen, setIsOpen]
-  );
-
   let timeTravelParameters: {block?: string, date?: string} = {};
   if (block) {
     timeTravelParameters.block = `${block}`;
@@ -75,7 +66,7 @@ export default function ContentHeader({
       </div>
 
       <div className="fixed z-20 top-0 right-4 opacity-50 hover:opacity-100 flex flex-wrap text-right">
-        <details open={isOpen} onClick={onToggle}>
+        <details open={true}>
           <summary></summary>
           <div className="bg-primary">
             <TimeTravelWidget
