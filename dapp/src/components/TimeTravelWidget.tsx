@@ -188,7 +188,7 @@ export default function TimeTravelWidget({
         newBlock < parseInt(timeTravelRange.min.number) ||
         newBlock > parseInt(timeTravelRange.max.number)
       ) {
-        alert(`Invalid page number: ${input}`);
+        alert(`Invalid block number: ${input}`);
       } else {
         setTimeTraveledToNumber(input);
         changeNumber(input);

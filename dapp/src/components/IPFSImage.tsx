@@ -41,89 +41,91 @@ export default function IPFSImage({
   }, [ipfsSrc, setImgLoading, setImgSrc, setImgError]);
 
   return (
-    <div className={`${className} relative`}>
-      <span>
-        <div>
-          <div className="opacity-50">
-            {imgLoading ? (
-              <div className="relative center grid">
-                <img
-                  className={"h-150px w-150px animation-download"}
-                  style={style}
-                  src={ipfsLoadingSrc}
-                  onClick={retry}
-                  alt=""
-                />
-                <div className="p-2">Loading...</div>
-              </div>
-            ) : imgError ? (
-              <div className="relative center grid">
-                <img
-                  className={"h-150px w-150px animation-fade-in"}
-                  style={style}
-                  src={ipfsErrorSrc}
-                  onClick={retry}
-                  alt=""
-                />
-                <div className="p-2">IPFS image load error</div>
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
+    <span>
+      <img
+        className={`${className} ${
+          !expand || imgError ? thumbnailClass : ""
+        } animation-fade-in`}
+        style={
+          imgLoading
+            ? { ...style, visibility: "hidden", position: "absolute" }
+            : !!imgError || !canShow
+            ? { display: "none" }
+            : style
+        }
+        src={imgSrc}
+        onLoad={() => setImgLoading(false)}
+        loading={htmlLoading}
+        onClick={() => {
+          if (expandable) {
+            setExpand(!expand);
+          }
+        }}
+        onError={(e) => {
+          setImgLoading(false);
+          setImgError(e);
+        }}
+        alt=""
+      />
+      <div className={`${className} relative`}>
+        <span>
           <div>
-            {!imgLoading && !imgError && !showSpoiler && isSpoiler ? (
-              <img
-                className={thumbnailClass}
-                src={spoilerSrc}
-                alt="SPOILER"
-                onClick={() => setShowSpoiler(true)}
-              ></img>
-            ) : (
-              ""
-            )}
-            {!imgLoading &&
-            !imgError &&
-            (showSpoiler || !isSpoiler) &&
-            !showNsfw &&
-            isNsfw ? (
-              <img
-                className={thumbnailClass}
-                src={nsfwSrc}
-                alt="NSFW"
-                onClick={() => setShowNsfw(true)}
-              ></img>
-            ) : (
-              ""
-            )}
-            <img
-              className={`${className} ${
-                !expand || imgError ? thumbnailClass : ""
-              } animation-fade-in`}
-              style={
-                imgLoading
-                  ? { ...style, visibility: "hidden", position: "absolute" }
-                  : !!imgError || !canShow
-                  ? { display: "none" }
-                  : style
-              }
-              src={imgSrc}
-              onLoad={() => setImgLoading(false)}
-              loading={htmlLoading}
-              onClick={() => {
-                if (expandable) {
-                  setExpand(!expand);
-                }
-              }}
-              onError={(e) => {
-                setImgLoading(false);
-                setImgError(e);
-              }}
-              alt=""
-            />
+            <div className="opacity-50">
+              {imgLoading ? (
+                <div className="relative center grid">
+                  <img
+                    className={"h-150px w-150px animation-download"}
+                    style={style}
+                    src={ipfsLoadingSrc}
+                    onClick={retry}
+                    alt=""
+                  />
+                  <div className="p-2">Loading...</div>
+                </div>
+              ) : imgError ? (
+                <div className="relative center grid">
+                  <img
+                    className={"h-150px w-150px animation-fade-in"}
+                    style={style}
+                    src={ipfsErrorSrc}
+                    onClick={retry}
+                    alt=""
+                  />
+                  <div className="p-2">IPFS image load error</div>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            <div>
+              {!imgLoading && !imgError && !showSpoiler && isSpoiler ? (
+                <img
+                  className={thumbnailClass}
+                  src={spoilerSrc}
+                  alt="SPOILER"
+                  onClick={() => setShowSpoiler(true)}
+                ></img>
+              ) : (
+                ""
+              )}
+              {!imgLoading &&
+              !imgError &&
+              (showSpoiler || !isSpoiler) &&
+              !showNsfw &&
+              isNsfw ? (
+                <img
+                  className={thumbnailClass}
+                  src={nsfwSrc}
+                  alt="NSFW"
+                  onClick={() => setShowNsfw(true)}
+                ></img>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
-        </div>
-      </span>
-    </div>
+        </span>
+      </div>
+    </span>
   );
 }
