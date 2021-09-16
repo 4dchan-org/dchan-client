@@ -76,7 +76,7 @@ export default function ContentHeader({
       </div>
 
       <div className="fixed z-20 top-0 right-4 opacity-50 hover:opacity-100 flex flex-wrap text-right">
-        <details open={isOpen} onClick={onToggle}>
+        <details open={true}>
           <summary></summary>
           <div className="bg-primary">
             <TimeTravelWidget
