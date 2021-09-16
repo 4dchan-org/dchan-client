@@ -129,8 +129,8 @@ export default function Post({
     }
   }, [addFavorite, removeFavorite, thread, favorite]);
   return (
-    <div className="flex">
-      {!isOp ? <span className="pl-2 text-secondary">&gt;&gt;</span> : ""}
+    <div className="flex max-w-100vw">
+      {!isOp ? <span className="hidden sm:block pl-2 text-secondary">&gt;&gt;</span> : ""}
       <details
         className="dchan-post-expand sm:mx-2 text-left inline"
         open={canShow}
@@ -223,25 +223,23 @@ export default function Post({
                 )}
                 <div className="y-1">
                   <div
-                    className={`h-full max-w-max flex flex-wrap sm:flex-nowrap text-left sm:items-start ${
+                    className={`h-full max-w-max flex flex-wrap text-left sm:items-start ${
                       isOp ? `pb-2` : ""
                     }`}
                   >
                     {!!image ? (
-                      <div className="overflow-auto px-2 sm:float-left grid center flex-shrink-0 max-w-100vw sm:max-w-max">
-                        <IPFSImage
-                          hash={image.ipfsHash}
-                          isSpoiler={image.isSpoiler}
-                          isNsfw={image.isNsfw}
-                          thumbnail={true}
-                          expandable={true}
-                        ></IPFSImage>
-                      </div>
+                      <IPFSImage
+                        hash={image.ipfsHash}
+                        isSpoiler={image.isSpoiler}
+                        isNsfw={image.isNsfw}
+                        thumbnail={true}
+                        expandable={true}
+                      ></IPFSImage>
                     ) : (
                       ""
                     )}
 
-                    <span>
+                    <span className="px-2">
                       <div>
                         {isOp && thread ? (
                           <span className="font-semibold">

@@ -10,17 +10,17 @@ function BoardItem({ id, title, postCount, name, isLocked, isNsfw }: Board) {
           id={id}
         ></IdLabel>
       </td>
-      <td className="px-2">
+      <td className="px-2 whitespace-nowrap">
         <span>
           <Link
-            className="text-blue-600 visited:text-purple-600 hover:text-blue-500 mx-4"
+            className="text-blue-600 visited:text-purple-600 hover:text-blue-500 mx-4 inline-block overflow-hidden overflow-ellipsis max-w-12rem"
             to={`/${name}/${id}`}
           >
             {title}
           </Link>
         </span>
       </td>
-      <td className="px-2">
+      <td className="px-2 whitespace-nowrap">
         <span>
           <Link
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500 mx-4"
@@ -30,10 +30,10 @@ function BoardItem({ id, title, postCount, name, isLocked, isNsfw }: Board) {
           </Link>
         </span>
       </td>
-      <td className="px-2">
+      <td className="px-2 whitespace-nowrap">
         <span>{postCount} posts</span>
       </td>
-      <td className="px-2">
+      <td className="px-2 whitespace-nowrap">
         {isLocked ? (
           <span title="Board locked. You cannot post.">🔒</span>
         ) : (

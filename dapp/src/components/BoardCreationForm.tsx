@@ -37,6 +37,7 @@ export default function BoardCreationForm() {
                   className="text-center"
                   type="text"
                   placeholder="Videogames"
+                  maxLength={70}
                   {...register("title")}
                 ></input>
               </td>
@@ -46,6 +47,7 @@ export default function BoardCreationForm() {
                   className="text-center w-16"
                   type="text"
                   placeholder="v"
+                  maxLength={7}
                   {...register("name")}
                 ></input>
                 /
