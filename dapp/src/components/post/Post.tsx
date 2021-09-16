@@ -239,7 +239,6 @@ export default function Post({
                       ) : (
                         ""
                       )}
-                    <span className="px-2">
                       <div>
                         {isOp && thread ? (
                           <span className="font-semibold">
