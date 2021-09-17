@@ -155,7 +155,7 @@ export default function Post({
           <div
             className={`${!isOp ? "bg-secondary max-w-90vw" : "max-w-100vw"} ${
               isFocused ? "bg-tertiary" : ""
-            } pb-2 mb-2 px-4 inline-block border-bottom-invisible relative`}
+            } pb-2 my-1 px-4 inline-block border-bottom-invisible relative`}
           >
             <div className="flex sm:flex-wrap center text-center sm:text-left sm:block max-w-100vw">
               {isOp && thread ? (
