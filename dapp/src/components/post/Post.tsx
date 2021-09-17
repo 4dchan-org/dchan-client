@@ -130,9 +130,9 @@ export default function Post({
   }, [addFavorite, removeFavorite, thread, favorite]);
   return (
     <div className="flex">
-      {!isOp ? <span className="md:px-2 px-1 text-secondary">&gt;&gt;</span> : ""}
+      {!isOp ? <span className="md:pl-2 pl-1 text-secondary">&gt;&gt;</span> : ""}
       <details
-        className="dchan-post-expand mr-3 text-left inline"
+        className="dchan-post-expand mr-3 text-left inline md:px-2 px-1"
         open={canShow}
         key={id}
         ref={postRef}
@@ -149,7 +149,7 @@ export default function Post({
         </summary>
         <article
           id={`${n}`}
-          className="dchan-post text-left w-full "
+          className="dchan-post text-left w-full"
           dchan-post-from-address={address}
         >
           <div
@@ -218,7 +218,7 @@ export default function Post({
                 ) : (
                   ""
                 )}
-                <div className="y-1">
+                <div className="y-1 pt-2 pb-2">
                   <div
                     className={`h-full sm:flex-nowrap text-left sm:items-start max-w-90vw ${
                       isOp ? `pb-2` : ""
@@ -226,7 +226,7 @@ export default function Post({
                   >
                     <span>
                       {!!image ? (
-                        <div className="overflow-auto px-2 float-left grid center flex-shrink-0 max-w-100vw sm:max-w-max">
+                        <div className="overflow-auto pr-5 float-left grid center flex-shrink-0 max-w-100vw sm:max-w-max">
                           <IPFSImage
                             hash={image.ipfsHash}
                             isSpoiler={image.isSpoiler}
@@ -248,7 +248,7 @@ export default function Post({
                         )}
                       </div>
                       <PostBody
-                        style={{margin: "0.5rem"}}
+                        style={{marginLeft: "1.25rem"}}
                         post={post}
                       />
 
