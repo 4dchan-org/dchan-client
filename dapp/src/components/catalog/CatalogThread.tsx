@@ -191,7 +191,8 @@ const CatalogThread = ({
                         />
                       </Link>
                     </div>
-                  ))}
+                  ))
+                }
               </div>
             </div>
           </div>
