@@ -3,6 +3,8 @@ import polygonSrc from "assets/images/polygon.png";
 import thegraphSrc from "assets/images/thegraph.png";
 import IPFSClientWidget from "./IPFSClientWidget";
 
+const preval = require("preval.macro");
+
 export default function Footer({
   showContentDisclaimer = false,
 }: {
@@ -83,9 +85,19 @@ export default function Footer({
               </a>
             </div>
           </div>
-          <div className="justify-end text-right px-6 text-xs text-gray-600 flex">
+          <div className="flex justify-end text-right px-6 text-xs text-gray-400 hover:text-gray-600">
             <div>
-              <div>v0.0.1</div>
+              <div>
+                <IPFSClientWidget>
+                  <span>dchan-client</span>
+                </IPFSClientWidget>
+              </div>
+              <div>
+                <small>
+                  v
+                  {preval`module.exports = Math.floor(new Date().getTime()/1000)`}
+                </small>
+              </div>
               <div>
                 <a
                   className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
@@ -95,9 +107,6 @@ export default function Footer({
                 >
                   Report a bug
                 </a>
-              </div>
-              <div>
-                <IPFSClientWidget />
               </div>
             </div>
           </div>
