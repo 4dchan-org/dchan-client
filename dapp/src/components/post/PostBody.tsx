@@ -11,10 +11,10 @@ export default function PostBody({post, style = {}}: {style?: any, post: Post}) 
 
   let __html = sanitized
     .replace(TEXT_QUOTES_HTML_SAFE_REGEX, `<span class="text-quote">&gt;$1</span>`) // Text quotes
-    .replace(REF_HTML_SAFE_REGEX, `<a href="#/$1" class="${refClasses}" style="${refStyle}"><u>&gt;&gt;$1</u>$2</a>`) // 0x refs
-    .replace(REF_POST_HTML_SAFE_REGEX, `<a href="#${baseUrl}$1" class="${refClasses}" style="${refStyle}"><u>&gt;&gt;$1</u> $2</a>`) // Post refs
-    .replace(REF_BOARD_HTML_SAFE_REGEX, `<a href="#/$2" class="${refClasses}" style="${refStyle}"><u>&gt;&gt;$1</u> #3</a>`) // Board refs
-    .replace(BACKLINK_HTML_SAFE_REGEX, `<a class="${refClasses}" style="${refStyle}" href="#${baseUrl}$1"><u>&gt;&gt;$1</u>$2</a>`) // Post backlinks // @HACK
+    .replace(REF_HTML_SAFE_REGEX, `<a href="#/$1" class="${refClasses}" style="${refStyle}"><u>&gt;&gt;$1</u></a>$2`) // 0x refs
+    .replace(REF_POST_HTML_SAFE_REGEX, `<a href="#${baseUrl}$1" class="${refClasses}" style="${refStyle}"><u>&gt;&gt;$1</u></a>$2`) // Post refs
+    .replace(REF_BOARD_HTML_SAFE_REGEX, `<a href="#/$2" class="${refClasses}" style="${refStyle}"><u>&gt;&gt;$1</u></a>$3`) // Board refs
+    .replace(BACKLINK_HTML_SAFE_REGEX, `<a class="${refClasses}" style="${refStyle}" href="#${baseUrl}$1"><u>&gt;&gt;$1</u></a>$2`) // Post backlinks // @HACK
     .replace(SPOILER_REGEX, `<span class="dchan-post-spoiler">$1</span>`) // Spoilers
     .replace(EXTERNAL_LINK_REGEX, `<a class="text-blue-600 visited:text-purple-600 hover:text-blue-500" href="$1" target="_blank" rel="noreferrer">$1</a>`) // Links
     .replace(NEWLINE_REGEX, `<br>`)
