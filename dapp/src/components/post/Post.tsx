@@ -142,16 +142,10 @@ export default function Post({
           title="Hide/Show"
         >
           <div className="inline">
-          <PostHeader thread={thread} post={post}>
-            {header}
-          </PostHeader>
+            <PostHeader thread={thread} post={post}>
+              {header}
+            </PostHeader>
           </div>
-          <p className={[
-            "block truncate",
-            isOp ? "max-w-95vw" : "max-w-90vw"
-          ].join(" ")}>
-            {comment}
-          </p>
         </summary>
         <article
           id={`${n}`}
