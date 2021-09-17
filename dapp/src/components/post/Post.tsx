@@ -141,12 +141,17 @@ export default function Post({
           className="text-left opacity-50 z-10 whitespace-nowrap overflow-hidden"
           title="Hide/Show"
         >
+          <div className="inline">
           <PostHeader thread={thread} post={post}>
             {header}
           </PostHeader>
-          <span>
-            {sanitize(thread?.subject || comment, { allowedTags: [] })}
-          </span>
+          </div>
+          <p className={[
+            "block truncate",
+            isOp ? "max-w-95vw" : "max-w-90vw"
+          ].join(" ")}>
+            {comment}
+          </p>
         </summary>
         <article
           id={`${n}`}
