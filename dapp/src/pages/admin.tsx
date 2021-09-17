@@ -15,7 +15,9 @@ export default function AdminPage() {
   };
 
   const adminGrant = async () => {
-    const hex_address = prompt("Whomst 0x?")
+    const hex_address = prompt("Whomst 0x?")?.toLowerCase()
+    if(!hex_address) return
+
     alert(`Granting admin to ${hex_address}`)
     await sendMessage("admin:grant", {hex_address}, accounts[0]);
   };
