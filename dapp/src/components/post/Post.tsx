@@ -132,7 +132,7 @@ export default function Post({
     <div className="flex">
       {!isOp ? <span className="md:pl-2 pl-1 text-secondary">&gt;&gt;</span> : ""}
       <details
-        className="dchan-post-expand mr-3 text-left inline md:px-2 px-1"
+        className="dchan-post-expand mr-3 text-left inline md:pl-2 pl-1"
         open={canShow}
         key={id}
         ref={postRef}
@@ -153,7 +153,7 @@ export default function Post({
           dchan-post-from-address={address}
         >
           <div
-            className={`${!isOp ? "bg-secondary max-w-90vw" : "max-w-100vw"} ${
+            className={`${!isOp ? "bg-secondary max-w-90vw" : "max-w-100vw -ml-1"} ${
               isFocused ? "bg-tertiary" : ""
             } pb-2 my-1 px-4 inline-block border-bottom-invisible relative`}
           >
