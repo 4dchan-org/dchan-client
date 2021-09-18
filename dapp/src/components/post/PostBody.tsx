@@ -1,8 +1,9 @@
-import { Post, Thread } from 'dchan';
+import { Post, shortenAddress, Thread } from 'dchan';
 import { Router } from 'router';
 import parseComment, { ParserResult, PostReferenceValue } from 'dchan/postparse';
 import { ReactElement, useCallback } from 'react';
 import usePubSub from 'hooks/usePubSub';
+import useWeb3 from 'hooks/useWeb3';
 
 function TextQuote({children, post, thread}: {children: ParserResult[], post: Post, thread?: Thread}) {
   return (
@@ -48,6 +49,12 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
 
   const baseUrl = `${post.board ? Router.board(post.board) : ""}/${post.thread ? `${post.from.id}/${post.thread.n}/` : ""}`;
 
+  const { accounts } = useWeb3();
+
+  const isYou = accounts && accounts[0] && refPost
+    ? accounts[0] === refPost.from.address
+    : false;
+
   return (
     <a
       className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
@@ -55,7 +62,7 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      &gt;&gt;{postLink}
+      &gt;&gt;{postLink}{isYou ? " (You)" : ""}
     </a>
   );
 }
