@@ -100,41 +100,29 @@ const newline: Parjser<NewlineValue> = string("\n").pipe(
 );
 
 const reference: Parjser<ReferenceValue> = regexp(/>>(0[xX][0-9a-fA-F]+)/).pipe(
-  map(vals => {
-    return {type: "ref", id: vals[1]}
-  })
+  map(vals => ({type: "ref", id: vals[1]}))
 );
 
 const postReference: Parjser<PostReferenceValue> = regexp(/>>(0[xX][0-9a-fA-F]+)\/(\d+)/).pipe(
-  map(vals => {
-    return {type: "postref", id: vals[1], n: vals[2]};
-  })
+  map(vals => ({type: "postref", id: vals[1], n: vals[2]}))
 );
 
 const boardReference: Parjser<BoardReferenceValue> = regexp(/>>(\/[a-zA-Z]+\/)(0[xX][0-9a-fA-F]+(?:\/\d+)?)?/).pipe(
-  map(vals => {
-    return {type: "boardref", board: vals[1], id: vals[2]};
-  })
+  map(vals => ({type: "boardref", board: vals[1], id: vals[2]}))
 );
 
 const altReference = alt<ParserResult>(boardReference, postReference, reference);
 
 const newlineReference: Parjser<[NewlineValue, ReferenceValue]> = regexp(/\n>>(0[xX][0-9a-fA-F]+)/).pipe(
-  map(vals => {
-    return [{type: "newline"}, {type: "ref", id: vals[1]}];
-  })
+  map(vals => [{type: "newline"}, {type: "ref", id: vals[1]}])
 );
 
 const newlinePostReference: Parjser<[NewlineValue, PostReferenceValue]> = regexp(/\n>>(0[xX][0-9a-fA-F]+)\/(\d+)/).pipe(
-  map(vals => {
-    return [{type: "newline"}, {type: "postref", id: vals[1], n: vals[2]}];
-  })
+  map(vals => [{type: "newline"}, {type: "postref", id: vals[1], n: vals[2]}])
 );
 
 const newlineBoardReference: Parjser<[NewlineValue, BoardReferenceValue]> = regexp(/\n>>(\/[a-zA-Z]+\/)(0[xX][0-9a-fA-F]+(?:\/\d+)?)?/).pipe(
-  map(vals => {
-    return [{type: "newline"}, {type: "boardref", board: vals[1], id: vals[2]}];
-  })
+  map(vals => [{type: "newline"}, {type: "boardref", board: vals[1], id: vals[2]}])
 );
 
 const newlineAltReference = alt<[NewlineValue, ParserResult]>(newlineBoardReference, newlinePostReference, newlineReference);
@@ -156,7 +144,7 @@ const spoilerText: Parjser<TextValue> = regexp(/[^[][^[\n>hfQ]*/g).pipe(
 );
 
 spoilerBody.init(
-  alt<ParserResult>(altReference, spoiler, link, ipfsHash, spoilerText)
+  alt<ParserResult>(altReference, spoiler, link, ipfsHash, newline, spoilerText)
 );
 
 const commonBase = alt<ParserResult>(spoiler, link, ipfsHash, text);
