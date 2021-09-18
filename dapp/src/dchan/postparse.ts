@@ -1,5 +1,5 @@
 import { regexp as brokenRegexp, string, eof, Parjser } from "parjs";
-import { map, backtrack, then, thenq, qthen, not, many, or, later, mapConst, flatten, between } from "parjs/combinators";
+import { map, backtrack, then, thenq, qthen, many, or, later, mapConst, flatten, between } from "parjs/combinators";
 
 // known bug with parjs
 const regexp: (origRegexp: RegExp) => Parjser<string[]> = brokenRegexp.bind({});
@@ -16,7 +16,7 @@ export type LinkValue = {
 
 export type IPFSValue = {
   type: "ipfs";
-  value: string;
+  hash: string;
 }
 
 export type NewlineValue = {
@@ -25,17 +25,19 @@ export type NewlineValue = {
 
 export type ReferenceValue = {
   type: "ref";
-  value: string;
+  id: string;
 }
 
 export type PostReferenceValue = {
   type: "postref";
-  value: string;
+  id: string;
+  n: string;
 }
 
 export type BoardReferenceValue = {
   type: "boardref";
-  value: [string, string];
+  board: string;
+  id: string;
 }
 
 export type SpoilerValue = {
@@ -90,7 +92,7 @@ const text: Parjser<TextValue> = regexp(/.[^[\n>hfQ]*/g).pipe(
 );
 
 const ipfsHash: Parjser<IPFSValue> = regexp(/(Qm[1-9A-Za-z]{44})/).pipe(
-  map(v => ({type: "ipfs", value: v[0]}))
+  map(v => ({type: "ipfs", hash: v[0]}))
 )
 
 const newline: Parjser<NewlineValue> = string("\n").pipe(
@@ -99,19 +101,19 @@ const newline: Parjser<NewlineValue> = string("\n").pipe(
 
 const reference: Parjser<ReferenceValue> = regexp(/>>(0[xX][0-9a-fA-F]+)/).pipe(
   map(vals => {
-    return {type: "ref", value: vals[1]}
+    return {type: "ref", id: vals[1]}
   })
 );
 
-const postReference: Parjser<PostReferenceValue> = regexp(/>>((?:0[xX][0-9a-fA-F]+)\/\d+)/).pipe(
+const postReference: Parjser<PostReferenceValue> = regexp(/>>(0[xX][0-9a-fA-F]+)\/(\d+)/).pipe(
   map(vals => {
-    return {type: "postref", value: vals[1]};
+    return {type: "postref", id: vals[1], n: vals[2]};
   })
 );
 
-const boardReference: Parjser<BoardReferenceValue> = regexp(/>>(\/(?:[a-zA-Z]+)\/(0[xX][0-9a-fA-F]+(?:\/\d+)?)?)/).pipe(
+const boardReference: Parjser<BoardReferenceValue> = regexp(/>>(\/[a-zA-Z]+\/)(0[xX][0-9a-fA-F]+(?:\/\d+)?)?/).pipe(
   map(vals => {
-    return {type: "boardref", value: [vals[1], vals[2]]};
+    return {type: "boardref", board: vals[1], id: vals[2]};
   })
 );
 
@@ -119,19 +121,19 @@ const altReference = alt<ParserResult>(boardReference, postReference, reference)
 
 const newlineReference: Parjser<[NewlineValue, ReferenceValue]> = regexp(/\n>>(0[xX][0-9a-fA-F]+)/).pipe(
   map(vals => {
-    return [{type: "newline"}, {type: "ref", value: vals[1]}]
+    return [{type: "newline"}, {type: "ref", id: vals[1]}];
   })
 );
 
-const newlinePostReference: Parjser<[NewlineValue, PostReferenceValue]> = regexp(/\n>>((?:0[xX][0-9a-fA-F]+)\/\d+)/).pipe(
+const newlinePostReference: Parjser<[NewlineValue, PostReferenceValue]> = regexp(/\n>>(0[xX][0-9a-fA-F]+)\/(\d+)/).pipe(
   map(vals => {
-    return [{type: "newline"}, {type: "postref", value: vals[1]}]
+    return [{type: "newline"}, {type: "postref", id: vals[1], n: vals[2]}];
   })
 );
 
-const newlineBoardReference: Parjser<[NewlineValue, BoardReferenceValue]> = regexp(/\n>>(\/(?:[a-zA-Z]+)\/(0[xX][0-9a-fA-F]+(?:\/\d+)?)?)/).pipe(
+const newlineBoardReference: Parjser<[NewlineValue, BoardReferenceValue]> = regexp(/\n>>(\/[a-zA-Z]+\/)(0[xX][0-9a-fA-F]+(?:\/\d+)?)?/).pipe(
   map(vals => {
-    return [{type: "newline"}, {type: "boardref", value: [vals[1], vals[2]]}];
+    return [{type: "newline"}, {type: "boardref", board: vals[1], id: vals[2]}];
   })
 );
 

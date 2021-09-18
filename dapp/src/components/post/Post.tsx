@@ -1,5 +1,4 @@
 import IPFSImage from "components/IPFSImage";
-import { BACKLINK_REGEX } from "dchan/regexps";
 import { Post as DchanPost, Thread } from "dchan";
 import { isLowScore } from "dchan/entities/post";
 import usePubSub from "hooks/usePubSub";
@@ -14,6 +13,23 @@ import PostHeader from "./PostHeader";
 import sanitize from "sanitize-html";
 import useFavorites from "hooks/useFavorites";
 import { isArray } from "lodash";
+import parseComment, { ParserResult, PostReferenceValue } from "dchan/postparse";
+
+function getPostRefs(vals: ParserResult[]): PostReferenceValue[] {
+  let ret: PostReferenceValue[] = [];
+  for (let val of vals) {
+    switch(val.type) {
+      case "postref":
+        ret.push(val);
+        break;
+      case "textquote":
+      case "spoiler":
+        ret.push(...getPostRefs(val.value));
+        break;
+    }
+  }
+  return ret;
+}
 
 export default function Post({
   children,
@@ -66,42 +82,62 @@ export default function Post({
   });
 
   useEffect(() => {
-    let sub = enableBacklinks
-      ? subscribe(
-          "POST_BACKLINK",
-          (
-            _: any,
-            { from, to: { n } }: { from: DchanPost; to: { n: string } }
-          ) => {
-            `${n}` === `${post.n}` &&
-              setBacklinks({ ...backlinks, [from.id]: from });
-          }
-        )
-      : false;
+    const sub = subscribe("POST_HIGHLIGHT", (_: any, focusedPost: string) => {
+      if (post.id === focusedPost) {
+        setIsFocused(true);
+      }
+    });
 
     return () => {
-      !!sub && unsubscribe(sub);
+      unsubscribe(sub);
     };
   });
 
   useEffect(() => {
-    post.comment
-      .match(BACKLINK_REGEX)
-      ?.map((comment) => {
-        return comment.replace(/>/g, "");
-      })
-      .forEach((blMatch) => {
-        const [userId, n] = blMatch.split("/")
-        const backlink = {
-          from: post,
-          to: {
-            userId: userId.trim(),
-            n: n.trim(),
-          },
-        };
+    const sub = subscribe("POST_DEHIGHLIGHT", (_: any, focusedPost: string) => {
+      if (post.id === focusedPost) {
+        setIsFocused(false);
+      }
+    });
 
-        publish("POST_BACKLINK", backlink);
-      });
+    return () => {
+      unsubscribe(sub);
+    };
+  });
+
+  useEffect(() => {
+    if (enableBacklinks) {
+      let sub = subscribe(
+        "POST_BACKLINK",
+        (
+          _: any,
+          { from, to: { n } }: { from: DchanPost; to: { n: string } }
+        ) => {
+          if (`${n}` === `${post.n}`) {
+            //console.log(`Post ${post.n} received backlink from ${from.n}`);
+            setBacklinks({ ...backlinks, [from.id]: from });
+          }
+        }
+      )
+
+      return () => {
+        !!sub && unsubscribe(sub);
+      };
+    }
+  });
+
+  useEffect(() => {
+    let backlinks = getPostRefs(parseComment(post.comment));
+    for (let link of backlinks) {
+      const backlink = {
+        from: post,
+        to: {
+          userId: link.id,
+          n: link.n,
+        }
+      };
+      publish("POST_BACKLINK", backlink);
+    }
   }, [post, publish]);
 
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
@@ -250,7 +286,7 @@ export default function Post({
                         )}
                       </div>
                       <div>
-                        <PostBody post={post} />
+                        <PostBody post={post} thread={thread}/>
                       </div>
 
                       {bans.length > 0 ? (

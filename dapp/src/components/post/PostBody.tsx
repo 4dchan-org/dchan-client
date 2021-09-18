@@ -1,17 +1,18 @@
-import { Post } from 'dchan';
+import { Post, Thread } from 'dchan';
 import { Router } from 'router';
-import parseComment, { ParserResult } from 'dchan/postparse';
-import { ReactElement } from 'react';
+import parseComment, { ParserResult, PostReferenceValue } from 'dchan/postparse';
+import { ReactElement, useCallback } from 'react';
+import usePubSub from 'hooks/usePubSub';
 
-function TextQuote({children, post}: {children: ParserResult[], post: Post}) {
+function TextQuote({children, post, thread}: {children: ParserResult[], post: Post, thread?: Thread}) {
   return (
     <span className="text-quote">
-      &gt;{children.map(v => renderValue(v, post))}
+      &gt;{children.map(v => renderValue(v, post, thread))}
     </span>
   );
 }
 
-function Reference({link, children}: {link: string; children: string}) {
+function Reference({link, children}: {link: string; children: string | string[]}) {
   return (
     <a
       className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
@@ -22,10 +23,47 @@ function Reference({link, children}: {link: string; children: string}) {
   );
 }
 
-function Spoiler({children, post}: {children: ParserResult[], post: Post}) {
+function PostReference({post, thread, value}: {post: Post, thread?: Thread, value: PostReferenceValue}) {
+  const { publish } = usePubSub();
+  const postLink = `${value.id}/${value.n}`;
+
+  const refPost = thread?.replies?.find(p => `${p.from.id}/${p.n}` === postLink);
+
+  const onMouseEnter = useCallback(
+    () => {
+      if (refPost != null) {
+        publish("POST_HIGHLIGHT", refPost.id)
+      }
+    },
+    [publish, refPost]
+  );
+  const onMouseLeave = useCallback(
+    () => {
+      if (refPost != null) {
+        publish("POST_DEHIGHLIGHT", refPost.id)
+      }
+    },
+    [publish, refPost]
+  );
+
+  const baseUrl = `${post.board ? Router.board(post.board) : ""}/${post.thread ? `${post.from.id}/${post.thread.n}/` : ""}`;
+
+  return (
+    <a
+      className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+      href={`#${baseUrl}${postLink}`}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      &gt;&gt;{postLink}
+    </a>
+  );
+}
+
+function Spoiler({children, post, thread}: {children: ParserResult[], post: Post, thread?: Thread}) {
   return (
     <span className="dchan-post-spoiler">
-      {children.map(v => renderValue(v, post))}
+      {children.map(v => renderValue(v, post, thread))}
     </span>
   );
 }
@@ -61,37 +99,36 @@ function IPFSImage({hash}: {hash: string}) {
   );
 }
 
-function renderValue(val: ParserResult, post: Post): ReactElement | string {
+function renderValue(val: ParserResult, post: Post, thread?: Thread): ReactElement | string {
   switch(val.type) {
     case "text":
       return val.value;
     case "link":
       return <ExternalLink link={val.value} />;
     case "ipfs":
-      return <IPFSImage hash={val.value} />;
+      return <IPFSImage hash={val.hash} />;
     case "newline":
       return <br/>;
     case "textquote":
-      return <TextQuote post={post}>{val.value}</TextQuote>;
+      return <TextQuote post={post} thread={thread}>{val.value}</TextQuote>;
     case "ref":
-      return <Reference link={`#/${val.value}`}>{val.value}</Reference>;
+      return <Reference link={`#/${val.id}`}>{val.id}</Reference>;
     case "postref":
-      const baseUrl = `${post.board ? Router.board(post.board) : ""}/${post.thread ? `${post.from.id}/${post.thread.n}/` : ""}`;
-      return <Reference link={`#${baseUrl}${val.value}`}>{val.value}</Reference>;
+      return <PostReference post={post} thread={thread} value={val} />;
     case "boardref":
-      return <Reference link={`#/${val.value[1]}`}>{val.value[0]}</Reference>;
+      return <Reference link={`#/${val.id}`}>{val.board}{val.id}</Reference>;
     case "spoiler":
-      return <Spoiler post={post}>{val.value}</Spoiler>;
+      return <Spoiler post={post} thread={thread}>{val.value}</Spoiler>;
   }
 }
 
-export default function PostBody({post, style = {}}: {style?: any, post: Post}) {
+export default function PostBody({post, thread, style = {}}: {style?: any, thread?: Thread, post: Post}) {
   return (
     <div
       className="block text-left break-words font-sans text-sm max-w-100vw"
       style={style}
     >
-      {parseComment(post.comment).map(v => renderValue(v, post))}
+      {parseComment(post.comment).map(v => renderValue(v, post, thread))}
     </div>
   )
 }
