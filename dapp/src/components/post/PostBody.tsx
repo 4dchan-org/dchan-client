@@ -1,7 +1,7 @@
-import { Post, shortenAddress, Thread } from 'dchan';
+import { Post, Thread } from 'dchan';
 import { Router } from 'router';
 import parseComment, { ParserResult, PostReferenceValue } from 'dchan/postparse';
-import { ReactElement, useCallback } from 'react';
+import { ReactElement, useCallback, useEffect } from 'react';
 import usePubSub from 'hooks/usePubSub';
 import useWeb3 from 'hooks/useWeb3';
 
@@ -29,6 +29,18 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
   const postLink = `${value.id}/${value.n}`;
 
   const refPost = thread?.replies?.find(p => `${p.from.id}/${p.n}` === postLink);
+
+  useEffect(() => {
+    const backlink = {
+      from: post,
+      to: {
+        userId: value.id,
+        n: value.n,
+      }
+    };
+    //console.log(`Post ${post.n} sending backlink to ${value.n}`);
+    publish("POST_BACKLINK", backlink);
+  }, [post, value, publish]);
 
   const onMouseEnter = useCallback(
     () => {
@@ -94,14 +106,14 @@ function IPFSImage({hash}: {hash: string}) {
       <summary>
         <a
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-          href="//ipfs.io/ipfs/$1"
+          href={`//ipfs.io/ipfs/${hash}`}
           target="_blank"
           rel="noreferrer"
         >
           {hash}
         </a>
       </summary>
-      <img src={`//ipfs.io/ipfs/${hash}`}/>
+      <img src={`//ipfs.io/ipfs/${hash}`} alt=""/>
     </details>
   );
 }

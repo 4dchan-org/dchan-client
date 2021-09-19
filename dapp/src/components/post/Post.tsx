@@ -13,23 +13,6 @@ import PostHeader from "./PostHeader";
 import sanitize from "sanitize-html";
 import useFavorites from "hooks/useFavorites";
 import { isArray } from "lodash";
-import parseComment, { ParserResult, PostReferenceValue } from "dchan/postparse";
-
-function getPostRefs(vals: ParserResult[]): PostReferenceValue[] {
-  let ret: PostReferenceValue[] = [];
-  for (let val of vals) {
-    switch(val.type) {
-      case "postref":
-        ret.push(val);
-        break;
-      case "textquote":
-      case "spoiler":
-        ret.push(...getPostRefs(val.value));
-        break;
-    }
-  }
-  return ret;
-}
 
 export default function Post({
   children,
@@ -49,7 +32,7 @@ export default function Post({
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [backlinks, setBacklinks] = useState<object>({});
   const postRef = useRef<HTMLInputElement>(null);
-  const { publish, subscribe, unsubscribe } = usePubSub();
+  const { subscribe, unsubscribe } = usePubSub();
 
   let {
     id,
@@ -125,20 +108,6 @@ export default function Post({
       };
     }
   });
-
-  useEffect(() => {
-    let backlinks = getPostRefs(parseComment(post.comment));
-    for (let link of backlinks) {
-      const backlink = {
-        from: post,
-        to: {
-          userId: link.id,
-          n: link.n,
-        }
-      };
-      publish("POST_BACKLINK", backlink);
-    }
-  }, [post, publish]);
 
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
   const isOp = id === thread?.id;
