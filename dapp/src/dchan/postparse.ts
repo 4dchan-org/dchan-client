@@ -1,5 +1,5 @@
-import { regexp as brokenRegexp, string, eof, Parjser } from "parjs";
-import { map, backtrack, then, thenq, qthen, many, or, later, mapConst, flatten, between } from "parjs/combinators";
+import { regexp as brokenRegexp, string, Parjser } from "parjs";
+import { map, backtrack, thenq, qthen, many, or, later, mapConst, between } from "parjs/combinators";
 
 // known bug with parjs
 const regexp: (origRegexp: RegExp) => Parjser<string[]> = brokenRegexp.bind({});
@@ -88,11 +88,11 @@ function mergeText(vals: ParserResult[]): ParserResult[] {
 // thenq(a)(b) yields b
 
 const text: Parjser<TextValue> = regexp(/.[^[\n>hfQ]*/g).pipe(
-  map(v => ({type: "text", value: v[0]}))
+  map(vals => ({type: "text", value: vals[0]}))
 );
 
 const ipfsHash: Parjser<IPFSValue> = regexp(/(Qm[1-9A-Za-z]{44})/).pipe(
-  map(v => ({type: "ipfs", hash: v[0]}))
+  map(vals => ({type: "ipfs", hash: vals[0]}))
 )
 
 const newline: Parjser<NewlineValue> = string("\n").pipe(
@@ -114,7 +114,7 @@ const boardReference: Parjser<BoardReferenceValue> = regexp(/>>(\/[a-zA-Z]+\/)(0
 const altReference = alt<ParserResult>(boardReference, postReference, reference);
 
 const link: Parjser<LinkValue> = regexp(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/i).pipe(
-  map(val => ({type: "link", value: val[0]}))
+  map(vals => ({type: "link", value: vals[0]}))
 );
 
 const spoilerBody = later<ParserResult>();
@@ -122,11 +122,11 @@ const spoilerBody = later<ParserResult>();
 const spoiler: Parjser<SpoilerValue> = spoilerBody.pipe(
   many(),
   between("[spoiler]", "[/spoiler]"),
-  map(value => ({type: "spoiler", value: mergeText(value)}))
+  map(body => ({type: "spoiler", value: mergeText(body)}))
 );
 
 const spoilerText: Parjser<TextValue> = regexp(/[^[][^[\n>hfQ]*/g).pipe(
-  map(v => ({type: "text", value: v[0]}))
+  map(vals => ({type: "text", value: vals[0]}))
 );
 
 spoilerBody.init(
@@ -135,12 +135,10 @@ spoilerBody.init(
 
 const commonBase = alt<ParserResult>(spoiler, link, ipfsHash, text);
 
-const endline = regexp(/$/m);
-
 const textQuote: Parjser<TextQuoteValue> = regexp(/^>/m).pipe(
   qthen(alt(altReference, commonBase).pipe(many())),
-  thenq(endline.pipe(backtrack())),
-  map(value => ({type: "textquote", value: mergeText(value)}))
+  thenq(regexp(/$/m).pipe(backtrack())),
+  map(body => ({type: "textquote", value: mergeText(body)}))
 );
 
 const post: Parjser<ParserResult[]> = alt(altReference, textQuote, newline, commonBase).pipe(
