@@ -113,20 +113,6 @@ const boardReference: Parjser<BoardReferenceValue> = regexp(/>>(\/[a-zA-Z]+\/)(0
 
 const altReference = alt<ParserResult>(boardReference, postReference, reference);
 
-const newlineReference: Parjser<[NewlineValue, ReferenceValue]> = regexp(/\n>>(0[xX][0-9a-fA-F]+)/).pipe(
-  map(vals => [{type: "newline"}, {type: "ref", id: vals[1]}])
-);
-
-const newlinePostReference: Parjser<[NewlineValue, PostReferenceValue]> = regexp(/\n>>(0[xX][0-9a-fA-F]+)\/(\d+)/).pipe(
-  map(vals => [{type: "newline"}, {type: "postref", id: vals[1], n: vals[2]}])
-);
-
-const newlineBoardReference: Parjser<[NewlineValue, BoardReferenceValue]> = regexp(/\n>>(\/[a-zA-Z]+\/)(0[xX][0-9a-fA-F]+(?:\/\d+)?)?/).pipe(
-  map(vals => [{type: "newline"}, {type: "boardref", board: vals[1], id: vals[2]}])
-);
-
-const newlineAltReference = alt<[NewlineValue, ParserResult]>(newlineBoardReference, newlinePostReference, newlineReference);
-
 const link: Parjser<LinkValue> = regexp(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/i).pipe(
   map(val => ({type: "link", value: val[0]}))
 );
@@ -144,28 +130,22 @@ const spoilerText: Parjser<TextValue> = regexp(/[^[][^[\n>hfQ]*/g).pipe(
 );
 
 spoilerBody.init(
-  alt<ParserResult>(altReference, spoiler, link, ipfsHash, newline, spoilerText)
+  alt(altReference, spoiler, link, ipfsHash, newline, spoilerText)
 );
 
 const commonBase = alt<ParserResult>(spoiler, link, ipfsHash, text);
 
-const endline = alt(string("\n"), eof());
+const endline = regexp(/$/m);
 
-const textQuoteStart: Parjser<TextQuoteValue> = string(">").pipe(
-  qthen(alt<ParserResult>(altReference, commonBase).pipe(many())),
+const textQuote: Parjser<TextQuoteValue> = regexp(/^>/m).pipe(
+  qthen(alt(altReference, commonBase).pipe(many())),
   thenq(endline.pipe(backtrack())),
   map(value => ({type: "textquote", value: mergeText(value)}))
 );
 
-const textQuote: Parjser<[NewlineValue, TextQuoteValue]> = string("\n>").pipe(
-  qthen(alt<ParserResult>(altReference, commonBase).pipe(many())),
-  thenq(endline.pipe(backtrack())),
-  map(value => [{type: "newline"}, {type: "textquote", value: mergeText(value)}])
-);
-
-const post: Parjser<ParserResult[]> = alt<ParserResult>(altReference, textQuoteStart, newline, commonBase).pipe(
-  then(alt<any>(newlineAltReference, altReference, textQuote, newline, commonBase).pipe(many(), flatten())),
-  map(v => mergeText([v[0], ...v[1]])),
+const post: Parjser<ParserResult[]> = alt(altReference, textQuote, newline, commonBase).pipe(
+  many(),
+  map(mergeText),
 );
 
 export default function parseComment(comment: string): ParserResult[] {
