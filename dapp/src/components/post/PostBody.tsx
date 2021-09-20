@@ -28,7 +28,8 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
   const { publish } = usePubSub();
   const postLink = `${value.id}/${value.n}`;
 
-  const refPost = thread?.replies?.find(p => `${p.from.id}/${p.n}` === postLink);
+  const refPost = thread
+    && [thread.op, ...thread.replies].find(p => `${p.from.id}/${p.n}` === postLink);
 
   useEffect(() => {
     const backlink = {
@@ -63,9 +64,9 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
 
   const { accounts } = useWeb3();
 
-  const isYou = accounts && accounts[0] && refPost
-    ? accounts[0] === refPost.from.address
-    : false;
+  const isOp = thread && refPost && thread.op.id === refPost.id;
+
+  const isYou = accounts && accounts[0] && refPost && accounts[0] === refPost.from.address;
 
   return (
     <a
@@ -74,7 +75,7 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      &gt;&gt;{postLink}{isYou ? " (You)" : ""}
+      &gt;&gt;{postLink}{isOp ? " (OP)" : ""}{isYou ? " (You)" : ""}
     </a>
   );
 }
