@@ -32,7 +32,7 @@ export default function WalletAccount() {
     <div className="text-xs center grid">
       <div>
         <span className="px-1">Connected as</span>
-        <span key={account}><AddressLabel address={account}/></span>
+        [<span key={account}><AddressLabel address={account}/></span>]
       </div>
       <div>
         {balance !== undefined ? (
