@@ -70,7 +70,7 @@ const CatalogThread = ({
   );
 
   return (
-    <div className="relative max-w-150px w-full" style={{minHeight: "20rem"}}>
+    <div className="relative max-w-150px w-full m-1" style={{minHeight: "20rem"}}>
       <article
         id={id}
         className="dchan-post justify-self-center text-decoration-none leading-4 text-black m-0.5 border-black overflow-hidden max-w-150px break-word w-full place-items-center flex"
