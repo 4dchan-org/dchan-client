@@ -6,10 +6,7 @@ import Card from "./Card";
 import Loading from "./Loading";
 
 export default function PopularThreadsCard() {
-  const { query } = {
-    query: THREADS_LIST_MOST_POPULAR,
-  };
-  const { loading, data } = useQuery<{ threads: Thread[] }, any>(query, {
+  const { loading, data } = useQuery<{ threads: Thread[] }, any>(THREADS_LIST_MOST_POPULAR, {
     pollInterval: 30_000,
   });
 
