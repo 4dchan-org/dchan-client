@@ -5,7 +5,7 @@ import PostComponent from "./post/Post";
 
 export default function PostSearchResult({ post }: { post: Post }) {
   return (
-    <div className="p-2 flex flex-wrap">
+    <div className="-mx-4 flex flex-wrap">
       <PostComponent
         key={post.id}
         post={post}
