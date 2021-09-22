@@ -113,7 +113,7 @@ function ExternalLink({link}: {link: string}) {
 
 function IPFSImage({hash}: {hash: string}) {
   return (
-    <details className="inline">
+    <details className="inline w-full truncate">
       <summary>
         <a
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
@@ -152,10 +152,20 @@ function renderValue(val: ParserResult, post: Post, thread?: Thread): ReactEleme
   }
 }
 
-export default function PostBody({post, thread, style = {}}: {style?: any, thread?: Thread, post: Post}) {
+export default function PostBody({
+  post,
+  thread,
+  style = {},
+  className = ""
+}: {
+  style?: any,
+  className?: string,
+  thread?: Thread,
+  post: Post
+}) {
   return (
     <div
-      className="block text-left break-words font-sans text-sm max-w-100vw"
+      className={"block text-left break-words font-sans text-sm max-w-100vw " + className}
       style={style}
     >
       {parseComment(post.comment).map(v => renderValue(v, post, thread))}
