@@ -87,7 +87,7 @@ export default function FormPost({
         "comment",
         `${comment || ""}${
           !!comment && comment.substr(-1, 1).match(/\w/) ? " " : ""
-        }${quote} `
+        }${quote}\n`
       );
       try {
         formRef?.current?.scrollIntoView();
