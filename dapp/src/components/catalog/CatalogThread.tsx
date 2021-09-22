@@ -1,4 +1,4 @@
-import { Thread } from "dchan";
+import { Post, Thread } from "dchan";
 import IPFSImage from "components/IPFSImage";
 import PostBody from "components/post/PostBody";
 import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
@@ -8,6 +8,60 @@ import { Router } from "router";
 import { DateTime } from "luxon";
 import { useState, useCallback } from "react";
 import BoardLink from "components/BoardLink";
+import parseComment, { ParserResult } from "dchan/postparse";
+
+function condensePost(post: Post) {
+  function condensePostRecurse(comment: ParserResult[], ret: string[], newlineMode: boolean) {
+    for (let val of comment) {
+      switch(val.type) {
+        case "newline":
+          if (newlineMode) continue;
+          ret.push(" // ");
+          newlineMode = true;
+          break;
+        case "ref":
+          if (newlineMode) continue;
+          ret.push(">>" + val.id);
+          break;
+        case "postref":
+          if (newlineMode) continue;
+          ret.push(">>" + val.id + "/" + val.n);
+          break;
+        case "boardref":
+          if (newlineMode) continue;
+          ret.push(">>" + val.board + "/" + val.id);
+          break;
+        case "text":
+          if (newlineMode && val.value.trim() === "") continue;
+          newlineMode = false;
+          ret.push(val.value);
+          break;
+        case "link":
+          newlineMode = false;
+          ret.push(val.value);
+          break;
+        case "ipfs":
+          newlineMode = false;
+          ret.push(val.hash);
+          break;
+        case "textquote":
+          newlineMode = false;
+          ret.push(">");
+          condensePostRecurse(val.value, ret, false);
+          break;
+        case "spoiler":
+          newlineMode = false;
+          ret.push("[spoiler]");
+          break;
+      }
+    }
+  }
+  let parse = parseComment(post.comment);
+  let ret: string[] = [];
+  condensePostRecurse(parse, ret, true);
+  let condensedComment = ret.join("");
+  return condensedComment !== "" ? condensedComment : post.image ? post.image.name : "";
+}
 
 const CatalogThread = ({
   thread,
@@ -68,6 +122,31 @@ const CatalogThread = ({
     },
     [setIsFocused]
   );
+
+  function getRelativeTime(post: Post): string {
+    const units = {
+      years: "y",
+      months: "M",
+      days: "d",
+      hours: "h",
+      minutes: "m",
+      seconds: "s",
+      milliseconds: "ms"
+    };
+    let duration = DateTime.now()
+      .diff(DateTime.fromSeconds(parseInt(post.createdAtBlock.timestamp)))
+      // @ts-ignore
+      .shiftTo(...Object.keys(units))
+      .normalize()
+      .toObject();
+    for (let [unit, repr] of Object.entries(units)) {
+      let value = (duration as any)[unit];
+      if (value !== 0) {
+        return `${value}${repr}`;
+      }
+    }
+    return "??";
+  }
 
   return (
     <div className="relative max-w-150px w-full m-1" style={{minHeight: "20rem"}}>
@@ -167,28 +246,19 @@ const CatalogThread = ({
                   replies &&
                   [...replies].reverse().map((post) => (
                     <div
-                      className="mt-1 p-1 border-0 border-t border-black border-solid text-xs text-left"
+                      className="mt-1 p-1 border-0 border-t border-black border-solid text-xs text-left truncate"
                       key={post.id}
                     >
-                      <div>
-                        {DateTime.fromSeconds(
-                          parseInt(post.createdAtBlock.timestamp)
-                        ).toRelative()}
-                      </div>
+                      <span className="font-semibold">
+                        {getRelativeTime(post)}:{" "}
+                      </span>
                       <Link
                         className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
                         to={`${Router.post(post) || ""}${
                           block ? `?block=${block}` : ""
                         }`}
                       >
-                        <PostBody
-                          style={{
-                            maxHeight: "3.75rem",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                          post={post}
-                        />
+                        {condensePost(post)}
                       </Link>
                     </div>
                   ))
