@@ -103,7 +103,7 @@ export default function PostHeader({
     ? Object.values(backlinks).sort((a, b) => parseInt(a.n) - parseInt(b.n))
     : [];
   return (
-    <span className="max-w-95vw inline-flex flex-wrap items-center">
+    <span className="max-w-95vw inline-flex flex-wrap items-center pr-5">
       <span className="px-0.5 whitespace-nowrap">
         <span className="text-accent font-bold">
           {!name || "" === name ? "Anonymous" : name}

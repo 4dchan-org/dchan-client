@@ -3,7 +3,6 @@ import { Post as DchanPost, Thread } from "dchan";
 import { isLowScore } from "dchan/entities/post";
 import usePubSub from "hooks/usePubSub";
 import useSettings from "hooks/useSettings";
-import { truncate } from "lodash";
 import { useCallback } from "react";
 import { ReactElement, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -143,14 +142,12 @@ export default function Post({
         ref={postRef}
       >
         <summary
-          className="text-left opacity-50 z-10 whitespace-nowrap overflow-hidden"
+          className="text-left opacity-50 z-10 whitespace-nowrap overflow-hidden mb-1"
           title="Hide/Show"
         >
-          <div className="inline">
-            <PostHeader thread={thread} post={post}>
-              {header}
-            </PostHeader>
-          </div>
+          <PostHeader thread={thread} post={post}>
+            {header}
+          </PostHeader>
         </summary>
         <article
           id={`${n}`}
@@ -158,11 +155,11 @@ export default function Post({
           dchan-post-from-address={address}
         >
           <div
-            className={`${!isOp ? "bg-secondary max-w-90vw" : "max-w-100vw -ml-1"} ${
+            className={`${!isOp ? "bg-secondary max-w-90vw mb-2" : "max-w-100vw -ml-1 mb-1"} ${
               isFocused ? "bg-tertiary" : ""
-            } pb-2 my-1 px-4 inline-block border-bottom-invisible relative`}
+            } inline-block border-bottom-invisible relative`}
           >
-            <div className="flex sm:flex-wrap center text-center sm:text-left sm:block max-w-100vw">
+            <div className="flex flex-wrap ml-5 center text-center sm:text-left sm:block max-w-100vw">
               {isOp && thread ? (
                 <button
                   className={`inline-block ${
@@ -198,7 +195,7 @@ export default function Post({
             ) : (
               <div>
                 {!!image ? (
-                  <div className="text-left text-sm truncate">
+                  <div className="text-left text-sm mx-5 truncate">
                     <a
                       target="_blank"
                       rel="noreferrer"
@@ -206,10 +203,9 @@ export default function Post({
                       href={ipfsUrl}
                       title={image.name}
                     >
-                      {truncate(image.name, {
-                        length: 32,
-                        omission: "...",
-                      })}
+                      <u>
+                        {image.name}
+                      </u>
                     </a>
                     <span className="px-1">
                       ({Math.trunc(parseInt(image.byteSize) * 0.001)}kb)
@@ -223,7 +219,7 @@ export default function Post({
                 ) : (
                   ""
                 )}
-                <div className="y-1 pt-2 pb-2">
+                <div>
                   <div
                     className={`h-full sm:flex-nowrap text-left sm:items-start max-w-90vw ${
                       isOp ? `pb-2` : ""
@@ -231,7 +227,7 @@ export default function Post({
                   >
                     <span>
                       {!!image ? (
-                        <div className="overflow-auto pr-5 float-left grid center flex-shrink-0 max-w-100vw sm:max-w-max">
+                        <div className="overflow-auto float-left mx-5 mb-2 grid center flex-shrink-0 max-w-100vw sm:max-w-max">
                           <IPFSImage
                             hash={image.ipfsHash}
                             isSpoiler={image.isSpoiler}
@@ -245,15 +241,15 @@ export default function Post({
                       )}
                       <div>
                         {isOp && thread ? (
-                          <span className="font-semibold">
+                          <div className="font-semibold mx-5">
                             {thread.subject}
-                          </span>
+                          </div>
                         ) : (
                           ""
                         )}
                       </div>
                       <PostBody
-                        style={{marginLeft: "1.25rem"}}
+                        className="md:ml-10 ml-5 mr-5 py-2 mb-2"
                         post={post}
                         thread={thread}
                       />
