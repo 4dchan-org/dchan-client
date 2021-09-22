@@ -99,7 +99,9 @@ export default function PostHeader({
   const canRemove = isOwner || isJanny;
   const canBan = isJanny;
   const canLock = isOp && (isOwner || isJanny);
-  const postBacklinks: Post[] = backlinks ? Object.values(backlinks) : [];
+  const postBacklinks: Post[] = backlinks
+    ? Object.values(backlinks).sort((a, b) => parseInt(a.n) - parseInt(b.n))
+    : [];
   return (
     <span className="max-w-95vw inline-flex flex-wrap items-center">
       <span className="px-0.5 whitespace-nowrap">
