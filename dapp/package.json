@@ -40,6 +40,7 @@
     "apollo-boost": "^0.4.9",
     "graphql": "^15.5.1",
     "ipfs-http-client": "^51.0.1",
+    "keccak256": "^1.0.3",
     "lodash": "^4.17.21",
     "luxon": "^2.0.1",
     "markdown-to-jsx": "^7.1.3",
