@@ -1,4 +1,4 @@
-import { Post, Thread } from 'dchan';
+import { Post, shortenAddress, Thread } from 'dchan';
 import { Router } from 'router';
 import parseComment, { ParserResult, PostReferenceValue } from 'dchan/postparse';
 import { ReactElement, useCallback, useEffect } from 'react';
@@ -29,7 +29,7 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
   const postLink = `${value.id}/${value.n}`;
 
   const refPost = thread
-    && [thread.op, ...thread.replies].find(p => `${p.from.id}/${p.n}` === postLink);
+    && [thread.op, ...thread.replies].find(p => `${p.from.id}/${p.n}` === postLink || `${shortenAddress(p.from.id)}/${p.n}` === postLink)
 
   useEffect(() => {
     const backlink = {
