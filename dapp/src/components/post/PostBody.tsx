@@ -60,7 +60,7 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
     [publish, refPost]
   );
 
-  const baseUrl = `${post.board ? Router.board(post.board) : ""}/${post.thread ? `${post.from.id}/${post.thread.n}/` : ""}`;
+  const baseUrl = `${post.thread ? Router.thread(post.thread) : post.board ? Router.board(post.board) : ""}/`
 
   const { accounts } = useWeb3();
 

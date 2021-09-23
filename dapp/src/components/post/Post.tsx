@@ -64,29 +64,30 @@ export default function Post({
     };
   });
 
-  useEffect(() => {
-    const sub = subscribe("POST_HIGHLIGHT", (_: any, focusedPost: string) => {
-      if (post.id === focusedPost) {
-        setIsFocused(true);
-      }
-    });
+  // Had to disable because on mouse leave the post would be unhighlighted (downlighted?) and interfere with the POST_FOCUS system
+  // useEffect(() => {
+  //   const sub = subscribe("POST_HIGHLIGHT", (_: any, focusedPost: string) => {
+  //     if (post.id === focusedPost) {
+  //       setIsFocused(true);
+  //     }
+  //   });
 
-    return () => {
-      unsubscribe(sub);
-    };
-  });
+  //   return () => {
+  //     unsubscribe(sub);
+  //   };
+  // });
 
-  useEffect(() => {
-    const sub = subscribe("POST_DEHIGHLIGHT", (_: any, focusedPost: string) => {
-      if (post.id === focusedPost) {
-        setIsFocused(false);
-      }
-    });
+  // useEffect(() => {
+  //   const sub = subscribe("POST_DEHIGHLIGHT", (_: any, focusedPost: string) => {
+  //     if (post.id === focusedPost) {
+  //       setIsFocused(false);
+  //     }
+  //   });
 
-    return () => {
-      unsubscribe(sub);
-    };
-  });
+  //   return () => {
+  //     unsubscribe(sub);
+  //   };
+  // });
 
   useEffect(() => {
     if (enableBacklinks) {
