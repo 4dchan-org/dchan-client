@@ -97,7 +97,7 @@ export default function Post({
           _: any,
           { from, to: { n } }: { from: DchanPost; to: { n: string } }
         ) => {
-          if (`${n}` === `${post.n}`) {
+          if (`${n}` === `${post.n}` && !(from.id in backlinks)) {
             //console.log(`Post ${post.n} received backlink from ${from.n}`);
             setBacklinks({ ...backlinks, [from.id]: from });
           }
