@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 import ContentHeader from "components/ContentHeader";
 import Footer from "components/Footer";
-import { Board, Post, Thread } from "dchan";
+import { Board, Post, shortenAddress, Thread } from "dchan";
 import THREAD_GET from "graphql/queries/thread_get";
 import { DateTime } from "luxon";
 import { parse as parseQueryString } from "query-string";
@@ -71,10 +71,10 @@ export default function ThreadPage({ location, match: { params } }: any) {
   useEffect(() => {
     const filtered = !loading && (focus_user_id || focus_post_n)
       ? posts.filter(
-          (post) => (!focus_user_id || post.from.id === focus_user_id) && (!focus_post_n || post.n === focus_post_n)
-        )
+        (post) => {
+          return (!focus_user_id || post.from.id === focus_user_id || `0x${shortenAddress(post.from.id).replace('-', '')}` === focus_user_id) && (!focus_post_n || post.n === focus_post_n)
+        })
       : [];
-    
     if (filtered.length > 0) {
       publish("POST_FOCUS", filtered)
     } else if (!loading && focus_user_id && focus_post_n) {
@@ -90,9 +90,8 @@ export default function ThreadPage({ location, match: { params } }: any) {
 
   useTitle(
     board && thread
-      ? `/${board.name}/ - ${
-          thread.subject || thread.op.comment
-        } - dchan.network - [${thread.id}]`
+      ? `/${board.name}/ - ${thread.subject || thread.op.comment
+      } - dchan.network - [${thread.id}]`
       : `/${board_id}/ - Loading... - dchan.network`
   );
 

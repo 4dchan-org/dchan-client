@@ -34,12 +34,22 @@ const SEARCH_BY_REF = gql`
     }
   }
 
-  query SearchByRef($id: String!, $post_n: BigInt!) {
+  fragment PostRef on PostRef {
+    id
+    post {
+      ...Post
+    }
+  }
+
+  query SearchByRef($id: String!, $post_n: BigInt!, $post_ref: String!) {
     threads(where: {board: $id, n: $post_n}) {
       ...Thread
     }
     posts(where: {from: $id, n: $post_n}) {
       ...Post
+    }
+    postRef(id: $post_ref) {
+      ...PostRef
     }
   }
 `;

@@ -41,4 +41,4 @@ export default function IdLabel({
 }
 
 export const LABEL_CLASSNAME =
-  "font-mono pt-0.5 px-0.5 mx-0.5 rounded opacity-75 hover:opacity-100 text-xs whitespace-nowrap";
+  "font-mono font-bold pt-0.5 px-0.5 mx-0.5 rounded opacity-75 hover:opacity-100 text-xs whitespace-nowrap";
