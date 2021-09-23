@@ -40,6 +40,11 @@ export type BoardReferenceValue = {
   id: string;
 }
 
+export type CodeValue = {
+  type: "code";
+  value: ParserResult[];
+};
+
 export type SpoilerValue = {
   type: "spoiler";
   value: ParserResult[];
@@ -57,6 +62,7 @@ export type ParserResult = TextValue
                          | ReferenceValue
                          | PostReferenceValue
                          | BoardReferenceValue
+                         | CodeValue
                          | SpoilerValue
                          | TextQuoteValue;
 
@@ -117,6 +123,18 @@ const link: Parjser<LinkValue> = regexp(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%
   map(vals => ({type: "link", value: vals[0]}))
 );
 
+const codeBody = later<ParserResult>();
+
+const code: Parjser<CodeValue> = codeBody.pipe(
+  many(),
+  between("`", "`"),
+  map(body => ({type: "code", value: mergeText(body)}))
+);
+
+const codeText: Parjser<TextValue> = regexp(/[^[][^[\n>hfQ]*/g).pipe(
+  map(vals => ({type: "text", value: vals[0]}))
+);
+
 const spoilerBody = later<ParserResult>();
 
 const spoiler: Parjser<SpoilerValue> = spoilerBody.pipe(
@@ -130,7 +148,7 @@ const spoilerText: Parjser<TextValue> = regexp(/[^[][^[\n>hfQ]*/g).pipe(
 );
 
 spoilerBody.init(
-  alt(altReference, spoiler, link, ipfsHash, newline, spoilerText)
+  alt(altReference, spoiler, link, ipfsHash, newline, spoilerText, code, codeText)
 );
 
 const commonBase = alt<ParserResult>(spoiler, link, ipfsHash, text);

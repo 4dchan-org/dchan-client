@@ -139,6 +139,8 @@ function renderValue(val: ParserResult, post: Post, thread?: Thread): ReactEleme
       return <Reference link={`#/${val.id}`}>{val.board}{val.id}</Reference>;
     case "spoiler":
       return <Spoiler post={post} thread={thread}>{val.value}</Spoiler>;
+    case "code":
+      return <code>{val.value}</code>;
   }
 }
 
