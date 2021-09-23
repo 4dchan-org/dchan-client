@@ -239,6 +239,7 @@ export default function Post({
                         isSpoiler={image.isSpoiler}
                         isNsfw={image.isNsfw}
                         thumbnail={true}
+                        thumbnailClass={isOp ? "max-h-48" : undefined}
                         expandable={true}
                       ></IPFSImage>
                     ) : (
