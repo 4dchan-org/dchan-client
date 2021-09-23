@@ -1,5 +1,4 @@
 import { Post, shortenAddress, Thread } from 'dchan';
-import { Router } from 'router';
 import parseComment, { ParserResult, PostReferenceValue } from 'dchan/postparse';
 import { ReactElement, useCallback, useEffect, useMemo } from 'react';
 import usePubSub from 'hooks/usePubSub';
@@ -28,8 +27,17 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
   const { publish } = usePubSub();
   const postLink = `${value.id}/${value.n}`;
 
-  const refPost = thread
-    && [thread.op, ...thread.replies].find(p => `${p.from.id}/${p.n}` === postLink || `${shortenAddress(p.from.id)}/${p.n}` === postLink)
+  const refPost = useMemo(
+    () => (
+      thread
+        && [thread.op, ...thread.replies]
+          .find(p => (
+            `${p.from.id}/${p.n}` === postLink
+            || `0x${shortenAddress(p.from.id).replace("-", "")}/${p.n}` === postLink
+          ))
+    ),
+    [thread, postLink]
+  )
 
   useEffect(() => {
     const backlink = {
@@ -60,7 +68,14 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
     [publish, refPost]
   );
 
-  const baseUrl = `${post.thread ? Router.thread(post.thread) : post.board ? Router.board(post.board) : ""}/`
+  const onClick = useCallback(
+    () => {
+      if (refPost != null) {
+        publish("POST_FOCUS", refPost);
+      }
+    },
+    [publish, refPost]
+  );
 
   const { accounts } = useWeb3();
 
@@ -69,14 +84,14 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
   const isYou = accounts && accounts[0] && refPost && accounts[0] === refPost.from.address;
 
   return (
-    <a
-      className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-      href={`#${baseUrl}${postLink}`}
+    <span
+      className="cursor-pointer text-blue-600 visited:text-purple-600 hover:text-blue-500"
+      onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       &gt;&gt;{postLink}{isOp ? " (OP)" : ""}{isYou ? " (You)" : ""}
-    </a>
+    </span>
   );
 }
 
@@ -143,7 +158,6 @@ function renderValue(val: ParserResult, post: Post, thread?: Thread): ReactEleme
 }
 
 export default function PostBody({post, thread, style = {}}: {style?: any, thread?: Thread, post: Post}) {
-  console.log("render");
   const parsedComment = useMemo(
     () => parseComment(post.comment),
     [post]
