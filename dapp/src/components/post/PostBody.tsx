@@ -1,7 +1,7 @@
 import { Post, shortenAddress, Thread } from 'dchan';
 import { Router } from 'router';
 import parseComment, { ParserResult, PostReferenceValue } from 'dchan/postparse';
-import { ReactElement, useCallback, useEffect } from 'react';
+import { ReactElement, useCallback, useEffect, useMemo } from 'react';
 import usePubSub from 'hooks/usePubSub';
 import useWeb3 from 'hooks/useWeb3';
 
@@ -143,12 +143,17 @@ function renderValue(val: ParserResult, post: Post, thread?: Thread): ReactEleme
 }
 
 export default function PostBody({post, thread, style = {}}: {style?: any, thread?: Thread, post: Post}) {
+  console.log("render");
+  const parsedComment = useMemo(
+    () => parseComment(post.comment),
+    [post]
+  );
   return (
     <div
       className="block text-left break-words font-sans text-sm max-w-100vw"
       style={style}
     >
-      {parseComment(post.comment).map(v => renderValue(v, post, thread))}
+      {parsedComment.map(v => renderValue(v, post, thread))}
     </div>
   )
 }
