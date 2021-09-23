@@ -1,4 +1,4 @@
-import { shortenAddress} from "dchan";
+import { shortenAddress } from "dchan";
 import polygonLogo from "assets/images/polygon.png";
 import { trim } from "lodash";
 import IdLabel from "./IdLabel";
