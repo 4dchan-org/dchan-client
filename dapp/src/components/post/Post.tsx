@@ -30,6 +30,7 @@ export default function Post({
   const history = useHistory();
   const [showAnyway, setShowAnyway] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
   const [backlinks, setBacklinks] = useState<object>({});
   const postRef = useRef<HTMLInputElement>(null);
   const { subscribe, unsubscribe } = usePubSub();
@@ -44,16 +45,16 @@ export default function Post({
   } = post;
 
   const onFocus = useCallback(() => {
-    setIsFocused(true);
     postRef.current?.scrollIntoView();
     const url = Router.post(post);
     url && history.push(url);
-  }, [post, postRef, history, setIsFocused]);
+  }, [post, postRef, history, setIsHighlighted]);
 
   useEffect(() => {
     const sub = subscribe("POST_FOCUS", (_: any, focusedPost: DchanPost | DchanPost[]) => {
       const newIsFocused = isArray(focusedPost) ? !!focusedPost.find(p => post.id === p.id) : post.id === focusedPost.id
       setIsFocused(newIsFocused);
+      setIsHighlighted(newIsFocused);
       if (newIsFocused) {
         onFocus();
       }
@@ -64,30 +65,29 @@ export default function Post({
     };
   });
 
-  // Had to disable because on mouse leave the post would be unhighlighted (downlighted?) and interfere with the POST_FOCUS system
-  // useEffect(() => {
-  //   const sub = subscribe("POST_HIGHLIGHT", (_: any, focusedPost: string) => {
-  //     if (post.id === focusedPost) {
-  //       setIsFocused(true);
-  //     }
-  //   });
+  useEffect(() => {
+    const sub = subscribe("POST_HIGHLIGHT", (_: any, focusedPost: string) => {
+      if (post.id === focusedPost) {
+        setIsHighlighted(true);
+      }
+    });
 
-  //   return () => {
-  //     unsubscribe(sub);
-  //   };
-  // });
+    return () => {
+      unsubscribe(sub);
+    };
+  });
 
-  // useEffect(() => {
-  //   const sub = subscribe("POST_DEHIGHLIGHT", (_: any, focusedPost: string) => {
-  //     if (post.id === focusedPost) {
-  //       setIsFocused(false);
-  //     }
-  //   });
+  useEffect(() => {
+    const sub = subscribe("POST_DEHIGHLIGHT", (_: any, focusedPost: string) => {
+      if (post.id === focusedPost && !isFocused) {
+        setIsHighlighted(false);
+      }
+    });
 
-  //   return () => {
-  //     unsubscribe(sub);
-  //   };
-  // });
+    return () => {
+      unsubscribe(sub);
+    };
+  });
 
   useEffect(() => {
     if (enableBacklinks) {
@@ -161,7 +161,7 @@ export default function Post({
         >
           <div
             className={`${!isOp ? "bg-secondary" : ""} ${
-              isFocused ? "bg-tertiary" : ""
+              isHighlighted ? "bg-tertiary" : ""
             } w-full sm:w-auto pb-2 mb-2 px-4 inline-block border-bottom-invisible relative max-w-screen-xl`}
           >
             <div className="flex sm:flex-wrap center text-center sm:text-left sm:block max-w-90vw">
