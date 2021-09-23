@@ -3,11 +3,16 @@ import { backgroundColorAddress, shortenAddress } from "dchan";
 export default function IdLabel({
   id,
   className = "",
+  children,
 }: {
   className?: string;
   id: string;
+  children?: string | string[];
 }) {
   const shortId = shortenAddress(id);
+  if (!children) {
+    children = shortId;
+  }
 
   return (
     <span
@@ -15,7 +20,7 @@ export default function IdLabel({
       className={[className, LABEL_CLASSNAME].join(" ")}
       // eslint-disable-next-line
     >
-      {shortId}
+      {children}
     </span>
   );
 }

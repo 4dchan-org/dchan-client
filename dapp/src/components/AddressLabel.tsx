@@ -1,6 +1,7 @@
-import { shortenAddress, backgroundColorAddress } from "dchan";
+import { shortenAddress} from "dchan";
 import polygonLogo from "assets/images/polygon.png";
 import { trim } from "lodash";
+import IdLabel from "./IdLabel";
 const keccak256 = require('keccak256')
 
 export default function AddressLabel({ address, className = "", etherscannable = true }: { className?: string, address: string, etherscannable?: boolean }) {
@@ -11,11 +12,9 @@ export default function AddressLabel({ address, className = "", etherscannable =
       href={etherscannable ? `https://polygonscan.com/address/${address}` : "javascript:void(0)"}
       target={etherscannable ? `_blank` : ""}
     >
-      <span
-        className={[className, LABEL_CLASSNAME].join(" ")}
-        style={{ backgroundColor: backgroundColorAddress(address) }}>
+      <IdLabel id={address} className={className}>
         {trim(btoa(keccak256(address).toString('hex')), "=").substr(-8, 8)}
-      </span>
+      </IdLabel>
       <abbr
         style={{ textDecoration: "none" }} title={address}>
         <img
@@ -27,5 +26,3 @@ export default function AddressLabel({ address, className = "", etherscannable =
     </a>
   );
 }
-
-export const LABEL_CLASSNAME = "font-mono text-readable-anywhere pt-0.5 px-0.5 mx-0.5 rounded opacity-75 hover:opacity-100 text-xs whitespace-nowrap"
