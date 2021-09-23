@@ -13,6 +13,7 @@ export default function IPFSImage({
   isNsfw = false,
   expandable = false,
   thumbnail = false,
+  thumbnailClass = "max-w-8rem max-h-32",
 }: {
   hash: string;
   className?: string;
@@ -22,6 +23,7 @@ export default function IPFSImage({
   isNsfw?: boolean;
   expandable?: boolean;
   thumbnail?: boolean;
+  thumbnailClass?: string;
 }) {
   const ipfsSrc = `https://ipfs.io/ipfs/${hash}`;
   const [imgError, setImgError] = useState<any>(false);
@@ -31,7 +33,7 @@ export default function IPFSImage({
   const [showNsfw, setShowNsfw] = useState<boolean>(false);
   const [expand, setExpand] = useState<boolean>(!thumbnail);
 
-  const thumbnailClass = thumbnail ? "max-w-8rem max-h-32" : "";
+  thumbnailClass = thumbnail ? thumbnailClass : "";
   const canShow = (!isNsfw || showNsfw) && (!isSpoiler || showSpoiler);
 
   const retry = useCallback(() => {
