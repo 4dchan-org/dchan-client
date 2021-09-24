@@ -135,16 +135,16 @@ export default function Post({
     }
   }, [addFavorite, removeFavorite, thread, favorite]);
   return (
-    <div className="flex max-w-100vw">
-      {!isOp ? <span className="hidden sm:block pl-2 text-secondary">&gt;&gt;</span> : ""}
+    <div className="flex">
+      {!isOp ? <span className="hidden md:block pl-2 text-secondary">&gt;&gt;</span> : ""}
       <details
-        className="dchan-post-expand sm:mx-2 text-left inline"
+        className="dchan-post-expand mx-auto md:mr-3 md:ml-2 text-left inline"
         open={canShow}
         key={id}
         ref={postRef}
       >
         <summary
-          className="text-left opacity-50 z-10 whitespace-nowrap max-w-95vw overflow-hidden"
+          className="text-left opacity-50 z-10 whitespace-nowrap max-w-95vw overflow-hidden mb-1"
           title="Hide/Show"
         >
           <PostHeader thread={thread} post={post}>
@@ -160,11 +160,11 @@ export default function Post({
           dchan-post-from-address={address}
         >
           <div
-            className={`${!isOp ? "bg-secondary" : ""} ${
+            className={`${!isOp ? "bg-secondary max-w-90vw mb-2" : "max-w-100vw md:max-w-max -ml-1 mb-1"} ${
               isFocused ? "bg-tertiary" : ""
-            } w-full sm:w-auto pb-2 mb-2 px-4 inline-block border-bottom-invisible relative max-w-screen-xl`}
+            } inline-block border-bottom-invisible relative max-w-screen-xl`}
           >
-            <div className="flex sm:flex-wrap center text-center sm:text-left sm:block max-w-90vw">
+            <div className="flex sm:flex-wrap ml-5 center text-center sm:text-left sm:block max-w-100vw">
               {isOp && thread ? (
                 <button
                   className={`inline-block ${
@@ -200,7 +200,7 @@ export default function Post({
             ) : (
               <div>
                 {!!image ? (
-                  <div className="text-center sm:text-left">
+                  <div className="text-center sm:text-left mx-5 truncate">
                     <span className="text-sm">
                       <span>
                         <a
@@ -230,35 +230,39 @@ export default function Post({
                 <div className="y-1">
                   <div
                     className={`h-full max-w-max flex flex-wrap text-left sm:items-start ${
-                      isOp ? `pb-2` : ""
+                      isOp ? `max-w-100vw pb-2` : "max-w-90vw"
                     }`}
                   >
-                    {!!image ? (
-                      <IPFSImage
-                        hash={image.ipfsHash}
-                        isSpoiler={image.isSpoiler}
-                        isNsfw={image.isNsfw}
-                        thumbnail={true}
-                        thumbnailClass={isOp ? "max-h-48" : undefined}
-                        expandable={true}
-                      ></IPFSImage>
-                    ) : (
-                      ""
-                    )}
 
-                    <span className="px-2">
+                    <span>
+                      {!!image ? (
+                        <div className="overflow-auto float-left mx-5 mb-2">
+                          <IPFSImage
+                            hash={image.ipfsHash}
+                            isSpoiler={image.isSpoiler}
+                            isNsfw={image.isNsfw}
+                            thumbnail={true}
+                            thumbnailClass={isOp ? "max-w-12rem max-h-48" : undefined}
+                            expandable={true}
+                          />
+                        </div>
+                      ) : (
+                        ""
+                      )}
                       <div>
                         {isOp && thread ? (
-                          <span className="font-semibold">
+                          <div className="font-semibold md:ml-10 ml-5 ">
                             {thread.subject}
-                          </span>
+                          </div>
                         ) : (
                           ""
                         )}
                       </div>
-                      <div>
-                        <PostBody post={post} thread={thread}/>
-                      </div>
+                      <PostBody
+                        className="md:ml-10 ml-5 mr-5 py-2 mb-2"
+                        post={post}
+                        thread={thread}
+                      />
 
                       {bans.length > 0 ? (
                         <div className="text-xl font-bold text-contrast whitespace-nowrap">
