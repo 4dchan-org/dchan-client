@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { Board, Thread } from "dchan";
+import { Board, shortenAddress, Thread } from "dchan";
 import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useWeb3 from "hooks/useWeb3";
@@ -82,7 +82,7 @@ export default function FormPost({
   const onQuote = useCallback(
     function (msg, { from, n }) {
       const { comment } = getValues();
-      const quote = `>>${from}/${n}`;
+      const quote = `>>0x${shortenAddress(from).replace("-","")}/${n}`;
       setValue(
         "comment",
         `${comment || ""}${

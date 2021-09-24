@@ -14,6 +14,12 @@ export default function AdminPage() {
     await sendMessage("admin:claim", {}, accounts[0]);
   };
 
+  const adminGrant = async () => {
+    const hex_address = prompt("Whomst 0x?")
+    alert(`Granting admin to ${hex_address}`)
+    await sendMessage("admin:grant", {hex_address}, accounts[0]);
+  };
+
   const clientPublish = async () => {
     const ipfs_hash = prompt("IPFS hash?")
     const version = prompt("Version?")
@@ -47,6 +53,10 @@ export default function AdminPage() {
 
           <div className="center grid">
             <button onClick={adminClaim}>Claim Admin</button>
+          </div>
+
+          <div className="center grid">
+            <button onClick={adminGrant}>Grant Admin</button>
           </div>
 
           <div className="center grid">

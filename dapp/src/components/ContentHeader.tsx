@@ -44,6 +44,17 @@ export default function ContentHeader({
     );
   }, [thread, board, setStartBlock]);
 
+  let timeTravelParameters: {block?: string, date?: string} = {};
+  if (block) {
+    timeTravelParameters.block = `${block}`;
+  }
+  if (dateTime != null) {
+    timeTravelParameters.date = dateTime.toISODate();
+  }
+  const timeTravelURL = timeTravelParameters
+    ? `?${Object.entries(timeTravelParameters).map(x => (x[0] + "=" + x[1])).join("&")}`
+    : "";
+
   return (
     <div>
       <BoardHeader board={board}></BoardHeader>
@@ -82,8 +93,10 @@ export default function ContentHeader({
                   [
                   <Link
                     className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                    to={`${Router.board(board)}/index`}
+
+                    to={`${Router.board(board)}/index${timeTravelURL}`}
                     style={{fontSize: "15px", padding: "4px"}}
+
                   >
                     Index
                   </Link>
@@ -93,8 +106,9 @@ export default function ContentHeader({
                   [
                   <Link
                     className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                    to={`${Router.board(board)}/catalog`}
+                    to={`${Router.board(board)}/catalog${timeTravelURL}`}
                     style={{fontSize: "15px", padding: "4px"}}
+
                   >
                     Catalog
                   </Link>

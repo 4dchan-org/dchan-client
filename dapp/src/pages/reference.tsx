@@ -10,10 +10,14 @@ import { Router } from "router";
 interface RefSearchData {
   threads: Thread[];
   posts: Post[];
+  postRef: {
+    post: Post
+  }
 }
 interface RefSearchVars {
   id: string;
   post_n: string;
+  post_ref: string;
 }
 
 export default function ReferencePage({ match: { params } }: any) {
@@ -23,11 +27,12 @@ export default function ReferencePage({ match: { params } }: any) {
 
   const id = `0x${params.id}`;
   const post_n = params.post_n;
+  const post_ref = `${id}/${post_n}`
 
   const { loading, data } = useQuery<RefSearchData, RefSearchVars>(
     SEARCH_BY_REF,
     {
-      variables: { id, post_n },
+      variables: { id, post_n, post_ref },
     }
   );
 
@@ -37,12 +42,14 @@ export default function ReferencePage({ match: { params } }: any) {
       let thread = null;
       let post = null;
 
-      let { threads, posts } = data;
+      let { threads, posts, postRef } = data;
 
       if (threads && threads.length > 0) {
         thread = threads[0];
       } else if (posts && posts.length > 0) {
         post = posts[0];
+      } else if (postRef) {
+        post = postRef.post
       }
 
       if (thread) {
@@ -51,7 +58,7 @@ export default function ReferencePage({ match: { params } }: any) {
         location = `${Router.post(post)}`;
       }
 
-      if ((thread || post) && !location) {
+      if ((thread || post || postRef) && !location) {
         setError(
           "Content not found. It may have been deleted, or the ID is invalid."
         );
@@ -73,11 +80,7 @@ export default function ReferencePage({ match: { params } }: any) {
         <div>
           {loading ? (
             <Loading />
-          ) : (
-            <Error subject="Content not found">
-              <span>It may have been deleted, or the ID is invalid.</span>
-            </Error>
-          )}
+          ) : ""}
           <div className="text-xs">
             {id}/{post_n}
           </div>

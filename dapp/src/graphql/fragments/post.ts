@@ -9,6 +9,10 @@ const POST_FRAGMENT = gql`
       address
     }
     thread {
+      board {
+        id
+        name
+      }
       id
       n
       op {

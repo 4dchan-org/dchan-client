@@ -1,5 +1,4 @@
 import IPFSImage from "components/IPFSImage";
-import { BACKLINK_REGEX } from "dchan/regexps";
 import { Post as DchanPost, Thread } from "dchan";
 import { isLowScore } from "dchan/entities/post";
 import usePubSub from "hooks/usePubSub";
@@ -33,7 +32,7 @@ export default function Post({
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [backlinks, setBacklinks] = useState<object>({});
   const postRef = useRef<HTMLInputElement>(null);
-  const { publish, subscribe, unsubscribe } = usePubSub();
+  const { subscribe, unsubscribe } = usePubSub();
 
   let {
     id,
@@ -65,44 +64,51 @@ export default function Post({
     };
   });
 
+  // Had to disable because on mouse leave the post would be unhighlighted (downlighted?) and interfere with the POST_FOCUS system
+  // useEffect(() => {
+  //   const sub = subscribe("POST_HIGHLIGHT", (_: any, focusedPost: string) => {
+  //     if (post.id === focusedPost) {
+  //       setIsFocused(true);
+  //     }
+  //   });
+
+  //   return () => {
+  //     unsubscribe(sub);
+  //   };
+  // });
+
+  // useEffect(() => {
+  //   const sub = subscribe("POST_DEHIGHLIGHT", (_: any, focusedPost: string) => {
+  //     if (post.id === focusedPost) {
+  //       setIsFocused(false);
+  //     }
+  //   });
+
+  //   return () => {
+  //     unsubscribe(sub);
+  //   };
+  // });
+
   useEffect(() => {
-    let sub = enableBacklinks
-      ? subscribe(
-          "POST_BACKLINK",
-          (
-            _: any,
-            { from, to: { n } }: { from: DchanPost; to: { n: string } }
-          ) => {
-            `${n}` === `${post.n}` &&
-              setBacklinks({ ...backlinks, [from.id]: from });
+    if (enableBacklinks) {
+      let sub = subscribe(
+        "POST_BACKLINK",
+        (
+          _: any,
+          { from, to: { n } }: { from: DchanPost; to: { n: string } }
+        ) => {
+          if (`${n}` === `${post.n}`) {
+            //console.log(`Post ${post.n} received backlink from ${from.n}`);
+            setBacklinks({ ...backlinks, [from.id]: from });
           }
-        )
-      : false;
+        }
+      )
 
-    return () => {
-      !!sub && unsubscribe(sub);
-    };
+      return () => {
+        !!sub && unsubscribe(sub);
+      };
+    }
   });
-
-  useEffect(() => {
-    post.comment
-      .match(BACKLINK_REGEX)
-      ?.map((comment) => {
-        return comment.replace(/>/g, "");
-      })
-      .forEach((blMatch) => {
-        const [userId, n] = blMatch.split("/")
-        const backlink = {
-          from: post,
-          to: {
-            userId: userId.trim(),
-            n: n.trim(),
-          },
-        };
-
-        publish("POST_BACKLINK", backlink);
-      });
-  }, [post, publish]);
 
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
   const isOp = id === thread?.id;
@@ -129,8 +135,8 @@ export default function Post({
     }
   }, [addFavorite, removeFavorite, thread, favorite]);
   return (
-    <div className="flex">
-      {!isOp ? <span className="pl-2 text-secondary">&gt;&gt;</span> : ""}
+    <div className="flex max-w-100vw">
+      {!isOp ? <span className="hidden sm:block pl-2 text-secondary">&gt;&gt;</span> : ""}
       <details
         className="dchan-post-expand sm:mx-2 text-left inline"
         open={canShow}
@@ -223,25 +229,23 @@ export default function Post({
                 )}
                 <div className="y-1">
                   <div
-                    className={`h-full max-w-max flex flex-wrap sm:flex-nowrap text-left sm:items-start ${
+                    className={`h-full max-w-max flex flex-wrap text-left sm:items-start ${
                       isOp ? `pb-2` : ""
                     }`}
                   >
                     {!!image ? (
-                      <div className="overflow-auto px-2 sm:float-left grid center flex-shrink-0 max-w-100vw sm:max-w-max">
-                        <IPFSImage
-                          hash={image.ipfsHash}
-                          isSpoiler={image.isSpoiler}
-                          isNsfw={image.isNsfw}
-                          thumbnail={true}
-                          expandable={true}
-                        ></IPFSImage>
-                      </div>
+                      <IPFSImage
+                        hash={image.ipfsHash}
+                        isSpoiler={image.isSpoiler}
+                        isNsfw={image.isNsfw}
+                        thumbnail={true}
+                        expandable={true}
+                      ></IPFSImage>
                     ) : (
                       ""
                     )}
 
-                    <span>
+                    <span className="px-2">
                       <div>
                         {isOp && thread ? (
                           <span className="font-semibold">
@@ -252,7 +256,7 @@ export default function Post({
                         )}
                       </div>
                       <div>
-                        <PostBody post={post} />
+                        <PostBody post={post} thread={thread}/>
                       </div>
 
                       {bans.length > 0 ? (

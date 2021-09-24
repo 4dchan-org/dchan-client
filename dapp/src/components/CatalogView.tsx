@@ -12,8 +12,13 @@ export default function CatalogView({
 }) {
   return (
     <div className="grid grid-template-columns-ram-150px place-items-start font-size-090rem px-4 sm:px-8">
-      {threads.filter(t => !!t && !!t.board).map((thread) => (
-        <CatalogThread thread={thread} key={thread.id} block={block} showBoard={showBoard}></CatalogThread>
+      {threads.filter(t => !!t && !!t.board).map(thread => (
+        <CatalogThread
+          thread={thread}
+          key={thread.id}
+          block={block}
+          showBoard={showBoard}
+        />
       ))}
     </div>
   );
