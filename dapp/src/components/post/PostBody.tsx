@@ -16,10 +16,11 @@ function TextQuote({children, post, thread}: {children: ParserResult[], post: Po
 function Reference({link, children}: {link: string; children: string | string[]}) {
   return (
     <a
-      className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+      className="dchan-postref"
       href={link}
     >
-      &gt;&gt;{children}
+      <wbr/>
+      <span className="whitespace-nowrap">&gt;&gt;{children}</span>
     </a>
   );
 }
@@ -70,12 +71,13 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
 
   return (
     <a
-      className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+      className="dchan-postref"
       href={`#${baseUrl}${postLink}`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      &gt;&gt;{postLink}{isOp ? " (OP)" : ""}{isYou ? " (You)" : ""}
+      <wbr/>
+      <span className="whitespace-nowrap">&gt;&gt;{postLink}</span>{isOp ? " (OP)" : ""}{isYou ? " (You)" : ""}
     </a>
   );
 }
