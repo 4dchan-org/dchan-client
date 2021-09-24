@@ -10,7 +10,7 @@ export default function HomePage() {
   useTitle("dchan.network");
 
   return (
-    <div className="center-grid w-full min-h-screen bg-primary">
+    <div className="center-grid max-w-full min-h-screen bg-primary">
       <div className="flex flex-wrap center">
         <Card
           title={
