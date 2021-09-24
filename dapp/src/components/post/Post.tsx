@@ -234,7 +234,7 @@ export default function Post({
                     }`}
                   >
 
-                    <span>
+                    <span className="w-full">
                       {!!image ? (
                         <div className="overflow-auto float-left mx-5 mb-2">
                           <IPFSImage
