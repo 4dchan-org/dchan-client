@@ -85,7 +85,7 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
 
   return (
     <span
-      className="cursor-pointer text-blue-600 visited:text-purple-600 hover:text-blue-500"
+      className="cursor-pointer text-blue-600 visited:text-purple-600 hover:text-blue-500 cursor-pointer"
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
