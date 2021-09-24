@@ -92,24 +92,16 @@ export default function BoardListPage({ location, match: { params } }: any) {
             </div>
           ) : boardsData ? (
             <div>
-              <div className="center flex">
-                <div>
-                  <Card title={<span>Most popular</span>}>
-                    <BoardList boards={boardsData.mostPopular} />
-                  </Card>
-                </div>
-              </div>
-              <div className="center flex flex-wrap">
-                <span className="px-2">
-                  <Card title={<span>Last created</span>}>
-                    <BoardList boards={boardsData.lastCreated} />
-                  </Card>
-                </span>
-                <span className="px-2">
-                  <Card title={<span>Last bumped</span>}>
-                    <BoardList boards={boardsData.lastBumped} />
-                  </Card>
-                </span>
+              <div className="grid justify-center">
+                <Card title={<span>Most popular</span>}>
+                  <BoardList boards={boardsData.mostPopular} />
+                </Card>
+                <Card title={<span>Last created</span>}>
+                  <BoardList boards={boardsData.lastCreated} />
+                </Card>
+                <Card title={<span>Last bumped</span>}>
+                  <BoardList boards={boardsData.lastBumped} />
+                </Card>
               </div>
               <div className="center flex">
                 <div>
