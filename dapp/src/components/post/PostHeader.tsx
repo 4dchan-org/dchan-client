@@ -111,7 +111,7 @@ export default function PostHeader({
         (ID: <AddressLabel etherscannable={true} address={address} />
         {provider ? (
           <button
-            className="text-blue-600 visited:text-purple-600 hover:text-blue-500 flex-grow opacity-10 hover:opacity-100"
+            className="text-blue-600 visited:text-purple-600 hover:text-blue-500 flex-grow opacity-50 hover:opacity-100"
             title="Send MATIC tip"
             onClick={() => onSendTip(address)}
           >
@@ -226,7 +226,7 @@ export default function PostHeader({
       ) : (
         ""
       )}
-      <span className="px-0.5 text-xs opacity-10 hover:opacity-100">
+      <span className="px-0.5 text-xs opacity-50 hover:opacity-100">
         <Link to={`/${post.id}`} title="Permalink">
           🔗
         </Link>
