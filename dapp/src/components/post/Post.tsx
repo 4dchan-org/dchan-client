@@ -48,7 +48,7 @@ function Post({
     postRef.current?.scrollIntoView();
     const url = Router.post(post);
     url && history.push(url);
-  }, [post, postRef, history, setIsHighlighted]);
+  }, [post, postRef, history]);
 
   useEffect(() => {
     const sub = subscribe("POST_FOCUS", (_: any, focusedPost: DchanPost | DchanPost[]) => {
