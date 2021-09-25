@@ -12,7 +12,7 @@ import PostBody from "./PostBody";
 import PostHeader from "./PostHeader";
 import sanitize from "sanitize-html";
 import useFavorites from "hooks/useFavorites";
-import { isArray } from "lodash";
+import { isArray, isEqual } from "lodash";
 
 function Post({
   children,
@@ -279,4 +279,4 @@ function Post({
   );
 }
 
-export default memo(Post);
+export default memo(Post, isEqual);

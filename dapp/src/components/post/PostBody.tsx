@@ -3,6 +3,7 @@ import parseComment, { ParserResult, PostReferenceValue } from 'dchan/postparse'
 import { ReactElement, useCallback, useEffect, useMemo, memo } from 'react';
 import usePubSub from 'hooks/usePubSub';
 import useWeb3 from 'hooks/useWeb3';
+import { isEqual } from "lodash";
 
 function TextQuote({children, post, thread}: {children: ParserResult[], post: Post, thread?: Thread}) {
   return (
@@ -172,4 +173,4 @@ function PostBody({post, thread, style = {}, className}: {style?: any, className
   )
 }
 
-export default memo(PostBody);
+export default memo(PostBody, isEqual);
