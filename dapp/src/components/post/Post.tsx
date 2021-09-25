@@ -5,7 +5,7 @@ import usePubSub from "hooks/usePubSub";
 import useSettings from "hooks/useSettings";
 import { truncate } from "lodash";
 import { useCallback } from "react";
-import { ReactElement, useEffect, useRef, useState } from "react";
+import { ReactElement, useEffect, useRef, useState, memo } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
 import PostBody from "./PostBody";
@@ -14,7 +14,7 @@ import sanitize from "sanitize-html";
 import useFavorites from "hooks/useFavorites";
 import { isArray } from "lodash";
 
-export default function Post({
+function Post({
   children,
   post,
   thread,
@@ -278,3 +278,5 @@ export default function Post({
     </div>
   );
 }
+
+export default memo(Post);
