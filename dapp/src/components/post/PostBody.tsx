@@ -4,6 +4,7 @@ import { ReactElement, useCallback, useEffect, useMemo, memo } from 'react';
 import usePubSub from 'hooks/usePubSub';
 import useWeb3 from 'hooks/useWeb3';
 import { isEqual } from "lodash";
+import { Router } from "router";
 
 function TextQuote({children, post, thread}: {children: ParserResult[], post: Post, thread?: Thread}) {
   return (
@@ -69,14 +70,7 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
     [publish, refPost]
   );
 
-  const onClick = useCallback(
-    () => {
-      if (refPost != null) {
-        publish("POST_FOCUS", refPost);
-      }
-    },
-    [publish, refPost]
-  );
+  const baseUrl = `${post.thread ? Router.thread(post.thread) : post.board ? Router.board(post.board) : ""}/`
 
   const { accounts } = useWeb3();
 
@@ -85,14 +79,14 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
   const isYou = accounts && accounts[0] && refPost && accounts[0] === refPost.from.address;
 
   return (
-    <span
-      className="cursor-pointer text-blue-600 visited:text-purple-600 hover:text-blue-500 cursor-pointer"
-      onClick={onClick}
+    <a
+      className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+      href={`#${baseUrl}${postLink}`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       &gt;&gt;{postLink}{isOp ? " (OP)" : ""}{isYou ? " (You)" : ""}
-    </span>
+    </a>
   );
 }
 
