@@ -72,11 +72,22 @@ export default function ThreadPage({ location, match: { params } }: any) {
     const filtered = !loading && (focus_user_id || focus_post_n)
       ? posts.filter(
         (post) => {
-          return (!focus_user_id || post.from.id === focus_user_id || `0x${shortenAddress(post.from.id).replace('-', '')}` === focus_user_id) && (!focus_post_n || post.n === focus_post_n)
+          const idCheck = (
+            !focus_user_id
+            || post.from.id === focus_user_id
+            || `0x${shortenAddress(post.from.id).replace('-', '')}` === focus_user_id
+          );
+          const numCheck = (
+            !focus_post_n
+            || post.n === focus_post_n
+          );
+          return idCheck && numCheck;
         })
       : [];
-    if (filtered.length > 0) {
-      publish("POST_FOCUS", filtered)
+    if (filtered.length === 1) {
+      publish("POST_FOCUS", filtered[0])
+    } else if (filtered.length > 1) {
+      throw new Error("Somehow multiple posts were focused?");
     } else if (!loading && focus_user_id && focus_post_n) {
       history.replace(`/${focus_user_id}/${focus_post_n}`);
     }
