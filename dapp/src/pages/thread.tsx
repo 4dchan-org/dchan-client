@@ -85,13 +85,19 @@ export default function ThreadPage({ location, match: { params } }: any) {
         })
       : [];
     if (filtered.length === 1) {
-      publish("POST_FOCUS", filtered[0])
+      const post = filtered[0];
+      if (`0x${shortenAddress(post.from.id).replace('-', '')}` === focus_user_id) {
+        // shortened address used in URL
+        // redirect to full address to avoid double history entries
+        history.replace(`${Router.post(post)}${block ? `?block=${block}` : ""}`);
+      }
+      publish("POST_FOCUS", post);
     } else if (filtered.length > 1) {
       throw new Error("Somehow multiple posts were focused?");
     } else if (!loading && focus_user_id && focus_post_n) {
       history.replace(`/${focus_user_id}/${focus_post_n}`);
     }
-  }, [posts, focus_user_id, focus_post_n, loading, publish, history]);
+  }, [posts, focus_user_id, focus_post_n, block, loading, publish, history]);
 
   useEffect(() => {
     refetch({
