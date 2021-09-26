@@ -20,6 +20,7 @@ import useWeb3 from "hooks/useWeb3";
 import { DateTime } from "luxon";
 import { ReactElement, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
+import { Router } from "router";
 
 export default function PostHeader({
   post,
@@ -75,13 +76,6 @@ export default function PostHeader({
     [accounts]
   );
 
-  const focusPost = useCallback(
-    (post: Post) => {
-      publish("POST_FOCUS", post);
-    },
-    [publish]
-  );
-
   const isPinned = thread?.isPinned;
   const isLocked = thread?.isLocked;
 
@@ -118,9 +112,12 @@ export default function PostHeader({
         {createdAt.toRelative()})
       </span>
       <span className="px-0.5 on-parent-target-font-bold text-sm whitespace-nowrap">
-        <button onClick={() => focusPost(post)} title="Link to this post">
+        <a
+          href={`#${Router.post(post)}`}
+          title="Link to this post"
+        >
           No.
-        </button>
+        </a>
         <button
           title="Reply to this post"
           onClick={() => replyTo(post.from.id, post.n)}
@@ -226,13 +223,15 @@ export default function PostHeader({
       {children}
       <span className="dchan-backlinks text-sm">
         {postBacklinks?.map((post) => (
-          <button
+          <a
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-1"
-            onClick={() => focusPost(post)}
+            href={`#${Router.post(post)}`}
             onMouseEnter={() => publish("POST_HIGHLIGHT", post.id)}
             onMouseLeave={() => publish("POST_DEHIGHLIGHT", post.id)}
             key={post.id}
-          >{`>>${post.n}`}</button>
+          >
+            {`>>${post.n}`}
+          </a>
         ))}
       </span>
       <Status status={status}></Status>

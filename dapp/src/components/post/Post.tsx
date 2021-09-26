@@ -6,8 +6,6 @@ import useSettings from "hooks/useSettings";
 import { truncate } from "lodash";
 import { useCallback } from "react";
 import { ReactElement, useEffect, useRef, useState, memo } from "react";
-import { useHistory } from "react-router-dom";
-import { Router } from "router";
 import PostBody from "./PostBody";
 import PostHeader from "./PostHeader";
 import sanitize from "sanitize-html";
@@ -27,7 +25,6 @@ function Post({
   header?: ReactElement;
   enableBacklinks?: boolean;
 }) {
-  const history = useHistory();
   const [showAnyway, setShowAnyway] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
@@ -46,9 +43,7 @@ function Post({
 
   const onFocus = useCallback(() => {
     postRef.current?.scrollIntoView();
-    const url = Router.post(post);
-    url && history.push(url);
-  }, [post, postRef, history]);
+  }, [postRef]);
 
   useEffect(() => {
     const sub = subscribe("POST_FOCUS", (_: any, focusedPost: DchanPost) => {
