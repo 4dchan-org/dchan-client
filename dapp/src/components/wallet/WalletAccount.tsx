@@ -43,8 +43,7 @@ export default function WalletAccount() {
             <img
               className="inline h-4 w-4 mx-1"
               alt="MATIC"
-              src={polygonLogo}
-            ></img>
+              src={polygonLogo} />
             )
             {balance !== undefined && balance < 0.0005 ? (
               <div className="p-4">

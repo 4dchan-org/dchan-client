@@ -17,6 +17,7 @@ import { postMessage } from "dchan/operations";
 import MaxLengthWatch from "./MaxLengthWatch";
 import AddressLabel from "components/AddressLabel";
 import usePubSub from "hooks/usePubSub";
+import Loading from "components/Loading";
 import Wallet from "components/Wallet";
 import useUser from "hooks/useUser";
 import Menu from "components/Menu";
@@ -57,16 +58,6 @@ export default function FormPost({
     watch,
   } = form;
 
-  const formId = useMemo(() => thread?.id || board?.id || "form", [thread, board]);
-  useFormPersist(
-    formId,
-    { watch, setValue },
-    {
-      storage: window.localStorage,
-      exclude: ["file", "thread", "board", "nonce"],
-      include: ["name"],
-    }
-  );
   useLayoutEffect(() => {
     return () => {
       trigger();
@@ -79,17 +70,17 @@ export default function FormPost({
 
   const [formDisabled, setFormDisabled] = useState<boolean>(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const {ref: registerCommentRef, ...registerCommentRest} = register("comment", { required: !thread });
+  const { ref: registerCommentRef, ...registerCommentRest } = register("comment", { required: !thread });
 
   const onQuote = useCallback(
     function (_, { from, n }) {
       const { comment } = getValues();
-      const quote = `>>0x${shortenAddress(from).replace("-","")}/${n}`;
+      const quote = `>>0x${shortenAddress(from).replace("-", "")}/${n}`;
       const textarea = textAreaRef.current;
 
       let newComment = "";
       let newPos = 0;
-      
+
       if (textarea) {
         if (textarea.selectionStart || textarea.selectionStart === 0) {
           // cursor in textarea, put quote there
@@ -282,7 +273,7 @@ export default function FormPost({
 
   const [currentBaseUrl, setCurrentBaseUrl] = useState<string | undefined>(baseUrl);
   useEffect(() => {
-    if(baseUrl && baseUrl !== currentBaseUrl) {
+    if (baseUrl && baseUrl !== currentBaseUrl) {
       setCurrentBaseUrl(baseUrl)
       resetForm()
     }
@@ -314,6 +305,16 @@ export default function FormPost({
     </Menu>
   );
 
+  const formId = useMemo(() => thread?.id || board?.id || "form", [thread, board]);
+  useFormPersist(
+    formId,
+    { watch, setValue },
+    {
+      storage: window.localStorage,
+      include: ["name", "comment", "subject"]
+    }
+  );
+
   return (
     <div>
       <Wallet />
@@ -327,7 +328,7 @@ export default function FormPost({
           <div>Board locked.</div>
           <div>You cannot post.</div>
         </div>
-      ) : (
+      ) : !!thread || !!board ? (
         <div>
           {showForm ? (
             <div className="grid center w-full text-left sticky top-0 min-h-200px">
@@ -543,9 +544,7 @@ export default function FormPost({
                                     src={thumbnailB64}
                                   ></img>
                                   <span
-                                    className={`text-xs ${
-                                      fileSize > 1000 ? "text-contrast" : ""
-                                    }`}
+                                    className={`text-xs ${fileSize > 1000 ? "text-contrast" : ""}`}
                                   >
                                     {Math.round(fileSize)} kb
                                   </span>
@@ -685,7 +684,7 @@ export default function FormPost({
             ""
           )}
         </div>
-      )}
+      ) : <Loading />}
     </div>
   );
 }
