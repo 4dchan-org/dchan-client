@@ -105,7 +105,7 @@ export default function FormPost({
           newPos += quote.length + 1;
         } else {
           // not in textarea, put at end
-          newComment += quote + "\n";
+          newComment = comment + quote + "\n";
           newPos = newComment.length;
         }
       }
