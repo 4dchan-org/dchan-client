@@ -11,7 +11,7 @@ function BoardItem({ id, title, postCount, name, isLocked, isNsfw }: Board) {
           id={id}
         ></IdLabel>
       </td>
-      <td className="px-2 whitespace-nowrap hidden sm:block max-w-xs truncate">
+      <td className="px-2 whitespace-nowrap hidden sm:block max-w-12rem truncate">
         <span>
           <Link
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
