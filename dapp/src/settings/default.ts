@@ -20,7 +20,7 @@ const DefaultSettings = {
     },
     autorefresh: {
         enabled: true,
-        seconds: 60
+        seconds: 10
     },
     eula: {
         agreed: false

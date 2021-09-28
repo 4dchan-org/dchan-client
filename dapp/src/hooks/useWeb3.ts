@@ -1,6 +1,7 @@
-import { useCallback, useState } from "react";
 import { Web3Provider } from "@ethersproject/providers";
-import { singletonHook } from 'react-singleton-hook';
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { singletonHook } from "react-singleton-hook";
 import Web3Modal from "web3modal";
 
 const NETWORK_NAME = "matic";
@@ -19,28 +20,31 @@ const useWeb3 = singletonHook({
   loadWeb3Modal: async () => { },
   logoutOfWeb3Modal: async () => { }
 }, () => {
-  const [web3Modal] = useState<Web3Modal>(new Web3Modal({
-    network: NETWORK_NAME,
-    cacheProvider: true,
-    providerOptions: {
-      injected: {
-        display: {
-          name: "Injected",
-          description: "Connect with the provider in your Browser"
-        },
-        package: null
-      }
-    }
-  }));
   const [provider, setProvider] = useState<Web3Provider>();
   const [chainId, setChainId] = useState<string | number>();
   const [accounts, setAccounts] = useState<string[]>([]);
+  const [autoloaded, setAutoloaded] = useState(false);
+  const autoload = true;
+
+  // Web3Modal also supports many other wallets.
+  // You can see other options at https://github.com/Web3Modal/web3modal
+  const web3Modal = useMemo(() => {
+    return new Web3Modal({
+      network: NETWORK_NAME,
+      cacheProvider: true,
+      providerOptions: {
+        walletconnect: {
+          package: WalletConnectProvider
+        },
+      },
+    });
+  }, []);
 
   // Open wallet selection modal.
   const loadWeb3Modal = useCallback(async () => {
     try {
       const newProvider = await web3Modal.connect();
-      
+
       setProvider(new Web3Provider(newProvider));
       setChainId(window.ethereum.chainId)
 
@@ -59,10 +63,10 @@ const useWeb3 = singletonHook({
       window.ethereum.on('chainChanged', (chainId: string) => {
         setChainId(chainId)
       });
-    } catch(error) {
-      console.error({error})
+    } catch (error) {
+      console.error({ error })
     }
-  }, [setProvider, setChainId, setAccounts, web3Modal]);
+  }, [web3Modal]);
 
   const logoutOfWeb3Modal = useCallback(
     async function () {
@@ -71,6 +75,14 @@ const useWeb3 = singletonHook({
     },
     [web3Modal],
   );
+
+  // If autoload is enabled and the the wallet had been loaded before, load it automatically now.
+  useEffect(() => {
+    if (autoload && !autoloaded && web3Modal.cachedProvider) {
+      loadWeb3Modal();
+      setAutoloaded(true);
+    }
+  }, [autoload, autoloaded, loadWeb3Modal, setAutoloaded, web3Modal.cachedProvider]);
 
   return {
     provider, chainId, accounts, loadWeb3Modal, logoutOfWeb3Modal
