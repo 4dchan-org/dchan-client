@@ -69,7 +69,7 @@ export default function TimeTravelWidget({
   >(dateTime);
   const [timeTraveledToNumber, setTimeTraveledToNumber] = useState<
     string | undefined
-  >(block ? `${block}` : lastBlock?.number);
+  >(block ? `${block}` : undefined);
 
   const changeBlock = useCallback(
     (block: Block) => {
@@ -79,6 +79,16 @@ export default function TimeTravelWidget({
     },
     [setTraveledBlock, setTimeTraveledToDate]
   );
+
+  const travelToLatest = useCallback(
+    () => {
+      if (lastBlock != null) {
+        changeBlock(lastBlock);
+        setTimeTraveledToNumber(lastBlock.number);
+      }
+    },
+    [lastBlock, changeBlock, setTimeTraveledToNumber]
+  )
 
   const changeDate = useCallback(
     (date: DateTime) => {
@@ -115,23 +125,41 @@ export default function TimeTravelWidget({
             changeBlock(b);
           }
         });
+      } else {
+        travelToLatest();
       }
     },
-    [changeBlock, baseUrl, history]
+    [changeBlock, baseUrl, history, travelToLatest]
   );
 
   useEffect(() => {
+    if (!block && lastBlock && traveledBlock !== lastBlock) {
+      // not time traveling
+      // move traveledBlock forward to keep in sync with latest
+      travelToLatest();
+      return;
+    }
     if (!traveledBlock) {
       if (timeTraveledToDate != null) {
         changeDate(timeTraveledToDate);
       } else if (timeTraveledToNumber != null) {
         changeNumber(timeTraveledToNumber);
-      } else if (lastBlock != null) {
-        setTimeTraveledToNumber(lastBlock.number);
-        changeNumber(lastBlock.number);
+      } else {
+        // not time travelling
+        // need to initialize traveledBlock with latest
+        travelToLatest();
       }
     }
-  }, [traveledBlock, changeDate, changeNumber, timeTraveledToDate, timeTraveledToNumber, lastBlock]);
+  }, [
+    block,
+    traveledBlock,
+    changeDate,
+    changeNumber,
+    travelToLatest,
+    timeTraveledToDate,
+    timeTraveledToNumber,
+    lastBlock
+  ]);
 
   useEffect(() => {
     if (startBlock && lastBlock) {

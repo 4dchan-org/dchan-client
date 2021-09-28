@@ -1,6 +1,14 @@
-import { shortenAddress, backgroundColorAddress } from "dchan";
-import { trim } from "lodash";
-const keccak256 = require('keccak256')
+import { shortenAddress } from "dchan";
+import IdLabel from "./IdLabel";
+const keccak256 = require('keccak256');
+
+function getCondensedHash(address: string): string {
+  let buffer: Buffer = keccak256(address);
+  for (let i = 6; i < 32; i++) {
+    buffer[i % 6] ^= buffer[i];
+  }
+  return buffer.slice(0, 6).toString("base64");
+}
 
 export default function AddressLabel({ address, className = "", etherscannable = true }: { className?: string, address: string, etherscannable?: boolean }) {
   return (
@@ -10,11 +18,9 @@ export default function AddressLabel({ address, className = "", etherscannable =
       href={etherscannable ? `https://polygonscan.com/address/${address}` : "javascript:void(0)"}
       target={etherscannable ? `_blank` : ""}
     >
-      <span
-        className={[className, LABEL_CLASSNAME].join(" ")}
-        style={{ backgroundColor: backgroundColorAddress(address) }}>
-        {trim(btoa(keccak256(address).toString('hex')), "=").substr(-8, 8)}
-      </span>
+      <IdLabel id={address} className={className}>
+        {getCondensedHash(address)}
+      </IdLabel>
       @<abbr
         className="text-xs font-mono"
         style={{ textDecoration: "none" }} title={address}>
@@ -23,5 +29,3 @@ export default function AddressLabel({ address, className = "", etherscannable =
     </a>
   );
 }
-
-export const LABEL_CLASSNAME = "font-mono font-bold text-readable-anywhere pt-0.5 px-0.5 mx-0.5 rounded opacity-75 hover:opacity-100 text-xs whitespace-nowrap"

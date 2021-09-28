@@ -35,7 +35,7 @@ export default function Status({
           </div>
         ) : isString(status) ? (
           status
-        ) : JSON.stringify(status) === "{}" ? "No tx result. Maybe it went through anyway?" : JSON.stringify(status)}
+        ) : JSON.stringify(status) === "{}" ? "No tx result returned by wallet, but it likely went through successfully." : JSON.stringify(status)}
       </div>
     </div>
   ) : (
