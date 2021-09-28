@@ -30,7 +30,8 @@ export abstract class Router {
         name,
         id
     }: Board, viewMode?: string) {
-        return !!name && !!id ? `/${name}/${id}${viewMode === "catalog" ? "/catalog" : ""}` : undefined
+        const urlViewMode = viewMode && ["catalog", "index"].includes(viewMode) ? `/${viewMode}` : "";
+        return !!name && !!id ? `/${name}/${id}${urlViewMode}` : undefined
     }
 
     public static posts() {
