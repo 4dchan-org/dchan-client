@@ -9,7 +9,7 @@ export default function BoardLink({ board }: { board: Board }) {
       title={board.title}
       to={`${Router.board(board)}`}
     >
-      <IdLabel id={board.id}>{board.name}</IdLabel>
+      <IdLabel id={board.id}>/{board.name}/</IdLabel>
     </Link>
   );
 }
