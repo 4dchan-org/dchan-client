@@ -78,17 +78,44 @@ export default function FormPost({
   const showForm = !!provider && (chainId === "0x89" || chainId === 137);
 
   const [formDisabled, setFormDisabled] = useState<boolean>(false);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const {ref: registerCommentRef, ...registerCommentRest} = register("comment", { required: !thread });
 
   const onQuote = useCallback(
-    function (msg, { from, n }) {
+    function (_, { from, n }) {
       const { comment } = getValues();
       const quote = `>>0x${shortenAddress(from).replace("-","")}/${n}`;
-      setValue(
-        "comment",
-        `${comment || ""}${
-          !!comment && comment.substr(-1, 1).match(/\w/) ? " " : ""
-        }${quote}\n`
-      );
+      const textarea = textAreaRef.current;
+
+      let newComment = "";
+      let newPos = 0;
+      
+      if (textarea) {
+        if (textarea.selectionStart || textarea.selectionStart === 0) {
+          // cursor in textarea, put quote there
+          let startPos = textarea.selectionStart;
+          let endPos = textarea.selectionEnd;
+          newPos = startPos;
+          newComment = comment.substr(0, startPos);
+          if (startPos > 0 && comment.substr(startPos - 1, 1).match(/\w/)) {
+            newComment += " ";
+            newPos += 1;
+          }
+          newComment += quote + "\n" + comment.substr(endPos);
+          newPos += quote.length + 1;
+        } else {
+          // not in textarea, put at end
+          newComment += quote + "\n";
+          newPos = newComment.length;
+        }
+      }
+      setValue("comment", newComment);
+      if (textarea) {
+        // set cursor to just after newly inserted quote
+        textarea.selectionStart = newPos;
+        textarea.selectionEnd = newPos;
+      }
+
       try {
         formRef?.current?.scrollIntoView();
         showForm && setFocus("comment");
@@ -458,7 +485,14 @@ export default function FormPost({
                             className="dchan-input-comment px-1 font-sans border border-solid border-gray focus:border-indigo-300"
                             cols={40}
                             rows={4}
-                            {...register("comment", { required: !thread })}
+                            {...registerCommentRest}
+                            ref={el => {
+                              registerCommentRef(el);
+                              // typescript thinks this can't be
+                              // assigned to, it can
+                              // @ts-ignore
+                              textAreaRef.current = el;
+                            }}
                             disabled={formDisabled}
                             onChange={(e) =>
                               setCommentLength(e.target.value.length)
