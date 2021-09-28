@@ -38,9 +38,11 @@
     display: unset;
 }
 
+/*
 .dchan-navigation-board + .dchan-navigation-board::before {
     content: " / ";
 }
+*/
 
 .dchan-post-expand[open] > summary {
     visibility: hidden;
