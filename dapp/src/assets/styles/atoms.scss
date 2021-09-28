@@ -196,6 +196,16 @@
     max-width: 12rem;
 }
 
+.max-w-16rem {
+    max-width: 16rem;
+}
+
+.md\:max-w-16rem {
+    @media (min-width:768px) {
+        max-width: 16rem;
+    }
+}
+
 .max-w-128px {
     max-width: 128px;
 }

@@ -242,7 +242,7 @@ export default function Post({
                             isSpoiler={image.isSpoiler}
                             isNsfw={image.isNsfw}
                             thumbnail={true}
-                            thumbnailClass={isOp ? "max-w-12rem max-h-48" : undefined}
+                            thumbnailClass={isOp ? "max-w-8rem max-h-32 md:max-w-16rem md:max-h-64" : undefined}
                             expandable={true}
                           />
                         </div>
