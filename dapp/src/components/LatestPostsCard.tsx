@@ -10,18 +10,18 @@ export default function LatestPostsCard() {
     query: POSTS_GET_LAST,
   };
   const { loading, data } = useQuery<{ posts: Post[] }, any>(query, {
-    pollInterval: 30_000,
+    pollInterval: 5_000,
   });
 
   return (
-    <Card className="max-w-100vw mx-auto" title={<span>Latest Posts</span>}>
-      <div>
-        {loading && !data ? (
-          <Loading />
-        ) : (
-          data?.posts?.map((post) => <PostSearchResult post={post} key={post.id} />)
-        )}
-      </div>
-    </Card>
+      <Card className="mx-auto" title={<span>Latest Posts</span>}>
+        <div>
+          {loading && !data ? (
+            <Loading />
+          ) : (
+            data?.posts?.map((post) => <PostSearchResult post={post} key={post.id} />)
+          )}
+        </div>
+      </Card>
   );
 }

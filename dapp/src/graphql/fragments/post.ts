@@ -49,6 +49,7 @@ const POST_FRAGMENT = gql`
       }
     }
     score
+    sage
   }
 `;
 
