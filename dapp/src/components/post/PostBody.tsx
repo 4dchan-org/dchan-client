@@ -1,9 +1,10 @@
 import { Post, shortenAddress, Thread } from 'dchan';
-import { Router } from 'router';
 import parseComment, { ParserResult, PostReferenceValue } from 'dchan/postparse';
-import { ReactElement, useCallback, useEffect } from 'react';
+import { ReactElement, useCallback, useEffect, useMemo, memo } from 'react';
 import usePubSub from 'hooks/usePubSub';
 import useWeb3 from 'hooks/useWeb3';
+import { isEqual } from "lodash";
+import { Router } from "router";
 
 function TextQuote({children, post, thread}: {children: ParserResult[], post: Post, thread?: Thread}) {
   return (
@@ -29,8 +30,17 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
   const { publish } = usePubSub();
   const postLink = `${value.id}/${value.n}`;
 
-  const refPost = thread
-    && [thread.op, ...thread.replies].find(p => `${p.from.id}/${p.n}` === postLink || `${shortenAddress(p.from.id)}/${p.n}` === postLink)
+  const refPost = useMemo(
+    () => (
+      thread
+        && [thread.op, ...thread.replies]
+          .find(p => (
+            `${p.from.id}/${p.n}` === postLink
+            || `0x${shortenAddress(p.from.id).replace("-", "")}/${p.n}` === postLink
+          ))
+    ),
+    [thread, postLink]
+  )
 
   useEffect(() => {
     const backlink = {
@@ -144,13 +154,19 @@ function renderValue(val: ParserResult, post: Post, thread?: Thread): ReactEleme
   }
 }
 
-export default function PostBody({post, thread, style = {}, className}: {style?: any, className?: string, thread?: Thread, post: Post}) {
+function PostBody({post, thread, style = {}, className}: {style?: any, className?: string, thread?: Thread, post: Post}) {
+  const parsedComment = useMemo(
+    () => parseComment(post.comment),
+    [post]
+  );
   return (
     <div
       className={className + " block text-left break-words font-sans text-sm max-w-100vw"}
       style={style}
     >
-      {parseComment(post.comment).map(v => renderValue(v, post, thread))}
+      {parsedComment.map(v => renderValue(v, post, thread))}
     </div>
   )
 }
+
+export default memo(PostBody, isEqual);

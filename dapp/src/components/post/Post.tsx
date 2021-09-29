@@ -5,16 +5,14 @@ import usePubSub from "hooks/usePubSub";
 import useSettings from "hooks/useSettings";
 import { truncate } from "lodash";
 import { useCallback } from "react";
-import { ReactElement, useEffect, useRef, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { Router } from "router";
+import { ReactElement, useEffect, useRef, useState, memo } from "react";
 import PostBody from "./PostBody";
 import PostHeader from "./PostHeader";
 import sanitize from "sanitize-html";
 import useFavorites from "hooks/useFavorites";
-import { isArray } from "lodash";
+import { isEqual } from "lodash";
 
-export default function Post({
+function Post({
   children,
   post,
   thread,
@@ -27,9 +25,9 @@ export default function Post({
   header?: ReactElement;
   enableBacklinks?: boolean;
 }) {
-  const history = useHistory();
   const [showAnyway, setShowAnyway] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
   const [backlinks, setBacklinks] = useState<object>({});
   const postRef = useRef<HTMLInputElement>(null);
   const { subscribe, unsubscribe } = usePubSub();
@@ -44,16 +42,14 @@ export default function Post({
   } = post;
 
   const onFocus = useCallback(() => {
-    setIsFocused(true);
     postRef.current?.scrollIntoView();
-    const url = Router.post(post);
-    url && history.push(url);
-  }, [post, postRef, history, setIsFocused]);
+  }, [postRef]);
 
   useEffect(() => {
-    const sub = subscribe("POST_FOCUS", (_: any, focusedPost: DchanPost | DchanPost[]) => {
-      const newIsFocused = isArray(focusedPost) ? !!focusedPost.find(p => post.id === p.id) : post.id === focusedPost.id
+    const sub = subscribe("POST_FOCUS", (_: any, focusedPost: DchanPost) => {
+      const newIsFocused = post.id === focusedPost.id
       setIsFocused(newIsFocused);
+      setIsHighlighted(newIsFocused);
       if (newIsFocused) {
         onFocus();
       }
@@ -64,30 +60,29 @@ export default function Post({
     };
   });
 
-  // Had to disable because on mouse leave the post would be unhighlighted (downlighted?) and interfere with the POST_FOCUS system
-  // useEffect(() => {
-  //   const sub = subscribe("POST_HIGHLIGHT", (_: any, focusedPost: string) => {
-  //     if (post.id === focusedPost) {
-  //       setIsFocused(true);
-  //     }
-  //   });
+  useEffect(() => {
+    const sub = subscribe("POST_HIGHLIGHT", (_: any, focusedPost: string) => {
+      if (post.id === focusedPost) {
+        setIsHighlighted(true);
+      }
+    });
 
-  //   return () => {
-  //     unsubscribe(sub);
-  //   };
-  // });
+    return () => {
+      unsubscribe(sub);
+    };
+  });
 
-  // useEffect(() => {
-  //   const sub = subscribe("POST_DEHIGHLIGHT", (_: any, focusedPost: string) => {
-  //     if (post.id === focusedPost) {
-  //       setIsFocused(false);
-  //     }
-  //   });
+  useEffect(() => {
+    const sub = subscribe("POST_DEHIGHLIGHT", (_: any, focusedPost: string) => {
+      if (post.id === focusedPost && !isFocused) {
+        setIsHighlighted(false);
+      }
+    });
 
-  //   return () => {
-  //     unsubscribe(sub);
-  //   };
-  // });
+    return () => {
+      unsubscribe(sub);
+    };
+  });
 
   useEffect(() => {
     if (enableBacklinks) {
@@ -97,7 +92,7 @@ export default function Post({
           _: any,
           { from, to: { n } }: { from: DchanPost; to: { n: string } }
         ) => {
-          if (`${n}` === `${post.n}`) {
+          if (`${n}` === `${post.n}` && !(from.id in backlinks)) {
             //console.log(`Post ${post.n} received backlink from ${from.n}`);
             setBacklinks({ ...backlinks, [from.id]: from });
           }
@@ -283,3 +278,5 @@ export default function Post({
     </div>
   );
 }
+
+export default memo(Post, isEqual);
