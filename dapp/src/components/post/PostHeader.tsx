@@ -229,7 +229,7 @@ export default function PostHeader({
         </Link>
       </span>
       {children}
-      <span className="dchan-backlinks text-left text-sm">
+      <span className="dchan-backlinks text-left text-sm flex flex-wrap">
         {postBacklinks?.map((post) => (
           <a
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-1"
