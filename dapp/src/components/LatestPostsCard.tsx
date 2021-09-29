@@ -19,7 +19,7 @@ export default function LatestPostsCard() {
         {loading && !data ? (
           <Loading />
         ) : (
-          data?.posts?.map((post) => <PostSearchResult post={post} />)
+          data?.posts?.map((post) => <PostSearchResult post={post} key={post.id} />)
         )}
       </div>
     </Card>

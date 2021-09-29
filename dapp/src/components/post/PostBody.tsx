@@ -3,7 +3,7 @@ import parseComment, { ParserResult, PostReferenceValue } from 'dchan/postparse'
 import { ReactElement, useCallback, useEffect, useMemo, memo } from 'react';
 import usePubSub from 'hooks/usePubSub';
 import useWeb3 from 'hooks/useWeb3';
-import { isEqual } from "lodash";
+import { isEqual, uniqueId } from "lodash";
 import { Router } from "router";
 
 function TextQuote({children, post, thread}: {children: ParserResult[], post: Post, thread?: Thread}) {
@@ -136,21 +136,21 @@ function renderValue(val: ParserResult, post: Post, thread?: Thread): ReactEleme
     case "text":
       return val.value;
     case "link":
-      return <ExternalLink link={val.value} />;
+      return <ExternalLink link={val.value} key={val.value} />;
     case "ipfs":
-      return <IPFSImage hash={val.hash} />;
+      return <IPFSImage hash={val.hash} key={val.hash} />;
     case "newline":
-      return <br/>;
+      return <br key={uniqueId()} />;
     case "textquote":
-      return <TextQuote post={post} thread={thread}>{val.value}</TextQuote>;
+      return <TextQuote post={post} thread={thread} key={uniqueId()}>{val.value}</TextQuote>;
     case "ref":
-      return <Reference link={`#/${val.id}`}>{val.id}</Reference>;
+      return <Reference link={`#/${val.id}`} key={val.id}>{val.id}</Reference>;
     case "postref":
-      return <PostReference post={post} thread={thread} value={val} />;
+      return <PostReference post={post} thread={thread} value={val} key={val.id} />;
     case "boardref":
-      return <Reference link={`#/${val.id}`}>{val.board}{val.id}</Reference>;
+      return <Reference link={`#/${val.id}`} key={val.id}>{val.board}{val.id}</Reference>;
     case "spoiler":
-      return <Spoiler post={post} thread={thread}>{val.value}</Spoiler>;
+      return <Spoiler post={post} thread={thread} key={uniqueId()}>{val.value}</Spoiler>;
   }
 }
 

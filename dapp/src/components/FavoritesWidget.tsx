@@ -34,8 +34,8 @@ export default function FavoritesWidget() {
   return favorites ? (
     <details open={open}>
       <summary>
-        <label htmlFor="dchan-favorites" onClick={onClick}>
-          ⭐
+        <label htmlFor="dchan-watched" onClick={onClick}>
+          👁
         </label>
       </summary>
       <div className="mx-1 text-center bg-primary">
@@ -43,13 +43,13 @@ export default function FavoritesWidget() {
           "Loading..."
         ) : ids.length > 0 && threads ? (
           <div>
-            <div className="mb-2">Favorite threads:</div>
+            <div className="mb-2">Watched threads:</div>
             <div className="text-sm">
               {threads.map((thread: Thread) => {
                 const board = thread.board;
 
                 return (
-                  <div>
+                  <div key={thread.id}>
                     <button onClick={() => onRemove(thread)}>✖</button>{" "}
                     {board ? (
                       <span>
@@ -88,7 +88,7 @@ export default function FavoritesWidget() {
             </div>
           </div>
         ) : (
-          "No favorites. Use the ⭐ button on threads to keep track of them here."
+          "No posts are being watched. Use the 👁 button on threads to keep track of them here."
         )}
       </div>
     </details>

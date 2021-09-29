@@ -155,9 +155,9 @@ function Post({
           dchan-post-from-address={address}
         >
           <div
-            className={`${!isOp ? "bg-secondary max-w-90vw mb-2" : "max-w-100vw md:max-w-max -ml-1 mb-1"} ${
-              isFocused ? "bg-tertiary" : ""
-            } inline-block border-bottom-invisible relative max-w-screen-xl`}
+            className={`${!isOp ? "bg-secondary" : ""} ${
+              isHighlighted || isFocused ? "bg-tertiary" : ""
+            } w-full sm:w-auto mb-2 pr-4 inline-block border-bottom-invisible relative max-w-screen-xl`}
           >
             <div className="flex sm:flex-wrap ml-5 center text-center sm:text-left sm:block max-w-100vw">
               {isOp && thread ? (
@@ -167,10 +167,10 @@ function Post({
                       ? "opacity-60 hover:opacity-80"
                       : "opacity-20 hover:opacity-40"}`
                   }
-                  title={favorite ? "Remove from favorites" : "Add to favorites"}
+                  title={favorite ? "Remove from watched" : "Add to watched"}
                   onClick={onFavorite}
                 >
-                  ⭐
+                  👁
                 </button>
               ) : (
                 <span></span>

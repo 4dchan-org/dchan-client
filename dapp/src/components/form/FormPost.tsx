@@ -22,6 +22,7 @@ import Wallet from "components/Wallet";
 import useUser from "hooks/useUser";
 import Menu from "components/Menu";
 import useFormPersist from "hooks/useFormPersist"
+import useFavorites from "hooks/useFavorites";
 
 export default function FormPost({
   baseUrl,
@@ -45,6 +46,7 @@ export default function FormPost({
   const [subjectLength, setSubjectLength] = useState<number>(0);
   const [thumbnailB64, setThumbnailB64] = useState<string>();
   const { subscribe, unsubscribe } = usePubSub();
+  const { addFavorite } = useFavorites();
   const form = useForm();
   const {
     register,
@@ -138,19 +140,20 @@ export default function FormPost({
     setFormDisabled(isSending);
   }, [isSending, setFormDisabled]);
 
-  const updateNonce = useCallback(() => {
+  const changeNonce = useCallback(() => {
     setNonce(uniqueId());
   }, [setNonce]);
 
   const resetForm = useCallback(() => {
     reset();
     trigger();
-    updateNonce();
+    changeNonce();
     clear();
-  }, [reset, trigger, updateNonce, clear]);
+  }, [reset, trigger, changeNonce, clear]);
 
   const onSubmit = useCallback(
     async (data: any) => {
+      !!thread && !!addFavorite && addFavorite(thread)
       setIsSending(true);
 
       let result = null;
@@ -184,7 +187,7 @@ export default function FormPost({
         history.push(url);
       }
     },
-    [accounts, history, setStatus, setIsSending, resetForm]
+    [accounts, history, setStatus, setIsSending, resetForm, addFavorite, thread]
   );
 
   const refreshThumbnail = useCallback(async () => {
@@ -294,6 +297,10 @@ export default function FormPost({
   const { isJannyOf } = useUser();
   const isJanny = board ? isJannyOf(board.id) : false;
 
+  const onBlur = useCallback(() => {
+    changeNonce()
+  }, [changeNonce])
+
   const formPostOptions = () => (
     <span>
       <Menu>
@@ -340,6 +347,7 @@ export default function FormPost({
                 id="dchan-post-form"
                 className="grid center bg-primary p-2 pointer-events-auto bg-primary"
                 onSubmit={handleSubmit(onSubmit)}
+                onBlur={onBlur}
               >
                 <input
                   type="hidden"
@@ -668,7 +676,7 @@ export default function FormPost({
                       </li>
                       <li>
                         and that{" "}
-                        <abbr title="Posts are stored on the blockchain and images are uploaded to IPFS. _This_cannot_be_undone_. Content can be removed, but will still be obtainable.">
+                        <abbr title="Posts are stored on the blockchain and images are uploaded to IPFS. _This_cannot_be_undone_. Content can be removed, but can still be obtained.">
                           <i>I won't be able to delete the content I post.</i>
                         </abbr>
                       </li>
