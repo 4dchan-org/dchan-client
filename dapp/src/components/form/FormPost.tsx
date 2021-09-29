@@ -21,7 +21,7 @@ import Loading from "components/Loading";
 import Wallet from "components/Wallet";
 import useUser from "hooks/useUser";
 import Menu from "components/Menu";
-const useFormPersist = require("react-hook-form-persist");
+import useFormPersist from "hooks/useFormPersist"
 
 export default function FormPost({
   baseUrl,
@@ -71,6 +71,15 @@ export default function FormPost({
   const [formDisabled, setFormDisabled] = useState<boolean>(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const { ref: registerCommentRef, ...registerCommentRest } = register("comment", { required: !thread });
+
+  const formId = useMemo(() => thread?.id || board?.id || "form", [thread, board]);
+  const { clear } = useFormPersist(
+    formId,
+    { watch, setValue },
+    {
+      include: ["name", "comment", "subject"]
+    }
+  );
 
   const onQuote = useCallback(
     function (_, { from, n }) {
@@ -137,7 +146,8 @@ export default function FormPost({
     reset();
     trigger();
     updateNonce();
-  }, [reset, trigger, updateNonce]);
+    clear();
+  }, [reset, trigger, updateNonce, clear]);
 
   const onSubmit = useCallback(
     async (data: any) => {
@@ -285,34 +295,27 @@ export default function FormPost({
   const isJanny = board ? isJannyOf(board.id) : false;
 
   const formPostOptions = () => (
-    <Menu>
-      <div>Options:</div>
-      <div>
-        <input
-          id="dchan-input-sage"
-          className="mx-1"
-          type="checkbox"
-          {...register("sage")}
-          disabled={formDisabled}
-        />
-        <label
-          htmlFor="dchan-input-sage"
-          className="text-black font-weight-800 font-family-tahoma"
-        >
-          <abbr title="Does not bump the thread">sage</abbr>
-        </label>
-      </div>
-    </Menu>
-  );
-
-  const formId = useMemo(() => thread?.id || board?.id || "form", [thread, board]);
-  useFormPersist(
-    formId,
-    { watch, setValue },
-    {
-      storage: window.localStorage,
-      include: ["name", "comment", "subject"]
-    }
+    <span>
+      <Menu>
+        <div>Options:</div>
+        <div>
+          <input
+            id="dchan-input-sage"
+            className="mx-1"
+            type="checkbox"
+            {...register("sage")}
+            disabled={formDisabled}
+          />
+          <label
+            htmlFor="dchan-input-sage"
+            className="text-black font-weight-800 font-family-tahoma"
+          >
+            <abbr title="Does not bump the thread">sage</abbr>
+          </label>
+        </div>
+      </Menu>
+      <span className="text-xs"><button onClick={resetForm}>❌</button></span>
+    </span>
   );
 
   return (
@@ -424,10 +427,9 @@ export default function FormPost({
                               New thread
                             </button>
 
-                            {/* @TODO dedup */}
-                            {formPostOptions()}
+                            {!status ? formPostOptions() : ""}
 
-                            <Status status={status}></Status>
+                            <Status status={status} />
                           </div>
                         </td>
                       </tr>
@@ -467,9 +469,9 @@ export default function FormPost({
                               Post reply
                             </button>
 
-                            {formPostOptions()}
+                            {!status ? formPostOptions() : ""}
 
-                            <Status status={status}></Status>
+                            <Status status={status} />
                           </div>
                         </td>
                       </tr>
