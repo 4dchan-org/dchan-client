@@ -10,7 +10,6 @@ interface UserData {
 }
 interface UserVars {
   address: string;
-  userId: string;
 }
 
 const useUser = () => {
@@ -18,7 +17,7 @@ const useUser = () => {
   const address = accounts.length > 0 ? accounts[0] : ""
 
   const query = useQuery<UserData, UserVars>(USER_GET, {
-    variables: { address, userId: `0x${address.substr(2, 3)}${address.substr(-3, 3)}` },
+    variables: { address },
     skip: !address
   })
 

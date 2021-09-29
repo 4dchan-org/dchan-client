@@ -163,6 +163,7 @@ function PostBody({post, thread, style = {}, className}: {style?: any, className
     <div
       className={className + " block text-left break-words font-sans text-sm max-w-100vw"}
       style={style}
+      key={`${post.id}-${thread?.id}`}
     >
       {parsedComment.map(v => renderValue(v, post, thread))}
     </div>

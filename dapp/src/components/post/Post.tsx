@@ -11,6 +11,7 @@ import PostHeader from "./PostHeader";
 import sanitize from "sanitize-html";
 import useFavorites from "hooks/useFavorites";
 import { isEqual } from "lodash";
+import useUser from "hooks/useUser";
 
 function Post({
   children,
@@ -25,6 +26,7 @@ function Post({
   header?: ReactElement;
   enableBacklinks?: boolean;
 }) {
+  const { data: userData } = useUser()
   const [showAnyway, setShowAnyway] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
@@ -129,6 +131,7 @@ function Post({
       }
     }
   }, [addFavorite, removeFavorite, thread, favorite]);
+  console.log({userData, post})
   return (
     <div className="flex">
       {!isOp ? <span className="hidden md:block pl-2 text-secondary">&gt;&gt;</span> : ""}
@@ -151,13 +154,11 @@ function Post({
         </summary>
         <article
           id={`${n}`}
-          className="dchan-post text-left w-full"
+          className={`dchan-post text-left w-full`}
           dchan-post-from-address={address}
         >
           <div
-            className={`${!isOp ? "bg-secondary" : ""} ${
-              isHighlighted || isFocused ? "bg-tertiary" : ""
-            } w-full sm:w-auto mb-2 pr-4 inline-block border-bottom-invisible relative max-w-screen-xl`}
+            className={`${isHighlighted || isFocused ? "bg-tertiary" : !isOp ? "bg-secondary" : ""} ${userData?.user?.id === post.from.id ? "border-dashed border-2 border-tertiary" : ""} w-full sm:w-auto mb-2 pr-4 inline-block relative max-w-screen-xl`}
           >
             <div className="flex sm:flex-wrap ml-5 center text-center sm:text-left sm:block max-w-100vw">
               {isOp && thread ? (
