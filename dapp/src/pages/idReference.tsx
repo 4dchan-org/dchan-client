@@ -89,7 +89,7 @@ export default function IdReferencePage({ location, match: { params } }: any) {
         history.replace(location);
       }
     }
-  }, [history, data]);
+  }, [history, data, isTimeTraveling, queriedBlock]);
 
   return (
     <div className="bg-primary center grid w-screen h-screen">
