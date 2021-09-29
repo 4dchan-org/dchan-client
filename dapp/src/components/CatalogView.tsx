@@ -11,7 +11,7 @@ export default function CatalogView({
   showBoard?: boolean
 }) {
   return (
-    <div className="grid grid-template-columns-ram-150px place-items-start font-size-090rem px-4 sm:px-8">
+    <div className="flex flex-row flex-wrap justify-center place-items-start font-size-090rem px-4 sm:px-8">
       {threads.filter(t => !!t && !!t.board).map(thread => (
         <CatalogThread
           thread={thread}

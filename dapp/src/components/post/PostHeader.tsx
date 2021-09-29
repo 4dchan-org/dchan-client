@@ -48,6 +48,15 @@ export default function PostHeader({
   const [status, setStatus] = useState<string | object>();
 
   const createdAt = fromBigInt(createdAtUnix);
+  const relativeTime = createdAt.toRelative();
+  const formattedDate = `${
+    // @ts-ignore
+    createdAt.toLocaleString({day: "2-digit", month: "2-digit", year: "2-digit"})
+  }(${
+    createdAt.weekdayShort
+  })${
+    createdAt.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+  }`;
 
   const isJanny = thread?.board?.id ? isJannyOf(thread.board.id) : false;
 
@@ -96,7 +105,7 @@ export default function PostHeader({
         (ID: <AddressLabel etherscannable={true} address={address} />
         {provider ? (
           <button
-            className="text-blue-600 visited:text-purple-600 hover:text-blue-500 flex-grow opacity-10 hover:opacity-100"
+            className="text-blue-600 visited:text-purple-600 hover:text-blue-500 flex-grow opacity-50 hover:opacity-100"
             title="Send MATIC tip"
             onClick={() => onSendTip(address)}
           >
@@ -107,9 +116,8 @@ export default function PostHeader({
         )}
         )
       </span>
-      <span className="px-0.5 whitespace-nowrap text-xs">
-        {createdAt.toLocaleString(DateTime.DATETIME_SHORT)} (
-        {createdAt.toRelative()})
+      <span className="px-0.5 whitespace-nowrap text-sm" title={relativeTime !== null ? relativeTime : undefined}>
+        {formattedDate}
       </span>
       <span className="px-0.5 on-parent-target-font-bold text-sm whitespace-nowrap">
         <a
@@ -215,13 +223,13 @@ export default function PostHeader({
       ) : (
         ""
       )}
-      <span className="px-0.5 text-xs opacity-10 hover:opacity-100">
+      <span className="px-0.5 text-xs opacity-50 hover:opacity-100">
         <Link to={`/${post.id}`} title="Permalink">
           🔗
         </Link>
       </span>
       {children}
-      <span className="dchan-backlinks text-sm">
+      <span className="dchan-backlinks text-left text-sm">
         {postBacklinks?.map((post) => (
           <a
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-1"

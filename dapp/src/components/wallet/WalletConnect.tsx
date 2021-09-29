@@ -1,3 +1,4 @@
+import StillStuck from "components/StillStuck";
 import useWeb3 from "hooks/useWeb3";
 import { useCallback, useState } from "react";
 
@@ -27,6 +28,7 @@ export default function WalletConnect() {
         </button>
         ]
       </div>
+      {isConnecting ? <StillStuck ms={2000}><span>If the above button does not work, try unlocking your wallet first, then retry.</span></StillStuck> : ""}
       {!provider ? (
         <div className="text-xs px-2">
           <small className="p-1 text-center">

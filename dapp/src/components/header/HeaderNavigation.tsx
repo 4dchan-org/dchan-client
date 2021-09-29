@@ -32,6 +32,7 @@ export default function HeaderNavigation() {
         {!!boards &&
           boards.map((board) => (
             <span className="dchan-navigation-board" key={board.id}>
+              <wbr/>
               <BoardLink board={board} />
             </span>
           ))}

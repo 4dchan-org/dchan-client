@@ -1,7 +1,9 @@
 const MATIC_CHAIN = `0x${(137).toString(16)}`
+
+// @TODO https://issueexplorer.com/issue/MetaMask/metamask-extension/12102
 const MATIC_PARAMS = {
   "chainId": MATIC_CHAIN,
-  "chainName": "Matic Mainnet",
+  "chainName": "Polygon (Matic) Mainnet",
   "rpcUrls": [
     "https://rpc-mainnet.matic.network",
     "https://matic-mainnet.chainstacklabs.com",

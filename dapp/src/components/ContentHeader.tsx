@@ -15,6 +15,7 @@ import BoardViewSettings from "./settings/BoardViewSettings";
 import FilterSettings from "./settings/FilterSettings";
 import { Link } from "react-router-dom";
 import FavoritesWidget from "./FavoritesWidget";
+import Loading from "./Loading";
 
 export default function ContentHeader({
   board,
@@ -59,7 +60,7 @@ export default function ContentHeader({
     <div>
       <BoardHeader board={board}></BoardHeader>
 
-      <FormPost baseUrl={baseUrl} thread={thread} board={board}></FormPost>
+      {!!thread || !!board ? <FormPost baseUrl={baseUrl} thread={thread} board={board} /> : <Loading />}
 
       <div className="p-2">
         <hr></hr>

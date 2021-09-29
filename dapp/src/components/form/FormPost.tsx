@@ -17,10 +17,11 @@ import { postMessage } from "dchan/operations";
 import MaxLengthWatch from "./MaxLengthWatch";
 import AddressLabel from "components/AddressLabel";
 import usePubSub from "hooks/usePubSub";
+import Loading from "components/Loading";
 import Wallet from "components/Wallet";
 import useUser from "hooks/useUser";
 import Menu from "components/Menu";
-const useFormPersist = require("react-hook-form-persist");
+import useFormPersist from "hooks/useFormPersist"
 
 export default function FormPost({
   baseUrl,
@@ -57,16 +58,6 @@ export default function FormPost({
     watch,
   } = form;
 
-  const formId = useMemo(() => thread?.id || board?.id || "form", [thread, board]);
-  useFormPersist(
-    formId,
-    { watch, setValue },
-    {
-      storage: window.localStorage,
-      exclude: ["file", "thread", "board", "nonce"],
-      include: ["name"],
-    }
-  );
   useLayoutEffect(() => {
     return () => {
       trigger();
@@ -79,17 +70,26 @@ export default function FormPost({
 
   const [formDisabled, setFormDisabled] = useState<boolean>(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const {ref: registerCommentRef, ...registerCommentRest} = register("comment", { required: !thread });
+  const { ref: registerCommentRef, ...registerCommentRest } = register("comment", { required: !thread });
+
+  const formId = useMemo(() => thread?.id || board?.id || "form", [thread, board]);
+  const { clear } = useFormPersist(
+    formId,
+    { watch, setValue },
+    {
+      include: ["name", "comment", "subject"]
+    }
+  );
 
   const onQuote = useCallback(
     function (_, { from, n }) {
       const { comment } = getValues();
-      const quote = `>>0x${shortenAddress(from).replace("-","")}/${n}`;
+      const quote = `>>0x${shortenAddress(from).replace("-", "")}/${n}`;
       const textarea = textAreaRef.current;
 
       let newComment = "";
       let newPos = 0;
-      
+
       if (textarea) {
         if (textarea.selectionStart || textarea.selectionStart === 0) {
           // cursor in textarea, put quote there
@@ -146,7 +146,8 @@ export default function FormPost({
     reset();
     trigger();
     updateNonce();
-  }, [reset, trigger, updateNonce]);
+    clear();
+  }, [reset, trigger, updateNonce, clear]);
 
   const onSubmit = useCallback(
     async (data: any) => {
@@ -282,7 +283,7 @@ export default function FormPost({
 
   const [currentBaseUrl, setCurrentBaseUrl] = useState<string | undefined>(baseUrl);
   useEffect(() => {
-    if(baseUrl && baseUrl !== currentBaseUrl) {
+    if (baseUrl && baseUrl !== currentBaseUrl) {
       setCurrentBaseUrl(baseUrl)
       resetForm()
     }
@@ -294,24 +295,27 @@ export default function FormPost({
   const isJanny = board ? isJannyOf(board.id) : false;
 
   const formPostOptions = () => (
-    <Menu>
-      <div>Options:</div>
-      <div>
-        <input
-          id="dchan-input-sage"
-          className="mx-1"
-          type="checkbox"
-          {...register("sage")}
-          disabled={formDisabled}
-        />
-        <label
-          htmlFor="dchan-input-sage"
-          className="text-black font-weight-800 font-family-tahoma"
-        >
-          <abbr title="Does not bump the thread">sage</abbr>
-        </label>
-      </div>
-    </Menu>
+    <span>
+      <Menu>
+        <div>Options:</div>
+        <div>
+          <input
+            id="dchan-input-sage"
+            className="mx-1"
+            type="checkbox"
+            {...register("sage")}
+            disabled={formDisabled}
+          />
+          <label
+            htmlFor="dchan-input-sage"
+            className="text-black font-weight-800 font-family-tahoma"
+          >
+            <abbr title="Does not bump the thread">sage</abbr>
+          </label>
+        </div>
+      </Menu>
+      <span className="text-xs"><button onClick={resetForm}>❌</button></span>
+    </span>
   );
 
   return (
@@ -327,7 +331,7 @@ export default function FormPost({
           <div>Board locked.</div>
           <div>You cannot post.</div>
         </div>
-      ) : (
+      ) : !!thread || !!board ? (
         <div>
           {showForm ? (
             <div className="grid center w-full text-left sticky top-0 min-h-200px">
@@ -423,10 +427,9 @@ export default function FormPost({
                               New thread
                             </button>
 
-                            {/* @TODO dedup */}
-                            {formPostOptions()}
+                            {!status ? formPostOptions() : ""}
 
-                            <Status status={status}></Status>
+                            <Status status={status} />
                           </div>
                         </td>
                       </tr>
@@ -466,9 +469,9 @@ export default function FormPost({
                               Post reply
                             </button>
 
-                            {formPostOptions()}
+                            {!status ? formPostOptions() : ""}
 
-                            <Status status={status}></Status>
+                            <Status status={status} />
                           </div>
                         </td>
                       </tr>
@@ -543,9 +546,7 @@ export default function FormPost({
                                     src={thumbnailB64}
                                   ></img>
                                   <span
-                                    className={`text-xs ${
-                                      fileSize > 1000 ? "text-contrast" : ""
-                                    }`}
+                                    className={`text-xs ${fileSize > 1000 ? "text-contrast" : ""}`}
                                   >
                                     {Math.round(fileSize)} kb
                                   </span>
@@ -685,7 +686,7 @@ export default function FormPost({
             ""
           )}
         </div>
-      )}
+      ) : <Loading />}
     </div>
   );
 }

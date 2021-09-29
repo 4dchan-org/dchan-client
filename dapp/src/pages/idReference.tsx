@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 import Error from "components/Error";
 import Loading from "components/Loading";
+import StillStuck from "components/StillStuck";
 import {
   Board,
   BoardCreationEvent,
@@ -28,17 +29,11 @@ interface IdSearchVars {
 
 export default function IdReferencePage({ match: { params } }: any) {
   const [error, setError] = useState<string>();
-  const [stillStuck, setStillStuck] = useState<boolean>(false);
-
-  setTimeout(() => {
-    setStillStuck(true);
-  }, 10_000);
-
   const history = useHistory();
 
   const id = `0x${params.id}`;
 
-  console.log({id})
+  console.log({ id })
 
   const { data } = useQuery<IdSearchData, IdSearchVars>(SEARCH_BY_ID, {
     variables: { id },
@@ -97,11 +92,9 @@ export default function IdReferencePage({ match: { params } }: any) {
           <Loading />
           <div className="text-xs">{id}</div>
           <div>
-            {stillStuck
-              ? id.indexOf("-") !== -1
-                ? "The requested content is (probably) still being indexed, please wait..."
-                : "Are you sure it's a valid ID?"
-              : ""}
+            <StillStuck><span>{id.indexOf("-") !== -1
+              ? "The requested content is (probably) still being indexed, please wait..."
+              : "Are you sure it's a valid ID?"}</span></StillStuck>
           </div>
         </div>
       )}

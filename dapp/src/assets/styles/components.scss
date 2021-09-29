@@ -38,9 +38,11 @@
     display: unset;
 }
 
+/*
 .dchan-navigation-board + .dchan-navigation-board::before {
     content: " / ";
 }
+*/
 
 .dchan-post-expand[open] > summary {
     visibility: hidden;
@@ -73,4 +75,9 @@
 
 .dchan-post-spoiler:hover {
     color: white;
+}
+
+.dchan-postref {
+    color: #dd0000;
+    text-decoration: underline;
 }

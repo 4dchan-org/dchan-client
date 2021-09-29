@@ -17,10 +17,11 @@ function TextQuote({children, post, thread}: {children: ParserResult[], post: Po
 function Reference({link, children}: {link: string; children: string | string[]}) {
   return (
     <a
-      className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+      className="dchan-postref"
       href={link}
     >
-      &gt;&gt;{children}
+      <wbr/>
+      <span className="whitespace-nowrap">&gt;&gt;{children}</span>
     </a>
   );
 }
@@ -80,12 +81,13 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
 
   return (
     <a
-      className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+      className="dchan-postref"
       href={`#${baseUrl}${postLink}`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      &gt;&gt;{postLink}{isOp ? " (OP)" : ""}{isYou ? " (You)" : ""}
+      <wbr/>
+      <span className="whitespace-nowrap">&gt;&gt;{postLink}</span>{isOp ? " (OP)" : ""}{isYou ? " (You)" : ""}
     </a>
   );
 }
@@ -113,7 +115,7 @@ function ExternalLink({link}: {link: string}) {
 
 function IPFSImage({hash}: {hash: string}) {
   return (
-    <details className="inline">
+    <details className="inline w-full">
       <summary>
         <a
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
@@ -159,7 +161,7 @@ function PostBody({post, thread, style = {}, className}: {style?: any, className
   );
   return (
     <div
-      className="block text-left break-words font-sans text-sm max-w-100vw"
+      className={className + " block text-left break-words font-sans text-sm max-w-100vw"}
       style={style}
     >
       {parsedComment.map(v => renderValue(v, post, thread))}
