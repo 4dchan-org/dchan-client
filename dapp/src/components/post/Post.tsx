@@ -9,7 +9,6 @@ import { ReactElement, useEffect, useRef, useState, memo } from "react";
 import PostBody from "./PostBody";
 import PostHeader from "./PostHeader";
 import sanitize from "sanitize-html";
-import useFavorites from "hooks/useFavorites";
 import { isEqual } from "lodash";
 import useUser from "hooks/useUser";
 
@@ -119,19 +118,6 @@ function Post({
     !bIsLowScore ||
     settings?.content_filter?.show_below_threshold ||
     showAnyway;
-
-  const { isFavorite, addFavorite, removeFavorite } = useFavorites();
-  const favorite = thread && isFavorite ? isFavorite(thread) : false;
-
-  const onFavorite = useCallback(() => {
-    if (thread && removeFavorite && addFavorite) {
-      if (favorite) {
-        removeFavorite(thread);
-      } else {
-        addFavorite(thread);
-      }
-    }
-  }, [addFavorite, removeFavorite, thread, favorite]);
   
   return (
     <div className="flex">
@@ -162,22 +148,6 @@ function Post({
             className={`${isHighlighted || isFocused ? "bg-tertiary" : !isOp ? "bg-secondary" : ""} ${isYou ? "border-dashed border-2 border-tertiary" : ""} w-full sm:w-auto mb-2 pr-4 inline-block relative max-w-screen-xl`}
           >
             <div className="flex sm:flex-wrap ml-5 center text-center sm:text-left sm:block max-w-100vw">
-              {isOp && thread ? (
-                <button
-                  className={`inline-block ${
-                    favorite
-                      ? "opacity-60 hover:opacity-80"
-                      : "opacity-20 hover:opacity-40"}`
-                  }
-                  title={favorite ? "Remove from watched" : "Add to watched"}
-                  onClick={onFavorite}
-                >
-                  👁
-                </button>
-              ) : (
-                <span></span>
-              )}
-
               <PostHeader thread={thread} post={post} backlinks={backlinks}>
                 {header}
               </PostHeader>

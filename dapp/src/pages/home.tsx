@@ -4,6 +4,7 @@ import Footer from "components/Footer";
 import LatestPostsCard from "components/LatestPostsCard";
 import PopularBoardsCard from "components/PopularBoardsCard";
 import PopularThreadsCard from "components/PopularThreadsCard";
+import WatchedThreadsCard from "components/WatchedThreadsCard";
 import { useTitle } from "react-use";
 
 export default function HomePage() {
@@ -53,6 +54,8 @@ export default function HomePage() {
           <PopularBoardsCard />
         </div>
       </div>
+        
+      <WatchedThreadsCard />
 
       <PopularThreadsCard />
       

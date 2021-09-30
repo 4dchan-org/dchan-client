@@ -9,7 +9,7 @@ import { DateTime } from "luxon";
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
-
+import { useLocation } from "react-router";
 export interface TimeTravelRange {
   min: Block;
   max: Block;
@@ -59,6 +59,8 @@ export default function TimeTravelWidget({
   startRangeLabel: string;
   baseUrl: string;
 }) {
+  const search = useLocation().search;  
+  const queriedBlock = new URLSearchParams(search).get('block');
   const now = DateTime.now();
   const history = useHistory();
   const { lastBlock } = useLastBlock();
@@ -69,7 +71,7 @@ export default function TimeTravelWidget({
   >(dateTime);
   const [timeTraveledToNumber, setTimeTraveledToNumber] = useState<
     string | undefined
-  >(block ? `${block}` : undefined);
+  >(block ? `${block}` : queriedBlock || undefined);
 
   const changeBlock = useCallback(
     (block: Block) => {
