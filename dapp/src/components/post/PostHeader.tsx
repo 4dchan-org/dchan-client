@@ -52,12 +52,10 @@ export default function PostHeader({
   const relativeTime = createdAt.toRelative();
   const formattedDate = `${
     // @ts-ignore
-    createdAt.toLocaleString({day: "2-digit", month: "2-digit", year: "2-digit"})
-  }(${
-    createdAt.weekdayShort
-  })${
-    createdAt.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-  }`;
+    createdAt.toLocaleString({ day: "2-digit", month: "2-digit", year: "2-digit" })
+    }(${createdAt.weekdayShort
+    })${createdAt.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+    }`;
 
   const isJanny = thread?.board?.id ? isJannyOf(thread.board.id) : false;
 
@@ -98,7 +96,7 @@ export default function PostHeader({
 
   const { isFavorite, addFavorite, removeFavorite } = useFavorites();
   const favorite = thread && isFavorite ? isFavorite(thread) : false;
-  
+
   const onFavorite = useCallback(() => {
     if (thread && removeFavorite && addFavorite) {
       if (favorite) {
@@ -113,8 +111,7 @@ export default function PostHeader({
     <span className="max-w-95vw inline-flex flex-wrap items-center">
       {isOp && thread ? (
         <button
-          className={`inline-block ${
-            favorite
+          className={`inline-block ${favorite
               ? "opacity-60 hover:opacity-80"
               : "opacity-20 hover:opacity-40"}`
           }
@@ -147,7 +144,9 @@ export default function PostHeader({
         )
       </span>
       <span className="px-0.5 whitespace-nowrap text-sm" title={relativeTime !== null ? relativeTime : undefined}>
-        {formattedDate} [<Link to={`${Router.post(post)}?block=${post.createdAtBlock.number}`}>{createdAt.toRelative()}</Link>]
+        {formattedDate} <span className="text-xs">[<Link
+          className="text-blue-600 visited:text-purple-600 hover:text-blue-500" 
+          to={`${Router.post(post)}?block=${post.createdAtBlock.number}`}>{createdAt.toRelative()}</Link>]</span>
       </span>
       <span className="px-0.5 on-parent-target-font-bold text-sm whitespace-nowrap">
         <a

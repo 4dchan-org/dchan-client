@@ -7,6 +7,9 @@ const THREADS_LIST_FAVORITES = gql`
   query Threads($ids: [String!]!) {
     threads(orderBy: lastBumpedAt, orderDirection: desc, where: {id_in: $ids}) {
       ...Thread
+      replies(first: 3, orderBy: n, orderDirection: $orderDirection) {
+        ...Post
+      }
     }
   }
 `;
