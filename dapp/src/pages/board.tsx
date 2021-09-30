@@ -68,14 +68,14 @@ export default function BoardPage({ location, match: { params } }: any) {
     skip: limit * (page-1),
   };
 
-  const { refetch, data, loading } = useQuery<
+  const { refetch, data: catalogData, loading: catalogLoading } = useQuery<
     BoardCatalogData,
     BoardCatalogVars
   >(BOARD_CATALOG, {
     variables
   });
 
-  const { data: boardData } = useQuery<
+  const { loading: boardLoading, data: boardData } = useQuery<
     BoardData,
     BoardVars
   >(BOARD_GET, {
@@ -85,10 +85,10 @@ export default function BoardPage({ location, match: { params } }: any) {
     }
   });
 
-  const board = boardData?.board;
+  const board: Board | undefined | null = boardData?.board;
   const threads = useMemo(
-    () => [...(data?.pinned || []), ...(data?.threads || [])],
-    [data]
+    () => [...(catalogData?.pinned || []), ...(catalogData?.threads || [])],
+    [catalogData]
   );
 
   useEffect(() => {
@@ -108,9 +108,11 @@ export default function BoardPage({ location, match: { params } }: any) {
   );
 
   useTitle(
-    board
-      ? `/${board.name}/ - dchan.network - [${board.id}]`
-      : `/${board_id}/ - Loading... - dchan.network`
+    !boardLoading
+      ? board
+        ? `/${board.name}/ - dchan.network - [${board.id}]`
+        : `??? - dchan.network - [${board_id}]`
+      : `Loading... - dchan.network - [${board_id}]`
   );
 
   return (
@@ -122,7 +124,7 @@ export default function BoardPage({ location, match: { params } }: any) {
           dateTime={dateTime}
           baseUrl={board ? Router.board(board, boardMode) : undefined}
           summary={
-            loading ? (
+            catalogLoading ? (
               <span>...</span>
             ) : (
               <span>
@@ -135,13 +137,23 @@ export default function BoardPage({ location, match: { params } }: any) {
           onRefresh={refetch}
         />
         <div>
-          {loading && !data ? (
+          {board === null ? (
+            <div className="center grid p-8">
+              Board does not exist.
+              {!isNaN(queriedBlock) ? <>
+                <br/>
+                You may have time traveled to before it was created.
+              </> : ""}
+            </div>
+          ) : catalogLoading && !catalogData ? (
             <div className="center grid min-h-50vh">
               <Loading />
             </div>
           ) : board && threads ? (
             threads.length === 0 ? (
-              <div className="center grid p-8">{`No threads.`}</div>
+              <div className="center grid p-8">
+                No threads.
+              </div>
             ) : (
               <div>
                 {
