@@ -65,6 +65,7 @@ export type Post = {
     createdAtBlock: Block,
     bans: PostBan[],
     score: string,
+    sage: boolean
 }
 
 export type PostCreationEvent = {

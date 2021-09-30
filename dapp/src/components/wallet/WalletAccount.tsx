@@ -53,6 +53,16 @@ export default function WalletAccount() {
                   <ul>
                     <li>
                       <a
+                        href="https://faucet.dchan.network/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-2"
+                      >
+                        https://faucet.dchan.network
+                      </a>
+                    </li>
+                    <li>
+                      <a
                         href="https://matic.supply/"
                         target="_blank"
                         rel="noreferrer"

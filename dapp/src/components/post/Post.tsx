@@ -109,6 +109,7 @@ function Post({
 
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
   const isOp = id === thread?.id;
+  const isYou = userData?.user?.id === post.from.id 
   const [settings] = useSettings();
   const bIsLowScore = isLowScore(
     post,
@@ -131,7 +132,7 @@ function Post({
       }
     }
   }, [addFavorite, removeFavorite, thread, favorite]);
-  console.log({userData, post})
+  
   return (
     <div className="flex">
       {!isOp ? <span className="hidden md:block pl-2 text-secondary">&gt;&gt;</span> : ""}
@@ -158,7 +159,7 @@ function Post({
           dchan-post-from-address={address}
         >
           <div
-            className={`${isHighlighted || isFocused ? "bg-tertiary" : !isOp ? "bg-secondary" : ""} ${userData?.user?.id === post.from.id ? "border-dashed border-2 border-tertiary" : ""} w-full sm:w-auto mb-2 pr-4 inline-block relative max-w-screen-xl`}
+            className={`${isHighlighted || isFocused ? "bg-tertiary" : !isOp ? "bg-secondary" : ""} ${isYou ? "border-dashed border-2 border-tertiary" : ""} w-full sm:w-auto mb-2 pr-4 inline-block relative max-w-screen-xl`}
           >
             <div className="flex sm:flex-wrap ml-5 center text-center sm:text-left sm:block max-w-100vw">
               {isOp && thread ? (
@@ -180,6 +181,8 @@ function Post({
               <PostHeader thread={thread} post={post} backlinks={backlinks}>
                 {header}
               </PostHeader>
+
+              {post.sage ? <abbr className="opacity-20 hover:opacity-100" title="Saged. Thread not bumped.">🍂</abbr> : ""}
             </div>
 
             {!canShow ? (
@@ -198,7 +201,7 @@ function Post({
                 {!!image ? (
                   <div className="text-center sm:text-left mx-5 truncate">
                     <span className="text-sm">
-                      <span>
+                      <span className="flex flex-wrap">
                         <a
                           target="_blank"
                           rel="noreferrer"

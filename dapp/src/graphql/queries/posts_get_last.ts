@@ -5,7 +5,7 @@ const POSTS_GET_LAST = gql`
   ${POST_FRAGMENT}
 
   query PostsGetLast {
-    posts(orderBy: createdAt, orderDirection: desc, first: 10) {
+    posts(orderBy: createdAt, orderDirection: desc, first: 10, where: {sage: false}) {
       ...Post
     }
   }

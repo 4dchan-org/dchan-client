@@ -38,7 +38,7 @@ interface BoardVars {
 }
 
 export default function BoardPage({ location, match: { params } }: any) {
-  let { board_id } = params;
+  let { board_id, board_name } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 
   const { lastBlock } = useLastBlock();
@@ -90,6 +90,10 @@ export default function BoardPage({ location, match: { params } }: any) {
     () => [...(catalogData?.pinned || []), ...(catalogData?.threads || [])],
     [catalogData]
   );
+
+  useEffect(() => {
+    board && board.name != board_name && history.replace(`/${board.id}`);
+  }, [board, board_name])
 
   useEffect(() => {
     refetch();
