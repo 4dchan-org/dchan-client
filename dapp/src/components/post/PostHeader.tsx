@@ -57,7 +57,7 @@ export default function PostHeader({
     createdAt.weekdayShort
   })${
     createdAt.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-  } [${createdAt.toRelative()}]`;
+  }`;
 
   const isJanny = thread?.board?.id ? isJannyOf(thread.board.id) : false;
 
@@ -147,7 +147,7 @@ export default function PostHeader({
         )
       </span>
       <span className="px-0.5 whitespace-nowrap text-sm" title={relativeTime !== null ? relativeTime : undefined}>
-        {formattedDate}
+        {formattedDate} [<Link to={`${Router.post(post)}?block=${post.createdAtBlock.number}`}>{createdAt.toRelative()}</Link>]
       </span>
       <span className="px-0.5 on-parent-target-font-bold text-sm whitespace-nowrap">
         <a
