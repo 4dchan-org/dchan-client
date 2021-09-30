@@ -5,6 +5,7 @@ const MATIC_PARAMS = {
   "chainId": MATIC_CHAIN,
   "chainName": "Polygon (Matic) Mainnet",
   "rpcUrls": [
+    "https://polygon-rpc.com",
     "https://rpc-mainnet.matic.network",
     "https://matic-mainnet.chainstacklabs.com",
     "https://rpc-mainnet.maticvigil.com",
