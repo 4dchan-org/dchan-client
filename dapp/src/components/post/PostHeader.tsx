@@ -17,6 +17,7 @@ import usePubSub from "hooks/usePubSub";
 import useSettings from "hooks/useSettings";
 import useUser from "hooks/useUser";
 import useWeb3 from "hooks/useWeb3";
+import useFavorites from "hooks/useFavorites";
 import { DateTime } from "luxon";
 import { ReactElement, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
@@ -94,8 +95,37 @@ export default function PostHeader({
   const canBan = isJanny;
   const canLock = isOp && (isOwner || isJanny);
   const postBacklinks: Post[] = backlinks ? Object.values(backlinks) : [];
+
+  const { isFavorite, addFavorite, removeFavorite } = useFavorites();
+  const favorite = thread && isFavorite ? isFavorite(thread) : false;
+  
+  const onFavorite = useCallback(() => {
+    if (thread && removeFavorite && addFavorite) {
+      if (favorite) {
+        removeFavorite(thread);
+      } else {
+        addFavorite(thread);
+      }
+    }
+  }, [addFavorite, removeFavorite, thread, favorite]);
+
   return (
     <span className="max-w-95vw inline-flex flex-wrap items-center">
+      {isOp && thread ? (
+        <button
+          className={`inline-block ${
+            favorite
+              ? "opacity-60 hover:opacity-80"
+              : "opacity-20 hover:opacity-40"}`
+          }
+          title={favorite ? "Remove from watched" : "Add to watched"}
+          onClick={onFavorite}
+        >
+          👁
+        </button>
+      ) : (
+        <span></span>
+      )}
       <span className="px-0.5 whitespace-nowrap">
         <span className="text-accent font-bold">
           {!name || "" === name ? "Anonymous" : name}
