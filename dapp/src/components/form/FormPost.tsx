@@ -303,6 +303,7 @@ export default function FormPost({
 
   const formPostOptions = () => (
     <span>
+      <span className="text-xs"><button onClick={resetForm}>❌</button></span>
       <Menu>
         <div>Options:</div>
         <div>
@@ -317,11 +318,10 @@ export default function FormPost({
             htmlFor="dchan-input-sage"
             className="text-black font-weight-800 font-family-tahoma"
           >
-            <abbr title="Does not bump the thread">sage</abbr>
+            <div title="Does not bump the thread">sage</div>
           </label>
         </div>
       </Menu>
-      <span className="text-xs"><button onClick={resetForm}>❌</button></span>
     </span>
   );
 

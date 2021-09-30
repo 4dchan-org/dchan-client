@@ -9,16 +9,19 @@ import { useState } from "react";
 import { lockBoard, removeBoard, unlockBoard } from "dchan/operations";
 import useUser from "hooks/useUser";
 import useWeb3 from "hooks/useWeb3";
+import { useLocation } from "react-router";
 
 export default function BoardHeader({
   board
 }: {
   board: Board | undefined | null
 }) {
+  const search = useLocation().search
   const { accounts } = useWeb3()
   const { isJannyOf } = useUser()
   const isJanny = board ? isJannyOf(board.id) : false
   const [status, setStatus] = useState<string | object>();
+  console.log({search})
 
   return (
     <header id="board-header">
@@ -44,7 +47,7 @@ export default function BoardHeader({
             {board === null ? (
               <div>/?/ - ?????</div>
             ) : (
-              <Link to={board ? `/${board.name}/${board.id}` : "#"}>
+              <Link to={board ? `/${board.name}/${board.id}${search}` : "#"}>
                 /{board?.name || "?"}/ - {board?.title || "..."}
               </Link>
             )}

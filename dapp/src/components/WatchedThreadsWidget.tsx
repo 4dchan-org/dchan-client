@@ -8,8 +8,9 @@ import { useCallback, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Router } from "router";
 import BoardLink from "./BoardLink";
+import Loading from "./Loading";
 
-export default function FavoritesWidget() {
+export default function WatchedThreadsWidget() {
   const { favorites, removeFavorite } = useFavorites();
   const [open, setOpen] = useState<boolean>(false);
   const onClick = useCallback(() => setOpen(true), [setOpen]);
@@ -40,7 +41,7 @@ export default function FavoritesWidget() {
       </summary>
       <div className="mx-1 text-center bg-primary">
         {loading ? (
-          "Loading..."
+          <Loading />
         ) : ids.length > 0 && threads ? (
           <div>
             <div className="mb-2">Watched threads:</div>
