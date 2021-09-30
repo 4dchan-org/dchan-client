@@ -56,7 +56,7 @@ export default function PostHeader({
     createdAt.weekdayShort
   })${
     createdAt.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-  }`;
+  } [${createdAt.toRelative()}]`;
 
   const isJanny = thread?.board?.id ? isJannyOf(thread.board.id) : false;
 
