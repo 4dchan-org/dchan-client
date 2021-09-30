@@ -27,7 +27,7 @@ interface ThreadContentVars {
 }
 
 export default function ThreadPage({ location, match: { params } }: any) {
-  let { board_id } = params;
+  let { board_name, board_id, user_id, thread_n } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 
   const history = useHistory();
@@ -86,11 +86,10 @@ export default function ThreadPage({ location, match: { params } }: any) {
       : [];
     if (filtered.length === 1) {
       const post = filtered[0];
-      if (`0x${shortenAddress(post.from.id).replace('-', '')}` === focus_user_id) {
-        // shortened address used in URL
-        // redirect to full address to avoid double history entries
-        history.replace(`${Router.post(post)}${block ? `?block=${block}` : ""}`);
-      }
+      // redirect to standard URL no matter what
+      // if the real URL is invalid, it'll get replaced
+      // if it's already in use, this will just raise a warning in the console
+      history.replace(`${Router.post(post)}${block ? `?block=${block}` : ""}`);
       publish("POST_FOCUS", post);
     } else if (filtered.length > 1) {
       throw new Error("Somehow multiple posts were focused?");
@@ -98,6 +97,15 @@ export default function ThreadPage({ location, match: { params } }: any) {
       history.replace(`/${focus_user_id}/${focus_post_n}`);
     }
   }, [posts, focus_user_id, focus_post_n, block, loading, publish, history]);
+
+  useEffect(() => {
+    // above useEffect will automatically redirect for focusing URLs
+    // this will handle the normal case
+    if (board && thread && (board_name !== board.name || user_id !== thread.op.from.id)) {
+      const url = Router.thread(thread);
+      url && history.replace(`${url}${block ? `?block=${block}` : ""}`);
+    }
+  }, [board, thread, board_name, user_id, history, block]);
 
   useEffect(() => {
     refetch({
