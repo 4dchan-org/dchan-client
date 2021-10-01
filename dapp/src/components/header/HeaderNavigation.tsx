@@ -28,7 +28,7 @@ export default function HeaderNavigation() {
       </Link>
       ]
       <span className="text-black text-opacity-50">
-        <span className="hidden lg:inline-block">
+        <span className="hidden sm:inline-block">
           [
           {!!boards &&
             boards.map((board) => (
