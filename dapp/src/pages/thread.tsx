@@ -44,7 +44,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
 
   let variables = {
     board: board_id,
-    n: params.thread_n,
+    n: thread_n,
     block,
   };
 

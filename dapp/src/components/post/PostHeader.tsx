@@ -110,7 +110,7 @@ export default function PostHeader({
   }, [addFavorite, removeFavorite, thread, favorite]);
 
   return (
-    <span className="max-w-95vw inline-flex flex-wrap items-center">
+    <span className="max-w-95vw inline-flex flex-wrap items-center relative">
       {isOp && thread ? (
         <button
           className={`inline-block ${favorite
@@ -146,118 +146,119 @@ export default function PostHeader({
         )
       </span>
       <span className="px-0.5 whitespace-nowrap text-sm" title={relativeTime !== null ? relativeTime : undefined}>
-        {formattedDate} <span className="text-xs">[<Link
-          className="text-blue-600 visited:text-purple-600 hover:text-blue-500" 
+        {formattedDate} <span className="text-xs px-1 text-gray-400 hover:text-gray-600 hidden sm:inline-block">[<Link
           to={`${Router.post(post)}?block=${post.createdAtBlock.number}`}>{createdAt.toRelative()}</Link>]</span>
       </span>
-      <span className="px-0.5 on-parent-target-font-bold text-sm whitespace-nowrap">
-        <a
-          href={`#${Router.post(post)}`}
-          title="Link to this post"
-        >
-          No.
-        </a>
-        <button
-          title="Reply to this post"
-          onClick={() => replyTo(post.from.id, post.n)}
-        >
-          {n}
-        </button>
-      </span>
-      <span>
-        {isOp && isPinned ? (
-          <span title="Thread pinned. This might be important.">📌</span>
-        ) : (
-          <span></span>
-        )}
-        {isOp && isLocked ? (
-          <span title="Thread locked. You cannot reply anymore.">🔒</span>
-        ) : (
-          <span></span>
-        )}
-        {isLowScore(post, settings?.content_filter?.score_threshold) ? (
-          <span title="Post hidden due to reports. Click to show anyway.">
-            ⚠️
-          </span>
-        ) : (
-          <span></span>
-        )}
-      </span>
-      {accounts && accounts[0] ? (
-        <Menu>
-          {canLock ? (
-            <div>
-              {thread && thread.isLocked ? (
-                <span>
-                  <input name="lock" type="hidden" value="false"></input>
-                  <button onClick={() => unlockThread(id, accounts, setStatus)}>
-                    🔓 Unlock
-                  </button>
-                </span>
-              ) : (
-                <span>
-                  <input name="lock" type="hidden" value="true"></input>
-                  <button onClick={() => lockThread(id, accounts, setStatus)}>
-                    🔒 Lock
-                  </button>
-                </span>
-              )}
-            </div>
+      <span className="whitespace-nowrap">
+        <span className="px-0.5 on-parent-target-font-bold text-sm whitespace-nowrap">
+          <a
+            href={`#${Router.post(post)}`}
+            title="Link to this post"
+          >
+            No.
+          </a>
+          <button
+            title="Reply to this post"
+            onClick={() => replyTo(post.from.id, post.n)}
+          >
+            {n}
+          </button>
+        </span>
+        <span>
+          {isOp && isPinned ? (
+            <span title="Thread pinned. This might be important.">📌</span>
           ) : (
-            ""
+            <span></span>
           )}
-          {canPin ? (
-            <div>
-              {thread && thread.isPinned ? (
-                <span>
-                  <input name="sticky" type="hidden" value="false"></input>
-                  <button onClick={() => unpinThread(id, accounts, setStatus)}>
-                    📌 Unpin
-                  </button>
-                </span>
-              ) : (
-                <span>
-                  <input name="sticky" type="hidden" value="true"></input>
-                  <button onClick={() => pinThread(id, accounts, setStatus)}>
-                    📌 Pin
-                  </button>
-                </span>
-              )}
-            </div>
+          {isOp && isLocked ? (
+            <span title="Thread locked. You cannot reply anymore.">🔒</span>
           ) : (
-            ""
+            <span></span>
           )}
-          {canRemove ? (
+          {isLowScore(post, settings?.content_filter?.score_threshold) ? (
+            <span title="Post hidden due to reports. Click to show anyway.">
+              ⚠️
+            </span>
+          ) : (
+            <span></span>
+          )}
+        </span>
+        {accounts && accounts[0] ? (
+          <Menu>
             <div>
-              <button onClick={() => removePost(id, accounts, setStatus)}>
-                ❌ Remove
+              <Link to={`/${post.id}${block ? `?block=${block}` : ""}`} title="Permalink">
+                🔗 Permalink
+              </Link>
+            </div>
+            {canLock ? (
+              <div>
+                {thread && thread.isLocked ? (
+                  <span>
+                    <input name="lock" type="hidden" value="false"></input>
+                    <button onClick={() => unlockThread(id, accounts, setStatus)}>
+                      🔓 Unlock
+                    </button>
+                  </span>
+                ) : (
+                  <span>
+                    <input name="lock" type="hidden" value="true"></input>
+                    <button onClick={() => lockThread(id, accounts, setStatus)}>
+                      🔒 Lock
+                    </button>
+                  </span>
+                )}
+              </div>
+            ) : (
+              ""
+            )}
+            {canPin ? (
+              <div>
+                {thread && thread.isPinned ? (
+                  <span>
+                    <input name="sticky" type="hidden" value="false"></input>
+                    <button onClick={() => unpinThread(id, accounts, setStatus)}>
+                      📌 Unpin
+                    </button>
+                  </span>
+                ) : (
+                  <span>
+                    <input name="sticky" type="hidden" value="true"></input>
+                    <button onClick={() => pinThread(id, accounts, setStatus)}>
+                      📌 Pin
+                    </button>
+                  </span>
+                )}
+              </div>
+            ) : (
+              ""
+            )}
+            {canRemove ? (
+              <div>
+                <button onClick={() => removePost(id, accounts, setStatus)}>
+                  ❌ Remove
+                </button>
+              </div>
+            ) : (
+              ""
+            )}
+            {canBan ? (
+              <div>
+                <button onClick={() => banPost(id, accounts, setStatus)}>
+                  🔫 Ban
+                </button>
+              </div>
+            ) : (
+              ""
+            )}
+            <div>
+              <button onClick={() => reportPost(id, accounts, setStatus)}>
+                ⚠️ Report
               </button>
             </div>
-          ) : (
-            ""
-          )}
-          {canBan ? (
-            <div>
-              <button onClick={() => banPost(id, accounts, setStatus)}>
-                🔫 Ban
-              </button>
-            </div>
-          ) : (
-            ""
-          )}
-          <div>
-            <button onClick={() => reportPost(id, accounts, setStatus)}>
-              ⚠️ Report
-            </button>
-          </div>
-        </Menu>
-      ) : (
-        ""
-      )}
-      <span className="px-0.5 text-xs opacity-50 hover:opacity-100">
-        <Link to={`/${post.id}${block ? `?block=${block}` : ""}`} title="Permalink">
-          🔗
-        </Link>
+          </Menu>
+        ) : (
+          ""
+        )}
       </span>
       {children}
       <span className="dchan-backlinks text-left text-sm flex flex-wrap">

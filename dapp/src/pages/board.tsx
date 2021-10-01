@@ -107,10 +107,13 @@ export default function BoardPage({ location, match: { params } }: any) {
     );
   });
 
-  const maxPage = Math.max(
-    Math.ceil(board ? parseInt(`${board.threadCount}`) / limit : 0),
-    1
-  );
+  // @TODO usePagination?
+  const maxPage = useMemo(() => {
+    const threadCount = parseInt(`${board?.threadCount || 0}`)
+    return Math.max(
+      Math.ceil(board ? threadCount / limit : 0),
+    1)
+  }, [board, limit]);
 
   useTitle(
     !boardLoading

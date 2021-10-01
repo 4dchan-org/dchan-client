@@ -1,4 +1,3 @@
-import { shortenAddress } from "dchan";
 import IdLabel from "./IdLabel";
 const keccak256 = require('keccak256');
 
@@ -21,11 +20,6 @@ export default function AddressLabel({ address, className = "", etherscannable =
       <IdLabel id={address} className={className}>
         {getCondensedHash(address)}
       </IdLabel>
-      @<abbr
-        className="text-xs font-mono"
-        style={{ textDecoration: "none" }} title={address}>
-        {shortenAddress(address)}
-      </abbr>
     </a>
   );
 }

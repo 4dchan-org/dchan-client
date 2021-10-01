@@ -147,7 +147,7 @@ function Post({
           <div
             className={`${isHighlighted || isFocused ? "bg-tertiary" : !isOp ? "bg-secondary" : ""} ${isYou ? "border-dashed border-2 border-tertiary" : ""} w-full sm:w-auto mb-2 pr-4 inline-block relative max-w-screen-xl`}
           >
-            <div className="flex sm:flex-wrap ml-5 center text-center sm:text-left sm:block max-w-100vw">
+            <div className="flex sm:flex-wrap ml-5 align-center text-center sm:text-left sm:justify-start max-w-100vw">
               <PostHeader thread={thread} post={post} backlinks={backlinks}>
                 {header}
               </PostHeader>
@@ -187,7 +187,7 @@ function Post({
                         <span className="px-1">
                           ({Math.trunc(parseInt(image.byteSize) * 0.001)}kb)
                         </span>
-                        <span className="px-1 text-gray-400 hover:text-gray-600">
+                        <span className="px-1 text-gray-400 hover:text-gray-600 hidden sm:inline-block">
                           <small>{image.ipfsHash}</small>
                         </span>
                       </span>

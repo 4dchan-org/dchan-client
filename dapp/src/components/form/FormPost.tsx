@@ -15,7 +15,6 @@ import useEventListener from "hooks/useEventListener";
 import { isString, uniqueId } from "lodash";
 import { postMessage } from "dchan/operations";
 import MaxLengthWatch from "./MaxLengthWatch";
-import AddressLabel from "components/AddressLabel";
 import usePubSub from "hooks/usePubSub";
 import Loading from "components/Loading";
 import Wallet from "components/Wallet";
@@ -23,6 +22,7 @@ import useUser from "hooks/useUser";
 import Menu from "components/Menu";
 import useFormPersist from "hooks/useFormPersist"
 import useFavorites from "hooks/useFavorites";
+import IdLabel from "components/IdLabel";
 
 export default function FormPost({
   baseUrl,
@@ -306,7 +306,7 @@ export default function FormPost({
       <span className="text-xs"><button onClick={resetForm}>❌</button></span>
       <Menu>
         <div>Options:</div>
-        <div>
+        <div className="flex">
           <input
             id="dchan-input-sage"
             className="mx-1"
@@ -629,59 +629,71 @@ export default function FormPost({
                     </tr>
                   </tbody>
                 </table>
-                <div className="p-1 text-xs flex center">
-                  <input
-                    id="dchan-input-rules"
-                    className="mx-1"
-                    type="checkbox"
-                    {...register("rulesAccepted", { required: true })}
-                    disabled={formDisabled}
-                  />
-                  <label
-                    htmlFor="dchan-input-rules"
-                    className="text-black font-weight-800 font-family-tahoma"
-                  >
-                    <ul>
-                      <li>
-                        I've read the{" "}
-                        <Link
-                          to="/_/rules"
-                          target="_blank"
-                          className="text-blue-600 visited:text-purple-600 hover:text-blue-400"
-                        >
-                          rules
-                        </Link>{" "}
-                        and the{" "}
-                        <Link
-                          to="/_/faq"
-                          target="_blank"
-                          className="text-blue-600 visited:text-purple-600 hover:text-blue-400"
-                        >
-                          FAQ
-                        </Link>{" "}
-                        before posting.
-                      </li>
-                      <li>
-                        I understand that{" "}
-                        <abbr title="Other users will be able to view all past transactions you ever made using this address. Be mindful of the security risks this entails.">
+                <div className="text-xs grid center">
+                  <div className="p-1 flex center">
+                    <input
+                      id="dchan-input-rules"
+                      className="mx-1"
+                      type="checkbox"
+                      {...register("rulesAccepted", { required: true })}
+                      disabled={formDisabled}
+                    />
+                    <label
+                      htmlFor="dchan-input-rules"
+                      className="text-black font-weight-800 font-family-tahoma"
+                    >
+                      <ul>
+                        <li>
+                          I've read the{" "}
+                          <Link
+                            to="/_/rules"
+                            target="_blank"
+                            className="text-blue-600 visited:text-purple-600 hover:text-blue-400"
+                          >
+                            rules
+                          </Link>{" "}
+                          and the{" "}
+                          <Link
+                            to="/_/faq"
+                            target="_blank"
+                            className="text-blue-600 visited:text-purple-600 hover:text-blue-400"
+                          >
+                            FAQ
+                          </Link>{" "}
+                          before posting.
+                        </li>
+                        <li>
+                          I understand that{" "}
+                          <abbr title="Other users will be able to view all past transactions you ever made using this address. Be mindful of the security risks this entails.">
+                            <i>
+                              my posts will be publicly signed by my address
+                            </i>
+                          </abbr>
+                        </li>
+                        <li>
                           <i>
-                            my posts will be public and signed by my address
+                            {accounts && accounts.length > 0 ?
+                              <a
+                                href={`https://polygonscan.com/address/${accounts[0]}`}
+                                target={`_blank`}
+                              >
+                                <IdLabel id={accounts[0]}>
+                                  {accounts[0]}
+                                </IdLabel>
+                              </a> : (
+                                ""
+                              )}{" "}
                           </i>
-                          {accounts && accounts.length > 0 ? (
-                            <AddressLabel address={accounts[0]}></AddressLabel>
-                          ) : (
-                            ""
-                          )}{" "}
-                        </abbr>
-                      </li>
-                      <li>
-                        and that{" "}
-                        <abbr title="Posts are stored on the blockchain and images are uploaded to IPFS. _This_cannot_be_undone_. Content can be removed, but can still be obtained.">
-                          <i>I won't be able to delete the content I post.</i>
-                        </abbr>
-                      </li>
-                    </ul>
-                  </label>
+                        </li>
+                        <li>
+                          and that{" "}
+                          <abbr title="Posts are stored on the blockchain and images are uploaded to IPFS. _This_cannot_be_undone_. Content can be removed, but can still be obtained.">
+                            <i>I won't be able to delete the content I post.</i>
+                          </abbr>
+                        </li>
+                      </ul>
+                    </label>
+                  </div>
                   {errors.rulesAccepted && (
                     <div className="px-1 text-contrast">
                       This field is required
