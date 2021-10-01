@@ -71,9 +71,9 @@ export default function ContentHeader({
       </div>
 
       <div className="fixed z-20 top-0 right-4 opacity-50 hover:opacity-100 flex flex-wrap text-right">
-        <details open={true}>
+        <details open={!!timeTravelParameters.block}>
           <summary></summary>
-          <div className="bg-primary">
+          <div className="bg-primary border border-solid border-secondary">
             <TimeTravelWidget
               baseUrl={baseUrl || ""}
               startBlock={startBlock}
@@ -83,7 +83,9 @@ export default function ContentHeader({
                 thread ? "Thread creation" : board ? "Board creation" : "?"
               }
             />
+            <hr />
             <SearchWidget baseUrl={Router.posts()} search={search} />
+            <hr />
             <WatchedThreadsWidget />
           </div>
         </details>

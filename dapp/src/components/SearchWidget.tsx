@@ -19,42 +19,44 @@ export default function SearchWidget({
   const onClick = useCallback(() => setOpen(true), [setOpen]);
 
   return (
-    <details open={open}>
-      <summary>
-        <label htmlFor="dchan-search" onClick={onClick}>
-          🔍
-        </label>
-      </summary>
-      <div className="mx-1 text-center bg-primary">
-        <div>Search:</div>
-        <div>
-          <input
-            id="dchan-search"
-            className="text-center w-32"
-            type="text"
-            placeholder="..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            autoFocus={true}
-          ></input>
+    <span className="bg-primary">
+      <details open={open}>
+        <summary className="list-none">
+          <label htmlFor="dchan-search" onClick={onClick}>
+            🔍
+          </label>
+        </summary>
+        <div className="mx-1 text-center bg-primary">
+          <div>Search:</div>
+          <div>
+            <input
+              id="dchan-search"
+              className="text-center w-32"
+              type="text"
+              placeholder="..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              autoFocus={true}
+            ></input>
+          </div>
+          <div className="relative">
+            {search ? (
+              <span className="text-xs">
+                [
+                <button
+                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                  onClick={() => setSearch("")}
+                >
+                  Cancel
+                </button>
+                ]
+              </span>
+            ) : (
+              ""
+            )}
+          </div>
         </div>
-        <div className="relative">
-          {search ? (
-            <span className="text-xs">
-              [
-              <button
-                className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                onClick={() => setSearch("")}
-              >
-                Cancel
-              </button>
-              ]
-            </span>
-          ) : (
-            ""
-          )}
-        </div>
-      </div>
-    </details>
+      </details>
+    </span>
   );
 }

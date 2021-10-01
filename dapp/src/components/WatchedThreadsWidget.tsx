@@ -30,69 +30,71 @@ export default function WatchedThreadsWidget() {
   const threads = data?.threads;
   const doRefetch = useCallback(() => refetch({ ids }), [refetch, ids]);
   const onRefresh = useThrottleCallback(doRefetch, 1, true);
-  const onRemove = removeFavorite ? removeFavorite : () => {};
+  const onRemove = removeFavorite ? removeFavorite : () => { };
 
   return favorites ? (
-    <details open={open}>
-      <summary>
-        <label htmlFor="dchan-watched" onClick={onClick}>
-          👁
-        </label>
-      </summary>
-      <div className="mx-1 text-center bg-primary">
-        {loading ? (
-          <Loading />
-        ) : ids.length > 0 && threads ? (
-          <div>
-            <div className="mb-2">Watched threads:</div>
-            <div className="text-sm">
-              {threads.map((thread: Thread) => {
-                const board = thread.board;
-
-                return (
-                  <div key={thread.id}>
-                    <button onClick={() => onRemove(thread)}>✖</button>{" "}
-                    {board ? (
-                      <span>
-                        /<BoardLink board={board} />/
-                      </span>
-                    ) : (
-                      ""
-                    )}
-                    <Link
-                      className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                      to={`${Router.thread(thread)}`}
-                    >
-                      {" "}
-                      - ({thread.replyCount}) -{" "}
-                      {truncate(thread.subject || thread.op.comment, {
-                        length: 32,
-                      })}{" "}
-                      {thread.isLocked ? "🔒" : ""}{" "}
-                      {thread.isPinned ? "📌" : ""}
-                    </Link>
-                  </div>
-                );
-              })}
-            </div>
+    <span className="bg-primary">
+      <details open={open}>
+        <summary className="list-none">
+          <label htmlFor="dchan-watched" onClick={onClick}>
+            👁
+          </label>
+        </summary>
+        <div className="mx-1 text-center bg-primary">
+          {loading ? (
+            <Loading />
+          ) : ids.length > 0 && threads ? (
             <div>
-              <div className="text-xs">
-                [
-                <button
-                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                  onClick={onRefresh}
-                >
-                  Refresh
-                </button>
-                ]
+              <div className="mb-2">Watched threads:</div>
+              <div className="text-sm">
+                {threads.map((thread: Thread) => {
+                  const board = thread.board;
+
+                  return (
+                    <div key={thread.id}>
+                      <button onClick={() => onRemove(thread)}>✖</button>{" "}
+                      {board ? (
+                        <span>
+                          /<BoardLink board={board} />/
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                      <Link
+                        className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                        to={`${Router.thread(thread)}`}
+                      >
+                        {" "}
+                        - ({thread.replyCount}) -{" "}
+                        {truncate(thread.subject || thread.op.comment, {
+                          length: 32,
+                        })}{" "}
+                        {thread.isLocked ? "🔒" : ""}{" "}
+                        {thread.isPinned ? "📌" : ""}
+                      </Link>
+                    </div>
+                  );
+                })}
+              </div>
+              <div>
+                <div className="text-xs">
+                  [
+                  <button
+                    className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                    onClick={onRefresh}
+                  >
+                    Refresh
+                  </button>
+                  ]
+                </div>
               </div>
             </div>
-          </div>
-        ) : (
-          "No posts are being watched. Use the 👁 button on threads to keep track of them here."
-        )}
-      </div>
-    </details>
+          ) : (
+            "No posts are being watched. Use the 👁 button on threads to keep track of them here."
+          )}
+        </div>
+      </details>
+    </span>
   ) : (
     <span />
   );

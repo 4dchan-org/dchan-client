@@ -8,7 +8,7 @@ interface BoardListData {
   boards: Board[];
 }
 
-interface BoardListVars {}
+interface BoardListVars { }
 
 export default function HeaderNavigation() {
   const { data } = useQuery<BoardListData, BoardListVars>(
@@ -18,7 +18,7 @@ export default function HeaderNavigation() {
 
   const boards = data?.boards;
   return (
-    <div className="text-sm py-1 border-solid border-secondary border-0 border-b-2">
+    <div className="text-sm p-1 border-solid border-secondary border-0 border-b-2 text-left">
       [
       <Link
         className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
@@ -28,15 +28,18 @@ export default function HeaderNavigation() {
       </Link>
       ]
       <span className="text-black text-opacity-50">
+        <span className="hidden lg:inline-block">
+          [
+          {!!boards &&
+            boards.map((board) => (
+              <span className="dchan-navigation-board" key={board.id}>
+                <wbr />
+                <BoardLink board={board} />
+              </span>
+            ))}
+          ]
+        </span>
         [
-        {!!boards &&
-          boards.map((board) => (
-            <span className="dchan-navigation-board" key={board.id}>
-              <wbr/>
-              <BoardLink board={board} />
-            </span>
-          ))}
-        ][
         <Link
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
           to="/_/boards"
