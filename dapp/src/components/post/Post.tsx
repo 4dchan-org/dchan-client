@@ -129,15 +129,12 @@ function Post({
         ref={postRef}
       >
         <summary
-          className="text-left opacity-50 z-10 whitespace-nowrap max-w-95vw overflow-hidden mb-1"
+          className="text-left opacity-50 z-10 whitespace-nowrap max-w-95vw overflow-hidden mb-1 flex center"
           title="Hide/Show"
         >
           <PostHeader thread={thread} post={post}>
             {header}
           </PostHeader>
-          <span>
-            {sanitize(thread?.subject || comment, { allowedTags: [] })}
-          </span>
         </summary>
         <article
           id={`${n}`}
