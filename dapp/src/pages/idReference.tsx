@@ -11,9 +11,11 @@ import {
   ThreadCreationEvent,
 } from "dchan";
 import SEARCH_BY_ID from "graphql/queries/search_by_id";
+import SEARCH_BY_ID_BLOCK from "graphql/queries/search_by_id_block";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
+import { parse as parseQueryString } from "query-string";
 
 interface IdSearchData {
   boardCreationEvent: BoardCreationEvent;
@@ -25,18 +27,24 @@ interface IdSearchData {
 }
 interface IdSearchVars {
   id: string;
+  block?: number;
 }
 
-export default function IdReferencePage({ match: { params } }: any) {
+export default function IdReferencePage({ location, match: { params } }: any) {
   const [error, setError] = useState<string>();
   const history = useHistory();
 
   const id = `0x${params.id}`;
+  const query = parseQueryString(location.search);
+  const queriedBlock = parseInt(`${query.block}`)
+  const isTimeTraveling = !isNaN(queriedBlock);
 
-  console.log({ id })
+  console.log({ id, queriedBlock })
 
-  const { data } = useQuery<IdSearchData, IdSearchVars>(SEARCH_BY_ID, {
-    variables: { id },
+  const graphQuery = isTimeTraveling ? SEARCH_BY_ID_BLOCK : SEARCH_BY_ID;
+
+  const { data } = useQuery<IdSearchData, IdSearchVars>(graphQuery, {
+    variables: { id, block: isTimeTraveling ? queriedBlock : undefined },
     pollInterval: 5_000,
   });
 
@@ -61,12 +69,14 @@ export default function IdReferencePage({ match: { params } }: any) {
         post = postCreationEvent.post;
       }
 
+      let queriedBlockUrl = isTimeTraveling ? `?block=${queriedBlock}` : "";
+
       if (board) {
-        location = `${Router.board(board)}`;
+        location = `${Router.board(board)}${queriedBlockUrl}`;
       } else if (thread) {
-        location = `${Router.thread(thread)}`;
+        location = `${Router.thread(thread)}${queriedBlockUrl}`;
       } else if (post) {
-        location = `${Router.post(post)}`;
+        location = `${Router.post(post)}${queriedBlockUrl}`;
       }
 
       if ((board || thread || post) && !location) {
@@ -79,7 +89,7 @@ export default function IdReferencePage({ match: { params } }: any) {
         history.replace(location);
       }
     }
-  }, [history, data]);
+  }, [history, data, isTimeTraveling, queriedBlock]);
 
   return (
     <div className="bg-primary center grid w-screen h-screen">

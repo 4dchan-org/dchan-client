@@ -14,7 +14,7 @@ import { useLocation } from "react-router";
 export default function BoardHeader({
   board
 }: {
-  board: Board | undefined
+  board: Board | undefined | null
 }) {
   const search = useLocation().search
   const { accounts } = useWeb3()
@@ -44,9 +44,13 @@ export default function BoardHeader({
             )}
           </span>{" "}
           <span className="font-semibold">
-            <Link to={board ? `/${board.name}/${board.id}${search}` : "#"}>
-              /{board?.name || "?"}/ - {board?.title || "..."}
-            </Link>
+            {board === null ? (
+              <div>/?/ - ?????</div>
+            ) : (
+              <Link to={board ? `/${board.name}/${board.id}${search}` : "#"}>
+                /{board?.name || "?"}/ - {board?.title || "..."}
+              </Link>
+            )}
           </span>
           {board && isJanny ? (
             <span>

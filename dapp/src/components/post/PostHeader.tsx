@@ -13,6 +13,7 @@ import {
   unlockThread,
   unpinThread,
 } from "dchan/operations";
+import useBlockNumber from "hooks/useBlockNumber";
 import usePubSub from "hooks/usePubSub";
 import useSettings from "hooks/useSettings";
 import useUser from "hooks/useUser";
@@ -47,6 +48,7 @@ export default function PostHeader({
   const { isJannyOf } = useUser();
   const isOwner = accounts.length > 0 && accounts[0] === address;
   const [status, setStatus] = useState<string | object>();
+  const block = useBlockNumber();
 
   const createdAt = fromBigInt(createdAtUnix);
   const relativeTime = createdAt.toRelative();
@@ -253,7 +255,7 @@ export default function PostHeader({
         ""
       )}
       <span className="px-0.5 text-xs opacity-50 hover:opacity-100">
-        <Link to={`/${post.id}`} title="Permalink">
+        <Link to={`/${post.id}${block ? `?block=${block}` : ""}`} title="Permalink">
           🔗
         </Link>
       </span>

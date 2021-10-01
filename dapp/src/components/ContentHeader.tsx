@@ -27,7 +27,7 @@ export default function ContentHeader({
   summary,
   onRefresh,
 }: {
-  board?: Board;
+  board?: Board | null;
   thread?: Thread;
   search?: string;
   baseUrl?: string;
@@ -60,7 +60,11 @@ export default function ContentHeader({
     <div>
       <BoardHeader board={board}></BoardHeader>
 
-      {!!thread || !!board ? <FormPost baseUrl={baseUrl} thread={thread} board={board} /> : <Loading />}
+      {board === null
+       ? ""
+       : (thread || board)
+       ? <FormPost baseUrl={baseUrl} thread={thread} board={board} />
+       : <Loading />}
 
       <div className="p-2">
         <hr></hr>
