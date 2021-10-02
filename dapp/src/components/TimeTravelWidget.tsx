@@ -66,6 +66,7 @@ export default function TimeTravelWidget({
   const { lastBlock } = useLastBlock();
   const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
   const [traveledBlock, setTraveledBlock] = useState<Block | undefined>();
+  const [prevQueriedBlock, setPrevQueriedBlock] = useState<string | null>(queriedBlock);
   const [timeTraveledToDate, setTimeTraveledToDate] = useState<
     DateTime | undefined
   >(dateTime);
@@ -101,6 +102,7 @@ export default function TimeTravelWidget({
             ? `${baseUrl}?block=${b.number}`
             : undefined;
 
+          setPrevQueriedBlock(b.number);
           url && history.replace(url);
           setTimeTraveledToNumber(`${b.number}`);
           changeBlock(b);
@@ -118,6 +120,7 @@ export default function TimeTravelWidget({
           : `${baseUrl}`
         : undefined;
 
+      setPrevQueriedBlock(block);
       url && history.replace(url);
 
       if (block) {
@@ -135,6 +138,17 @@ export default function TimeTravelWidget({
   );
 
   useEffect(() => {
+    if (queriedBlock !== prevQueriedBlock) {
+      // out of sync with URL
+      setPrevQueriedBlock(queriedBlock);
+      if (queriedBlock) {
+        setTimeTraveledToNumber(queriedBlock);
+        changeNumber(queriedBlock);
+      } else {
+        travelToLatest();
+      }
+      return;
+    }
     if (!block && lastBlock && traveledBlock !== lastBlock) {
       // not time traveling
       // move traveledBlock forward to keep in sync with latest
