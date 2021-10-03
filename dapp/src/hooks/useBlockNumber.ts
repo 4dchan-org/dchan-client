@@ -1,13 +1,6 @@
-import useBlockParam from "hooks/useBlockParam";
+import { useLocation } from "react-router";
 
 export default function useBlockNumber() {
-  const block = useBlockParam();
-  let queriedBlock: number | undefined;
-  if (block) {
-    queriedBlock = parseInt(block);
-    if (isNaN(queriedBlock)) {
-      queriedBlock = undefined;
-    }
-  }
-  return queriedBlock;
+  const location = useLocation();
+  return new URLSearchParams(location.search).get('block') || undefined;
 }

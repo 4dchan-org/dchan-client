@@ -58,19 +58,22 @@ export default function TimeTravelWidget({
   startRangeLabel: string;
   baseUrl: string;
 }) { 
-  const queriedBlock = useBlockNumber();
+  let queriedBlock = useBlockNumber();
+  if (queriedBlock && isNaN(parseInt(queriedBlock))) {
+    queriedBlock = undefined;
+  }
   const now = DateTime.now();
   const history = useHistory();
   const { lastBlock } = useLastBlock();
   const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
   const [traveledBlock, setTraveledBlock] = useState<Block | undefined>();
-  const [prevQueriedBlock, setPrevQueriedBlock] = useState<number | undefined>(queriedBlock);
+  const [prevQueriedBlock, setPrevQueriedBlock] = useState<string | undefined>(queriedBlock);
   const [timeTraveledToDate, setTimeTraveledToDate] = useState<
     DateTime | undefined
   >(dateTime);
   const [timeTraveledToNumber, setTimeTraveledToNumber] = useState<
     string | undefined
-  >(queriedBlock ? `${queriedBlock}` : undefined);
+  >(queriedBlock);
 
   const changeBlock = useCallback(
     (block: Block) => {
@@ -100,7 +103,7 @@ export default function TimeTravelWidget({
             ? `${baseUrl}?block=${b.number}`
             : undefined;
 
-          setPrevQueriedBlock(parseInt(b.number));
+          setPrevQueriedBlock(b.number);
           url && history.replace(url);
           setTimeTraveledToNumber(`${b.number}`);
           changeBlock(b);
@@ -118,7 +121,7 @@ export default function TimeTravelWidget({
           : `${baseUrl}`
         : undefined;
 
-      setPrevQueriedBlock(block ? parseInt(block) : undefined);
+      setPrevQueriedBlock(block);
       url && history.replace(url);
 
       if (block) {
@@ -140,8 +143,8 @@ export default function TimeTravelWidget({
       // out of sync with URL
       setPrevQueriedBlock(queriedBlock);
       if (queriedBlock) {
-        setTimeTraveledToNumber(`${queriedBlock}`);
-        changeNumber(`${queriedBlock}`);
+        setTimeTraveledToNumber(queriedBlock);
+        changeNumber(queriedBlock);
       } else {
         travelToLatest();
       }
@@ -166,7 +169,6 @@ export default function TimeTravelWidget({
     }
   }, [
     queriedBlock,
-    prevQueriedBlock,
     traveledBlock,
     changeDate,
     changeNumber,
@@ -244,7 +246,7 @@ export default function TimeTravelWidget({
   const isTimeTraveling = !!(
     queriedBlock &&
     lastBlock &&
-    `${queriedBlock}` !== lastBlock?.number
+    queriedBlock !== lastBlock?.number
   );
 
   return timeTravelRange ? (
