@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
 import { parse as parseQueryString } from "query-string";
+import useBlockNumber from "hooks/useBlockNumber";
 
 interface IdSearchData {
   boardCreationEvent: BoardCreationEvent;
@@ -35,16 +36,21 @@ export default function IdReferencePage({ location, match: { params } }: any) {
   const history = useHistory();
 
   const id = `0x${params.id}`;
-  const query = parseQueryString(location.search);
-  const queriedBlock = parseInt(`${query.block}`)
-  const isTimeTraveling = !isNaN(queriedBlock);
+  const block = useBlockNumber();
+  let queriedBlock: number | undefined;
+  if (block) {
+    queriedBlock = parseInt(block);
+    if (isNaN(queriedBlock)) {
+      queriedBlock = undefined;
+    }
+  }
 
   console.log({ id, queriedBlock })
 
-  const graphQuery = isTimeTraveling ? SEARCH_BY_ID_BLOCK : SEARCH_BY_ID;
+  const graphQuery = queriedBlock ? SEARCH_BY_ID_BLOCK : SEARCH_BY_ID;
 
   const { data } = useQuery<IdSearchData, IdSearchVars>(graphQuery, {
-    variables: { id, block: isTimeTraveling ? queriedBlock : undefined },
+    variables: { id, block: queriedBlock ? queriedBlock : undefined },
     pollInterval: 5_000,
   });
 
@@ -69,7 +75,7 @@ export default function IdReferencePage({ location, match: { params } }: any) {
         post = postCreationEvent.post;
       }
 
-      let queriedBlockUrl = isTimeTraveling ? `?block=${queriedBlock}` : "";
+      let queriedBlockUrl = queriedBlock ? `?block=${queriedBlock}` : "";
 
       if (board) {
         location = `${Router.board(board)}${queriedBlockUrl}`;
@@ -89,7 +95,7 @@ export default function IdReferencePage({ location, match: { params } }: any) {
         history.replace(location);
       }
     }
-  }, [history, data, isTimeTraveling, queriedBlock]);
+  }, [history, data, queriedBlock]);
 
   return (
     <div className="bg-primary center grid w-screen h-screen">

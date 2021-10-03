@@ -128,7 +128,6 @@ export default function BoardPage({ location, match: { params } }: any) {
       <div>
         <ContentHeader
           board={board}
-          block={queriedBlock}
           dateTime={dateTime}
           baseUrl={board ? Router.board(board, boardMode) : undefined}
           summary={

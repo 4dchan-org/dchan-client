@@ -70,7 +70,6 @@ export default function PostSearchPage({ location, match: { params } }: any) {
     <div className="bg-primary min-h-100vh" data-theme={"blueboard"}>
       <ContentHeader
         dateTime={dateTime}
-        block={block}
         search={search}
         baseUrl={Router.posts()}
         summary={
