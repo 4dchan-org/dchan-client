@@ -5,6 +5,11 @@ const BOARD_GET = gql`
   ${BOARD_FRAGMENT}
   
   query BoardGet($board: String!, $block: Int!) {
+    boardRef(id: $board, block: {number: $block}) {
+      board {
+        ...Board
+      }
+    }
     board(id: $board, block: {number: $block}) {
       ...Board
     }

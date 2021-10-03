@@ -27,7 +27,6 @@ type PostCreateData = {
     comment: string;
     sage?: boolean;
     file?: {
-        byte_size: number;
         ipfs: {
             hash: string;
         };
@@ -59,8 +58,16 @@ export async function postMessage(
 
     let file: IpfsUploadResult | undefined;
     if (input.file.length > 0) {
+        setStatus({
+            progress: "Uploading file...",
+        })
+
         file = await upload(input.file, setStatus);
         if (!file) {
+            setStatus({
+                error: "Upload failed",
+            })
+
             return;
         }
     }

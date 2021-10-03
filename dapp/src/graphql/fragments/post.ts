@@ -31,7 +31,6 @@ const POST_FRAGMENT = gql`
     image {
       id
       name
-      byteSize
       ipfsHash
       score
       isSpoiler

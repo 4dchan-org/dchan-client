@@ -9,17 +9,17 @@ const SEARCH_BY_ID = gql`
   ${POST_FRAGMENT}
 
   query SearchById($id: String!) {
-    boardCreationEvent(id: $id) {
+    boardRef(id: $id) {
       board {
         ...Board
       }
     }
-    threadCreationEvent(id: $id) {
+    threadRef(id: $id) {
       thread {
         ...Thread
       }
     }
-    postCreationEvent(id: $id) {
+    postRef(id: $id) {
       post {
         ...Post
       }

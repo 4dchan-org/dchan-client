@@ -21,7 +21,6 @@ export default function BoardHeader({
   const { isJannyOf } = useUser()
   const isJanny = board ? isJannyOf(board.id) : false
   const [status, setStatus] = useState<string | object>();
-  console.log({search})
 
   return (
     <header id="board-header">

@@ -1,4 +1,4 @@
-dchan
+dchan-client
 -----
 Official client for the [dchan.network](https://dchan.network) decentralized imageboard.
 

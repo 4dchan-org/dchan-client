@@ -5,8 +5,7 @@ export type IpfsUploadResult = {
     ipfs: {
         hash: string;
     };
-    name: string;
-    byte_size: number;
+    name: string
 };
 
 export async function upload(
@@ -24,7 +23,7 @@ export async function upload(
                 let formData = new FormData();
                 formData.append("file", file);
                 const ipfsResponse = await fetch(
-                    Config.ipfs.endpoint,
+                    `${Config.ipfs.endpoint}/add`,
                     { method: "POST", body: formData, referrer: "" }
                 );
 
@@ -38,8 +37,7 @@ export async function upload(
                         ipfs: {
                             hash: ipfs.Hash,
                         },
-                        name: ipfs.Name,
-                        byte_size: parseInt(ipfs.Size),
+                        name: ipfs.Name
                     };
                 } else {
                     if (ipfs.error) {

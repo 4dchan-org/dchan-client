@@ -156,7 +156,7 @@ export default function FormPost({
       !!thread && !!addFavorite && addFavorite(thread)
       setIsSending(true);
 
-      let result = null;
+      let result: { error?: any, success?: any, events?: any } | null = null;
       try {
         result = await postMessage(data, accounts, setStatus);
       } catch (error) {
@@ -167,6 +167,7 @@ export default function FormPost({
           result.error.message.match(/failed.*check.*transaction.*receipt/i)
         ) {
           delete result.error;
+          result.success = true;
         }
 
         setStatus(result);
@@ -180,9 +181,9 @@ export default function FormPost({
         resetForm();
       }
 
-      const events = result?.events;
-      if (events && events.Message) {
-        const { transactionHash, logIndex } = events.Message;
+      const evtMessage = result?.events?.Message;
+      if (evtMessage) {
+        const { transactionHash, logIndex } = evtMessage;
         const url = `/${transactionHash}-${logIndex}`;
         history.push(url);
       }
@@ -543,82 +544,82 @@ export default function FormPost({
                             disabled={formDisabled}
                             onChange={onFileChange}
                           />
-                          {!!files && files.length > 0 ? (
-                            <div className="flex">
-                              {!!thumbnailB64 ? (
-                                <details className="mx-0.5" open={true}>
-                                  <summary>🖼</summary>
-                                  <img
-                                    alt=""
-                                    className="max-h-24 max-w-24"
-                                    src={thumbnailB64}
-                                  ></img>
-                                  <span
-                                    className={`text-xs ${fileSize > 1000 ? "text-contrast" : ""}`}
-                                  >
-                                    {Math.round(fileSize)} kb
-                                  </span>
-                                </details>
-                              ) : (
-                                ""
-                              )}
-                              <span>
-                                <button
-                                  className="dchan-input-file-rename mx-0.5"
-                                  title="Rename file"
-                                  type="button"
-                                  onClick={fileRename}
+                          <div className="flex">
+                            {!!thumbnailB64 ? (
+                              <details className="mx-0.5" open={true}>
+                                <summary>🖼</summary>
+                                <img
+                                  alt=""
+                                  className="max-h-24 max-w-16rem"
+                                  src={thumbnailB64} />
+                                <span
+                                  className={`text-xs ${fileSize > 1000 ? "text-contrast" : ""}`}
                                 >
-                                  ✎
-                                </button>
-                                <button
-                                  className="dchan-input-file-remove mx-0.5"
-                                  title="Remove file"
-                                  type="button"
-                                  onClick={fileRemove}
-                                >
-                                  ❌
-                                </button>
-                              </span>
-                              <details className="mx-0.5">
-                                <summary className="marker-closed-hide">
-                                  ⚙️
-                                </summary>
-                                <div>
-                                  <input
-                                    id="dchan-input-is_spoiler"
-                                    className="mx-1"
-                                    type="checkbox"
-                                    {...register("is_spoiler")}
-                                    disabled={formDisabled}
-                                  />
-                                  <label
-                                    htmlFor="dchan-input-is_spoiler"
-                                    className="text-black font-weight-800 font-family-tahoma"
-                                  >
-                                    Spoiler
-                                  </label>
-                                </div>
-                                <div>
-                                  <input
-                                    id="dchan-input-is_nsfw"
-                                    className="mx-1"
-                                    type="checkbox"
-                                    {...register("is_nsfw")}
-                                    disabled={formDisabled}
-                                  />
-                                  <label
-                                    htmlFor="dchan-input-is_nsfw"
-                                    className="text-black font-weight-800 font-family-tahoma"
-                                  >
-                                    NSFW
-                                  </label>
-                                </div>
+                                  {Math.round(fileSize)} kb
+                                </span>
                               </details>
-                            </div>
-                          ) : (
-                            ""
-                          )}
+                            ) : (
+                              ""
+                            )}
+                            {!!files && files.length > 0 ? (
+                              <div className="flex">
+                                <span>
+                                  <button
+                                    className="dchan-input-file-rename mx-0.5"
+                                    title="Rename file"
+                                    type="button"
+                                    onClick={fileRename}
+                                  >
+                                    ✎
+                                  </button>
+                                  <button
+                                    className="dchan-input-file-remove mx-0.5"
+                                    title="Remove file"
+                                    type="button"
+                                    onClick={fileRemove}
+                                  >
+                                    ❌
+                                  </button>
+                                </span>
+                                <details className="mx-0.5">
+                                  <summary className="marker-closed-hide">
+                                    ⚙️
+                                  </summary>
+                                  <div>
+                                    <input
+                                      id="dchan-input-is_spoiler"
+                                      className="mx-1"
+                                      type="checkbox"
+                                      {...register("is_spoiler")}
+                                      disabled={formDisabled}
+                                    />
+                                    <label
+                                      htmlFor="dchan-input-is_spoiler"
+                                      className="text-black font-weight-800 font-family-tahoma"
+                                    >
+                                      Spoiler
+                                    </label>
+                                  </div>
+                                  <div>
+                                    <input
+                                      id="dchan-input-is_nsfw"
+                                      className="mx-1"
+                                      type="checkbox"
+                                      {...register("is_nsfw")}
+                                      disabled={formDisabled}
+                                    />
+                                    <label
+                                      htmlFor="dchan-input-is_nsfw"
+                                      className="text-black font-weight-800 font-family-tahoma"
+                                    >
+                                      NSFW
+                                    </label>
+                                  </div>
+                                </details>
+                              </div>) : (
+                              ""
+                            )}
+                          </div>
                         </div>
                       </td>
                       {errors.file && (

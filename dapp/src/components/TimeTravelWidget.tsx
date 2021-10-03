@@ -114,7 +114,7 @@ export default function TimeTravelWidget({
   );
 
   const changeNumber = useCallback(
-    (block: string) => {
+    async (block: string) => {
       const url = !!baseUrl
         ? !!block
           ? `${baseUrl}?block=${block}`
@@ -125,12 +125,11 @@ export default function TimeTravelWidget({
       url && history.replace(url);
 
       if (block) {
-        queryBlockByNumber(block).then(result => {
-          const b = result.data?.blocks?.[0];
-          if (b != null) {
-            changeBlock(b);
-          }
-        });
+        const result = await queryBlockByNumber(block)
+        const b = result.data?.blocks?.[0];
+        if (b != null) {
+          changeBlock(b);
+        }
       } else {
         travelToLatest();
       }
@@ -139,6 +138,7 @@ export default function TimeTravelWidget({
   );
 
   useEffect(() => {
+    console.log({queriedBlock, prevQueriedBlock})
     if (queriedBlock !== prevQueriedBlock) {
       // out of sync with URL
       setPrevQueriedBlock(queriedBlock);
@@ -175,6 +175,7 @@ export default function TimeTravelWidget({
     travelToLatest,
     timeTraveledToDate,
     timeTraveledToNumber,
+    prevQueriedBlock,
     setPrevQueriedBlock,
     lastBlock
   ]);
@@ -200,7 +201,7 @@ export default function TimeTravelWidget({
     [changeNumber]
   );
 
-  const onNumberChange = useCallback(
+  const onBlockNumberChange = useCallback(
     (block: string) => {
       setTimeTraveledToNumber(block);
       debouncedNumberChange(block);
@@ -318,7 +319,7 @@ export default function TimeTravelWidget({
               type="range"
               min={parseInt(timeTravelRange.min.number)}
               max={parseInt(timeTravelRange.max.number)}
-              onChange={(e) => onNumberChange(e.target.value)}
+              onChange={(e) => onBlockNumberChange(e.target.value)}
               value={timeTraveledToNumber}
             />{" "}
             <span className="mx-1">Now</span>

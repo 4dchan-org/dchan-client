@@ -8,7 +8,6 @@ import { useCallback } from "react";
 import { ReactElement, useEffect, useRef, useState, memo } from "react";
 import PostBody from "./PostBody";
 import PostHeader from "./PostHeader";
-import sanitize from "sanitize-html";
 import { isEqual } from "lodash";
 import useUser from "hooks/useUser";
 
@@ -39,7 +38,6 @@ function Post({
     n,
     image,
     bans,
-    comment,
   } = post;
 
   const onFocus = useCallback(() => {
@@ -181,12 +179,18 @@ function Post({
                             omission: "...",
                           })}
                         </a>
-                        <span className="px-1">
+                        {/* <span className="px-1">
                           ({Math.trunc(parseInt(image.byteSize) * 0.001)}kb)
-                        </span>
-                        <span className="px-1 text-gray-400 hover:text-gray-600 hidden sm:inline-block">
+                        </span> */}
+                        <a
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-1 text-gray-400 hover:text-gray-600 hidden sm:inline-block"
+                          href={ipfsUrl}
+                          title={image.name}
+                        >
                           <small>{image.ipfsHash}</small>
-                        </span>
+                        </a>
                       </span>
                     </span>
                   </div>
@@ -240,6 +244,14 @@ function Post({
                     </span>
                   </div>
                   {children}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-1 text-xs text-gray-300 hover:text-gray-400 hidden sm:inline-block absolute bottom-0 right-0"
+                    href={`/${post.id}`}
+                  >
+                    <small>{post.id}</small>
+                  </a>
                 </div>
               </div>
             )}

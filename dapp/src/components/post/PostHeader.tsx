@@ -183,82 +183,91 @@ export default function PostHeader({
             <span></span>
           )}
         </span>
-        {accounts && accounts[0] ? (
           <Menu>
             <div>
               <Link to={`/${post.id}${block ? `?block=${block}` : ""}`} title="Permalink">
                 🔗 Permalink
               </Link>
             </div>
-            {canLock ? (
-              <div>
-                {thread && thread.isLocked ? (
-                  <span>
-                    <input name="lock" type="hidden" value="false"></input>
-                    <button onClick={() => unlockThread(id, accounts, setStatus)}>
-                      🔓 Unlock
-                    </button>
-                  </span>
-                ) : (
-                  <span>
-                    <input name="lock" type="hidden" value="true"></input>
-                    <button onClick={() => lockThread(id, accounts, setStatus)}>
-                      🔒 Lock
-                    </button>
-                  </span>
-                )}
-              </div>
-            ) : (
-              ""
-            )}
-            {canPin ? (
-              <div>
-                {thread && thread.isPinned ? (
-                  <span>
-                    <input name="sticky" type="hidden" value="false"></input>
-                    <button onClick={() => unpinThread(id, accounts, setStatus)}>
-                      📌 Unpin
-                    </button>
-                  </span>
-                ) : (
-                  <span>
-                    <input name="sticky" type="hidden" value="true"></input>
-                    <button onClick={() => pinThread(id, accounts, setStatus)}>
-                      📌 Pin
-                    </button>
-                  </span>
-                )}
-              </div>
-            ) : (
-              ""
-            )}
-            {canRemove ? (
-              <div>
-                <button onClick={() => removePost(id, accounts, setStatus)}>
-                  ❌ Remove
-                </button>
-              </div>
-            ) : (
-              ""
-            )}
-            {canBan ? (
-              <div>
-                <button onClick={() => banPost(id, accounts, setStatus)}>
-                  🔫 Ban
-                </button>
-              </div>
-            ) : (
-              ""
-            )}
             <div>
-              <button onClick={() => reportPost(id, accounts, setStatus)}>
-                ⚠️ Report
-              </button>
+              <a href={`https://polygonscan.com/tx/${post.id}`} title="TX Details" target="_blank" rel="noreferrer">
+                🔍 TX Details
+              </a>
             </div>
+            <div>
+              <Link to={`${Router.post(post)}?block=${post.createdAtBlock.number}`}>
+                ⏱️ Time travel to
+              </Link>
+            </div>
+            {accounts && accounts[0] ? 
+              <div>
+                {canLock ? (
+                  <div>
+                    {thread && thread.isLocked ? (
+                      <span>
+                        <input name="lock" type="hidden" value="false"></input>
+                        <button onClick={() => unlockThread(id, accounts, setStatus)}>
+                          🔓 Unlock
+                        </button>
+                      </span>
+                    ) : (
+                      <span>
+                        <input name="lock" type="hidden" value="true"></input>
+                        <button onClick={() => lockThread(id, accounts, setStatus)}>
+                          🔒 Lock
+                        </button>
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  ""
+                )}
+                {canPin ? (
+                  <div>
+                    {thread && thread.isPinned ? (
+                      <span>
+                        <input name="sticky" type="hidden" value="false"></input>
+                        <button onClick={() => unpinThread(id, accounts, setStatus)}>
+                          📌 Unpin
+                        </button>
+                      </span>
+                    ) : (
+                      <span>
+                        <input name="sticky" type="hidden" value="true"></input>
+                        <button onClick={() => pinThread(id, accounts, setStatus)}>
+                          📌 Pin
+                        </button>
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  ""
+                )}
+                {canRemove ? (
+                  <div>
+                    <button onClick={() => removePost(id, accounts, setStatus)}>
+                      ❌ Remove
+                    </button>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {canBan ? (
+                  <div>
+                    <button onClick={() => banPost(id, accounts, setStatus)}>
+                      🔫 Ban
+                    </button>
+                  </div>
+                ) : (
+                  ""
+                )}
+                <div>
+                  <button onClick={() => reportPost(id, accounts, setStatus)}>
+                    ⚠️ Report
+                  </button>
+                </div>
+              </div> : ""}
           </Menu>
-        ) : (
-          ""
-        )}
       </span>
       {children}
       <span className="dchan-backlinks text-left text-sm flex flex-wrap">

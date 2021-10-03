@@ -4,24 +4,23 @@ import Loading from "components/Loading";
 import StillStuck from "components/StillStuck";
 import {
   Board,
-  BoardCreationEvent,
+  BoardRef,
   Post,
-  PostCreationEvent,
+  PostRef,
   Thread,
-  ThreadCreationEvent,
+  ThreadRef,
 } from "dchan";
 import SEARCH_BY_ID from "graphql/queries/search_by_id";
 import SEARCH_BY_ID_BLOCK from "graphql/queries/search_by_id_block";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
-import { parse as parseQueryString } from "query-string";
 import useBlockNumber from "hooks/useBlockNumber";
 
 interface IdSearchData {
-  boardCreationEvent: BoardCreationEvent;
-  threadCreationEvent: ThreadCreationEvent;
-  postCreationEvent: PostCreationEvent;
+  boardRef: BoardRef;
+  threadRef: ThreadRef;
+  postRef: PostRef;
   board: Board;
   thread: Thread;
   post: Post;
@@ -31,7 +30,7 @@ interface IdSearchVars {
   block?: number;
 }
 
-export default function IdReferencePage({ location, match: { params } }: any) {
+export default function IdReferencePage({ match: { params } }: any) {
   const [error, setError] = useState<string>();
   const history = useHistory();
 
@@ -45,8 +44,6 @@ export default function IdReferencePage({ location, match: { params } }: any) {
     }
   }
 
-  console.log({ id, queriedBlock })
-
   const graphQuery = queriedBlock ? SEARCH_BY_ID_BLOCK : SEARCH_BY_ID;
 
   const { data } = useQuery<IdSearchData, IdSearchVars>(graphQuery, {
@@ -59,20 +56,20 @@ export default function IdReferencePage({ location, match: { params } }: any) {
       let location = null;
 
       let {
-        boardCreationEvent,
-        threadCreationEvent,
-        postCreationEvent,
+        boardRef,
+        threadRef,
+        postRef,
         board,
         thread,
         post,
       } = data;
 
-      if (!board && boardCreationEvent) {
-        board = boardCreationEvent.board;
-      } else if (!thread && threadCreationEvent) {
-        thread = threadCreationEvent.thread;
-      } else if (!post && postCreationEvent) {
-        post = postCreationEvent.post;
+      if (!board && boardRef) {
+        board = boardRef.board;
+      } else if (!thread && threadRef) {
+        thread = threadRef.thread;
+      } else if (!post && postRef) {
+        post = postRef.post;
       }
 
       let queriedBlockUrl = queriedBlock ? `?block=${queriedBlock}` : "";
@@ -109,7 +106,7 @@ export default function IdReferencePage({ location, match: { params } }: any) {
           <div className="text-xs">{id}</div>
           <div>
             <StillStuck><span>{id.indexOf("-") !== -1
-              ? "The requested content is (probably) still being indexed, please wait..."
+              ? "The content is being indexed, please wait..."
               : "Are you sure it's a valid ID?"}</span></StillStuck>
           </div>
         </div>

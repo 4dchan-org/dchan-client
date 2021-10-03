@@ -22,7 +22,7 @@ export type Board = {
     jannies: BoardJanny[]
 }
 
-export type BoardCreationEvent = {
+export type BoardRef = {
     id: string,
     board: Board
 }
@@ -48,7 +48,7 @@ export type Thread = {
     score: string
 }
 
-export type ThreadCreationEvent = {
+export type ThreadRef = {
     id: string,
     thread: Thread
 }
@@ -68,7 +68,7 @@ export type Post = {
     sage: boolean
 }
 
-export type PostCreationEvent = {
+export type PostRef = {
     id: string,
     post: Post
 }
@@ -102,7 +102,6 @@ export type User = {
 export type Image = {
     id: string,
     name: string,
-    byteSize: string,
     ipfsHash: string,
     isNsfw: boolean,
     isSpoiler: boolean,

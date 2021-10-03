@@ -2,7 +2,7 @@ import Footer from "components/Footer";
 import useLastBlock from "hooks/useLastBlock";
 import { parse as parseQueryString } from "query-string";
 import { DateTime } from "luxon";
-import { Board, Thread } from "dchan";
+import { Board, BoardRef, Thread } from "dchan";
 import { useEffect, useMemo } from "react";
 import { Router } from "router";
 import BOARD_CATALOG from "graphql/queries/board_catalog";
@@ -32,6 +32,7 @@ interface BoardCatalogVars {
 
 interface BoardData {
   board: Board;
+  boardRef: BoardRef;
 }
 interface BoardVars {
   board: string;
@@ -80,6 +81,7 @@ export default function BoardPage({ location, match: { params } }: any) {
     BoardData,
     BoardVars
   >(BOARD_GET, {
+    skip: !block,
     variables: {
       board: board_id,
       block
@@ -87,6 +89,7 @@ export default function BoardPage({ location, match: { params } }: any) {
   });
 
   const board: Board | undefined | null = boardData?.board;
+  const boardRef: BoardRef | undefined | null = boardData?.boardRef;
   const threads = useMemo(
     () => [...(catalogData?.pinned || []), ...(catalogData?.threads || [])],
     [catalogData]
@@ -95,6 +98,10 @@ export default function BoardPage({ location, match: { params } }: any) {
   useEffect(() => {
     board && board.name !== board_name && history.replace(`/${board.id}`);
   }, [board, board_name, history])
+
+  useEffect(() => {
+    !board && boardRef?.board?.id && history.replace(`/${boardRef.board.id}`);
+  }, [board, boardRef, history])
 
   useEffect(() => {
     refetch();
