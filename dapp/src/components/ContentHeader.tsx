@@ -16,13 +16,13 @@ import FilterSettings from "./settings/FilterSettings";
 import { Link } from "react-router-dom";
 import WatchedThreadsWidget from "./WatchedThreadsWidget";
 import Loading from "./Loading";
+import useBlockNumber from "hooks/useBlockNumber";
 
 export default function ContentHeader({
   board,
   thread,
   search,
   baseUrl,
-  block,
   dateTime,
   summary,
   onRefresh,
@@ -32,7 +32,6 @@ export default function ContentHeader({
   search?: string;
   baseUrl?: string;
   summary: ReactElement;
-  block?: number;
   dateTime?: DateTime;
   onRefresh: () => void;
 }) {
@@ -45,9 +44,10 @@ export default function ContentHeader({
     );
   }, [thread, board, setStartBlock]);
 
+  const queriedBlock = useBlockNumber();
   let timeTravelParameters: {block?: string, date?: string} = {};
-  if (block) {
-    timeTravelParameters.block = `${block}`;
+  if (queriedBlock) {
+    timeTravelParameters.block = `${queriedBlock}`;
   }
   if (dateTime != null) {
     timeTravelParameters.date = dateTime.toISODate();
@@ -78,7 +78,6 @@ export default function ContentHeader({
               baseUrl={baseUrl || ""}
               startBlock={startBlock}
               dateTime={dateTime}
-              block={block}
               startRangeLabel={
                 thread ? "Thread creation" : board ? "Board creation" : "?"
               }
@@ -123,7 +122,7 @@ export default function ContentHeader({
             <Anchor to="#bottom" label="Bottom" />
           </span>
 
-          {!block || (lastBlock && `${lastBlock.number}` === `${block}`) ? (
+          {!queriedBlock || (lastBlock && `${lastBlock.number}` === queriedBlock) ? (
             <RefreshWidget onRefresh={throttledRefresh} />
           ) : (
             ""

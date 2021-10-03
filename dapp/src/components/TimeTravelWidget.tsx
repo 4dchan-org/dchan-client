@@ -9,7 +9,8 @@ import { DateTime } from "luxon";
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
-import { useLocation } from "react-router";
+import useBlockNumber from "hooks/useBlockNumber";
+
 export interface TimeTravelRange {
   min: Block;
   max: Block;
@@ -49,29 +50,30 @@ function queryBlockByNumber(block: string): Promise<ApolloQueryResult<BlockData>
 export default function TimeTravelWidget({
   startBlock,
   dateTime,
-  block,
   startRangeLabel,
   baseUrl,
 }: {
   startBlock?: Block;
   dateTime?: DateTime;
-  block?: number;
   startRangeLabel: string;
   baseUrl: string;
-}) {
-  const search = useLocation().search;  
-  const queriedBlock = new URLSearchParams(search).get('block');
+}) { 
+  let queriedBlock = useBlockNumber();
+  if (queriedBlock && isNaN(parseInt(queriedBlock))) {
+    queriedBlock = undefined;
+  }
   const now = DateTime.now();
   const history = useHistory();
   const { lastBlock } = useLastBlock();
   const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
   const [traveledBlock, setTraveledBlock] = useState<Block | undefined>();
+  const [prevQueriedBlock, setPrevQueriedBlock] = useState<string | undefined>(queriedBlock);
   const [timeTraveledToDate, setTimeTraveledToDate] = useState<
     DateTime | undefined
   >(dateTime);
   const [timeTraveledToNumber, setTimeTraveledToNumber] = useState<
     string | undefined
-  >(block ? `${block}` : queriedBlock || undefined);
+  >(queriedBlock);
 
   const changeBlock = useCallback(
     (block: Block) => {
@@ -101,6 +103,7 @@ export default function TimeTravelWidget({
             ? `${baseUrl}?block=${b.number}`
             : undefined;
 
+          setPrevQueriedBlock(b.number);
           url && history.replace(url);
           setTimeTraveledToNumber(`${b.number}`);
           changeBlock(b);
@@ -118,6 +121,7 @@ export default function TimeTravelWidget({
           : `${baseUrl}`
         : undefined;
 
+      setPrevQueriedBlock(block);
       url && history.replace(url);
 
       if (block) {
@@ -135,7 +139,18 @@ export default function TimeTravelWidget({
   );
 
   useEffect(() => {
-    if (!block && lastBlock && traveledBlock !== lastBlock) {
+    if (queriedBlock !== prevQueriedBlock) {
+      // out of sync with URL
+      setPrevQueriedBlock(queriedBlock);
+      if (queriedBlock) {
+        setTimeTraveledToNumber(queriedBlock);
+        changeNumber(queriedBlock);
+      } else {
+        travelToLatest();
+      }
+      return;
+    }
+    if (!queriedBlock && lastBlock && traveledBlock !== lastBlock) {
       // not time traveling
       // move traveledBlock forward to keep in sync with latest
       travelToLatest();
@@ -153,13 +168,14 @@ export default function TimeTravelWidget({
       }
     }
   }, [
-    block,
+    queriedBlock,
     traveledBlock,
     changeDate,
     changeNumber,
     travelToLatest,
     timeTraveledToDate,
     timeTraveledToNumber,
+    setPrevQueriedBlock,
     lastBlock
   ]);
 
@@ -228,9 +244,9 @@ export default function TimeTravelWidget({
   );
 
   const isTimeTraveling = !!(
-    block &&
+    queriedBlock &&
     lastBlock &&
-    `${block}` !== lastBlock?.number
+    queriedBlock !== lastBlock?.number
   );
 
   return timeTravelRange ? (

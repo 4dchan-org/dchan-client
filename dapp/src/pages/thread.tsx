@@ -125,7 +125,6 @@ export default function ThreadPage({ location, match: { params } }: any) {
       <ContentHeader
         board={board}
         thread={thread}
-        block={block}
         dateTime={dateTime}
         baseUrl={thread ? Router.thread(thread) : undefined}
         summary={
