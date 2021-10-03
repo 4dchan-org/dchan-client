@@ -13,7 +13,7 @@ import {
   unlockThread,
   unpinThread,
 } from "dchan/operations";
-import useBlockNumber from "hooks/useBlockNumber";
+import useBlockParam from "hooks/useBlockParam";
 import usePubSub from "hooks/usePubSub";
 import useSettings from "hooks/useSettings";
 import useUser from "hooks/useUser";
@@ -48,7 +48,7 @@ export default function PostHeader({
   const { isJannyOf } = useUser();
   const isOwner = accounts.length > 0 && accounts[0] === address;
   const [status, setStatus] = useState<string | object>();
-  const block = useBlockNumber();
+  const block = useBlockParam();
 
   const createdAt = fromBigInt(createdAtUnix);
   const relativeTime = createdAt.toRelative();

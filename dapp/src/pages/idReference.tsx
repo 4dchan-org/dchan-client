@@ -12,11 +12,10 @@ import {
 } from "dchan";
 import SEARCH_BY_ID from "graphql/queries/search_by_id";
 import SEARCH_BY_ID_BLOCK from "graphql/queries/search_by_id_block";
+import useBlockNumber from "hooks/useBlockNumber";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
-import { parse as parseQueryString } from "query-string";
-import useBlockNumber from "hooks/useBlockNumber";
 
 interface IdSearchData {
   boardCreationEvent: BoardCreationEvent;
@@ -36,14 +35,7 @@ export default function IdReferencePage({ location, match: { params } }: any) {
   const history = useHistory();
 
   const id = `0x${params.id}`;
-  const block = useBlockNumber();
-  let queriedBlock: number | undefined;
-  if (block) {
-    queriedBlock = parseInt(block);
-    if (isNaN(queriedBlock)) {
-      queriedBlock = undefined;
-    }
-  }
+  const queriedBlock = useBlockNumber();
 
   console.log({ id, queriedBlock })
 

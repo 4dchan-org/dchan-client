@@ -16,7 +16,7 @@ import FilterSettings from "./settings/FilterSettings";
 import { Link } from "react-router-dom";
 import WatchedThreadsWidget from "./WatchedThreadsWidget";
 import Loading from "./Loading";
-import useBlockNumber from "hooks/useBlockNumber";
+import useBlockParam from "hooks/useBlockParam";
 
 export default function ContentHeader({
   board,
@@ -44,7 +44,7 @@ export default function ContentHeader({
     );
   }, [thread, board, setStartBlock]);
 
-  const queriedBlock = useBlockNumber();
+  const queriedBlock = useBlockParam();
   let timeTravelParameters: {block?: string, date?: string} = {};
   if (queriedBlock) {
     timeTravelParameters.block = `${queriedBlock}`;
