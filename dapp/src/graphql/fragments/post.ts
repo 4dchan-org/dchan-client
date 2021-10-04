@@ -1,30 +1,33 @@
 import { gql } from "apollo-boost";
+import USER_FRAGMENT from "./user";
 
 const POST_FRAGMENT = gql`
+  ${USER_FRAGMENT}
+
   fragment Post on Post{
     id
     n
     from {
-      id
-      address
+      ...User
     }
     thread {
       board {
         id
         name
+        isNsfw
       }
       id
       n
       op {
         from {
-          id
-          address
+          ...User
         }
       }
     }
     board {
       id
       name
+      isNsfw
     }
     name
     comment

@@ -20,6 +20,7 @@ const THREAD_FRAGMENT = gql`
     board {
       id
       name
+      isNsfw
     }
     subject
     replyCount

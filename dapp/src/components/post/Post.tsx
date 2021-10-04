@@ -10,6 +10,8 @@ import PostBody from "./PostBody";
 import PostHeader from "./PostHeader";
 import { isEqual } from "lodash";
 import useUser from "hooks/useUser";
+import { Link } from "react-router-dom";
+import useBlockNumber from "hooks/useBlockNumber";
 
 function Post({
   children,
@@ -17,12 +19,14 @@ function Post({
   thread,
   header,
   enableBacklinks = false,
+  showNsfw = false
 }: {
   children?: any;
   post: DchanPost;
   thread?: Thread;
   header?: ReactElement;
   enableBacklinks?: boolean;
+  showNsfw?: boolean
 }) {
   const { data: userData } = useUser()
   const [showAnyway, setShowAnyway] = useState<boolean>(false);
@@ -116,7 +120,8 @@ function Post({
     !bIsLowScore ||
     settings?.content_filter?.show_below_threshold ||
     showAnyway;
-  
+  const block = useBlockNumber();
+
   return (
     <div className="flex">
       {!isOp ? <span className="hidden md:block pl-2 text-secondary">&gt;&gt;</span> : ""}
@@ -199,18 +204,17 @@ function Post({
                 )}
                 <div className="y-1">
                   <div
-                    className={`h-full max-w-max flex flex-wrap text-left sm:items-start ${
-                      isOp ? `max-w-100vw pb-2` : "max-w-90vw"
+                    className={`h-full max-w-max flex flex-wrap text-left sm:items-start pb-1 ${
+                      isOp ? `max-w-100vw` : "max-w-90vw"
                     }`}
                   >
-
                     <span className="w-full">
                       {!!image ? (
                         <div className="overflow-auto float-left mx-5 mb-2">
                           <IPFSImage
                             hash={image.ipfsHash}
                             isSpoiler={image.isSpoiler}
-                            isNsfw={image.isNsfw}
+                            isNsfw={(!showNsfw && (image.isNsfw || post.board?.isNsfw)) || false}
                             thumbnail={true}
                             thumbnailClass={isOp ? "max-w-8rem max-h-32 md:max-w-16rem md:max-h-64" : undefined}
                             expandable={true}
@@ -244,14 +248,11 @@ function Post({
                     </span>
                   </div>
                   {children}
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    className="px-1 text-xs opacity-10 hover:opacity-100 hidden sm:inline-block absolute bottom-0 right-0"
-                    href={`/${post.id}`}
-                  >
+                  <Link
+                    className="px-1 text-xs opacity-10 hover:opacity-100 absolute bottom-0 right-0"
+                    to={`/${post.id}${block ? `?block=${block}` : ""}`} title="Permalink">
                     <small>{post.id}</small>
-                  </a>
+                  </Link>
                 </div>
               </div>
             )}
