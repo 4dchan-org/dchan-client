@@ -68,12 +68,22 @@ export default function TimeTravelWidget({
   const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
   const [traveledBlock, setTraveledBlock] = useState<Block | undefined>();
   const [prevQueriedBlock, setPrevQueriedBlock] = useState<string | undefined>(queriedBlock);
-  const [timeTraveledToDate, setTimeTraveledToDate] = useState<
-    DateTime | undefined
-  >(dateTime);
-  const [timeTraveledToNumber, setTimeTraveledToNumber] = useState<
-    string | undefined
-  >(queriedBlock);
+  const [timeTraveledToDate, setTimeTraveledToDate] = useState<DateTime | undefined>(dateTime);
+  const [timeTraveledToNumber, setTimeTraveledToNumber] = useState<string | undefined>(queriedBlock);
+
+  // this should be set to true only when prevQueriedBlock and the URL are
+  // being written to, as the first of the two actions triggers
+  // a parallel rerender of the component and causes a race condition
+  // where the other action effectively doesn't happen, thus either breaking
+  // time travel or causing each travel to perform two queries unnecessarily
+  //
+  // setting this value to true causes the component to allow prevQueriedBlock
+  // to be out of sync with the url, as it knows it's in an incomplete state, so
+  // the second render will effectively do nothing
+  //
+  // if you find a way to prevent this parallel rerender from occuring, feel
+  // free to remove this god-awful hack
+  const [writingState, setWritingState] = useState<boolean>(false);
 
   const changeBlock = useCallback(
     (block: Block) => {
@@ -103,41 +113,46 @@ export default function TimeTravelWidget({
             ? `${baseUrl}?block=${b.number}`
             : undefined;
 
+          setWritingState(true);
+          setPrevQueriedBlock(b.number);
           url && history.replace(url);
+          setWritingState(false);
           setTimeTraveledToNumber(`${b.number}`);
           changeBlock(b);
         }
       });
     },
-    [changeBlock, setTimeTraveledToNumber, history, baseUrl]
+    [changeBlock, setTimeTraveledToNumber, history, baseUrl, setWritingState]
   );
 
   const changeNumber = useCallback(
-    async (block: string) => {
+    (block: string) => {
       const url = !!baseUrl
         ? !!block
           ? `${baseUrl}?block=${block}`
           : `${baseUrl}`
         : undefined;
 
+      setWritingState(true);
+      setPrevQueriedBlock(block || undefined);
       url && history.replace(url);
+      setWritingState(false);
 
       if (block) {
-        const result = await queryBlockByNumber(block)
-        const b = result.data?.blocks?.[0];
-        if (b != null) {
+        queryBlockByNumber(block).then((result) => {
+          const b = result.data?.blocks?.[0];
           changeBlock(b);
-        }
+        });
       } else {
         travelToLatest();
       }
     },
-    [changeBlock, baseUrl, history, travelToLatest]
+    [changeBlock, baseUrl, history, travelToLatest, setPrevQueriedBlock, setWritingState]
   );
 
   useEffect(() => {
     console.log({queriedBlock, prevQueriedBlock})
-    if (queriedBlock !== prevQueriedBlock) {
+    if (queriedBlock !== prevQueriedBlock && !writingState) {
       // out of sync with URL
       setPrevQueriedBlock(queriedBlock);
       if (queriedBlock) {
