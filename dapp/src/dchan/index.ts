@@ -93,6 +93,7 @@ export type Admin = {
 
 export type User = {
     id: string,
+    b58id: string,
     address: string,
     name: string,
     jannies: BoardJanny[],

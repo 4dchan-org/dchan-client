@@ -1,6 +1,9 @@
 import { gql } from "apollo-boost";
+import USER_FRAGMENT from "./user";
 
 const BOARD_FRAGMENT = gql`
+  ${USER_FRAGMENT}
+
   fragment Board on Board{
     id
     title
@@ -20,7 +23,7 @@ const BOARD_FRAGMENT = gql`
     }
     jannies {
       user {
-        address
+        ...User
       }
     }
   }

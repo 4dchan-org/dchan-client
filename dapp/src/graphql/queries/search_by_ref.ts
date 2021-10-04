@@ -1,6 +1,9 @@
 import { gql } from "apollo-boost";
+import USER_FRAGMENT from "graphql/fragments/user";
 
 const SEARCH_BY_REF = gql`
+  ${USER_FRAGMENT}
+
   fragment Board on Board {
     id
     name
@@ -14,8 +17,7 @@ const SEARCH_BY_REF = gql`
     }
     op {
       from {
-        id
-        address
+        ...User
       }
     }
   }

@@ -1,6 +1,6 @@
-import AddressLabel from "components/AddressLabel";
 import Menu from "components/Menu";
 import Status from "components/Status";
+import UserLabel from "components/UserLabel"
 import { Post, sendTip, Thread } from "dchan";
 import { fromBigInt } from "dchan/entities/datetime";
 import { isLowScore } from "dchan/entities/post";
@@ -13,7 +13,6 @@ import {
   unlockThread,
   unpinThread,
 } from "dchan/operations";
-import useBlockNumber from "hooks/useBlockNumber";
 import usePubSub from "hooks/usePubSub";
 import useSettings from "hooks/useSettings";
 import useUser from "hooks/useUser";
@@ -48,7 +47,6 @@ export default function PostHeader({
   const { isJannyOf } = useUser();
   const isOwner = accounts.length > 0 && accounts[0] === address;
   const [status, setStatus] = useState<string | object>();
-  const block = useBlockNumber();
 
   const createdAt = fromBigInt(createdAtUnix);
   const relativeTime = createdAt.toRelative();
@@ -131,7 +129,7 @@ export default function PostHeader({
         </span>
       </span>
       <span className="px-1 whitespace-nowrap text-sm">
-        (ID: <AddressLabel etherscannable={true} address={address} />
+        (ID: <UserLabel user={post.from} />
         {provider ? (
           <button
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500 flex-grow opacity-50 hover:opacity-100"
@@ -184,11 +182,6 @@ export default function PostHeader({
           )}
         </span>
           <Menu>
-            <div>
-              <Link to={`/${post.id}${block ? `?block=${block}` : ""}`} title="Permalink">
-                🔗 Permalink
-              </Link>
-            </div>
             <div>
               <a href={`https://polygonscan.com/tx/${post.id}`} title="TX Details" target="_blank" rel="noreferrer">
                 🔍 TX Details

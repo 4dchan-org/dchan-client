@@ -1,11 +1,13 @@
-import AddressLabel from "components/AddressLabel";
 import { getBalance, isMaticChainId } from "dchan";
 import { useEffect, useState } from "react";
+import UserLabel from "components/UserLabel"
 import polygonLogo from "assets/images/polygon.png";
 import useWeb3 from "hooks/useWeb3";
+import useUser from "hooks/useUser";
 
 export default function WalletAccount() {
   const { provider, accounts, chainId } = useWeb3();
+  const user = useUser().data?.user
   const account = accounts[0];
   const [balance, setBalance] = useState<number>();
 
@@ -27,13 +29,13 @@ export default function WalletAccount() {
 
     return () => clearInterval(interval);
   }, [account]);
-
-  return provider && account && isMaticChainId(chainId) ? (
+  console.log({user})
+  return provider && account && user && isMaticChainId(chainId) ? (
     <div className="text-xs center grid">
       <div>
         <span className="px-1">Connected as</span>
         <span key={account}>
-          [<AddressLabel address={account}></AddressLabel>]
+          [<UserLabel user={user}/>]
         </span>
       </div>
       <div>
