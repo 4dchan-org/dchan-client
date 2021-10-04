@@ -19,7 +19,7 @@ function Post({
   thread,
   header,
   enableBacklinks = false,
-  showNsfw = true
+  showNsfw = false
 }: {
   children?: any;
   post: DchanPost;
@@ -214,7 +214,7 @@ function Post({
                           <IPFSImage
                             hash={image.ipfsHash}
                             isSpoiler={image.isSpoiler}
-                            isNsfw={(image.isNsfw && !post.board?.isNsfw) || false}
+                            isNsfw={(!showNsfw && (image.isNsfw || post.board?.isNsfw)) || false}
                             thumbnail={true}
                             thumbnailClass={isOp ? "max-w-8rem max-h-32 md:max-w-16rem md:max-h-64" : undefined}
                             expandable={true}

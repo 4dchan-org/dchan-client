@@ -147,6 +147,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
                   thread={thread}
                   key={post.id}
                   enableBacklinks={true}
+                  showNsfw={thread.board?.isNsfw}
                 />
               ))}
             </div>

@@ -1,4 +1,3 @@
-import AddressLabel from "components/AddressLabel";
 import Card from "components/Card";
 import SimpleFooter from "components/SimpleFooter";
 import { useTitle } from "react-use";
@@ -30,19 +29,31 @@ function TheGraph() {
   );
 }
 
+function Polygon() {
+  return (
+    <a
+      className="text-blue-600 visited:text-purple-600"
+      href="//polygon.network/"
+      target="_blank"
+      rel="noreferrer"
+    >
+      Polygon
+    </a>
+  );
+}
+
 export default function FAQPage() {
   useTitle(`FAQ - dchan.network`);
 
   return (
-    <div className="center grid w-full min-h-screen bg-primary">
-      <div className="grid bg-primary">
+    <div className="center grid min-h-screen bg-primary">
+      <div className="grid bg-primary max-w-xl">
         <Card title={<span>FAQ</span>}>
           <div className="text-left p-8 text-sm">
             <div className="pb-2">
               <strong>Q: What is this?</strong>
               <div>
-                This is dchan, a decentralized, uncensorable, time-traveling
-                imageboard.
+                This is dchan, a decentralized time-traveling imageboard.
               </div>
             </div>
 
@@ -50,30 +61,18 @@ export default function FAQPage() {
               <strong>Q: Decentralized?</strong>
               <div>
                 dchan is a Web3 imageboard whose posts and images are
-                respectively stored on Polygon's blockchain and on IPFS, using{" "}
+                respectively stored on <Polygon />'s blockchain and on IPFS, using{" "}
                 <TheGraph /> to index and serve the content in a decentralized
                 manner.
               </div>
             </div>
 
             <div className="pb-2">
-              <strong>Q: Uncensorable?</strong>
-              <div>
-                Since dchan users write their posts on the blockchain and upload
-                their images to IPFS, there is no way for anyone, including the
-                original poster and dchan's admins, to ever delete any of that
-                content. dchan's admins and janitors are able to remove any
-                offending content from view, but the content will still be
-                retrievable.
-              </div>
-            </div>
-
-            <div className="pb-2">
               <strong>Q: Time-Traveling?</strong>
               <div>
-                <TheGraph /> is capable of obtaining data as it was at any point
-                in time, and dchan makes use of this to allow you to read
-                dchan's boards and threads exactly as they were whenever in the
+                dchan's backend was built using <TheGraph />, which is capable of obtaining data as it was at any point
+                in time, allowing you to read
+                dchan's boards and threads exactly as they were, whenever in the
                 past. This also means that there is no need for an archive, as
                 it is already built in the protocol.
               </div>
@@ -84,48 +83,23 @@ export default function FAQPage() {
               <div>
                 dchan is a simple image-based bulletin board where anyone can
                 post comments, share images and create boards. It is heavily
-                inspired by 4chan, with the most fundamental difference being
-                that users are pseudonymous rather than anonymous.
-              </div>
-            </div>
-
-            <div className="pb-2">
-              <strong>Q: Pseudonymous users?</strong>
-              <div>
-                Since posts are written directly on the blockchain, they are
-                plainly tied to the address sending the transaction,
-                making it impossible to prevent other users from finding out
-                what address posted a specific post. Therefore, in order to avoid creating
-                a sense of false anonymity, dchan's posts publicize the poster's
-                address, effectively acting as the poster's unique public
-                pseudonym.
+                inspired by 4chan.
               </div>
             </div>
 
             <div className="pb-2">
               <strong>Q: Is it free?</strong>
               <div>
-                Yes, but you'll still need to pay the MATIC gas fee for your
-                interactions' transactions. If you don't have any but still want
-                to try it out, you can get some free MATIC from{" "}
+                Yes! You will need a crypto wallet to post, but you don't need to buy cryptocurrency.
+                A tiny bit of free MATIC from{" "}
                 <a
                   className="text-blue-600 visited:text-purple-600"
-                  href="https://matic.supply/"
+                  href="https://faucet.dchan.network/"
                   target="_blank"
                   rel="noreferrer"
                 >
                   the faucet
-                </a>
-                , which will let you post a couple times.
-              </div>
-            </div>
-
-            <div className="pb-2">
-              <strong>Q: Do you sell tokens?</strong>
-              <div>
-                dchan does not require any token to function (except MATIC for
-                sending txs), so no tokens are sold. For now.
-                tl;dr Token not needed.
+                </a> will let you post a couple times. (<Polygon />'s gas fee is a minuscule &lt;$0.0001 per tx).
               </div>
             </div>
 
@@ -146,33 +120,32 @@ export default function FAQPage() {
                 >
                   Trust Wallet
                 </a>{" "}
-                (if you're on Mobile). Connect your wallet to this website and then you'll be
-                able to post.
+                (if you're on Mobile). You'll need to connect your crypto wallet to interact with dchan.
+              </div>
+            </div>
+
+            <div className="pb-2">
+              <strong>Q: Do you sell tokens?</strong>
+              <div>
+                dchan does not require any token to function (except MATIC for
+                sending txs), so no tokens are sold. For now.
               </div>
             </div>
 
             <div className="pb-2">
               <strong>
-                Q: Why did you choose Polygon instead of *insert chain name
-                here*?
+                Q: Why did you choose <Polygon /> instead of *chain*?
               </strong>
               <div>
-                As I'm writing this (Sep. 2021), Polygon's L2 chain currently
-                offers the best compromise between security, speed and price per
-                tx. Other solutions might have been better for some reason, but
-                had a tradeoff that made them not viable. (For example,
-                Arbitrum's instantaneous transactions also cost 10000x more
-                compared to Polygon).
+                As I'm writing this (Sep. 2021), <Polygon />'s L2 chain offers the best compromise between security, speed and price per
+                tx. Other solutions had a tradeoff that made them not viable
               </div>
             </div>
 
             <div className="pb-2">
               <strong>Q: Why did you do this?</strong>
               <div>
-                dchan was born in a 4chan /biz/ thread after some anon pitched the
-                idea to use <TheGraph /> to create a decentralized imageboard.
-                It was mainly a technical challenge to see if it was possible.
-                And it was.
+                Some anon pitched the idea to use <TheGraph /> to create a decentralized imageboard, and badabing badaboom here we are.
               </div>
             </div>
 
@@ -195,9 +168,22 @@ export default function FAQPage() {
               </div>
             </div>
 
-            <div>
-              <strong>Q: Who are you?</strong>
-              <div>I am <AddressLabel address={"0x22a973417575E3EA73dD26220aeFe78c16742b33"} /></div>
+            <div className="pb-2">
+              <strong>
+                Q: Is this open source?
+              </strong>
+              <div>
+                Of course.
+                <br/>
+                <a
+                  className="text-blue-600 visited:text-purple-600"
+                  href="//github.com/dchan-network/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  GitHub
+                </a>
+              </div>
             </div>
           </div>
         </Card>

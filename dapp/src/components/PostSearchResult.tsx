@@ -7,7 +7,6 @@ export default function PostSearchResult({ post }: { post: Post }) {
   return (
     <div className="flex flex-wrap my-2">
       <PostComponent
-        showNsfw={false}
         key={post.id}
         post={post}
         header={
