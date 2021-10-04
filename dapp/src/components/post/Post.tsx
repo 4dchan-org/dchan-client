@@ -19,12 +19,14 @@ function Post({
   thread,
   header,
   enableBacklinks = false,
+  showNsfw = true
 }: {
   children?: any;
   post: DchanPost;
   thread?: Thread;
   header?: ReactElement;
   enableBacklinks?: boolean;
+  showNsfw?: boolean
 }) {
   const { data: userData } = useUser()
   const [showAnyway, setShowAnyway] = useState<boolean>(false);
@@ -119,7 +121,7 @@ function Post({
     settings?.content_filter?.show_below_threshold ||
     showAnyway;
   const block = useBlockNumber();
-  
+
   return (
     <div className="flex">
       {!isOp ? <span className="hidden md:block pl-2 text-secondary">&gt;&gt;</span> : ""}
@@ -212,7 +214,7 @@ function Post({
                           <IPFSImage
                             hash={image.ipfsHash}
                             isSpoiler={image.isSpoiler}
-                            isNsfw={image.isNsfw}
+                            isNsfw={(!showNsfw && (image.isNsfw || post.board?.isNsfw)) || false}
                             thumbnail={true}
                             thumbnailClass={isOp ? "max-w-8rem max-h-32 md:max-w-16rem md:max-h-64" : undefined}
                             expandable={true}

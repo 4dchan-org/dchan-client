@@ -14,6 +14,7 @@ const POST_FRAGMENT = gql`
       board {
         id
         name
+        isNsfw
       }
       id
       n
@@ -26,6 +27,7 @@ const POST_FRAGMENT = gql`
     board {
       id
       name
+      isNsfw
     }
     name
     comment

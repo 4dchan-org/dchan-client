@@ -29,7 +29,7 @@ export default function WalletAccount() {
 
     return () => clearInterval(interval);
   }, [account]);
-  console.log({user})
+
   return provider && account && user && isMaticChainId(chainId) ? (
     <div className="text-xs center grid">
       <div>

@@ -135,7 +135,7 @@ const CatalogThread = ({
                   expandable={false}
                   thumbnail={false}
                   isSpoiler={isSpoiler}
-                  isNsfw={isNsfw || thread.board?.isNsfw || false}
+                  isNsfw={(isNsfw && !thread.board?.isNsfw) || false}
                 />
               </div>
             ) : (

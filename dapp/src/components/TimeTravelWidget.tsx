@@ -136,7 +136,6 @@ export default function TimeTravelWidget({
   );
 
   useEffect(() => {
-    console.log({queriedBlock, prevQueriedBlock})
     if (queriedBlock !== prevQueriedBlock) {
       // out of sync with URL
       setPrevQueriedBlock(queriedBlock);

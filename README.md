@@ -14,12 +14,10 @@ Required:
 
 ## Start development
 - `./bin/docker_setup.sh` (only 1st time)
-- `./bin/docker_bash.sh`
-- In the docker container
-    - `./bin/yarn_start.sh`
+- `./bin/docker_dev.sh`
 
 ## Serve production build
-- `./bin/docker_deploy.sh`
+- `./bin/docker_release.sh`
 - `http://localhost:8080`
 
 # Links
