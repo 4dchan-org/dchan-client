@@ -185,7 +185,7 @@ function Post({
                         <a
                           target="_blank"
                           rel="noreferrer"
-                          className="px-1 text-gray-400 hover:text-gray-600 hidden sm:inline-block"
+                          className="px-1 opacity-20 hover:opacity-100  hidden sm:inline-block"
                           href={ipfsUrl}
                           title={image.name}
                         >
@@ -247,7 +247,7 @@ function Post({
                   <a
                     target="_blank"
                     rel="noreferrer"
-                    className="px-1 text-xs text-gray-300 hover:text-gray-400 hidden sm:inline-block absolute bottom-0 right-0"
+                    className="px-1 text-xs opacity-10 hover:opacity-100 hidden sm:inline-block absolute bottom-0 right-0"
                     href={`/${post.id}`}
                   >
                     <small>{post.id}</small>

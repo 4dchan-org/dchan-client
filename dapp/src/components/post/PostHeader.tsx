@@ -146,7 +146,7 @@ export default function PostHeader({
         )
       </span>
       <span className="px-0.5 whitespace-nowrap text-sm" title={relativeTime !== null ? relativeTime : undefined}>
-        {formattedDate} <span className="text-xs px-1 text-gray-400 hover:text-gray-600 hidden sm:inline-block">[<Link title={`Time travel to ${formattedDate}`}
+        {formattedDate} <span className="text-xs px-1 opacity-20 hover:opacity-100  hidden sm:inline-block">[<Link title={`Time travel to ${formattedDate}`}
           to={`${Router.post(post)}?block=${post.createdAtBlock.number}`}>{createdAt.toRelative()}</Link>]</span>
       </span>
       <span className="whitespace-nowrap">
