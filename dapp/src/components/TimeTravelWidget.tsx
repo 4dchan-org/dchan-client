@@ -103,7 +103,6 @@ export default function TimeTravelWidget({
             ? `${baseUrl}?block=${b.number}`
             : undefined;
 
-          setPrevQueriedBlock(b.number);
           url && history.replace(url);
           setTimeTraveledToNumber(`${b.number}`);
           changeBlock(b);
@@ -121,7 +120,6 @@ export default function TimeTravelWidget({
           : `${baseUrl}`
         : undefined;
 
-      setPrevQueriedBlock(block);
       url && history.replace(url);
 
       if (block) {
