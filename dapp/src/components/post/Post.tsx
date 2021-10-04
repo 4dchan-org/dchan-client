@@ -204,7 +204,7 @@ function Post({
                 )}
                 <div className="y-1">
                   <div
-                    className={`h-full max-w-max flex flex-wrap text-left sm:items-start pb-2 ${
+                    className={`h-full max-w-max flex flex-wrap text-left sm:items-start pb-1 ${
                       isOp ? `max-w-100vw` : "max-w-90vw"
                     }`}
                   >
@@ -214,7 +214,7 @@ function Post({
                           <IPFSImage
                             hash={image.ipfsHash}
                             isSpoiler={image.isSpoiler}
-                            isNsfw={(!showNsfw && (image.isNsfw || post.board?.isNsfw)) || false}
+                            isNsfw={(image.isNsfw && !post.board?.isNsfw) || false}
                             thumbnail={true}
                             thumbnailClass={isOp ? "max-w-8rem max-h-32 md:max-w-16rem md:max-h-64" : undefined}
                             expandable={true}
