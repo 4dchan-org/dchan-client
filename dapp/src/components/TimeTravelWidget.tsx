@@ -189,7 +189,8 @@ export default function TimeTravelWidget({
     timeTraveledToNumber,
     prevQueriedBlock,
     setPrevQueriedBlock,
-    lastBlock
+    lastBlock,
+    writingState
   ]);
 
   useEffect(() => {

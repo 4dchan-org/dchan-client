@@ -47,7 +47,7 @@ export default function WalletAccount() {
               alt="MATIC"
               src={polygonLogo} />
             )
-            {balance !== undefined && balance < 0.0005 ? (
+            {balance !== undefined && balance < 0.001 ? (
               <div className="p-4">
                 <div>Need Matic?</div>
                 <div>
