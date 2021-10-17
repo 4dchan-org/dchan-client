@@ -5,6 +5,7 @@ import usePubSub from 'hooks/usePubSub';
 import useWeb3 from 'hooks/useWeb3';
 import { isEqual } from "lodash";
 import { Router } from "router";
+import { Link } from "react-router-dom";
 
 function TextQuote({
   children,
@@ -26,13 +27,13 @@ function TextQuote({
 
 function Reference({link, children}: {link: string; children: string | string[]}) {
   return (
-    <a
+    <Link
       className="dchan-postref"
-      href={link}
+      to={link}
     >
       <wbr/>
       <span className="whitespace-nowrap">&gt;&gt;{children}</span>
-    </a>
+    </Link>
   );
 }
 
@@ -100,9 +101,9 @@ function PostReference({
   const isCrossThread = thread && !refPost;
 
   return (
-    <a
+    <Link
       className="dchan-postref"
-      href={`${isCrossThread ? "#/" : baseUrl}${postLink}${block ? `?block=${block}` : ""}`}
+      to={`${isCrossThread ? "/" : baseUrl}${postLink}${block ? `?block=${block}` : ""}`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
@@ -113,7 +114,7 @@ function PostReference({
       {isOp ? " (OP)" : ""}
       {isYou ? " (You)" : ""}
       {isCrossThread ? " (Cross-thread)" : ""}
-    </a>
+    </Link>
   );
 }
 
@@ -179,11 +180,11 @@ function renderValue(val: ParserResult, post: Post, thread?: Thread, block?: str
     case "textquote":
       return <TextQuote post={post} thread={thread} block={block} key={val.key}>{val.value}</TextQuote>;
     case "ref":
-      return <Reference link={`#/${val.id}${block ? `?block=${block}` : ""}`} key={val.key}>{val.id}</Reference>;
+      return <Reference link={`/${val.id}${block ? `?block=${block}` : ""}`} key={val.key}>{val.id}</Reference>;
     case "postref":
       return <PostReference post={post} thread={thread} block={block} value={val} key={val.key} />;
     case "boardref":
-      return <Reference link={`#/${val.id}${block ? `?block=${block}` : ""}`} key={val.key}>{val.board}{val.id}</Reference>;
+      return <Reference link={`/${val.id}${block ? `?block=${block}` : ""}`} key={val.key}>{val.board}{val.id}</Reference>;
     case "spoiler":
       return <Spoiler post={post} thread={thread} block={block} key={val.key}>{val.value}</Spoiler>;
   }
