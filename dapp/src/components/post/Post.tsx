@@ -236,6 +236,7 @@ function Post({
                         className="md:ml-10 ml-5 mr-5 py-2 mb-2"
                         post={post}
                         thread={thread}
+                        block={block}
                       />
 
                       {bans.length > 0 ? (
