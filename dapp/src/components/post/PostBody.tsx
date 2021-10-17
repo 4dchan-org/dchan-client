@@ -96,13 +96,13 @@ function PostReference({
   const { accounts } = useWeb3();
 
   const isOp = thread && refPost && thread.op.id === refPost.id;
-
   const isYou = accounts && accounts[0] && refPost && accounts[0] === refPost.from.address;
+  const isCrossThread = thread && !refPost;
 
   return (
     <a
       className="dchan-postref"
-      href={`#${baseUrl}${postLink}${block ? `?block=${block}` : ""}`}
+      href={`${isCrossThread ? "#/" : baseUrl}${postLink}${block ? `?block=${block}` : ""}`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
@@ -112,6 +112,7 @@ function PostReference({
       </span>
       {isOp ? " (OP)" : ""}
       {isYou ? " (You)" : ""}
+      {isCrossThread ? " (Cross-thread)" : ""}
     </a>
   );
 }
