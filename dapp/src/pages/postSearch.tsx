@@ -35,6 +35,7 @@ export default function PostSearchPage({ location, match: { params } }: any) {
     ? DateTime.fromISO(query.date as string)
     : undefined;
   const block = parseInt(`${query.block || lastBlock?.number || ""}`);
+  const isTimeTraveling = query.block && `${query.block}` !== lastBlock?.number;
   const [settings] = useSettings();
 
   const variables = {
@@ -72,6 +73,7 @@ export default function PostSearchPage({ location, match: { params } }: any) {
         dateTime={dateTime}
         search={search}
         baseUrl={Router.posts()}
+        block={isTimeTraveling ? `${block}` : undefined}
         summary={
           results ? (
             <span>
@@ -103,6 +105,7 @@ export default function PostSearchPage({ location, match: { params } }: any) {
                   <PostComponent
                     key={post.id}
                     post={post}
+                    block={isTimeTraveling ? `${block}` : undefined}
                     header={
                       <span>
                         <span className="p-1">

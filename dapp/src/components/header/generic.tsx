@@ -1,10 +1,10 @@
 import HeaderNavigation from "components/header/HeaderNavigation"
 import HeaderLogo from "components/header/logo"
 
-const GenericHeader = ({title}: {title: string}) => (
+const GenericHeader = ({title, block}: {title: string, block?: string}) => (
     <header>
-        <HeaderNavigation></HeaderNavigation>
-        <HeaderLogo></HeaderLogo>
+        <HeaderNavigation block={block} />
+        <HeaderLogo />
 
         <div className="text-4xl text-contrast font-weight-800 font-family-tahoma">
             {title}

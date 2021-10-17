@@ -5,12 +5,15 @@ import Card from "components/Card";
 import BOARDS_SEARCH from "graphql/queries/boards/search";
 import { useQuery } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
+import { parse as parseQueryString } from "query-string";
 
 export default function BoardListPage({
+  location,
   match: {
     params: { boardName: name },
   },
 }: any) {
+  const query = parseQueryString(location.search);
   const { data } = useQuery(BOARDS_SEARCH, {
     variables: { name },
     pollInterval: 30_000,
@@ -18,7 +21,7 @@ export default function BoardListPage({
 
   return (
     <div className="bg-primary min-h-100vh">
-      <GenericHeader title="Boards"></GenericHeader>
+      <GenericHeader title="Boards" block={query.block ? `${query.block}` : undefined} />
 
       <Link
         className="text-blue-600 visited:text-purple-600 hover:text-blue-500 py-1 px-4"

@@ -144,7 +144,7 @@ const CatalogThread = ({
             <div className="p-1">
               {showBoard && board ? (
                 <div>
-                  <BoardLink board={board} />
+                  <BoardLink board={board} block={block == null ? undefined : `${block}`} />
                 </div>
               ) : (
                 ""

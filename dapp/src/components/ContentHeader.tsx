@@ -16,13 +16,13 @@ import FilterSettings from "./settings/FilterSettings";
 import { Link } from "react-router-dom";
 import WatchedThreadsWidget from "./WatchedThreadsWidget";
 import Loading from "./Loading";
-import useBlockNumber from "hooks/useBlockNumber";
 
 export default function ContentHeader({
   board,
   thread,
   search,
   baseUrl,
+  block,
   dateTime,
   summary,
   onRefresh,
@@ -31,6 +31,7 @@ export default function ContentHeader({
   thread?: Thread;
   search?: string;
   baseUrl?: string;
+  block?: string;
   summary: ReactElement;
   dateTime?: DateTime;
   onRefresh: () => void;
@@ -44,10 +45,9 @@ export default function ContentHeader({
     );
   }, [thread, board, setStartBlock]);
 
-  const queriedBlock = useBlockNumber();
   let timeTravelParameters: {block?: string, date?: string} = {};
-  if (queriedBlock) {
-    timeTravelParameters.block = `${queriedBlock}`;
+  if (block) {
+    timeTravelParameters.block = `${block}`;
   }
   if (dateTime != null) {
     timeTravelParameters.date = dateTime.toISODate();
@@ -58,7 +58,7 @@ export default function ContentHeader({
 
   return (
     <div>
-      <BoardHeader board={board}></BoardHeader>
+      <BoardHeader board={board} block={block}></BoardHeader>
 
       {board === null
        ? ""
@@ -75,6 +75,7 @@ export default function ContentHeader({
           <summary></summary>
           <div className="bg-primary border border-solid border-secondary">
             <TimeTravelWidget
+              block={block}
               baseUrl={baseUrl || ""}
               startBlock={startBlock}
               dateTime={dateTime}
@@ -85,7 +86,7 @@ export default function ContentHeader({
             <hr />
             <SearchWidget baseUrl={Router.posts()} search={search} />
             <hr />
-            <WatchedThreadsWidget />
+            <WatchedThreadsWidget block={block}/>
           </div>
         </details>
       </div>
@@ -122,7 +123,7 @@ export default function ContentHeader({
             <Anchor to="#bottom" label="Bottom" />
           </span>
 
-          {!queriedBlock || (lastBlock && `${lastBlock.number}` === queriedBlock) ? (
+          {!block || (lastBlock && `${lastBlock.number}` === block) ? (
             <RefreshWidget onRefresh={throttledRefresh} />
           ) : (
             ""

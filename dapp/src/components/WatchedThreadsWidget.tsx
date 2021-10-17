@@ -10,7 +10,7 @@ import { Router } from "router";
 import BoardLink from "./BoardLink";
 import Loading from "./Loading";
 
-export default function WatchedThreadsWidget() {
+export default function WatchedThreadsWidget({ block }: { block?: string }) {
   const { favorites, removeFavorite } = useFavorites();
   const [open, setOpen] = useState<boolean>(false);
   const onClick = useCallback(() => setOpen(true), [setOpen]);
@@ -55,7 +55,7 @@ export default function WatchedThreadsWidget() {
                       <button onClick={() => onRemove(thread)}>✖</button>{" "}
                       {board ? (
                         <span>
-                          /<BoardLink board={board} />/
+                          <BoardLink board={board} block={block} />
                         </span>
                       ) : (
                         ""

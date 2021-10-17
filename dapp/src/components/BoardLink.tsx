@@ -1,11 +1,9 @@
 import { Board } from "dchan";
-import useBlockNumber from "hooks/useBlockNumber";
 import { Link } from "react-router-dom";
 import { Router } from "router";
 import IdLabel from "./IdLabel";
 
-export default function BoardLink({ board }: { board: Board }) {
-  const block = useBlockNumber();
+export default function BoardLink({ board, block }: { board: Board, block?: string }) {
   return (
     <Link
       title={board.title}

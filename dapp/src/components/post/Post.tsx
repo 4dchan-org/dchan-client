@@ -11,13 +11,13 @@ import PostHeader from "./PostHeader";
 import { isEqual } from "lodash";
 import useUser from "hooks/useUser";
 import { Link } from "react-router-dom";
-import useBlockNumber from "hooks/useBlockNumber";
 
 function Post({
   children,
   post,
   thread,
   header,
+  block,
   enableBacklinks = false,
   showNsfw = false
 }: {
@@ -25,6 +25,7 @@ function Post({
   post: DchanPost;
   thread?: Thread;
   header?: ReactElement;
+  block?: string;
   enableBacklinks?: boolean;
   showNsfw?: boolean
 }) {
@@ -120,7 +121,6 @@ function Post({
     !bIsLowScore ||
     settings?.content_filter?.show_below_threshold ||
     showAnyway;
-  const block = useBlockNumber();
 
   return (
     <div className="flex">
