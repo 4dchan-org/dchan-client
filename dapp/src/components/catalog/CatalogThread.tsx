@@ -78,7 +78,7 @@ const CatalogThread = ({
           isFocused
             ? {
                 maxWidth: "initial",
-                zIndex: 900,
+                zIndex: 40,
                 marginLeft: "-2rem",
                 marginRight: "-2rem",
                 width: "14rem",

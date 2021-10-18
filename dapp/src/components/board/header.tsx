@@ -1,6 +1,6 @@
 import HeaderNavigation from "components/header/HeaderNavigation";
 import HeaderLogo from "components/header/logo";
-import { Board } from "dchan";
+import { Board, Thread } from "dchan";
 import { Link } from "react-router-dom";
 import Status from "components/Status";
 import IdLabel from "components/IdLabel";
@@ -9,16 +9,23 @@ import { useState } from "react";
 import { lockBoard, removeBoard, unlockBoard } from "dchan/operations";
 import useUser from "hooks/useUser";
 import useWeb3 from "hooks/useWeb3";
-import { useLocation } from "react-router";
+import { DateTime } from "luxon";
 
 export default function BoardHeader({
+  block,
+  dateTime,
   board,
-  block
+  thread,
+  baseUrl,
+  search,
 }: {
-  board: Board | undefined | null;
   block?: string;
+  dateTime?: DateTime;
+  board?: Board | null;
+  thread?: Thread;
+  baseUrl?: string;
+  search?: string;
 }) {
-  const search = useLocation().search
   const { accounts } = useWeb3()
   const { isJannyOf } = useUser()
   const isJanny = board ? isJannyOf(board.id) : false
@@ -26,7 +33,14 @@ export default function BoardHeader({
 
   return (
     <header id="board-header">
-      <HeaderNavigation block={block}/>
+      <HeaderNavigation
+        block={block}
+        dateTime={dateTime}
+        board={board || undefined}
+        thread={thread}
+        baseUrl={baseUrl}
+        search={search}
+      />
 
       <HeaderLogo></HeaderLogo>
 
