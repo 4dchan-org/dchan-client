@@ -82,19 +82,26 @@ export default function HeaderNavigation({
             ⚙️
           </Link>
           ] */}
-          <span className="text-right">
-            <TimeTravelWidget
-              block={block}
-              baseUrl={baseUrl || ""}
-              startBlock={startBlock}
-              dateTime={dateTime}
-              startRangeLabel={
-                thread ? "Thread creation" : board ? "Board creation" : "?"
-              }
-            />
-            <SearchWidget baseUrl={Router.posts()} search={search} />
-            <WatchedThreadsWidget block={block}/>
-          </span>
+        </span>
+        <span className="text-right relative">
+          <details className="w-full relative">
+            <summary className="list-none cursor-pointer">
+              ⏱️
+            </summary>
+            <div className="absolute w-max top-full right-0 mt-1">
+              <TimeTravelWidget
+                block={block}
+                baseUrl={baseUrl || ""}
+                startBlock={startBlock}
+                dateTime={dateTime}
+                startRangeLabel={
+                  thread ? "Thread creation" : board ? "Board creation" : "?"
+                }
+              />
+            </div>
+          </details>{" "}
+          <SearchWidget baseUrl={Router.posts()} search={search} />{" "}
+          <WatchedThreadsWidget block={block}/>
         </span>
       </div>
     </div>

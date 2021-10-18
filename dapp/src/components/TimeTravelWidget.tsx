@@ -264,101 +264,65 @@ export default function TimeTravelWidget({
   );
 
   return timeTravelRange ? (
-    <span className="bg-primary">
-      <details className="mx-1 sm:text-right" open={isTimeTraveling}>
-        <summary className="list-none">
-          <span className="mx-1 text-xs">
-            {isTimeTraveling ? (
-              <abbr title="You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date.">
-                Time traveled to
-              </abbr>
-            ) : (
-              ""
-            )}
-          </span>
-          <span className="mx-1 text-xs text-left">
-            [
-            <input
-              required
-              type="date"
-              id="dchan-timetravel-date-input"
-              value={(isTimeTraveling && timeTraveledToDate
-                ? timeTraveledToDate
-                : now
-              ).toISODate()}
-              onChange={(e) => onDateChange(e.target.value)}
-              min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
-              max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
-            ></input>
-            ,{" "}
-            <span className="inline-block min-w-3rem">
-              {(isTimeTraveling && timeTraveledToDate
-                ? timeTraveledToDate
-                : now
-              ).toLocaleString(DateTime.TIME_SIMPLE)}
-            </span>
-            ]
-          </span>
-        </summary>
-        <span className="grid center text-xs">
-          <button
-            className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-            onClick={onInputBlockNumber}
-          >
-            {`Block #${timeTraveledToNumber || "?"}`}
-          </button>
+    <div className="bg-primary border border-secondary-accent">
+      <span className="grid center text-xs">
+        <button
+          className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+          onClick={onInputBlockNumber}
+        >
+          {`Block #${timeTraveledToNumber || "?"}`}
+        </button>
 
-          {isTimeTraveling ? (
-            <div className="text-xs">
-              [
-              <button
-                className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                onClick={onReturnToPresent}
-              >
-                Return to present
-              </button>
-              ]
-            </div>
-          ) : (
-            ""
-          )}
-        </span>
-        <div className="text-xs bg-primary">
-          <div className="grid grid-cols-4 center text-center">
-            <span className="mx-1">{startRangeLabel}</span>
-            <input
-              className="col-span-2"
-              id="timetravel"
-              type="range"
-              min={parseInt(timeTravelRange.min.number)}
-              max={parseInt(timeTravelRange.max.number)}
-              onChange={(e) => onBlockNumberChange(e.target.value)}
-              value={timeTraveledToNumber}
-            />{" "}
-            <span className="mx-1">Now</span>
+        {isTimeTraveling ? (
+          <div className="text-xs">
+            [
+            <button
+              className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+              onClick={onReturnToPresent}
+            >
+              Return to present
+            </button>
+            ]
           </div>
-          <div className="grid grid-cols-4 center text-center">
-            <span className="mx-1">
-              <div>
-                {fromBigInt(timeTravelRange.min.timestamp).toLocaleString(
-                  DateTime.DATETIME_SHORT
-                )}
-              </div>
-              <div>#{timeTravelRange.min.number}</div>
-            </span>
-            <span className="col-span-2" />
-            <span className="mx-1">
-              <div>
-                {fromBigInt(timeTravelRange.max.timestamp).toLocaleString(
-                  DateTime.DATETIME_SHORT
-                )}
-              </div>
-              <div>#{timeTravelRange.max.number}</div>
-            </span>
-          </div>
+        ) : (
+          ""
+        )}
+      </span>
+      <div className="text-xs bg-primary">
+        <div className="grid grid-cols-4 center text-center">
+          <span className="mx-1">{startRangeLabel}</span>
+          <input
+            className="col-span-2"
+            id="timetravel"
+            type="range"
+            min={parseInt(timeTravelRange.min.number)}
+            max={parseInt(timeTravelRange.max.number)}
+            onChange={(e) => onBlockNumberChange(e.target.value)}
+            value={timeTraveledToNumber}
+          />{" "}
+          <span className="mx-1">Now</span>
         </div>
-      </details>
-    </span>
+        <div className="grid grid-cols-4 center text-center">
+          <span className="mx-1">
+            <div>
+              {fromBigInt(timeTravelRange.min.timestamp).toLocaleString(
+                DateTime.DATETIME_SHORT
+              )}
+            </div>
+            <div>#{timeTravelRange.min.number}</div>
+          </span>
+          <span className="col-span-2" />
+          <span className="mx-1">
+            <div>
+              {fromBigInt(timeTravelRange.max.timestamp).toLocaleString(
+                DateTime.DATETIME_SHORT
+              )}
+            </div>
+            <div>#{timeTravelRange.max.number}</div>
+          </span>
+        </div>
+      </div>
+    </div>
   ) : (
     <span></span>
   );
