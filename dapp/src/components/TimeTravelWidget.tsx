@@ -361,6 +361,8 @@ export default function TimeTravelWidget({
       </div>
     </div>
   ) : (
-    <span></span>
+    <div className="bg-primary border border-secondary-accent p-1">
+      Cannot time travel here.
+    </div>
   );
 }
