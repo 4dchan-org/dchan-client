@@ -14,14 +14,14 @@ export default function LatestPostsCard() {
   });
 
   return (
-      <Card className="mx-auto" title={<span>Latest Posts</span>}>
-        <div>
-          {loading && !data ? (
-            <Loading />
-          ) : (
-            data?.posts?.map((post) => <PostSearchResult post={post} key={post.id} />)
-          )}
-        </div>
-      </Card>
+    <Card className="mx-auto" title={<span>Latest Posts</span>}>
+      <div>
+        {loading && !data ? (
+          <Loading />
+        ) : (
+          data?.posts?.map((post) => <PostSearchResult post={post} key={post.id} />)
+        )}
+      </div>
+    </Card>
   );
 }

@@ -15,7 +15,7 @@ import SEARCH_BY_ID_BLOCK from "graphql/queries/search_by_id_block";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
-import useBlockNumber from "hooks/useBlockNumber";
+import { parse as parseQueryString } from "query-string";
 
 interface IdSearchData {
   boardRef: BoardRef;
@@ -30,12 +30,13 @@ interface IdSearchVars {
   block?: number;
 }
 
-export default function IdReferencePage({ match: { params } }: any) {
+export default function IdReferencePage({ location, match: { params } }: any) {
   const [error, setError] = useState<string>();
   const history = useHistory();
 
   const id = `0x${params.id}`;
-  const block = useBlockNumber();
+  const query = parseQueryString(location.search);
+  const block = `${query.block}`;
   let queriedBlock: number | undefined;
   if (block) {
     queriedBlock = parseInt(block);

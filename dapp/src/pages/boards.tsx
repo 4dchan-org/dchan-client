@@ -68,7 +68,7 @@ export default function BoardListPage({ location, match: { params } }: any) {
 
   return (
     <div className="bg-primary min-h-100vh">
-      <GenericHeader title="Boards"></GenericHeader>
+      <GenericHeader title="Boards" block={query.block ? `${query.block}` : undefined} />
       <div>
         <div>
           <div className="flex center">

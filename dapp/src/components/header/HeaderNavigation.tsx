@@ -10,7 +10,7 @@ interface BoardListData {
 
 interface BoardListVars { }
 
-export default function HeaderNavigation() {
+export default function HeaderNavigation({ block } : { block?: string }) {
   const { data } = useQuery<BoardListData, BoardListVars>(
     BOARDS_LIST_MOST_POPULAR,
     { variables: {}, pollInterval: 30_000 }
@@ -34,7 +34,7 @@ export default function HeaderNavigation() {
             boards.map((board) => (
               <span className="dchan-navigation-board" key={board.id}>
                 <wbr />
-                <BoardLink board={board} />
+                <BoardLink board={board} block={block} />
               </span>
             ))}
           ]

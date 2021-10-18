@@ -137,6 +137,7 @@ export default function BoardPage({ location, match: { params } }: any) {
           board={board}
           dateTime={dateTime}
           baseUrl={board ? Router.board(board, boardMode) : undefined}
+          block={isNaN(queriedBlock) ? undefined : `${queriedBlock}`}
           summary={
             catalogLoading ? (
               <span>...</span>

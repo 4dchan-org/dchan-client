@@ -3,30 +3,51 @@ import parseComment, { ParserResult, PostReferenceValue } from 'dchan/postparse'
 import { ReactElement, useCallback, useEffect, useMemo, memo } from 'react';
 import usePubSub from 'hooks/usePubSub';
 import useWeb3 from 'hooks/useWeb3';
-import { isEqual, uniqueId } from "lodash";
+import { isEqual } from "lodash";
 import { Router } from "router";
+import { Link } from "react-router-dom";
 
-function TextQuote({children, post, thread}: {children: ParserResult[], post: Post, thread?: Thread}) {
+function TextQuote({
+  children,
+  post,
+  thread,
+  block
+}: {
+  children: ParserResult[];
+  post: Post;
+  thread?: Thread;
+  block?: string;
+}) {
   return (
     <span className="text-quote">
-      &gt;{children.map(v => renderValue(v, post, thread))}
+      &gt;{children.map(v => renderValue(v, post, thread, block))}
     </span>
   );
 }
 
 function Reference({link, children}: {link: string; children: string | string[]}) {
   return (
-    <a
+    <Link
       className="dchan-postref"
-      href={link}
+      to={link}
     >
       <wbr/>
       <span className="whitespace-nowrap">&gt;&gt;{children}</span>
-    </a>
+    </Link>
   );
 }
 
-function PostReference({post, thread, value}: {post: Post, thread?: Thread, value: PostReferenceValue}) {
+function PostReference({
+  post,
+  thread,
+  value,
+  block
+}: {
+  post: Post;
+  thread?: Thread;
+  value: PostReferenceValue;
+  block?: string;
+}) {
   const { publish } = usePubSub();
   const postLink = `${value.id}/${value.n}`;
 
@@ -76,26 +97,41 @@ function PostReference({post, thread, value}: {post: Post, thread?: Thread, valu
   const { accounts } = useWeb3();
 
   const isOp = thread && refPost && thread.op.id === refPost.id;
-
   const isYou = accounts && accounts[0] && refPost && accounts[0] === refPost.from.address;
+  const isCrossThread = thread && !refPost;
 
   return (
-    <a
+    <Link
       className="dchan-postref"
-      href={`#${baseUrl}${postLink}`}
+      to={`${isCrossThread ? "/" : baseUrl}${postLink}${block ? `?block=${block}` : ""}`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       <wbr/>
-      <span className="whitespace-nowrap">&gt;&gt;{postLink}</span>{isOp ? " (OP)" : ""}{isYou ? " (You)" : ""}
-    </a>
+      <span className="whitespace-nowrap">
+        &gt;&gt;{postLink}
+      </span>
+      {isOp ? " (OP)" : ""}
+      {isYou ? " (You)" : ""}
+      {isCrossThread ? " (Cross-thread)" : ""}
+    </Link>
   );
 }
 
-function Spoiler({children, post, thread}: {children: ParserResult[], post: Post, thread?: Thread}) {
+function Spoiler({
+  children,
+  post,
+  thread,
+  block
+}: {
+  children: ParserResult[];
+  post: Post;
+  thread?: Thread;
+  block?: string;
+}) {
   return (
     <span className="dchan-post-spoiler">
-      {children.map(v => renderValue(v, post, thread))}
+      {children.map(v => renderValue(v, post, thread, block))}
     </span>
   );
 }
@@ -131,33 +167,45 @@ function IPFSImage({hash}: {hash: string}) {
   );
 }
 
-function renderValue(val: ParserResult, post: Post, thread?: Thread): ReactElement | string {
+function renderValue(val: ParserResult, post: Post, thread?: Thread, block?: string): ReactElement | string {
   switch(val.type) {
     case "text":
       return val.value;
     case "link":
-      return <ExternalLink link={val.value} key={val.value} />;
+      return <ExternalLink link={val.value} key={val.key} />;
     case "ipfs":
-      return <IPFSImage hash={val.hash} key={val.hash} />;
+      return <IPFSImage hash={val.hash} key={val.key} />;
     case "newline":
-      return <br key={uniqueId()} />;
+      return <br key={val.key} />;
     case "textquote":
-      return <TextQuote post={post} thread={thread} key={uniqueId()}>{val.value}</TextQuote>;
+      return <TextQuote post={post} thread={thread} block={block} key={val.key}>{val.value}</TextQuote>;
     case "ref":
-      return <Reference link={`#/${val.id}`} key={val.id}>{val.id}</Reference>;
+      return <Reference link={`/${val.id}${block ? `?block=${block}` : ""}`} key={val.key}>{val.id}</Reference>;
     case "postref":
-      return <PostReference post={post} thread={thread} value={val} key={val.id} />;
+      return <PostReference post={post} thread={thread} block={block} value={val} key={val.key} />;
     case "boardref":
-      return <Reference link={`#/${val.id}`} key={val.id}>{val.board}{val.id}</Reference>;
+      return <Reference link={`/${val.id}${block ? `?block=${block}` : ""}`} key={val.key}>{val.board}{val.id}</Reference>;
     case "spoiler":
-      return <Spoiler post={post} thread={thread} key={uniqueId()}>{val.value}</Spoiler>;
+      return <Spoiler post={post} thread={thread} block={block} key={val.key}>{val.value}</Spoiler>;
   }
 }
 
-function PostBody({post, thread, style = {}, className}: {style?: any, className?: string, thread?: Thread, post: Post}) {
+function PostBody({
+  post,
+  thread,
+  block,
+  style = {},
+  className
+}: {
+  style?: any;
+  className?: string;
+  block?: string;
+  thread?: Thread;
+  post: Post;
+}) {
   const parsedComment = useMemo(
     () => parseComment(post.comment),
-    [post]
+    [post.comment]
   );
   return (
     <div
@@ -165,7 +213,7 @@ function PostBody({post, thread, style = {}, className}: {style?: any, className
       style={style}
       key={`${post.id}-${thread?.id}`}
     >
-      {parsedComment.map(v => renderValue(v, post, thread))}
+      {parsedComment.map(v => renderValue(v, post, thread, block))}
     </div>
   )
 }

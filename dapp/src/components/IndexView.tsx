@@ -25,6 +25,7 @@ export default function IndexView({
                             post={thread.op}
                             thread={thread}
                             key={thread.op.id}
+                            block={block == null ? undefined : `${block}`}
                             header={
                                 <span>
                                     <span className="p-1">
@@ -41,7 +42,7 @@ export default function IndexView({
                                         ]
                                         {showBoard && thread.board ? (
                                             <span>
-                                                <BoardLink board={thread.board} />
+                                                <BoardLink board={thread.board} block={block == null ? undefined : `${block}`} />
                                             </span>
                                         ) : (
                                             ""
@@ -74,6 +75,7 @@ export default function IndexView({
                                     post={post}
                                     thread={thread}
                                     key={post.id}
+                                    block={block == null ? undefined : `${block}`}
                                 />
                             ))}
                         </Post>

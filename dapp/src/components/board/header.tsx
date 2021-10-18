@@ -12,9 +12,11 @@ import useWeb3 from "hooks/useWeb3";
 import { useLocation } from "react-router";
 
 export default function BoardHeader({
-  board
+  board,
+  block
 }: {
-  board: Board | undefined | null
+  board: Board | undefined | null;
+  block?: string;
 }) {
   const search = useLocation().search
   const { accounts } = useWeb3()
@@ -24,7 +26,7 @@ export default function BoardHeader({
 
   return (
     <header id="board-header">
-      <HeaderNavigation></HeaderNavigation>
+      <HeaderNavigation block={block}/>
 
       <HeaderLogo></HeaderLogo>
 

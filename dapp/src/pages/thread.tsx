@@ -127,6 +127,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
         thread={thread}
         dateTime={dateTime}
         baseUrl={thread ? Router.thread(thread) : undefined}
+        block={isNaN(block) ? undefined : `${block}`}
         summary={
           loading ? <span>...</span> : <span>Posts: {posts.length}</span>
         }
@@ -143,6 +144,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
             <div>
               {posts.map((post) => (
                 <PostComponent
+                  block={isNaN(block) ? undefined : `${block}`}
                   post={post}
                   thread={thread}
                   key={post.id}

@@ -9,7 +9,6 @@ import { DateTime } from "luxon";
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
-import useBlockNumber from "hooks/useBlockNumber";
 
 export interface TimeTravelRange {
   min: Block;
@@ -48,28 +47,29 @@ function queryBlockByNumber(block: string): Promise<ApolloQueryResult<BlockData>
 }
 
 export default function TimeTravelWidget({
+  block,
   startBlock,
   dateTime,
   startRangeLabel,
   baseUrl,
 }: {
+  block?: string;
   startBlock?: Block;
   dateTime?: DateTime;
   startRangeLabel: string;
   baseUrl: string;
 }) { 
-  let queriedBlock = useBlockNumber();
-  if (queriedBlock && isNaN(parseInt(queriedBlock))) {
-    queriedBlock = undefined;
+  if (block && isNaN(parseInt(block))) {
+    block = undefined;
   }
   const now = DateTime.now();
   const history = useHistory();
   const { lastBlock } = useLastBlock();
   const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
   const [traveledBlock, setTraveledBlock] = useState<Block | undefined>();
-  const [prevQueriedBlock, setPrevQueriedBlock] = useState<string | undefined>(queriedBlock);
+  const [prevQueriedBlock, setPrevQueriedBlock] = useState<string | undefined>(block);
   const [timeTraveledToDate, setTimeTraveledToDate] = useState<DateTime | undefined>(dateTime);
-  const [timeTraveledToNumber, setTimeTraveledToNumber] = useState<string | undefined>(queriedBlock);
+  const [timeTraveledToNumber, setTimeTraveledToNumber] = useState<string | undefined>(block);
 
   // this should be set to true only when prevQueriedBlock and the URL are
   // being written to, as the first of the two actions triggers
@@ -151,18 +151,18 @@ export default function TimeTravelWidget({
   );
 
   useEffect(() => {
-    if (queriedBlock !== prevQueriedBlock && !writingState) {
+    if (block !== prevQueriedBlock && !writingState) {
       // out of sync with URL
-      setPrevQueriedBlock(queriedBlock);
-      if (queriedBlock) {
-        setTimeTraveledToNumber(queriedBlock);
-        changeNumber(queriedBlock);
+      setPrevQueriedBlock(block);
+      if (block) {
+        setTimeTraveledToNumber(block);
+        changeNumber(block);
       } else {
         travelToLatest();
       }
       return;
     }
-    if (!queriedBlock && lastBlock && traveledBlock !== lastBlock) {
+    if (!block && lastBlock && traveledBlock !== lastBlock) {
       // not time traveling
       // move traveledBlock forward to keep in sync with latest
       travelToLatest();
@@ -180,7 +180,7 @@ export default function TimeTravelWidget({
       }
     }
   }, [
-    queriedBlock,
+    block,
     traveledBlock,
     changeDate,
     changeNumber,
@@ -258,9 +258,9 @@ export default function TimeTravelWidget({
   );
 
   const isTimeTraveling = !!(
-    queriedBlock &&
+    block &&
     lastBlock &&
-    queriedBlock !== lastBlock?.number
+    block !== lastBlock?.number
   );
 
   return timeTravelRange ? (
