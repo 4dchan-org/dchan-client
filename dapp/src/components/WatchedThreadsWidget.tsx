@@ -9,11 +9,10 @@ import { Link } from "react-router-dom";
 import { Router } from "router";
 import BoardLink from "./BoardLink";
 import Loading from "./Loading";
+import Spinner from "./Spinner";
 
 export default function WatchedThreadsWidget({ block }: { block?: string }) {
   const { favorites, removeFavorite } = useFavorites();
-  const [open, setOpen] = useState<boolean>(false);
-  const onClick = useCallback(() => setOpen(true), [setOpen]);
   const ids = useMemo(
     () => (favorites ? Object.keys(favorites) : []),
     [favorites]
@@ -33,69 +32,62 @@ export default function WatchedThreadsWidget({ block }: { block?: string }) {
   const onRemove = removeFavorite ? removeFavorite : () => { };
 
   return favorites ? (
-    <span className="bg-primary">
-      <details open={open}>
-        <summary className="list-none">
-          <label htmlFor="dchan-watched" onClick={onClick}>
-            👁
-          </label>
-        </summary>
-        <div className="mx-1 text-center bg-primary">
-          {loading ? (
-            <Loading />
-          ) : ids.length > 0 && threads ? (
-            <div>
-              <div className="mb-2">Watched threads:</div>
-              <div className="text-sm">
-                {threads.map((thread: Thread) => {
-                  const board = thread.board;
+    <div className="mx-1 text-center bg-primary border border-secondary-accent p-1">
+      {loading ? (
+        <Loading />
+      ) : ids.length > 0 && threads ? (
+        <div>
+          <div className="mb-2">Watched threads:</div>
+          <div className="text-sm">
+            {threads.map((thread: Thread) => {
+              const board = thread.board;
 
-                  return (
-                    <div key={thread.id}>
-                      <button onClick={() => onRemove(thread)}>✖</button>{" "}
-                      {board ? (
-                        <span>
-                          <BoardLink board={board} block={block} />
-                        </span>
-                      ) : (
-                        ""
-                      )}
-                      <Link
-                        className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                        to={`${Router.thread(thread)}`}
-                      >
-                        {" "}
-                        - ({thread.replyCount}) -{" "}
-                        {truncate(thread.subject || thread.op.comment, {
-                          length: 32,
-                        })}{" "}
-                        {thread.isLocked ? "🔒" : ""}{" "}
-                        {thread.isPinned ? "📌" : ""}
-                      </Link>
-                    </div>
-                  );
-                })}
-              </div>
-              <div>
-                <div className="text-xs">
-                  [
-                  <button
+              return (
+                <div key={thread.id}>
+                  <button onClick={() => onRemove(thread)}>✖</button>{" "}
+                  {board ? (
+                    <span>
+                      <BoardLink board={board} block={block} />
+                    </span>
+                  ) : (
+                    ""
+                  )}
+                  <Link
                     className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                    onClick={onRefresh}
+                    to={`${Router.thread(thread)}`}
                   >
-                    Refresh
-                  </button>
-                  ]
+                    {" "}
+                    - ({thread.replyCount}) -{" "}
+                    {truncate(thread.subject || thread.op.comment, {
+                      length: 32,
+                    })}{" "}
+                    {thread.isLocked ? "🔒" : ""}{" "}
+                    {thread.isPinned ? "📌" : ""}
+                  </Link>
                 </div>
-              </div>
+              );
+            })}
+          </div>
+          <div>
+            <div className="text-xs">
+              [
+              <button
+                className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                onClick={onRefresh}
+              >
+                Refresh
+              </button>
+              ]
             </div>
-          ) : (
-            "No posts are being watched. Use the 👁 button on threads to keep track of them here."
-          )}
+          </div>
         </div>
-      </details>
-    </span>
+      ) : (
+        "No posts are being watched. Use the 👁 button on threads to keep track of them here."
+      )}
+    </div>
   ) : (
-    <span />
+    <div className="bg-primary border border-secondary-accent p-1">
+      ...
+    </div>
   );
 }

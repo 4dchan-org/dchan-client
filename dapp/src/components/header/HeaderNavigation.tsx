@@ -150,7 +150,21 @@ export default function HeaderNavigation({
               <SearchWidget baseUrl={Router.posts()} search={search} />
             </div>
           </details>
-          <WatchedThreadsWidget block={block}/>
+          <details className="w-full relative px-1" open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS} ref={timeTravelRef}>
+            <summary className="list-none cursor-pointer" onClick={(event) => {
+              event.preventDefault();
+              setOpenedWidget(
+                openedWidget === OpenedWidgetEnum.WATCHEDTHREADS
+                  ? null
+                  : OpenedWidgetEnum.WATCHEDTHREADS
+              );
+            }}>
+              👁
+            </summary>
+            <div className="absolute w-max top-full right-0 mt-1">
+              <WatchedThreadsWidget block={block}/>
+            </div>
+          </details>
         </span>
       </div>
     </div>
