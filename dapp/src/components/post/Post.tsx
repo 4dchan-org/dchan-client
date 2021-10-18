@@ -135,7 +135,7 @@ function Post({
           className="text-left opacity-50 z-10 whitespace-nowrap max-w-95vw overflow-hidden mb-1 flex center"
           title="Hide/Show"
         >
-          <PostHeader thread={thread} post={post}>
+          <PostHeader thread={thread} post={post} block={block}>
             {header}
           </PostHeader>
         </summary>
@@ -148,7 +148,7 @@ function Post({
             className={`${isHighlighted || isFocused ? "bg-tertiary" : !isOp ? "bg-secondary" : ""} ${isYou ? "border-dashed border-2 border-tertiary" : ""} w-full sm:w-auto mb-2 pr-4 inline-block relative max-w-screen-xl`}
           >
             <div className="flex sm:flex-wrap ml-5 align-center text-center sm:text-left sm:justify-start max-w-100vw">
-              <PostHeader thread={thread} post={post} backlinks={backlinks}>
+              <PostHeader thread={thread} post={post} backlinks={backlinks} block={block}>
                 {header}
               </PostHeader>
 

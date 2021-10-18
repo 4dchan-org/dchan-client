@@ -27,11 +27,13 @@ export default function PostHeader({
   post,
   thread,
   backlinks,
+  block,
   children,
 }: {
   post: Post;
   thread?: Thread;
   backlinks?: object;
+  block?: string;
   children?: ReactElement;
 }) {
   const {
@@ -51,7 +53,6 @@ export default function PostHeader({
   const createdAt = fromBigInt(createdAtUnix);
   const relativeTime = createdAt.toRelative();
   const formattedDate = `${
-    // @ts-ignore
     createdAt.toLocaleString({ day: "2-digit", month: "2-digit", year: "2-digit" })
     }(${createdAt.weekdayShort
     })${createdAt.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
@@ -144,17 +145,24 @@ export default function PostHeader({
         )
       </span>
       <span className="px-0.5 whitespace-nowrap text-sm" title={relativeTime !== null ? relativeTime : undefined}>
-        {formattedDate} <span className="text-xs px-1 opacity-20 hover:opacity-100  hidden sm:inline-block">[<Link title={`Time travel to ${formattedDate}`}
-          to={`${Router.post(post)}?block=${post.createdAtBlock.number}`}>{createdAt.toRelative()}</Link>]</span>
+        {formattedDate}
+        <span className="text-xs px-1 opacity-20 hover:opacity-100  hidden sm:inline-block">[
+          <Link
+            title={`Time travel to ${formattedDate}`}
+            to={`${Router.post(post)}?block=${post.createdAtBlock.number}`}
+          >
+            {relativeTime}
+          </Link>
+        ]</span>
       </span>
       <span className="whitespace-nowrap">
         <span className="px-0.5 on-parent-target-font-bold text-sm whitespace-nowrap">
-          <a
-            href={`#${Router.post(post)}`}
+          <Link
+            to={`${Router.post(post)}${block ? `?block=${block}` : ""}`}
             title="Link to this post"
           >
             No.
-          </a>
+          </Link>
           <button
             title="Reply to this post"
             onClick={() => replyTo(post.from.id, post.n)}
@@ -265,15 +273,15 @@ export default function PostHeader({
       {children}
       <span className="dchan-backlinks text-left text-sm flex flex-wrap">
         {postBacklinks?.map((post) => (
-          <a
+          <Link
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500 px-1"
-            href={`#${Router.post(post)}`}
+            to={`${Router.post(post)}${block ? `?block=${block}` : ""}`}
             onMouseEnter={() => publish("POST_HIGHLIGHT", post.id)}
             onMouseLeave={() => publish("POST_DEHIGHLIGHT", post.id)}
             key={post.id}
           >
             {`>>${post.n}`}
-          </a>
+          </Link>
         ))}
       </span>
       <Status status={status}></Status>
