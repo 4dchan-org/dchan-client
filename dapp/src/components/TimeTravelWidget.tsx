@@ -264,8 +264,45 @@ export default function TimeTravelWidget({
   );
 
   return timeTravelRange ? (
-    <div className="bg-primary border border-secondary-accent">
-      <span className="grid center text-xs">
+    <div className="bg-primary border border-secondary-accent p-1">
+      <span className="pb-1 float-right clear-both w-full flex flex-row justify-end">
+        <div className="text-xs">
+          {isTimeTraveling ? (
+            <abbr
+              className=""
+              title="You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date."
+            >
+              Time traveled to:
+            </abbr>
+          ) : (
+            ""
+          )}
+        </div>
+        <div className="text-xs ml-2">
+          [
+          <input
+            required
+            type="date"
+            id="dchan-timetravel-date-input"
+            value={(isTimeTraveling && timeTraveledToDate
+              ? timeTraveledToDate
+              : now
+            ).toISODate()}
+            onChange={(e) => onDateChange(e.target.value)}
+            min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
+            max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
+          ></input>
+          ,{" "}
+          <span className="inline-block min-w-3rem">
+            {(isTimeTraveling && timeTraveledToDate
+              ? timeTraveledToDate
+              : now
+            ).toLocaleString(DateTime.TIME_SIMPLE)}
+          </span>
+          ]
+        </div>
+      </span>
+      <div className="grid align-center text-xs w-full">
         <button
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
           onClick={onInputBlockNumber}
@@ -274,7 +311,7 @@ export default function TimeTravelWidget({
         </button>
 
         {isTimeTraveling ? (
-          <div className="text-xs">
+          <div className="text-xs text-center">
             [
             <button
               className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
@@ -285,9 +322,9 @@ export default function TimeTravelWidget({
             ]
           </div>
         ) : (
-          ""
+          <div className="mb-4" />
         )}
-      </span>
+      </div>
       <div className="text-xs bg-primary">
         <div className="grid grid-cols-4 center text-center">
           <span className="mx-1">{startRangeLabel}</span>

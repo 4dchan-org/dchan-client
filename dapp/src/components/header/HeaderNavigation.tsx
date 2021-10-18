@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/react-hooks";
 import BoardLink from "components/BoardLink";
 import { Board, Thread, Block } from "dchan";
 import BOARDS_LIST_MOST_POPULAR from "graphql/queries/boards/list_most_popular";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { DateTime } from "luxon";
 import { Router } from "router";
@@ -15,6 +15,12 @@ interface BoardListData {
 }
 
 interface BoardListVars { }
+
+enum OpenedWidgetEnum {
+  TIMETRAVEL = "TIMETRAVEL",
+  SEARCH = "SEARCH",
+  WATCHEDTHREADS = "WATCHEDTHREADS",
+}
 
 export default function HeaderNavigation({
   block,
@@ -32,11 +38,33 @@ export default function HeaderNavigation({
   search?: string;
 }) {
   const [startBlock, setStartBlock] = useState<Block | undefined>();
+  const [openedWidget, setOpenedWidget] = useState<OpenedWidgetEnum | null>(null);
+  const timeTravelRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
     setStartBlock(
       thread ? thread.createdAtBlock : board ? board.createdAtBlock : undefined
     );
   }, [thread, board, setStartBlock]);
+
+  /*
+  useEffect(() => {
+    const listener = (event: any) => {
+      if (timeTravelRef.current && !timeTravelRef.current.contains(event.target)) {
+        setTimeTravelOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", listener);
+    document.addEventListener("touchstart", listener);
+
+    return () => {
+      document.removeEventListener("mousedown", listener);
+      document.removeEventListener("touchstart", listener);
+    };
+  })
+  */
+
   const { data } = useQuery<BoardListData, BoardListVars>(
     BOARDS_LIST_MOST_POPULAR,
     { variables: {}, pollInterval: 30_000 }
@@ -45,7 +73,7 @@ export default function HeaderNavigation({
   const boards = data?.boards;
   return (
     <div className="mb-8">
-      <div className="text-sm p-1 border-solid border-bottom-secondary-accent bg-primary border-0 border-b-2 text-left fixed top-0 shadow z-50 w-screen">
+      <div className="text-sm p-1 border-solid border-bottom-secondary-accent bg-primary border-0 border-b-2 text-left fixed top-0 shadow z-50 w-full">
         [
         <Link
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
@@ -83,9 +111,16 @@ export default function HeaderNavigation({
           </Link>
           ] */}
         </span>
-        <span className="text-right relative">
-          <details className="w-full relative">
-            <summary className="list-none cursor-pointer">
+        <span className="float-right flex flex-row">
+          <details className="w-full relative px-1" open={openedWidget === OpenedWidgetEnum.TIMETRAVEL} ref={timeTravelRef}>
+            <summary className="list-none cursor-pointer" onClick={(event) => {
+              event.preventDefault();
+              setOpenedWidget(
+                openedWidget === OpenedWidgetEnum.TIMETRAVEL
+                  ? null
+                  : OpenedWidgetEnum.TIMETRAVEL
+              );
+            }}>
               ⏱️
             </summary>
             <div className="absolute w-max top-full right-0 mt-1">
@@ -99,8 +134,8 @@ export default function HeaderNavigation({
                 }
               />
             </div>
-          </details>{" "}
-          <SearchWidget baseUrl={Router.posts()} search={search} />{" "}
+          </details>
+          <SearchWidget baseUrl={Router.posts()} search={search} />
           <WatchedThreadsWidget block={block}/>
         </span>
       </div>
