@@ -135,7 +135,21 @@ export default function HeaderNavigation({
               />
             </div>
           </details>
-          <SearchWidget baseUrl={Router.posts()} search={search} />
+          <details className="w-full relative px-1" open={openedWidget === OpenedWidgetEnum.SEARCH} ref={timeTravelRef}>
+            <summary className="list-none cursor-pointer" onClick={(event) => {
+              event.preventDefault();
+              setOpenedWidget(
+                openedWidget === OpenedWidgetEnum.SEARCH
+                  ? null
+                  : OpenedWidgetEnum.SEARCH
+              );
+            }}>
+              🔍
+            </summary>
+            <div className="absolute w-max top-full right-0 mt-1">
+              <SearchWidget baseUrl={Router.posts()} search={search} />
+            </div>
+          </details>
           <WatchedThreadsWidget block={block}/>
         </span>
       </div>
