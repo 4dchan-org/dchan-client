@@ -104,29 +104,23 @@ export default function HeaderNavigation({
           ]
         </span>
         <span className="float-right flex flex-row">
-          <details className="w-full relative mx-1" open={openedWidget === OpenedWidgetEnum.TIMETRAVEL} ref={timeTravelRef}>
-            <summary className="list-none cursor-pointer" onClick={(event) => {
-              event.preventDefault();
+          <TimeTravelWidget
+            open={openedWidget === OpenedWidgetEnum.TIMETRAVEL}
+            onOpen={() => {
               setOpenedWidget(
                 openedWidget === OpenedWidgetEnum.TIMETRAVEL
                   ? null
                   : OpenedWidgetEnum.TIMETRAVEL
               );
-            }}>
-              ⏱️
-            </summary>
-            <div className="absolute w-max top-full right-0 mt-1">
-              <TimeTravelWidget
-                block={block}
-                baseUrl={baseUrl || ""}
-                startBlock={startBlock}
-                dateTime={dateTime}
-                startRangeLabel={
-                  thread ? "Thread creation" : board ? "Board creation" : "?"
-                }
-              />
-            </div>
-          </details>
+            }}
+            block={block}
+            baseUrl={baseUrl || ""}
+            startBlock={startBlock}
+            dateTime={dateTime}
+            startRangeLabel={
+              thread ? "Thread creation" : board ? "Board creation" : "?"
+            }
+          />
           <details className="w-full relative mx-1" open={openedWidget === OpenedWidgetEnum.SEARCH} ref={timeTravelRef}>
             <summary className="list-none cursor-pointer" onClick={(event) => {
               event.preventDefault();
