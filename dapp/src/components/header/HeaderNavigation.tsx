@@ -38,8 +38,10 @@ export default function HeaderNavigation({
   search?: string;
 }) {
   const [startBlock, setStartBlock] = useState<Block | undefined>();
-  const [openedWidget, setOpenedWidget] = useState<OpenedWidgetEnum | null>(block ? OpenedWidgetEnum.TIMETRAVEL : null);
+  const [openedWidget, setOpenedWidget] = useState<OpenedWidgetEnum | null>(null);
   const timeTravelRef = useRef<HTMLElement>(null);
+  const searchRef = useRef<HTMLElement>(null);
+  const watchedThreadsRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     setStartBlock(
@@ -47,11 +49,12 @@ export default function HeaderNavigation({
     );
   }, [thread, board, setStartBlock]);
 
-  /*
   useEffect(() => {
     const listener = (event: any) => {
-      if (timeTravelRef.current && !timeTravelRef.current.contains(event.target)) {
-        setTimeTravelOpen(false);
+      const refs = [timeTravelRef, searchRef, watchedThreadsRef];
+      if (refs.every(r => r.current && !r.current.contains(event.target))) {
+        console.log("trigger");
+        setOpenedWidget(null);
       }
     };
 
@@ -63,7 +66,6 @@ export default function HeaderNavigation({
       document.removeEventListener("touchstart", listener);
     };
   })
-  */
 
   const { data } = useQuery<BoardListData, BoardListVars>(
     BOARDS_LIST_MOST_POPULAR,
@@ -105,6 +107,7 @@ export default function HeaderNavigation({
         </span>
         <span className="float-right flex flex-row">
           <TimeTravelWidget
+            ref={timeTravelRef}
             open={openedWidget === OpenedWidgetEnum.TIMETRAVEL}
             onOpen={() => {
               setOpenedWidget(
@@ -121,7 +124,7 @@ export default function HeaderNavigation({
               thread ? "Thread creation" : board ? "Board creation" : "?"
             }
           />
-          <details className="w-full relative mx-1" open={openedWidget === OpenedWidgetEnum.SEARCH} ref={timeTravelRef}>
+          <details className="w-full relative mx-1" open={openedWidget === OpenedWidgetEnum.SEARCH} ref={searchRef}>
             <summary className="list-none cursor-pointer" onClick={(event) => {
               event.preventDefault();
               setOpenedWidget(
@@ -136,7 +139,7 @@ export default function HeaderNavigation({
               <SearchWidget baseUrl={Router.posts()} search={search} />
             </div>
           </details>
-          <details className="w-full relative mx-1" open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS} ref={timeTravelRef}>
+          <details className="w-full relative mx-1" open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS} ref={watchedThreadsRef}>
             <summary className="list-none cursor-pointer" onClick={(event) => {
               event.preventDefault();
               setOpenedWidget(
