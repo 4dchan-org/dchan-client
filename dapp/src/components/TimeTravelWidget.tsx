@@ -6,7 +6,7 @@ import BLOCK_BY_NUMBER from "graphql/queries/block_by_number";
 import client from "graphql/clients/dchan";
 import useLastBlock from "hooks/useLastBlock";
 import { DateTime } from "luxon";
-import { useCallback, useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useState, useMemo, forwardRef, ForwardedRef } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 
@@ -46,7 +46,7 @@ function queryBlockByNumber(block: string): Promise<ApolloQueryResult<BlockData>
   });
 }
 
-export default function TimeTravelWidget({
+export default forwardRef(({
   block,
   startBlock,
   dateTime,
@@ -62,7 +62,7 @@ export default function TimeTravelWidget({
   baseUrl: string;
   open: boolean;
   onOpen: () => void;
-}) { 
+}, ref: ForwardedRef<HTMLElement>) => { 
   if (block && isNaN(parseInt(block))) {
     block = undefined;
   }
@@ -268,7 +268,7 @@ export default function TimeTravelWidget({
   );
 
   return (
-    <details className="w-full relative mx-1" open={open}>
+    <details className="w-full relative mx-1" open={open} ref={ref}>
       <summary className="list-none cursor-pointer w-full whitespace-nowrap" onClick={(event) => {
         event.preventDefault();
         onOpen();
@@ -375,4 +375,4 @@ export default function TimeTravelWidget({
       </div>
     </details>
   );
-}
+});
