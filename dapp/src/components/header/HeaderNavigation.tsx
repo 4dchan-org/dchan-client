@@ -38,7 +38,7 @@ export default function HeaderNavigation({
   search?: string;
 }) {
   const [startBlock, setStartBlock] = useState<Block | undefined>();
-  const [openedWidget, setOpenedWidget] = useState<OpenedWidgetEnum | null>(null);
+  const [openedWidget, setOpenedWidget] = useState<OpenedWidgetEnum | null>(block ? OpenedWidgetEnum.TIMETRAVEL : null);
   const timeTravelRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -102,17 +102,9 @@ export default function HeaderNavigation({
             +
           </Link>
           ]
-          {/* <span className="px-2"></span> [
-          <Link
-            className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-            to="/_/settings"
-          >
-            ⚙️
-          </Link>
-          ] */}
         </span>
         <span className="float-right flex flex-row">
-          <details className="w-full relative px-1" open={openedWidget === OpenedWidgetEnum.TIMETRAVEL} ref={timeTravelRef}>
+          <details className="w-full relative mx-1" open={openedWidget === OpenedWidgetEnum.TIMETRAVEL} ref={timeTravelRef}>
             <summary className="list-none cursor-pointer" onClick={(event) => {
               event.preventDefault();
               setOpenedWidget(
@@ -135,7 +127,7 @@ export default function HeaderNavigation({
               />
             </div>
           </details>
-          <details className="w-full relative px-1" open={openedWidget === OpenedWidgetEnum.SEARCH} ref={timeTravelRef}>
+          <details className="w-full relative mx-1" open={openedWidget === OpenedWidgetEnum.SEARCH} ref={timeTravelRef}>
             <summary className="list-none cursor-pointer" onClick={(event) => {
               event.preventDefault();
               setOpenedWidget(
@@ -150,7 +142,7 @@ export default function HeaderNavigation({
               <SearchWidget baseUrl={Router.posts()} search={search} />
             </div>
           </details>
-          <details className="w-full relative px-1" open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS} ref={timeTravelRef}>
+          <details className="w-full relative mx-1" open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS} ref={timeTravelRef}>
             <summary className="list-none cursor-pointer" onClick={(event) => {
               event.preventDefault();
               setOpenedWidget(
@@ -165,6 +157,12 @@ export default function HeaderNavigation({
               <WatchedThreadsWidget block={block}/>
             </div>
           </details>
+          <span
+            className="cursor-pointer mx-1"
+            onClick={() => alert("hello world")}
+          >
+            ⚙️
+          </span>
         </span>
       </div>
     </div>
