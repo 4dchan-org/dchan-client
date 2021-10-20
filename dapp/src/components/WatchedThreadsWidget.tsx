@@ -32,7 +32,7 @@ export default function WatchedThreadsWidget({ block }: { block?: string }) {
   const onRemove = removeFavorite ? removeFavorite : () => { };
 
   return favorites ? (
-    <div className="mx-1 text-center bg-primary border border-secondary-accent p-1">
+    <div className="text-center bg-primary border border-secondary-accent p-1">
       {loading ? (
         <Loading />
       ) : ids.length > 0 && threads ? (

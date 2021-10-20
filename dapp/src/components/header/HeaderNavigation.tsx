@@ -58,13 +58,13 @@ export default function HeaderNavigation({
     };
 
     document.addEventListener("mousedown", listener);
-    document.addEventListener("touchstart", listener);
+    //document.addEventListener("touchstart", listener);
 
     return () => {
       document.removeEventListener("mousedown", listener);
-      document.removeEventListener("touchstart", listener);
+      //document.removeEventListener("touchstart", listener);
     };
-  })
+  }, [timeTravelRef, searchRef, watchedThreadsRef])
 
   const { data } = useQuery<BoardListData, BoardListVars>(
     BOARDS_LIST_MOST_POPULAR,
@@ -74,7 +74,7 @@ export default function HeaderNavigation({
   const boards = data?.boards;
   return (
     <div className="mb-8">
-      <div className="text-sm p-1 border-solid border-bottom-secondary-accent bg-primary border-0 border-b-2 text-left fixed top-0 shadow z-50 w-full">
+      <div className="text-sm p-1 border-solid border-bottom-secondary-accent bg-primary border-0 border-b-2 text-left fixed top-0 shadow-md z-50 w-full">
         [
         <Link
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
@@ -115,6 +115,7 @@ export default function HeaderNavigation({
                   : OpenedWidgetEnum.TIMETRAVEL
               );
             }}
+            onClose={() => setOpenedWidget(null)}
             block={block}
             baseUrl={baseUrl || ""}
             startBlock={startBlock}
@@ -123,7 +124,7 @@ export default function HeaderNavigation({
               thread ? "Thread creation" : board ? "Board creation" : "?"
             }
           />
-          <details className="w-full relative mx-1" open={openedWidget === OpenedWidgetEnum.SEARCH} ref={searchRef}>
+          <details className="w-full sm:relative mx-1" open={openedWidget === OpenedWidgetEnum.SEARCH} ref={searchRef}>
             <summary className="list-none cursor-pointer" onClick={(event) => {
               event.preventDefault();
               setOpenedWidget(
@@ -134,11 +135,11 @@ export default function HeaderNavigation({
             }}>
               🔍
             </summary>
-            <div className="absolute w-max top-full right-0 mt-1">
+            <div className="absolute w-screen sm:w-max top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto sm:right-0">
               <SearchWidget baseUrl={Router.posts()} search={search} />
             </div>
           </details>
-          <details className="w-full relative mx-1" open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS} ref={watchedThreadsRef}>
+          <details className="w-full sm:relative mx-1" open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS} ref={watchedThreadsRef}>
             <summary className="list-none cursor-pointer" onClick={(event) => {
               event.preventDefault();
               setOpenedWidget(
@@ -149,7 +150,7 @@ export default function HeaderNavigation({
             }}>
               👁
             </summary>
-            <div className="absolute w-max top-full right-0 mt-1">
+            <div className="absolute w-screen sm:w-max top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto sm:right-0">
               <WatchedThreadsWidget block={block}/>
             </div>
           </details>

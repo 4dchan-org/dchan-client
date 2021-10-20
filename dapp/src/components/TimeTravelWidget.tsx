@@ -54,6 +54,7 @@ export default forwardRef(({
   baseUrl,
   open,
   onOpen,
+  onClose,
 }: {
   block?: string;
   startBlock?: Block;
@@ -62,6 +63,7 @@ export default forwardRef(({
   baseUrl: string;
   open: boolean;
   onOpen: () => void;
+  onClose: () => void;
 }, ref: ForwardedRef<HTMLElement>) => { 
   if (block && isNaN(parseInt(block))) {
     block = undefined;
@@ -268,45 +270,52 @@ export default forwardRef(({
   );
 
   return (
-    <details className="w-full relative mx-1" open={open} ref={ref}>
-      <summary className="list-none cursor-pointer w-full whitespace-nowrap" onClick={(event) => {
+    <details className="sm:relative" open={open} ref={ref}>
+      <summary className="list-none cursor-pointer w-full mx-1 whitespace-nowrap" onClick={(event) => {
         event.preventDefault();
-        onOpen();
       }}>
         {timeTravelRange ? <>
           <div className="text-xs ml-2">
-            {isTimeTraveling ? (
-              "⏱️ "
-            ) : (
+            {isTimeTraveling ? <>
+              <span title="Return to present" onClick={() => {
+                onReturnToPresent();
+                onClose();
+              }}>
+                ⏱️
+              </span>
+              {" "}
+            </> : (
               ""
             )}
-            [
-            <input
-              required
-              type="date"
-              id="dchan-timetravel-date-input"
-              value={(isTimeTraveling && timeTraveledToDate
-                ? timeTraveledToDate
-                : now
-              ).toISODate()}
-              onChange={(e) => onDateChange(e.target.value)}
-              min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
-              max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
-            ></input>
-            ,{" "}
-            <span className="inline-block min-w-3rem">
-              {(isTimeTraveling && timeTraveledToDate
-                ? timeTraveledToDate
-                : now
-              ).toLocaleString(DateTime.TIME_SIMPLE)}
+            <span onClick={onOpen}>
+              [
+              <input
+                required
+                type="date"
+                id="dchan-timetravel-date-input"
+                value={(isTimeTraveling && timeTraveledToDate
+                  ? timeTraveledToDate
+                  : now
+                ).toISODate()}
+                onChange={(e) => onDateChange(e.target.value)}
+                min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
+                max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
+              ></input>
+              ,{" "}
+              <span className="inline-block min-w-3rem">
+                {(isTimeTraveling && timeTraveledToDate
+                  ? timeTraveledToDate
+                  : now
+                ).toLocaleString(DateTime.TIME_SIMPLE)}
+              </span>
+              ]
             </span>
-            ]
           </div>
         </> : (
           ""
         )}
       </summary>
-      <div className="absolute w-max top-full right-0 mt-1">
+      <div className="absolute w-screen sm:w-max top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto sm:right-0">
         {timeTravelRange ? (
           <div className="bg-primary border border-secondary-accent p-1">
             <div className="grid align-center text-xs w-full">

@@ -17,7 +17,7 @@ export default function SearchWidget({
   );
 
   return (
-    <div className="mx-1 text-center bg-primary border border-secondary-accent p-1">
+    <div className="text-center bg-primary border border-secondary-accent p-1">
       <div>Search:</div>
       <div>
         <input
