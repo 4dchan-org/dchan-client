@@ -62,7 +62,7 @@ export default function BoardHeader({
             {board === null ? (
               <div>/?/ - ?????</div>
             ) : (
-              <Link to={board ? `/${board.name}/${board.id}${search}` : "#"}>
+              <Link to={board ? `/${board.name}/${board.id}${search || ""}` : "#"}>
                 /{board?.name || "?"}/ - {board?.title || "..."}
               </Link>
             )}
