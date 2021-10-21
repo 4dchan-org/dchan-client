@@ -1,5 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { debounce } from "lodash";
 
 export default function SearchWidget({
   baseUrl,
@@ -9,11 +10,25 @@ export default function SearchWidget({
   search?: string;
 }) {
   const history = useHistory();
+  const [displayInput, setDisplayInput] = useState<string>(search || "");
   const setSearch = useCallback(
     (search: string) => {
       history.push(`${baseUrl}${search ? `?s=${search}` : ``}`);
     },
     [history, baseUrl]
+  );
+
+  const setSearchDebounce = useMemo(
+    () => debounce(setSearch, 500),
+    [setSearch]
+  );
+
+  const onInput = useCallback(
+    (search: string) => {
+      setDisplayInput(search);
+      setSearchDebounce(search);
+    },
+    []
   );
 
   return (
@@ -25,8 +40,8 @@ export default function SearchWidget({
           className="text-center w-32"
           type="text"
           placeholder="..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={displayInput}
+          onChange={(e) => onInput(e.target.value)}
           autoFocus={true}
         ></input>
       </div>
