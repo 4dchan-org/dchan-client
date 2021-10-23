@@ -126,7 +126,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
         board={board}
         thread={thread}
         dateTime={dateTime}
-        baseUrl={thread ? Router.thread(thread) : undefined}
+        baseUrl={thread ? Router.thread(thread) : location.pathname + location.hash}
         block={isNaN(block) ? undefined : `${block}`}
         summary={
           loading ? <span>...</span> : <span>Posts: {posts.length}</span>
