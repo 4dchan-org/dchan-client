@@ -74,7 +74,7 @@ export default function HeaderNavigation({
   const boards = data?.boards;
   return (
     <div className="mb-8">
-      <div className="text-sm p-1 border-solid border-bottom-secondary-accent bg-primary border-0 border-b-2 text-left fixed top-0 shadow-md z-50 w-full">
+      <div className="text-sm p-1 border-solid border-bottom-secondary-accent bg-primary border-0 border-b-2 text-left fixed top-0 left-0 right-0 shadow-md z-50">
         [
         <Link
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
