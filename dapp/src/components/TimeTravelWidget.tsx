@@ -46,6 +46,8 @@ function queryBlockByNumber(block: string): Promise<ApolloQueryResult<BlockData>
   });
 }
 
+const timeTravelingNote = "You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date.";
+
 export default forwardRef(({
   block,
   startBlock,
@@ -275,9 +277,9 @@ export default forwardRef(({
         event.preventDefault();
       }}>
         {timeTravelRange ? <>
-          <div className="text-xs ml-2">
+          <div className="ml-2 hidden sm:block">
             {isTimeTraveling ? <>
-              <span title="Return to present" onClick={() => {
+              <span title={timeTravelingNote} onClick={() => {
                 onReturnToPresent();
                 onClose();
               }}>
@@ -287,7 +289,7 @@ export default forwardRef(({
             </> : (
               ""
             )}
-            <span onClick={onOpen}>
+            <span onClick={onOpen} className="text-xs">
               [
               <input
                 required
@@ -311,6 +313,15 @@ export default forwardRef(({
               ]
             </span>
           </div>
+          <div className="ml-2 sm:hidden" onClick={onOpen}>
+            {isTimeTraveling ? (
+              <abbr title={timeTravelingNote}>
+                ⏱️
+              </abbr>
+            ) : (
+              <span>⏱️</span>
+            )}
+          </div>
         </> : (
           ""
         )}
@@ -318,6 +329,42 @@ export default forwardRef(({
       <div className="absolute w-screen sm:w-max top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto sm:right-0">
         {timeTravelRange ? (
           <div className="bg-primary border border-secondary-accent p-1">
+            <div className="sm:hidden text-xs my-1 ml-2">
+              <span className="mr-2">
+                {isTimeTraveling ? (
+                  <abbr
+                    title="You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date."
+                  >
+                    Time traveled to:
+                  </abbr>
+                ) : (
+                  "Current time:"
+                )}
+              </span>
+              <span onClick={onOpen}>
+                [
+                <input
+                  required
+                  type="date"
+                  id="dchan-timetravel-date-input"
+                  value={(isTimeTraveling && timeTraveledToDate
+                    ? timeTraveledToDate
+                    : now
+                  ).toISODate()}
+                  onChange={(e) => onDateChange(e.target.value)}
+                  min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
+                  max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
+                ></input>
+                ,{" "}
+                <span className="inline-block min-w-3rem">
+                  {(isTimeTraveling && timeTraveledToDate
+                    ? timeTraveledToDate
+                    : now
+                  ).toLocaleString(DateTime.TIME_SIMPLE)}
+                </span>
+                ]
+              </span>
+            </div>
             <div className="grid align-center text-xs w-full">
               <button
                 className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
