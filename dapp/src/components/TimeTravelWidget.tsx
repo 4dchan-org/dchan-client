@@ -299,6 +299,12 @@ export default forwardRef(({
                   ? timeTraveledToDate
                   : now
                 ).toISODate()}
+                onClick={(e) => {
+                  if (!open) {
+                    onOpen();
+                  }
+                  e.stopPropagation();
+                }}
                 onChange={(e) => onDateChange(e.target.value)}
                 min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
                 max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
