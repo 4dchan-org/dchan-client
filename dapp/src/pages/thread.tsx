@@ -64,6 +64,10 @@ export default function ThreadPage({ location, match: { params } }: any) {
   );
 
   useEffect(() => {
+    window.scrollTo({top: 0})
+  }, [thread?.id])
+
+  useEffect(() => {
     const url = !thread && post ? Router.post(post) : undefined;
     url && history.replace(`${url}${block ? `?block=${block}` : ""}`);
   }, [history, thread, block, post]);

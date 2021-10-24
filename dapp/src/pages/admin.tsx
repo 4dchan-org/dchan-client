@@ -5,10 +5,15 @@ import useWeb3 from "hooks/useWeb3";
 import { sendMessage } from "dchan";
 import WalletConnect from "components/wallet/WalletConnect";
 import useUser from "hooks/useUser";
+import { useEffect } from "react";
 
 export default function AdminPage() {
   const { isAdmin } = useUser();
   const { accounts } = useWeb3();
+
+  useEffect(() => {
+    window.scrollTo({top: 0})
+  }, [])
 
   const adminClaim = async () => {
     await sendMessage("admin:claim", {}, accounts[0]);

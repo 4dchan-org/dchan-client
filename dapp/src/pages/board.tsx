@@ -96,6 +96,10 @@ export default function BoardPage({ location, match: { params } }: any) {
   );
 
   useEffect(() => {
+    window.scrollTo({top: 0})
+  }, [board?.id])
+
+  useEffect(() => {
     board && board.name !== board_name && history.replace(`/${board.id}`);
   }, [board, board_name, history])
 
