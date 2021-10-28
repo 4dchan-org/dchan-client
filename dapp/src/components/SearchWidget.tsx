@@ -28,7 +28,7 @@ export default function SearchWidget({
       setDisplayInput(search);
       setSearchDebounce(search);
     },
-    []
+    [setSearchDebounce]
   );
 
   return (
