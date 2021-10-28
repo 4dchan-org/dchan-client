@@ -9,7 +9,8 @@ import { Router } from "router";
 import TimeTravelWidget from "components/TimeTravelWidget";
 import SearchWidget from "components/SearchWidget";
 import WatchedThreadsWidget from "components/WatchedThreadsWidget";
-import SettingsWidgetOverlay from "components/SettingsWidgetOverlay";
+import SettingsWidget from "components/SettingsWidget";
+import OverlayComponent from "components/OverlayComponent";
 
 interface BoardListData {
   boards: Board[];
@@ -23,6 +24,8 @@ enum OpenedWidgetEnum {
   WATCHEDTHREADS = "WATCHEDTHREADS",
   SETTINGS = "SETTINGS",
 }
+
+const SettingsWidgetOverlay = OverlayComponent(SettingsWidget);
 
 export default function HeaderNavigation({
   block,
