@@ -9,6 +9,7 @@ import { Router } from "router";
 import TimeTravelWidget from "components/TimeTravelWidget";
 import SearchWidget from "components/SearchWidget";
 import WatchedThreadsWidget from "components/WatchedThreadsWidget";
+import SettingsWidgetOverlay from "components/SettingsWidgetOverlay";
 
 interface BoardListData {
   boards: Board[];
@@ -20,6 +21,7 @@ enum OpenedWidgetEnum {
   TIMETRAVEL = "TIMETRAVEL",
   SEARCH = "SEARCH",
   WATCHEDTHREADS = "WATCHEDTHREADS",
+  SETTINGS = "SETTINGS",
 }
 
 export default function HeaderNavigation({
@@ -42,6 +44,7 @@ export default function HeaderNavigation({
   const timeTravelRef = useRef<HTMLElement>(null);
   const searchRef = useRef<HTMLElement>(null);
   const watchedThreadsRef = useRef<HTMLElement>(null);
+  const settingsRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     setStartBlock(
@@ -51,8 +54,8 @@ export default function HeaderNavigation({
 
   useEffect(() => {
     const listener = (event: any) => {
-      const refs = [timeTravelRef, searchRef, watchedThreadsRef];
-      if (refs.every(r => r.current && !r.current.contains(event.target))) {
+      const widgetRefs = [timeTravelRef, searchRef, watchedThreadsRef, settingsRef];
+      if (widgetRefs.every(r => r.current && !r.current.contains(event.target))) {
         setOpenedWidget(null);
       }
     };
@@ -64,7 +67,7 @@ export default function HeaderNavigation({
       document.removeEventListener("mousedown", listener);
       //document.removeEventListener("touchstart", listener);
     };
-  }, [timeTravelRef, searchRef, watchedThreadsRef])
+  }, [timeTravelRef, searchRef, watchedThreadsRef, settingsRef])
 
   const { data } = useQuery<BoardListData, BoardListVars>(
     BOARDS_LIST_MOST_POPULAR,
@@ -155,10 +158,24 @@ export default function HeaderNavigation({
             </div>
           </details>
           <span
+            ref={settingsRef}
             className="cursor-pointer mx-1"
-            onClick={() => alert("hello world")}
+            onClick={() => {
+              setOpenedWidget(
+                openedWidget === OpenedWidgetEnum.SETTINGS
+                  ? null
+                  : OpenedWidgetEnum.SETTINGS
+              );
+            }}
           >
             ⚙️
+            {openedWidget === OpenedWidgetEnum.SETTINGS ? (
+              <SettingsWidgetOverlay
+                onExit={() => setOpenedWidget(null)}
+              />
+            ) : (
+              ""
+            )}
           </span>
         </span>
       </div>
