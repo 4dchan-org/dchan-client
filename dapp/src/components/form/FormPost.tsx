@@ -23,7 +23,7 @@ import Menu from "components/Menu";
 import useFormPersist from "hooks/useFormPersist"
 import useFavorites from "hooks/useFavorites";
 import IdLabel from "components/IdLabel";
-import FAQButton from "components/FAQButton";
+import FAQButton from "components/FAQCard";
 
 export default function FormPost({
   baseUrl,

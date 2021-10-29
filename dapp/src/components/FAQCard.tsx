@@ -1,4 +1,7 @@
 import Card from "components/Card";
+import { useState } from "react";
+import { singletonHook } from "react-singleton-hook";
+import OverlayComponent from "./OverlayComponent";
 
 function TheGraph() {
   return (
@@ -40,8 +43,7 @@ function Polygon() {
   );
 }
 
-
-export default function FAQCard({onExit, className}: {onExit: () => void, className?: string}) {
+export function FAQCard({onExit, className}: {onExit: () => void, className?: string}) {
   return (
     <Card title={<span>FAQ</span>} className={className} bodyClassName="flex overflow-y-scroll overscroll-contain">
       <div className="text-left p-8 text-sm">
@@ -187,4 +189,34 @@ export default function FAQCard({onExit, className}: {onExit: () => void, classN
       </div>
     </Card>
   )
+}
+
+const FAQCardOverlayInternal = OverlayComponent(FAQCard);
+
+export const useFAQ = singletonHook<[boolean, (open: boolean) => void]>([false, () => {}], () => {
+  return useState<boolean>(false);
+})
+
+export function FAQCardOverlay() {
+  const [openFAQ, setOpenFAQ] = useFAQ();
+  return openFAQ
+    ? <FAQCardOverlayInternal
+      onExit={() => setOpenFAQ(false)}
+      className="h-full flex flex-col flex-grow flex-shrink-0"
+    />
+    : null;
+}
+
+export default function FAQButton({className = ""}: {className?: string}) {
+  const [_, setOpenFAQ] = useFAQ();
+  return (
+    <>
+      <span
+        className={`${className} cursor-pointer text-blue-600 visited:text-purple-600 hover:text-blue-500`}
+        onClick={() => setOpenFAQ(true)}
+      >
+        FAQ
+      </span>
+    </>
+  );
 }

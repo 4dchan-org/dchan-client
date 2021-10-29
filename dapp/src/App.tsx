@@ -11,11 +11,11 @@ import LockBanner from "components/LockBanner";
 import PostSearchPage from "pages/postSearch";
 import ReferencePage from "pages/reference";
 import RulesPage from "pages/rules";
-import FAQPage from "pages/faq";
 import ThreadPage from "pages/thread";
 import useSettings from "hooks/useSettings";
 import EULA from "components/EULA";
 import IdReferencePage from "pages/idReference";
+import { FAQCardOverlay } from "components/FAQCard";
 
 function App() {
   const [settings] = useSettings();
@@ -29,7 +29,6 @@ function App() {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/_/boards" component={BoardListPage} />
-          <Route path="/_/faq" component={FAQPage} />
           <Route path="/_/rules" component={RulesPage} />
           <Route path="/_/abuse" component={AbusePage} />
           <Route path="/_/admin" component={AdminPage} />
@@ -63,6 +62,7 @@ function App() {
           <Route path="/:board_name/0x:board_id" component={BoardPage} />
           <Route exact path="/:board_name" component={BoardListPage} />
         </Switch>
+        <FAQCardOverlay/>
       </div>
     </Router>
   );
