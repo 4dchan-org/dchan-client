@@ -4,6 +4,7 @@ import thegraphSrc from "assets/images/thegraph.png";
 import IPFSClientWidget from "./IPFSClientWidget";
 import FAQButton from "./FAQCard";
 import RulesButton from "./RulesCard";
+import AbuseButton from "./AbuseCard";
 
 export default function Footer({
   showContentDisclaimer = false,
@@ -45,26 +46,14 @@ export default function Footer({
             </div>
           </div>
           <div className="justify-center flex h-6 items-end">
-            <details className="bg-primary">
-              <summary>
-                <span onClick={(e) => e.stopPropagation()}>
-                  <RulesButton className="border border-black py-1 px-4 mx-1 bg-white"/>
-                </span>
-              </summary>
-              <div className="pt-4">
-                <Link
-                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black my-4 py-1 px-4 mx-1 bg-white whitespace-nowrap"
-                  to="/_/abuse"
-                  rel="noreferrer"
-                >
-                  Abuse (DMCA/CSAM)
-                </Link>
-              </div>
-            </details>
             <div>
-              <FAQButton
-                className="border border-black py-1 px-4 mx-1 bg-white"
-              />
+              <RulesButton className="border border-black py-1 px-4 mx-1 bg-white"/>
+            </div>
+            <div>
+              <AbuseButton className="border border-black py-1 px-4 mx-1 bg-white"/>
+            </div>
+            <div>
+              <FAQButton className="border border-black py-1 px-4 mx-1 bg-white"/>
             </div>
             <div>
               <a

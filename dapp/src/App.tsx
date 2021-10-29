@@ -2,7 +2,6 @@ import { HashRouter as Router, Switch, Route } from "react-router-dom";
 
 import "assets/styles/index.scss";
 
-import AbusePage from "pages/abuse";
 import AdminPage from "pages/admin";
 import BoardListPage from "pages/boards";
 import BoardPage from "pages/board";
@@ -10,13 +9,13 @@ import HomePage from "pages/home";
 import LockBanner from "components/LockBanner";
 import PostSearchPage from "pages/postSearch";
 import ReferencePage from "pages/reference";
-import RulesPage from "pages/rules";
 import ThreadPage from "pages/thread";
 import useSettings from "hooks/useSettings";
 import EULA from "components/EULA";
 import IdReferencePage from "pages/idReference";
 import { FAQCardOverlay } from "components/FAQCard";
 import { RulesCardOverlay } from "components/RulesCard";
+import { AbuseCardOverlay } from "components/AbuseCard";
 
 function App() {
   const [settings] = useSettings();
@@ -30,8 +29,6 @@ function App() {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/_/boards" component={BoardListPage} />
-          <Route path="/_/rules" component={RulesPage} />
-          <Route path="/_/abuse" component={AbusePage} />
           <Route path="/_/admin" component={AdminPage} />
           <Route path="/_/posts" component={PostSearchPage} />
           <Route path="/0x:id/:post_n" component={ReferencePage} />
@@ -67,6 +64,7 @@ function App() {
           * but it works flawlessly so fuck it */} 
         <FAQCardOverlay/>
         <RulesCardOverlay/>
+        <AbuseCardOverlay/>
       </div>
     </Router>
   );

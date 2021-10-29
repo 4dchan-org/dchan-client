@@ -7,7 +7,7 @@ export function RulesCard() {
   return (
     <Card title={<span>The rules</span>} className="h-full flex flex-col flex-grow flex-shrink-0" bodyClassName="flex">
       <div className="p-8">
-      <ul className="list-disc text-wrap m-auto">
+      <ul className="list-disc text-wrap text-left m-auto">
         <li>
         Do not post anything that can get you in trouble with local or
         global jurisdictions.
