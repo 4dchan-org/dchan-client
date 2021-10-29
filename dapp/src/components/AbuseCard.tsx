@@ -37,7 +37,11 @@ export default function AbuseButton({className = ""}: {className?: string}) {
     <>
       <span
         className={`${className} cursor-pointer text-blue-600 visited:text-purple-600 hover:text-blue-500`}
-        onClick={() => setOpenAbuse(true)}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          setOpenAbuse(true);
+        }}
       >
         Abuse (DMCA/CSAM)
       </span>

@@ -5,7 +5,7 @@ import OverlayComponent from "./OverlayComponent";
 
 export function RulesCard() {
   return (
-    <Card title={<span>The rules</span>} className="h-full flex flex-col flex-grow flex-shrink-0" bodyClassName="flex">
+    <Card title={<span>The rules</span>} className="flex flex-col flex-grow flex-shrink-0" bodyClassName="flex">
       <div className="p-8">
       <ul className="list-disc text-wrap text-left m-auto">
         <li>
@@ -40,7 +40,11 @@ export default function RulesButton({className = ""}: {className?: string}) {
     <>
       <span
         className={`${className} cursor-pointer text-blue-600 visited:text-purple-600 hover:text-blue-500`}
-        onClick={() => setOpenRules(true)}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          setOpenRules(true);
+        }}
       >
         Rules
       </span>

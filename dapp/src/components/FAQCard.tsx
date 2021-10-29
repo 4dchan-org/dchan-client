@@ -203,6 +203,7 @@ export function FAQCardOverlay() {
     ? <FAQCardOverlayInternal
       onExit={() => setOpenFAQ(false)}
       className="h-full flex flex-col flex-grow flex-shrink-0"
+      overlayClassName="w-full sm:w-4/6 h-5/6"
     />
     : null;
 }
@@ -213,7 +214,11 @@ export default function FAQButton({className = ""}: {className?: string}) {
     <>
       <span
         className={`${className} cursor-pointer text-blue-600 visited:text-purple-600 hover:text-blue-500`}
-        onClick={() => setOpenFAQ(true)}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          setOpenFAQ(true);
+        }}
       >
         FAQ
       </span>

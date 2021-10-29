@@ -175,6 +175,7 @@ export default function HeaderNavigation({
             {openedWidget === OpenedWidgetEnum.SETTINGS ? (
               <SettingsWidgetOverlay
                 onExit={() => setOpenedWidget(null)}
+                overlayClassName="w-full sm:w-4/6 h-5/6"
               />
             ) : (
               ""
