@@ -45,17 +45,17 @@ export default function Footer({
               </a>
             </div>
           </div>
-          <div className="justify-center flex h-6 items-end">
-            <div>
+          <div className="justify-center flex flex-wrap h-6 items-end">
+            <div className="mt-2">
               <RulesButton className="border border-black py-1 px-4 mx-1 bg-white"/>
             </div>
-            <div>
+            <div className="mt-2">
               <AbuseButton className="border border-black py-1 px-4 mx-1 bg-white"/>
             </div>
-            <div>
+            <div className="mt-2">
               <FAQButton className="border border-black py-1 px-4 mx-1 bg-white"/>
             </div>
-            <div>
+            <div className="mt-2">
               <a
                 className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white"
                 href="//faucet.dchan.network"
@@ -65,7 +65,7 @@ export default function Footer({
                 Faucet
               </a>
             </div>
-            <div>
+            <div className="mt-2">
               <a
                 className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white"
                 href="//github.com/dchan-network"
