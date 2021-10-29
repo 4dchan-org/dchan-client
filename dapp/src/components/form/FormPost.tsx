@@ -23,6 +23,7 @@ import Menu from "components/Menu";
 import useFormPersist from "hooks/useFormPersist"
 import useFavorites from "hooks/useFavorites";
 import IdLabel from "components/IdLabel";
+import FAQButton from "components/FAQButton";
 
 export default function FormPost({
   baseUrl,
@@ -327,7 +328,7 @@ export default function FormPost({
   );
 
   return (
-    <div>
+    <div className="z-30">
       <Wallet />
       {!isJanny && thread?.isLocked ? (
         <div className="text-contrast font-weight-800 font-family-tahoma">
@@ -654,13 +655,7 @@ export default function FormPost({
                             rules
                           </Link>{" "}
                           and the{" "}
-                          <Link
-                            to="/_/faq"
-                            target="_blank"
-                            className="text-blue-600 visited:text-purple-600 hover:text-blue-400"
-                          >
-                            FAQ
-                          </Link>{" "}
+                          <FAQButton/>{" "}
                           before posting.
                         </li>
                         <li>
