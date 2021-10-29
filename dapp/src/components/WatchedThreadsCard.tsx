@@ -22,7 +22,7 @@ export default function WatchedThreadsCard() {
   });
   const threads = data?.threads
   return loading || (threads && threads.length > 0) ?
-    <Card className="w-100vw max-w-initial p-2" title={<span>👁 Watched threads</span>}>
+    <Card className="w-100vw max-w-initial p-2 pt-4" title={<span>👁 Watched threads</span>}>
       {loading ? <Loading /> : <CatalogView threads={threads || []} showBoard={true} />}
     </Card>
     : (

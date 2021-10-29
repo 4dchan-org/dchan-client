@@ -14,7 +14,7 @@ export default function LatestPostsCard() {
   });
 
   return (
-    <Card className="mx-auto" title={<span>Latest Posts</span>}>
+    <Card className="mx-auto pt-4" title={<span>Latest Posts</span>}>
       <div>
         {loading && !data ? (
           <Loading />

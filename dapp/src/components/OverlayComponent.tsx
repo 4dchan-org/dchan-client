@@ -13,7 +13,7 @@ export default function OverlayComponent<P extends WithOnExit>(WrappedComponent:
         style={{zIndex: 9000}}
         onClick={onExit}
       >
-        <div className="w-full sm:w-4/6 h-5/6 m-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="max-w-full sm:max-w-4/6 max-h-5/6 m-auto" onClick={(e) => e.stopPropagation()}>
           <WrappedComponent {...props} />
         </div>
       </div>

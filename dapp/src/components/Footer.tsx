@@ -3,6 +3,7 @@ import polygonSrc from "assets/images/polygon.png";
 import thegraphSrc from "assets/images/thegraph.png";
 import IPFSClientWidget from "./IPFSClientWidget";
 import FAQButton from "./FAQCard";
+import RulesButton from "./RulesCard";
 
 export default function Footer({
   showContentDisclaimer = false,
@@ -46,13 +47,9 @@ export default function Footer({
           <div className="justify-center flex h-6 items-end">
             <details className="bg-primary">
               <summary>
-                <Link
-                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white"
-                  to="/_/rules"
-                  rel="noreferrer"
-                >
-                  Rules
-                </Link>
+                <span onClick={(e) => e.stopPropagation()}>
+                  <RulesButton className="border border-black py-1 px-4 mx-1 bg-white"/>
+                </span>
               </summary>
               <div className="pt-4">
                 <Link

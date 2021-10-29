@@ -30,7 +30,7 @@ export default function BoardListPage({
         All boards
       </Link>
       <div className="center flex">
-        <Card title={<span>{`/${name}/`}</span>}>
+        <Card title={<span>{`/${name}/`}</span>} className="pt-4">
           <BoardList boards={data?.boards}></BoardList>
         </Card>
       </div>

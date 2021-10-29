@@ -12,7 +12,7 @@ export default function Card({
   title: ReactElement | string;
 }) {
   return (
-    <article className={`${className} mt-4 max-w-100vw`}>
+    <article className={`${className} max-w-100vw`}>
       <header className="bg-highlight w-full py-1 bg-white border border-black">
         <div className="text-xl text-center font-semibold">{title}</div>
       </header>

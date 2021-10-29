@@ -24,6 +24,7 @@ import useFormPersist from "hooks/useFormPersist"
 import useFavorites from "hooks/useFavorites";
 import IdLabel from "components/IdLabel";
 import FAQButton from "components/FAQCard";
+import RulesButton from "components/RulesCard";
 
 export default function FormPost({
   baseUrl,
@@ -647,13 +648,7 @@ export default function FormPost({
                       <ul>
                         <li>
                           I've read the{" "}
-                          <Link
-                            to="/_/rules"
-                            target="_blank"
-                            className="text-blue-600 visited:text-purple-600 hover:text-blue-400"
-                          >
-                            rules
-                          </Link>{" "}
+                          <RulesButton/>{" "}
                           and the{" "}
                           <FAQButton/>{" "}
                           before posting.

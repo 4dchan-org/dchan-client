@@ -82,7 +82,7 @@ export default function BoardListPage({ location, match: { params } }: any) {
             <div className="center flex">
               <div className="p-2">
                 {searchResults.length > 0 ? (
-                  <Card title={<span>Results for "{search}"</span>}>
+                  <Card title={<span>Results for "{search}"</span>} className="pt-4">
                     <BoardList boards={searchResults} />
                   </Card>
                 ) : (
@@ -93,13 +93,13 @@ export default function BoardListPage({ location, match: { params } }: any) {
           ) : boardsData ? (
             <div>
               <div className="grid justify-center">
-                <Card title={<span>Most popular</span>}>
+                <Card title={<span>Most popular</span>} className="pt-4">
                   <BoardList boards={boardsData.mostPopular} />
                 </Card>
-                <Card title={<span>Last created</span>}>
+                <Card title={<span>Last created</span>} className="pt-4">
                   <BoardList boards={boardsData.lastCreated} />
                 </Card>
-                <Card title={<span>Last bumped</span>}>
+                <Card title={<span>Last bumped</span>} className="pt-4">
                   <BoardList boards={boardsData.lastBumped} />
                 </Card>
               </div>

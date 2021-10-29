@@ -16,7 +16,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <div className="center-grid max-w-full min-h-screen bg-primary">
+    <div className="center-grid max-w-full min-h-screen bg-primary pt-8">
       <div className="flex flex-wrap center">
         <Card
           title={

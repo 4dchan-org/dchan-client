@@ -132,7 +132,7 @@ function Post({
         ref={postRef}
       >
         <summary
-          className="text-left opacity-50 z-10 whitespace-nowrap max-w-95vw overflow-hidden mb-1 flex center"
+          className="text-left opacity-50 z-10 whitespace-nowrap overflow-hidden mb-1 flex center"
           title="Hide/Show"
         >
           <PostHeader thread={thread} post={post} block={block}>
@@ -145,7 +145,7 @@ function Post({
           dchan-post-from-address={address}
         >
           <div
-            className={`${isHighlighted || isFocused ? "bg-tertiary" : !isOp ? "bg-secondary" : ""} ${isYou ? "border-dashed border-2 border-tertiary" : ""} w-full sm:w-auto mb-2 pr-4 inline-block relative max-w-screen-xl`}
+            className={`${isHighlighted || isFocused ? "bg-tertiary" : !isOp ? "bg-secondary" : ""} ${isYou ? "border-dashed border-2 border-tertiary" : ""} w-full sm:w-full mb-2 pr-4 inline-block relative`}
           >
             <div className="flex sm:flex-wrap ml-5 align-center text-center sm:text-left sm:justify-start max-w-100vw">
               <PostHeader thread={thread} post={post} backlinks={backlinks} block={block}>

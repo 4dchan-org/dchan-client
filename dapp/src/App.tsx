@@ -16,6 +16,7 @@ import useSettings from "hooks/useSettings";
 import EULA from "components/EULA";
 import IdReferencePage from "pages/idReference";
 import { FAQCardOverlay } from "components/FAQCard";
+import { RulesCardOverlay } from "components/RulesCard";
 
 function App() {
   const [settings] = useSettings();
@@ -62,7 +63,10 @@ function App() {
           <Route path="/:board_name/0x:board_id" component={BoardPage} />
           <Route exact path="/:board_name" component={BoardListPage} />
         </Switch>
+        {/* my gut tells me this is a terrible hack,
+          * but it works flawlessly so fuck it */} 
         <FAQCardOverlay/>
+        <RulesCardOverlay/>
       </div>
     </Router>
   );
