@@ -4,12 +4,11 @@ import { Thread } from "dchan";
 import THREADS_LIST_FAVORITES from "graphql/queries/threads/list_favorites";
 import useFavorites from "hooks/useFavorites";
 import { truncate } from "lodash";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Router } from "router";
 import BoardLink from "./BoardLink";
 import Loading from "./Loading";
-import Spinner from "./Spinner";
 
 export default function WatchedThreadsWidget({ block }: { block?: string }) {
   const { favorites, removeFavorite } = useFavorites();

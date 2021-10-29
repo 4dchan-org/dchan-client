@@ -1,9 +1,8 @@
-import { ApolloQueryResult } from "@apollo/client";
+import { ApolloQueryResult, ApolloClient } from "@apollo/react-hooks";
 import { Block } from "dchan";
 import { fromBigInt } from "dchan/entities/datetime";
 import BLOCK_BY_DATE from "graphql/queries/block_by_date";
 import BLOCK_BY_NUMBER from "graphql/queries/block_by_number";
-import client from "graphql/clients/dchan";
 import useLastBlock from "hooks/useLastBlock";
 import { DateTime } from "luxon";
 import { useCallback, useEffect, useState, useMemo, forwardRef, ForwardedRef } from "react";
@@ -27,7 +26,7 @@ interface BlockByNumberVars {
   number: string;
 }
 
-function queryBlockByDate(dateTime: DateTime): Promise<ApolloQueryResult<BlockData>> {
+function queryBlockByDate(client: ApolloClient<any>, dateTime: DateTime): Promise<ApolloQueryResult<BlockData>> {
   return client.query<BlockData, BlockByDateVars>({
     query: BLOCK_BY_DATE,
     variables: {
@@ -37,7 +36,7 @@ function queryBlockByDate(dateTime: DateTime): Promise<ApolloQueryResult<BlockDa
   });
 }
 
-function queryBlockByNumber(block: string): Promise<ApolloQueryResult<BlockData>> {
+function queryBlockByNumber(client: ApolloClient<any>, block: string): Promise<ApolloQueryResult<BlockData>> {
   return client.query<BlockData, BlockByNumberVars>({
     query: BLOCK_BY_NUMBER,
     variables: {
@@ -49,6 +48,7 @@ function queryBlockByNumber(block: string): Promise<ApolloQueryResult<BlockData>
 const timeTravelingNote = "You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date.";
 
 export default forwardRef(({
+  client,
   block,
   startBlock,
   dateTime,
@@ -58,6 +58,7 @@ export default forwardRef(({
   onOpen,
   onClose,
 }: {
+  client: ApolloClient<any>;
   block?: string;
   startBlock?: Block;
   dateTime?: DateTime;
@@ -114,7 +115,7 @@ export default forwardRef(({
 
   const changeDate = useCallback(
     (date: DateTime) => {
-      queryBlockByDate(date).then(result => {
+      queryBlockByDate(client, date).then(result => {
         const b = result.data?.blocks?.[0];
         if (b != null) {
           const url = !!baseUrl
@@ -147,7 +148,7 @@ export default forwardRef(({
       setWritingState(false);
 
       if (block) {
-        queryBlockByNumber(block).then((result) => {
+        queryBlockByNumber(client, block).then((result) => {
           const b = result.data?.blocks?.[0];
           changeBlock(b);
         });

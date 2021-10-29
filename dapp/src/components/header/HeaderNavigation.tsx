@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/react-hooks";
+import { ApolloConsumer, ApolloClient, useQuery } from "@apollo/react-hooks";
 import BoardLink from "components/BoardLink";
 import { Board, Thread, Block } from "dchan";
 import BOARDS_LIST_MOST_POPULAR from "graphql/queries/boards/list_most_popular";
@@ -111,25 +111,28 @@ export default function HeaderNavigation({
           ]
         </span>
         <span className="float-right flex flex-row">
-          <TimeTravelWidget
-            ref={timeTravelRef}
-            open={openedWidget === OpenedWidgetEnum.TIMETRAVEL}
-            onOpen={() => {
-              setOpenedWidget(
-                openedWidget === OpenedWidgetEnum.TIMETRAVEL
-                  ? null
-                  : OpenedWidgetEnum.TIMETRAVEL
-              );
-            }}
-            onClose={() => setOpenedWidget(null)}
-            block={block}
-            baseUrl={baseUrl || ""}
-            startBlock={startBlock}
-            dateTime={dateTime}
-            startRangeLabel={
-              thread ? "Thread creation" : board ? "Board creation" : "?"
-            }
-          />
+          <ApolloConsumer>{(client: ApolloClient<any>) => (
+            <TimeTravelWidget
+              client={client}
+              ref={timeTravelRef}
+              open={openedWidget === OpenedWidgetEnum.TIMETRAVEL}
+              onOpen={() => {
+                setOpenedWidget(
+                  openedWidget === OpenedWidgetEnum.TIMETRAVEL
+                    ? null
+                    : OpenedWidgetEnum.TIMETRAVEL
+                );
+              }}
+              onClose={() => setOpenedWidget(null)}
+              block={block}
+              baseUrl={baseUrl || ""}
+              startBlock={startBlock}
+              dateTime={dateTime}
+              startRangeLabel={
+                thread ? "Thread creation" : board ? "Board creation" : "?"
+              }
+            />
+          )}</ApolloConsumer>
           <details className="w-full sm:relative mx-1" open={openedWidget === OpenedWidgetEnum.SEARCH} ref={searchRef}>
             <summary className="list-none cursor-pointer" onClick={(event) => {
               event.preventDefault();
