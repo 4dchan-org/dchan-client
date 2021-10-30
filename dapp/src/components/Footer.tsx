@@ -50,7 +50,7 @@ export default function Footer({
               <RulesButton className="border border-black py-1 px-4 mx-1 bg-white"/>
             </div>
             <div className="mt-2">
-              <AbuseButton className="border border-black py-1 px-4 mx-1 bg-white"/>
+              <AbuseButton className="border border-black py-1 px-4 mx-1 bg-white whitespace-nowrap"/>
             </div>
             <div className="mt-2">
               <FAQButton className="border border-black py-1 px-4 mx-1 bg-white"/>
