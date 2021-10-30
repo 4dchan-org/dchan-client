@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { Board, shortenAddress, Thread } from "dchan";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useWeb3 from "hooks/useWeb3";
 import Status from "components/Status";
@@ -191,8 +191,16 @@ export default function FormPost({
         const url = `/${transactionHash}-${logIndex}`;
         history.push(url);
       }
-    },
-    [accounts, history, setStatus, setIsSending, resetForm, addFavorite, thread]
+    }, [
+      accounts,
+      history,
+      setStatus,
+      setIsSending,
+      resetForm,
+      addFavorite,
+      thread,
+      settings?.ipfs?.endpoint
+    ]
   );
 
   const refreshThumbnail = useCallback(async () => {

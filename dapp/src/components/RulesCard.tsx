@@ -35,7 +35,7 @@ export function RulesCardOverlay() {
 }
 
 export default function RulesButton({className = ""}: {className?: string}) {
-  const [_, setOpenRules] = useRules();
+  const [, setOpenRules] = useRules();
   return (
     <>
       <span

@@ -32,7 +32,7 @@ export function AbuseCardOverlay() {
 }
 
 export default function AbuseButton({className = ""}: {className?: string}) {
-  const [_, setOpenAbuse] = useAbuse();
+  const [, setOpenAbuse] = useAbuse();
   return (
     <>
       <span

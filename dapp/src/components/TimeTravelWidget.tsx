@@ -131,7 +131,7 @@ export default forwardRef(({
         }
       });
     },
-    [changeBlock, setTimeTraveledToNumber, history, baseUrl, setWritingState]
+    [changeBlock, setTimeTraveledToNumber, history, baseUrl, setWritingState, client]
   );
 
   const changeNumber = useCallback(
@@ -156,7 +156,7 @@ export default forwardRef(({
         travelToLatest();
       }
     },
-    [changeBlock, baseUrl, history, travelToLatest, setPrevQueriedBlock, setWritingState]
+    [changeBlock, baseUrl, history, travelToLatest, setPrevQueriedBlock, setWritingState, client]
   );
 
   useEffect(() => {

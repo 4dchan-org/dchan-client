@@ -1,5 +1,5 @@
 import useSettings, { Settings } from "hooks/useSettings";
-import React, { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { debounce } from "lodash";
 
 export default function SettingsWidget({onExit}: {onExit: () => void}) {
@@ -14,7 +14,7 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
       settings.subgraph.endpoint = val;
       setSettings(updatedSettings);
     }, 500),
-    [settings, setSettings]
+    [setSettings]
   );
 
   const [displayIPFS, setDisplayIPFS] = useState<
@@ -26,7 +26,7 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
       settings.ipfs.endpoint = val;
       setSettings(updatedSettings);
     }, 500),
-    [settings, setSettings]
+    [setSettings]
   );
 
   const [displayScoreThreshold, setDisplayScoreThreshold] = useState<
@@ -38,7 +38,7 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
       settings.content_filter.score_threshold = val;
       setSettings(updatedSettings);
     }, 500),
-    [settings, setSettings]
+    [setSettings]
   );
 
   return (settings ? (

@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import polygonSrc from "assets/images/polygon.png";
 import thegraphSrc from "assets/images/thegraph.png";
 import IPFSClientWidget from "./IPFSClientWidget";

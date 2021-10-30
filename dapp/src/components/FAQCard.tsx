@@ -209,7 +209,7 @@ export function FAQCardOverlay() {
 }
 
 export default function FAQButton({className = ""}: {className?: string}) {
-  const [_, setOpenFAQ] = useFAQ();
+  const [, setOpenFAQ] = useFAQ();
   return (
     <>
       <span
