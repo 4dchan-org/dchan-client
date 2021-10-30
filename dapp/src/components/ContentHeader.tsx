@@ -9,7 +9,6 @@ import BoardHeader from "./board/header";
 import FormPost from "./form/FormPost";
 import { RefreshWidget } from "./RefreshWidget";
 import BoardViewSettings from "./settings/BoardViewSettings";
-import FilterSettings from "./settings/FilterSettings";
 import { Link } from "react-router-dom";
 import Loading from "./Loading";
 
@@ -106,12 +105,7 @@ export default function ContentHeader({
           )}
         </div>
         <div className="center grid">
-          <details>
-            <summary className="py-2 text-xs text-gray-600">{summary}</summary>
-            <div>
-              <FilterSettings />
-            </div>
-          </details>
+          <span className="py-2 text-xs text-gray-600">{summary}</span>
         </div>
         <div className="flex justify-end">{!thread ? <BoardViewSettings /> : ""}</div>
       </div>
