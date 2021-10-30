@@ -1,19 +1,44 @@
 import useSettings, { Settings } from "hooks/useSettings";
-import React, { useCallback } from "react";
-import OverlayComponent from "./OverlayComponent";
+import React, { useCallback, useMemo, useState } from "react";
+import { debounce } from "lodash";
 
 export default function SettingsWidget({onExit}: {onExit: () => void}) {
   const [settings, setSettings] = useSettings();
 
-  // this might be a bit too autistic
-  const changeSetting = useCallback(
-    <T extends HTMLElement>(settings: Settings, func: (s: Settings, e: React.ChangeEvent<T>) => void) =>
-    (e: React.ChangeEvent<T>) => {
+  const [displaySubgraph, setDisplaySubgraph] = useState<
+    string | undefined
+  >(settings?.subgraph?.endpoint);
+  const writeSubgraphEndpoint = useMemo(
+    () => debounce((settings: Settings, val: string) => {
       let updatedSettings = {...settings};
-      func(updatedSettings, e);
+      settings.subgraph.endpoint = val;
       setSettings(updatedSettings);
-    },
-    [setSettings]
+    }, 500),
+    [settings, setSettings]
+  );
+
+  const [displayIPFS, setDisplayIPFS] = useState<
+    string | undefined
+  >(settings?.ipfs?.endpoint);
+  const writeIPFSEndpoint = useMemo(
+    () => debounce((settings: Settings, val: string) => {
+      let updatedSettings = {...settings};
+      settings.ipfs.endpoint = val;
+      setSettings(updatedSettings);
+    }, 500),
+    [settings, setSettings]
+  );
+
+  const [displayScoreThreshold, setDisplayScoreThreshold] = useState<
+    number | undefined
+  >(settings?.content_filter?.score_threshold);
+  const writeScoreThreshold = useMemo(
+    () => debounce((settings: Settings, val: number) => {
+      let updatedSettings = {...settings};
+      settings.content_filter.score_threshold = val;
+      setSettings(updatedSettings);
+    }, 500),
+    [settings, setSettings]
   );
 
   return (settings ? (
@@ -35,8 +60,11 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
           <textarea
             className="w-full"
             spellCheck={false}
-            onChange={changeSetting(settings, (s, e) => s.subgraph.endpoint = e.target.value)}
-            value={settings.subgraph.endpoint}
+            onChange={(e) => {
+              setDisplaySubgraph(e.target.value);
+              writeSubgraphEndpoint(settings, e.target.value);
+            }}
+            value={displaySubgraph}
           />
         </fieldset>
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
@@ -45,8 +73,11 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
           <textarea
             className="w-full"
             spellCheck={false}
-            onChange={changeSetting(settings, (s, e) => s.ipfs.endpoint = e.target.value)}
-            value={settings.ipfs.endpoint}
+            onChange={(e) => {
+              setDisplayIPFS(e.target.value);
+              writeIPFSEndpoint(settings, e.target.value);
+            }}
+            value={displayIPFS}
           />
         </fieldset>
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
@@ -61,7 +92,11 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
             className="mx-1 text-xs whitespace-nowrap opacity-80 hover:opacity-100"
             type="checkbox"
             checked={settings.content_filter.show_below_threshold}
-            onChange={changeSetting(settings, (s, e) => s.content_filter.show_below_threshold = e.target.checked)}
+            onChange={(e) => {
+              let updatedSettings = {...settings};
+              settings.content_filter.show_below_threshold = e.target.checked;
+              setSettings(updatedSettings);
+            }}
           />
           <label htmlFor="dchan-input-show-below-threshold">
             Show hidden content
@@ -78,8 +113,12 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
               min={0}
               max={1}
               step={0.1}
-              value={settings?.content_filter?.score_threshold}
-              onChange={changeSetting(settings, (s, e) => s.content_filter.score_threshold = parseFloat(e.target.value))}
+              value={displayScoreThreshold}
+              onChange={(e) => {
+                const val = parseFloat(e.target.value);
+                setDisplayScoreThreshold(val);
+                writeScoreThreshold(settings, val);
+              }}
             />
           </div>
           <div className="text-sm">
@@ -96,7 +135,7 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
                 "0.8": "Hide slighly reported content",
                 "0.9": "Hide slighly reported content",
                 "1": "Only show content with no reports",
-              }[settings?.content_filter?.score_threshold ?? "1"]
+              }[displayScoreThreshold ?? "1"]
             }
           </div>
         </fieldset>
