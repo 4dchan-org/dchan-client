@@ -1,6 +1,7 @@
 import useSettings, { Settings } from "hooks/useSettings";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { debounce } from "lodash";
+import DefaultSettings from "settings/default";
 
 export default function SettingsWidget({onExit}: {onExit: () => void}) {
   const [settings, setSettings] = useSettings();
@@ -8,31 +9,39 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
   const [displaySubgraph, setDisplaySubgraph] = useState<
     string | undefined
   >(settings?.subgraph?.endpoint);
-  const writeSubgraphEndpoint = useMemo(
-    () => debounce((settings: Settings, val: string) => {
+  const writeSubgraphEndpoint = useCallback(
+    (settings: Settings, val: string) => {
       let updatedSettings = {...settings};
       settings.subgraph.endpoint = val;
       setSettings(updatedSettings);
-    }, 500),
+    },
     [setSettings]
+  );
+  const writeSubgraphEndpointDebounced = useMemo(
+    () => debounce(writeSubgraphEndpoint, 500),
+    [writeSubgraphEndpoint]
   );
 
   const [displayIPFS, setDisplayIPFS] = useState<
     string | undefined
   >(settings?.ipfs?.endpoint);
-  const writeIPFSEndpoint = useMemo(
-    () => debounce((settings: Settings, val: string) => {
+  const writeIPFSEndpoint = useCallback(
+    (settings: Settings, val: string) => {
       let updatedSettings = {...settings};
       settings.ipfs.endpoint = val;
       setSettings(updatedSettings);
-    }, 500),
+    },
     [setSettings]
+  );
+  const writeIPFSEndpointDebounced = useMemo(
+    () => debounce(writeIPFSEndpoint, 500),
+    [writeIPFSEndpoint]
   );
 
   const [displayScoreThreshold, setDisplayScoreThreshold] = useState<
     number | undefined
   >(settings?.content_filter?.score_threshold);
-  const writeScoreThreshold = useMemo(
+  const writeScoreThresholdDebounced = useMemo(
     () => debounce((settings: Settings, val: number) => {
       let updatedSettings = {...settings};
       settings.content_filter.score_threshold = val;
@@ -57,12 +66,21 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">Subgraph Endpoint</legend>
           <div>Change this to query a different subgraph for data.</div>
+          <button
+            className="border border-black px-1 mb-0.5 bg-primary"
+            onClick={() => {
+              setDisplaySubgraph(DefaultSettings.subgraph.endpoint);
+              writeSubgraphEndpoint(settings, DefaultSettings.subgraph.endpoint);
+            }}
+          >
+            Reset to default
+          </button>
           <textarea
             className="w-full"
             spellCheck={false}
             onChange={(e) => {
               setDisplaySubgraph(e.target.value);
-              writeSubgraphEndpoint(settings, e.target.value);
+              writeSubgraphEndpointDebounced(settings, e.target.value);
             }}
             value={displaySubgraph}
           />
@@ -70,12 +88,21 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">IPFS Endpoint</legend>
           <div>Change this to upload IPFS images to a different endpoint.</div>
+          <button
+            className="border border-black px-1 mb-0.5 bg-primary"
+            onClick={() => {
+              setDisplayIPFS(DefaultSettings.ipfs.endpoint);
+              writeIPFSEndpoint(settings, DefaultSettings.ipfs.endpoint);
+            }}
+          >
+            Reset to default
+          </button>
           <textarea
             className="w-full"
             spellCheck={false}
             onChange={(e) => {
               setDisplayIPFS(e.target.value);
-              writeIPFSEndpoint(settings, e.target.value);
+              writeIPFSEndpointDebounced(settings, e.target.value);
             }}
             value={displayIPFS}
           />
@@ -117,7 +144,7 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
               onChange={(e) => {
                 const val = parseFloat(e.target.value);
                 setDisplayScoreThreshold(val);
-                writeScoreThreshold(settings, val);
+                writeScoreThresholdDebounced(settings, val);
               }}
             />
           </div>
