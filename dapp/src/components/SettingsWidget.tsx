@@ -65,7 +65,8 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
       <div className="h-full overflow-y-scroll overscroll-contain" style={{flex: "1 1 auto"}}>
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">Subgraph Endpoint</legend>
-          <div>Change this to query a different subgraph for data.</div>
+          <div>Endpoint used to query the subgraph for data.</div>
+          <div>If you're having issues with boards/threads not loading, check if resetting to default fixes the issue first.</div>
           <button
             className="border border-black px-1 mb-0.5 bg-primary"
             onClick={() => {
@@ -87,7 +88,8 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
         </fieldset>
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">IPFS Endpoint</legend>
-          <div>Change this to upload IPFS images to a different endpoint.</div>
+          <div>Endpoint used to upload images to IPFS.</div>
+          <div>If you're having issues with image uploads failing, check if resetting to default fixes the issue first.</div>
           <button
             className="border border-black px-1 mb-0.5 bg-primary"
             onClick={() => {
