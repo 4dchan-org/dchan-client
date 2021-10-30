@@ -18,13 +18,49 @@ import IdReferencePage from "pages/idReference";
 import { FAQCardOverlay } from "components/FAQCard";
 import { RulesCardOverlay } from "components/RulesCard";
 import { AbuseCardOverlay } from "components/AbuseCard";
-import useLocalStorage from "hooks/useLocalStorage";
 import DefaultSettings from "settings/default";
 
+import { useState } from "react";
+import { Settings, writeAppSetSettings } from "hooks/useSettings";
+
+// So there's an issue with how settings works
+//
+// It's loaded via a singletonHook, which is just a wrapper
+// around a hook for reading/writing to local storage
+//
+// In order to allow singleton hooks access to the client
+// (e.g. so useLastBlock can access it), we need to put
+// <SingletonHooksContainer/> inside <ApolloProvider/> in
+// the App component
+//
+// The issue is that because settings can now force App
+// to reload the apollo client, it now depends on Settings,
+// which is loaded by a singleton hook, but App also
+// loads <SingletonHooksContainer/>, which causes an
+// infinite loop to occur and crashes the page
+//
+// To fix this, we need to break that loop by having the
+// settings in the App component be separate from the one
+// in the hook, and to do this we load the settings beforehand
+// directly, then have the hook overwrite App's settings value
+// whenever changes are made
+//
+// It's an awful hack, but it works
+function useLocalSettings() {
+  return useState<Settings>(() => {
+    try {
+      const item = window.localStorage.getItem("dchan.config");
+      return item ? {...DefaultSettings, ...JSON.parse(item)} : DefaultSettings;
+    } catch (error) {
+      console.log(error);
+      return DefaultSettings;
+    }
+  });
+}
+
 function App() {
-  // can't use useSettings here, since I need to put <SingletonHooksContainer/>
-  // within the ApolloProvider, and using it would cause an infinite render loop
-  const settings = {...DefaultSettings, ...useLocalStorage("dchan.config", DefaultSettings)[0]};
+  const [settings, setSettings] = useLocalSettings();
+  writeAppSetSettings(setSettings);
 
   const client = useMemo(() => new ApolloClient({
     uri: settings.subgraph.endpoint,
