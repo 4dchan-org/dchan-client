@@ -132,8 +132,6 @@ function App() {
             <Route path="/:board_name/0x:board_id" component={BoardPage} />
             <Route exact path="/:board_name" component={BoardListPage} />
           </Switch>
-          {/* my gut tells me this is a terrible hack,
-            * but it works flawlessly so fuck it */} 
           <FAQCardOverlay/>
           <RulesCardOverlay/>
           <AbuseCardOverlay/>
