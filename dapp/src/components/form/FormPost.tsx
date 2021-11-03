@@ -25,7 +25,7 @@ import useFavorites from "hooks/useFavorites";
 import IdLabel from "components/IdLabel";
 import FAQButton from "components/FAQCard";
 import RulesButton from "components/RulesCard";
-import useSettings from "hooks/useSettings";
+import DefaultSettings from "settings/default";
 
 export default function FormPost({
   baseUrl,
@@ -37,7 +37,7 @@ export default function FormPost({
   board?: Board;
 }) {
   const { provider, chainId, accounts } = useWeb3();
-  const [settings] = useSettings();
+  //const [settings] = useSettings();
 
   const history = useHistory();
   const formRef = useRef<HTMLFormElement>(null);
@@ -162,7 +162,7 @@ export default function FormPost({
 
       let result: { error?: any, success?: any, events?: any } | null = null;
       try {
-        result = await postMessage(data, accounts, setStatus, settings?.ipfs?.endpoint);
+        result = await postMessage(data, accounts, setStatus, DefaultSettings.ipfs.endpoint);
       } catch (error) {
         result = { error };
 
@@ -199,7 +199,7 @@ export default function FormPost({
       resetForm,
       addFavorite,
       thread,
-      settings?.ipfs?.endpoint
+      DefaultSettings.ipfs.endpoint
     ]
   );
 

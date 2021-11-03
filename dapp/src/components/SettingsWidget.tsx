@@ -6,6 +6,7 @@ import DefaultSettings from "settings/default";
 export default function SettingsWidget({onExit}: {onExit: () => void}) {
   const [settings, setSettings] = useSettings();
 
+  /*
   const [displaySubgraph, setDisplaySubgraph] = useState<
     string | undefined
   >(settings?.subgraph?.endpoint);
@@ -37,6 +38,7 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
     () => debounce(writeIPFSEndpoint, 500),
     [writeIPFSEndpoint]
   );
+  */
 
   const [displayScoreThreshold, setDisplayScoreThreshold] = useState<
     number | undefined
@@ -63,6 +65,7 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
         </div>
       </div>
       <div className="h-full overflow-y-scroll overscroll-contain" style={{flex: "1 1 auto"}}>
+        {/*
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">Subgraph Endpoint</legend>
           <div>Endpoint used to query the subgraph for data.</div>
@@ -109,6 +112,7 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
             value={displayIPFS}
           />
         </fieldset>
+        */}
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">Filter Settings</legend>
           <div className="text-contrast">

@@ -62,10 +62,13 @@ function App() {
   const [settings, setSettings] = useLocalSettings();
   writeAppSetSettings(setSettings);
 
-  const client = useMemo(() => new ApolloClient({
-    uri: settings.subgraph.endpoint,
-    cache: new InMemoryCache(),
-  }), [settings.subgraph.endpoint]);
+  const client = useMemo(
+    () => new ApolloClient({
+      uri: DefaultSettings.subgraph.endpoint,
+      cache: new InMemoryCache(),
+    }),
+    [DefaultSettings.subgraph.endpoint]
+  );
 
   return settings?.eula?.agreed === false ? (
     <EULA />
