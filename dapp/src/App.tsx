@@ -1,6 +1,6 @@
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/react-hooks";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { SingletonHooksContainer } from "react-singleton-hook";
 
 import "assets/styles/index.scss";
@@ -21,7 +21,7 @@ import { AbuseCardOverlay } from "components/AbuseCard";
 import DefaultSettings from "settings/default";
 
 import { useState } from "react";
-import { Settings, writeAppSetSettings } from "hooks/useSettings";
+import useSettings, { Settings, writeAppSetSettings } from "hooks/useSettings";
 
 // So there's an issue with how settings works
 //
@@ -58,6 +58,25 @@ function useLocalSettings() {
   });
 }
 
+// @HACK keeps localstorage endpoints in sync with
+// DefaultSettings, remove when users are allowed
+// to change it themselves
+let endpointsWritten: boolean = false;
+function WriteEndpointsHack() {
+  let [settings, setSettings] = useSettings();
+  useEffect(() => {
+    if (!endpointsWritten && settings) {
+      console.log("func called");
+      endpointsWritten = true;
+      let newSettings = {...settings};
+      newSettings.subgraph.endpoint = DefaultSettings.subgraph.endpoint;
+      newSettings.ipfs.endpoint = DefaultSettings.ipfs.endpoint;
+      setSettings(newSettings);
+    }
+  }, [settings])
+  return null;
+}
+
 function App() {
   const [settings, setSettings] = useLocalSettings();
   writeAppSetSettings(setSettings);
@@ -67,7 +86,7 @@ function App() {
       uri: DefaultSettings.subgraph.endpoint,
       cache: new InMemoryCache(),
     }),
-    [DefaultSettings.subgraph.endpoint]
+    []
   );
 
   return settings?.eula?.agreed === false ? (
@@ -75,6 +94,7 @@ function App() {
   ) : (
     <ApolloProvider client={client}>
       <SingletonHooksContainer/>
+      <WriteEndpointsHack/>
       <Router basename="/">
         <LockBanner />
         <div className="App text-center">
