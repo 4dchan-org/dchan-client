@@ -1,15 +1,23 @@
 import logo from "assets/images/dchan.png";
 import Card from "components/Card";
 import Footer from "components/Footer";
+import HeaderNavigation from "components/header/HeaderNavigation";
 import LatestPostsCard from "components/LatestPostsCard";
 import PopularBoardsCard from "components/PopularBoardsCard";
 import PopularThreadsCard from "components/PopularThreadsCard";
 import WatchedThreadsCard from "components/WatchedThreadsCard";
+import { parse as parseQueryString } from "query-string";
+import { DateTime } from "luxon";
 import { useEffect } from "react";
 import { useTitle } from "react-use";
 
-export default function HomePage() {
+export default function HomePage({ location }: any) {
   useTitle("dchan.network");
+  
+  const query = parseQueryString(location.search);
+  const dateTime = query.date
+    ? DateTime.fromISO(query.date as string)
+    : undefined;
 
   useEffect(() => {
     window.scrollTo({top: 0})
@@ -17,6 +25,11 @@ export default function HomePage() {
 
   return (
     <div className="center-grid max-w-full min-h-screen bg-primary pt-8">
+      <HeaderNavigation
+        baseUrl="/"
+        block={`${query.block}`}
+        dateTime={dateTime}
+      />
       <div className="flex flex-wrap center">
         <Card
           title={
