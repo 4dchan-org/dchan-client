@@ -52,7 +52,8 @@ type JannyRevokeData = {
 export async function postMessage(
     input: PostCreateInput,
     accounts: any,
-    setStatus: SetStatus
+    setStatus: SetStatus,
+    ipfsEndpoint?: string,
 ) {
     const { board, thread, comment, name, subject, sage, nonce } = input;
 
@@ -62,7 +63,7 @@ export async function postMessage(
             progress: "Uploading file...",
         })
 
-        file = await upload(input.file, setStatus);
+        file = await upload(input.file, setStatus, ipfsEndpoint);
         if (!file) {
             setStatus({
                 error: "Upload failed",

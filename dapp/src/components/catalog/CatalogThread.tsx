@@ -78,7 +78,7 @@ const CatalogThread = ({
           isFocused
             ? {
                 maxWidth: "initial",
-                zIndex: 900,
+                zIndex: 40,
                 marginLeft: "-2rem",
                 marginRight: "-2rem",
                 width: "14rem",
@@ -110,7 +110,7 @@ const CatalogThread = ({
         >
           <div
             className={[
-              !isFocused ? "absolute top-0 right-0" : "relative top-0 z-10 bg-tertiary border border-black h-full",
+              !isFocused ? "absolute top-0 right-0 left-0" : "relative top-0 z-10 bg-tertiary border border-black h-full",
               !isFocused && isLowScore ? "dchan-censor" : "",
             ].join(" ")}
             style={{maxHeight: "initial"}}

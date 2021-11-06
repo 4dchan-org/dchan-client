@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { Board, shortenAddress, Thread } from "dchan";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useWeb3 from "hooks/useWeb3";
 import Status from "components/Status";
@@ -23,6 +23,9 @@ import Menu from "components/Menu";
 import useFormPersist from "hooks/useFormPersist"
 import useFavorites from "hooks/useFavorites";
 import IdLabel from "components/IdLabel";
+import FAQButton from "components/FAQCard";
+import RulesButton from "components/RulesCard";
+import DefaultSettings from "settings/default";
 
 export default function FormPost({
   baseUrl,
@@ -34,6 +37,7 @@ export default function FormPost({
   board?: Board;
 }) {
   const { provider, chainId, accounts } = useWeb3();
+  //const [settings] = useSettings();
 
   const history = useHistory();
   const formRef = useRef<HTMLFormElement>(null);
@@ -158,7 +162,7 @@ export default function FormPost({
 
       let result: { error?: any, success?: any, events?: any } | null = null;
       try {
-        result = await postMessage(data, accounts, setStatus);
+        result = await postMessage(data, accounts, setStatus, DefaultSettings.ipfs.endpoint);
       } catch (error) {
         result = { error };
 
@@ -187,8 +191,16 @@ export default function FormPost({
         const url = `/${transactionHash}-${logIndex}`;
         history.push(url);
       }
-    },
-    [accounts, history, setStatus, setIsSending, resetForm, addFavorite, thread]
+    }, [
+      accounts,
+      history,
+      setStatus,
+      setIsSending,
+      resetForm,
+      addFavorite,
+      thread,
+      DefaultSettings.ipfs.endpoint
+    ]
   );
 
   const refreshThumbnail = useCallback(async () => {
@@ -327,7 +339,7 @@ export default function FormPost({
   );
 
   return (
-    <div>
+    <div className="z-30">
       <Wallet />
       {!isJanny && thread?.isLocked ? (
         <div className="text-contrast font-weight-800 font-family-tahoma">
@@ -646,21 +658,9 @@ export default function FormPost({
                       <ul>
                         <li>
                           I've read the{" "}
-                          <Link
-                            to="/_/rules"
-                            target="_blank"
-                            className="text-blue-600 visited:text-purple-600 hover:text-blue-400"
-                          >
-                            rules
-                          </Link>{" "}
+                          <RulesButton/>{" "}
                           and the{" "}
-                          <Link
-                            to="/_/faq"
-                            target="_blank"
-                            className="text-blue-600 visited:text-purple-600 hover:text-blue-400"
-                          >
-                            FAQ
-                          </Link>{" "}
+                          <FAQButton/>{" "}
                           before posting.
                         </li>
                         <li>

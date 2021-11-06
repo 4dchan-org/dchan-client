@@ -10,7 +10,8 @@ export type IpfsUploadResult = {
 
 export async function upload(
     files: FileList,
-    setStatus: SetStatus
+    setStatus: SetStatus,
+    ipfsEndpoint?: string,
 ): Promise<IpfsUploadResult | undefined> {
     if (!!files) {
         const file = files[0];
@@ -23,7 +24,7 @@ export async function upload(
                 let formData = new FormData();
                 formData.append("file", file);
                 const ipfsResponse = await fetch(
-                    `${Config.ipfs.endpoint}/add`,
+                    `${ipfsEndpoint || Config.ipfs.endpoint}/add`,
                     { method: "POST", body: formData, referrer: "" }
                 );
 

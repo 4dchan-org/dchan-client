@@ -14,7 +14,7 @@ export default function PopularBoardsCard() {
   });
 
   return (
-    <Card className="p-2" title={<span>Popular boards</span>}>
+    <Card className="p-2 pt-4" title={<span>Popular boards</span>}>
       <div>
         <BoardList className="grid" loading={loading} boards={data?.boards}></BoardList>
         <div className="p-4">

@@ -35,10 +35,25 @@ export type Settings = {
     }
 }
 
+// see App.tsx on why this awful hack exists
+let appSetSettings: (s: Settings) => void;
+
+export function writeAppSetSettings(func: (s: Settings) => void) {
+    appSetSettings = func;
+}
+
 const useSettings = singletonHook<[Settings|undefined, any | undefined]>([undefined, undefined], () => {
     let [settings, setSettings] = useLocalStorage("dchan.config", DefaultSettings)
 
-    return [{...DefaultSettings, ...settings}, useCallback((e: Settings) => setSettings(e), [setSettings])]
+    const setSettingsCallback = useCallback(
+        (e: Settings) => {
+            setSettings(e);
+            appSetSettings(e);
+        },
+        [setSettings]
+    );
+
+    return [{...DefaultSettings, ...settings}, setSettingsCallback]
 })
 
 export default useSettings

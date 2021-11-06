@@ -96,6 +96,10 @@ export default function BoardPage({ location, match: { params } }: any) {
   );
 
   useEffect(() => {
+    window.scrollTo({top: 0})
+  }, [board?.id])
+
+  useEffect(() => {
     board && board.name !== board_name && history.replace(`/${board.id}`);
   }, [board, board_name, history])
 
@@ -136,7 +140,7 @@ export default function BoardPage({ location, match: { params } }: any) {
         <ContentHeader
           board={board}
           dateTime={dateTime}
-          baseUrl={board ? Router.board(board, boardMode) : undefined}
+          baseUrl={board ? Router.board(board, boardMode) : location.pathname + location.hash}
           block={isNaN(queriedBlock) ? undefined : `${queriedBlock}`}
           summary={
             catalogLoading ? (

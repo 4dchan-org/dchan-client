@@ -1,24 +1,24 @@
 import { ReactElement } from "react";
 
 export default function Card({
-  className = "",
+  className = "grid",
+  bodyClassName = "",
   title,
   children,
 }: {
   className?: string;
-  children: ReactElement;
-  title: ReactElement;
+  bodyClassName?: string;
+  children: ReactElement | ReactElement[];
+  title: ReactElement | string;
 }) {
   return (
-    <div className={`${className} grid max-w-100vw`}>
-      <article className="grid md-grid mt-4">
-        <header className="bg-highlight w-full py-1 bg-white border border-black">
-          <div className="text-xl text-center font-semibold">{title}</div>
-        </header>
-        <section className="bg-white border border-black border-t-0 w-full p-4">
-          {children}
-        </section>
-      </article>
-    </div>
+    <article className={`${className} max-w-100vw`}>
+      <header className="bg-highlight py-1 bg-white border border-black">
+        <div className="text-xl text-center font-semibold">{title}</div>
+      </header>
+      <section className={`${bodyClassName} bg-white border border-black border-t-0 w-full p-4`} style={{flex: "1 1 auto"}}>
+        {children}
+      </section>
+    </article>
   );
 }

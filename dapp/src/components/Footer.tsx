@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
 import polygonSrc from "assets/images/polygon.png";
 import thegraphSrc from "assets/images/thegraph.png";
 import IPFSClientWidget from "./IPFSClientWidget";
+import FAQButton from "./FAQCard";
+import RulesButton from "./RulesCard";
+import AbuseButton from "./AbuseCard";
 
 export default function Footer({
   showContentDisclaimer = false,
@@ -42,37 +44,17 @@ export default function Footer({
               </a>
             </div>
           </div>
-          <div className="justify-center flex h-6 items-end">
-            <details className="bg-primary">
-              <summary>
-                <Link
-                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white"
-                  to="/_/rules"
-                  rel="noreferrer"
-                >
-                  Rules
-                </Link>
-              </summary>
-              <div className="pt-4">
-                <Link
-                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black my-4 py-1 px-4 mx-1 bg-white whitespace-nowrap"
-                  to="/_/abuse"
-                  rel="noreferrer"
-                >
-                  Abuse (DMCA/CSAM)
-                </Link>
-              </div>
-            </details>
-            <div>
-              <Link
-                className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white"
-                to="/_/faq"
-                rel="noreferrer"
-              >
-                FAQ
-              </Link>
+          <div className="justify-center flex flex-wrap h-6 items-end">
+            <div className="mt-2">
+              <RulesButton className="border border-black py-1 px-4 mx-1 bg-white"/>
             </div>
-            <div>
+            <div className="mt-2">
+              <AbuseButton className="border border-black py-1 px-4 mx-1 bg-white whitespace-nowrap"/>
+            </div>
+            <div className="mt-2">
+              <FAQButton className="border border-black py-1 px-4 mx-1 bg-white"/>
+            </div>
+            <div className="mt-2">
               <a
                 className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white"
                 href="//faucet.dchan.network"
@@ -82,7 +64,7 @@ export default function Footer({
                 Faucet
               </a>
             </div>
-            <div>
+            <div className="mt-2">
               <a
                 className="text-blue-600 visited:text-purple-600 hover:text-blue-500 border border-black py-1 px-4 mx-1 bg-white"
                 href="//github.com/dchan-network"

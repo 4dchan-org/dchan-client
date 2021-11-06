@@ -64,6 +64,10 @@ export default function PostSearchPage({ location, match: { params } }: any) {
   }, [postSearch]);
 
   useEffect(() => {
+    window.scrollTo({top: 0})
+  }, [search])
+
+  useEffect(() => {
     refetch();
   }, [search, block, refetch]);
 

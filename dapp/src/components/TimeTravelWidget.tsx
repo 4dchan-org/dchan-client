@@ -1,12 +1,11 @@
-import { ApolloQueryResult } from "@apollo/client";
+import { ApolloQueryResult, ApolloClient } from "@apollo/react-hooks";
 import { Block } from "dchan";
 import { fromBigInt } from "dchan/entities/datetime";
 import BLOCK_BY_DATE from "graphql/queries/block_by_date";
 import BLOCK_BY_NUMBER from "graphql/queries/block_by_number";
-import client from "graphql/clients/dchan";
 import useLastBlock from "hooks/useLastBlock";
 import { DateTime } from "luxon";
-import { useCallback, useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useState, useMemo, forwardRef, ForwardedRef } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 
@@ -27,7 +26,7 @@ interface BlockByNumberVars {
   number: string;
 }
 
-function queryBlockByDate(dateTime: DateTime): Promise<ApolloQueryResult<BlockData>> {
+function queryBlockByDate(client: ApolloClient<any>, dateTime: DateTime): Promise<ApolloQueryResult<BlockData>> {
   return client.query<BlockData, BlockByDateVars>({
     query: BLOCK_BY_DATE,
     variables: {
@@ -37,7 +36,7 @@ function queryBlockByDate(dateTime: DateTime): Promise<ApolloQueryResult<BlockDa
   });
 }
 
-function queryBlockByNumber(block: string): Promise<ApolloQueryResult<BlockData>> {
+function queryBlockByNumber(client: ApolloClient<any>, block: string): Promise<ApolloQueryResult<BlockData>> {
   return client.query<BlockData, BlockByNumberVars>({
     query: BLOCK_BY_NUMBER,
     variables: {
@@ -46,19 +45,29 @@ function queryBlockByNumber(block: string): Promise<ApolloQueryResult<BlockData>
   });
 }
 
-export default function TimeTravelWidget({
+const timeTravelingNote = "You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date.";
+
+export default forwardRef(({
+  client,
   block,
   startBlock,
   dateTime,
   startRangeLabel,
   baseUrl,
+  open,
+  onOpen,
+  onClose,
 }: {
+  client: ApolloClient<any>;
   block?: string;
   startBlock?: Block;
   dateTime?: DateTime;
   startRangeLabel: string;
   baseUrl: string;
-}) { 
+  open: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}, ref: ForwardedRef<HTMLElement>) => { 
   if (block && isNaN(parseInt(block))) {
     block = undefined;
   }
@@ -106,7 +115,7 @@ export default function TimeTravelWidget({
 
   const changeDate = useCallback(
     (date: DateTime) => {
-      queryBlockByDate(date).then(result => {
+      queryBlockByDate(client, date).then(result => {
         const b = result.data?.blocks?.[0];
         if (b != null) {
           const url = !!baseUrl
@@ -122,7 +131,7 @@ export default function TimeTravelWidget({
         }
       });
     },
-    [changeBlock, setTimeTraveledToNumber, history, baseUrl, setWritingState]
+    [changeBlock, setTimeTraveledToNumber, history, baseUrl, setWritingState, client]
   );
 
   const changeNumber = useCallback(
@@ -139,7 +148,7 @@ export default function TimeTravelWidget({
       setWritingState(false);
 
       if (block) {
-        queryBlockByNumber(block).then((result) => {
+        queryBlockByNumber(client, block).then((result) => {
           const b = result.data?.blocks?.[0];
           changeBlock(b);
         });
@@ -147,7 +156,7 @@ export default function TimeTravelWidget({
         travelToLatest();
       }
     },
-    [changeBlock, baseUrl, history, travelToLatest, setPrevQueriedBlock, setWritingState]
+    [changeBlock, baseUrl, history, travelToLatest, setPrevQueriedBlock, setWritingState, client]
   );
 
   useEffect(() => {
@@ -263,103 +272,170 @@ export default function TimeTravelWidget({
     block !== lastBlock?.number
   );
 
-  return timeTravelRange ? (
-    <span className="bg-primary">
-      <details className="mx-1 sm:text-right" open={isTimeTraveling}>
-        <summary className="list-none">
-          <span className="mx-1 text-xs">
-            {isTimeTraveling ? (
-              <abbr title="You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date.">
-                Time traveled to
-              </abbr>
-            ) : (
+  return (
+    <details className="sm:relative" open={open} ref={ref}>
+      <summary className="list-none cursor-pointer w-full mx-1 whitespace-nowrap" onClick={(event) => {
+        event.preventDefault();
+      }}>
+        {timeTravelRange ? <>
+          <div className="ml-2 hidden sm:block">
+            {isTimeTraveling ? <>
+              <span title={timeTravelingNote} onClick={() => {
+                onReturnToPresent();
+                onClose();
+              }}>
+                ⏱️
+              </span>
+              {" "}
+            </> : (
               ""
             )}
-          </span>
-          <span className="mx-1 text-xs text-left">
-            [
-            <input
-              required
-              type="date"
-              id="dchan-timetravel-date-input"
-              value={(isTimeTraveling && timeTraveledToDate
-                ? timeTraveledToDate
-                : now
-              ).toISODate()}
-              onChange={(e) => onDateChange(e.target.value)}
-              min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
-              max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
-            ></input>
-            ,{" "}
-            <span className="inline-block min-w-3rem">
-              {(isTimeTraveling && timeTraveledToDate
-                ? timeTraveledToDate
-                : now
-              ).toLocaleString(DateTime.TIME_SIMPLE)}
-            </span>
-            ]
-          </span>
-        </summary>
-        <span className="grid center text-xs">
-          <button
-            className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-            onClick={onInputBlockNumber}
-          >
-            {`Block #${timeTraveledToNumber || "?"}`}
-          </button>
-
-          {isTimeTraveling ? (
-            <div className="text-xs">
+            <span onClick={onOpen} className="text-xs">
               [
+              <input
+                required
+                type="date"
+                id="dchan-timetravel-date-input"
+                value={(isTimeTraveling && timeTraveledToDate
+                  ? timeTraveledToDate
+                  : now
+                ).toISODate()}
+                onClick={(e) => {
+                  if (!open) {
+                    onOpen();
+                  }
+                  e.stopPropagation();
+                }}
+                onChange={(e) => onDateChange(e.target.value)}
+                min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
+                max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
+              ></input>
+              ,{" "}
+              <span className="inline-block min-w-3rem">
+                {(isTimeTraveling && timeTraveledToDate
+                  ? timeTraveledToDate
+                  : now
+                ).toLocaleString(DateTime.TIME_SIMPLE)}
+              </span>
+              ]
+            </span>
+          </div>
+          <div className="ml-2 sm:hidden" onClick={onOpen}>
+            {isTimeTraveling ? (
+              <abbr title={timeTravelingNote}>
+                ⏱️
+              </abbr>
+            ) : (
+              <span>⏱️</span>
+            )}
+          </div>
+        </> : (
+          ""
+        )}
+      </summary>
+      <div className="absolute w-screen sm:w-max top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto sm:right-0">
+        {timeTravelRange ? (
+          <div className="bg-primary border border-secondary-accent p-1">
+            <div className="sm:hidden text-xs my-1 ml-2">
+              <span className="mr-2">
+                {isTimeTraveling ? (
+                  <abbr
+                    title="You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date."
+                  >
+                    Time traveled to:
+                  </abbr>
+                ) : (
+                  "Current time:"
+                )}
+              </span>
+              <span onClick={onOpen}>
+                [
+                <input
+                  required
+                  type="date"
+                  id="dchan-timetravel-date-input"
+                  value={(isTimeTraveling && timeTraveledToDate
+                    ? timeTraveledToDate
+                    : now
+                  ).toISODate()}
+                  onChange={(e) => onDateChange(e.target.value)}
+                  min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
+                  max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
+                ></input>
+                ,{" "}
+                <span className="inline-block min-w-3rem">
+                  {(isTimeTraveling && timeTraveledToDate
+                    ? timeTraveledToDate
+                    : now
+                  ).toLocaleString(DateTime.TIME_SIMPLE)}
+                </span>
+                ]
+              </span>
+            </div>
+            <div className="grid align-center text-xs w-full">
               <button
                 className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                onClick={onReturnToPresent}
+                onClick={onInputBlockNumber}
               >
-                Return to present
+                {`Block #${timeTraveledToNumber || "?"}`}
               </button>
-              ]
+
+              {isTimeTraveling ? (
+                <div className="text-xs text-center">
+                  [
+                  <button
+                    className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+                    onClick={onReturnToPresent}
+                  >
+                    Return to present
+                  </button>
+                  ]
+                </div>
+              ) : (
+                <div className="mb-4" />
+              )}
             </div>
-          ) : (
-            ""
-          )}
-        </span>
-        <div className="text-xs bg-primary">
-          <div className="grid grid-cols-4 center text-center">
-            <span className="mx-1">{startRangeLabel}</span>
-            <input
-              className="col-span-2"
-              id="timetravel"
-              type="range"
-              min={parseInt(timeTravelRange.min.number)}
-              max={parseInt(timeTravelRange.max.number)}
-              onChange={(e) => onBlockNumberChange(e.target.value)}
-              value={timeTraveledToNumber}
-            />{" "}
-            <span className="mx-1">Now</span>
-          </div>
-          <div className="grid grid-cols-4 center text-center">
-            <span className="mx-1">
-              <div>
-                {fromBigInt(timeTravelRange.min.timestamp).toLocaleString(
-                  DateTime.DATETIME_SHORT
-                )}
+            <div className="text-xs bg-primary">
+              <div className="grid grid-cols-4 center text-center">
+                <span className="mx-1">{startRangeLabel}</span>
+                <input
+                  className="col-span-2"
+                  id="timetravel"
+                  type="range"
+                  min={parseInt(timeTravelRange.min.number)}
+                  max={parseInt(timeTravelRange.max.number)}
+                  onChange={(e) => onBlockNumberChange(e.target.value)}
+                  value={timeTraveledToNumber}
+                />{" "}
+                <span className="mx-1">Now</span>
               </div>
-              <div>#{timeTravelRange.min.number}</div>
-            </span>
-            <span className="col-span-2" />
-            <span className="mx-1">
-              <div>
-                {fromBigInt(timeTravelRange.max.timestamp).toLocaleString(
-                  DateTime.DATETIME_SHORT
-                )}
+              <div className="grid grid-cols-4 center text-center">
+                <span className="mx-1">
+                  <div>
+                    {fromBigInt(timeTravelRange.min.timestamp).toLocaleString(
+                      DateTime.DATETIME_SHORT
+                    )}
+                  </div>
+                  <div>#{timeTravelRange.min.number}</div>
+                </span>
+                <span className="col-span-2" />
+                <span className="mx-1">
+                  <div>
+                    {fromBigInt(timeTravelRange.max.timestamp).toLocaleString(
+                      DateTime.DATETIME_SHORT
+                    )}
+                  </div>
+                  <div>#{timeTravelRange.max.number}</div>
+                </span>
               </div>
-              <div>#{timeTravelRange.max.number}</div>
-            </span>
+            </div>
           </div>
-        </div>
-      </details>
-    </span>
-  ) : (
-    <span></span>
+        ) : (
+          <div className="bg-primary border border-secondary-accent p-1">
+            Cannot time travel here.
+          </div>
+        )}
+      </div>
+    </details>
   );
-}
+});

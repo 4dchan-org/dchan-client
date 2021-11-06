@@ -26,7 +26,7 @@ export default function BoardCreationForm() {
   };
 
   return (
-    <Card title={<span>Create a board!</span>}>
+    <Card title={<span>Create a board!</span>} className="pt-4">
       <form onSubmit={handleSubmit(onSubmit)}>
         <WalletConnect />
         <div className="border center flex">

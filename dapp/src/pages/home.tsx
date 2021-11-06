@@ -5,13 +5,18 @@ import LatestPostsCard from "components/LatestPostsCard";
 import PopularBoardsCard from "components/PopularBoardsCard";
 import PopularThreadsCard from "components/PopularThreadsCard";
 import WatchedThreadsCard from "components/WatchedThreadsCard";
+import { useEffect } from "react";
 import { useTitle } from "react-use";
 
 export default function HomePage() {
   useTitle("dchan.network");
 
+  useEffect(() => {
+    window.scrollTo({top: 0})
+  }, [])
+
   return (
-    <div className="center-grid max-w-full min-h-screen bg-primary">
+    <div className="center-grid max-w-full min-h-screen bg-primary pt-8">
       <div className="flex flex-wrap center">
         <Card
           title={

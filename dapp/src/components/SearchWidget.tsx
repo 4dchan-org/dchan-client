@@ -1,5 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { debounce } from "lodash";
 
 export default function SearchWidget({
   baseUrl,
@@ -9,54 +10,57 @@ export default function SearchWidget({
   search?: string;
 }) {
   const history = useHistory();
-  const [open, setOpen] = useState<boolean>(!!search);
+  const [displayInput, setDisplayInput] = useState<string>(search || "");
   const setSearch = useCallback(
     (search: string) => {
       history.push(`${baseUrl}${search ? `?s=${search}` : ``}`);
     },
     [history, baseUrl]
   );
-  const onClick = useCallback(() => setOpen(true), [setOpen]);
+
+  const setSearchDebounce = useMemo(
+    () => debounce(setSearch, 500),
+    [setSearch]
+  );
+
+  const onInput = useCallback(
+    (search: string) => {
+      setDisplayInput(search);
+      setSearchDebounce(search);
+    },
+    [setSearchDebounce]
+  );
 
   return (
-    <span className="bg-primary">
-      <details open={open}>
-        <summary className="list-none">
-          <label htmlFor="dchan-search" onClick={onClick}>
-            🔍
-          </label>
-        </summary>
-        <div className="mx-1 text-center bg-primary">
-          <div>Search:</div>
-          <div>
-            <input
-              id="dchan-search"
-              className="text-center w-32"
-              type="text"
-              placeholder="..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              autoFocus={true}
-            ></input>
-          </div>
-          <div className="relative">
-            {search ? (
-              <span className="text-xs">
-                [
-                <button
-                  className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-                  onClick={() => setSearch("")}
-                >
-                  Cancel
-                </button>
-                ]
-              </span>
-            ) : (
-              ""
-            )}
-          </div>
-        </div>
-      </details>
-    </span>
+    <div className="text-center bg-primary border border-secondary-accent p-1">
+      <div>Search:</div>
+      <div>
+        <input
+          id="dchan-search"
+          className="text-center w-32"
+          type="text"
+          placeholder="..."
+          value={displayInput}
+          onChange={(e) => onInput(e.target.value)}
+          autoFocus={true}
+        ></input>
+      </div>
+      <div className="relative">
+        {search ? (
+          <span className="text-xs">
+            [
+            <button
+              className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
+              onClick={() => setSearch("")}
+            >
+              Cancel
+            </button>
+            ]
+          </span>
+        ) : (
+          ""
+        )}
+      </div>
+    </div>
   );
 }

@@ -25,7 +25,7 @@ export default function LockBanner() {
   return data?.chanStatus?.isLocked ? (
     <div className="bg-primary relative" style={{ height: "100000vh" }}>
       <div className="center grid">
-        <Card title={<div className="text-red-500 text-4xl">UH OH</div>}>
+        <Card title={<div className="text-red-500 text-4xl">UH OH</div>} className="pt-4">
           <div className="center grid">
             <img src={poopieSrc} alt="poopie" />
             <div className="p-4">
