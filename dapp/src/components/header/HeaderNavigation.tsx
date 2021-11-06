@@ -25,6 +25,12 @@ enum OpenedWidgetEnum {
   SETTINGS = "SETTINGS",
 }
 
+const siteCreatedAtBlock: Block = {
+  id: "0x04eeaa77c96947c5efca4abd8e3f8de005369390409d79dfef81aa983eb69e89",
+  number: "17766365",
+  timestamp: "1628450632"
+};
+
 const SettingsWidgetOverlay = OverlayComponent(SettingsWidget);
 
 export default function HeaderNavigation({
@@ -51,7 +57,7 @@ export default function HeaderNavigation({
 
   useEffect(() => {
     setStartBlock(
-      thread ? thread.createdAtBlock : board ? board.createdAtBlock : undefined
+      thread ? thread.createdAtBlock : board ? board.createdAtBlock : siteCreatedAtBlock
     );
   }, [thread, board, setStartBlock]);
 
@@ -129,7 +135,7 @@ export default function HeaderNavigation({
               startBlock={startBlock}
               dateTime={dateTime}
               startRangeLabel={
-                thread ? "Thread creation" : board ? "Board creation" : "?"
+                thread ? "Thread creation" : board ? "Board creation" : "Site creation"
               }
             />
           )}</ApolloConsumer>
