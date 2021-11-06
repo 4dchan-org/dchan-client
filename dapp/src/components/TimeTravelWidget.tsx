@@ -277,7 +277,7 @@ export default forwardRef(({
       <summary className="list-none cursor-pointer w-full mx-1 whitespace-nowrap" onClick={(event) => {
         event.preventDefault();
       }}>
-        {timeTravelRange ? <>
+        {timeTravelRange && baseUrl ? <>
           <div className="ml-2 hidden sm:block">
             {isTimeTraveling ? <>
               <span title={timeTravelingNote} onClick={() => {
@@ -330,7 +330,7 @@ export default forwardRef(({
             )}
           </div>
         </> : (
-          ""
+          null
         )}
       </summary>
       <div className="absolute w-screen sm:w-max top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto sm:right-0">
