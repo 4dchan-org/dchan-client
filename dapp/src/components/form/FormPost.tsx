@@ -176,7 +176,7 @@ export default function FormPost({
 
         setStatus(result);
 
-        console.log(result);
+        console.log({result});
       }
 
       setIsSending(false);
@@ -198,8 +198,7 @@ export default function FormPost({
       setIsSending,
       resetForm,
       addFavorite,
-      thread,
-      DefaultSettings.ipfs.endpoint
+      thread
     ]
   );
 

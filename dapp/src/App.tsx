@@ -52,7 +52,7 @@ function useLocalSettings() {
       const item = window.localStorage.getItem("dchan.config");
       return item ? {...DefaultSettings, ...JSON.parse(item)} : DefaultSettings;
     } catch (error) {
-      console.log(error);
+      console.error({error});
       return DefaultSettings;
     }
   });
@@ -66,14 +66,13 @@ function WriteEndpointsHack() {
   let [settings, setSettings] = useSettings();
   useEffect(() => {
     if (!endpointsWritten && settings) {
-      console.log("func called");
       endpointsWritten = true;
       let newSettings = {...settings};
       newSettings.subgraph.endpoint = DefaultSettings.subgraph.endpoint;
       newSettings.ipfs.endpoint = DefaultSettings.ipfs.endpoint;
       setSettings(newSettings);
     }
-  }, [settings])
+  }, [setSettings, settings])
   return null;
 }
 
