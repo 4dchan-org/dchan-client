@@ -11,7 +11,7 @@ export default function Footer({
   showContentDisclaimer?: boolean;
 }) {
   return (
-    <div>
+    <div className="mt-auto">
       <div id="bottom" />
       <footer className="mt-4">
         {showContentDisclaimer ? (

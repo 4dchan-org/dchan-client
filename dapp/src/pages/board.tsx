@@ -135,7 +135,7 @@ export default function BoardPage({ location, match: { params } }: any) {
   );
 
   return (
-    <div className="bg-primary min-h-100vh">
+    <div className="bg-primary min-h-100vh flex flex-col">
       <div>
         <ContentHeader
           board={board}
@@ -165,7 +165,7 @@ export default function BoardPage({ location, match: { params } }: any) {
               </> : ""}
             </div>
           ) : catalogLoading && !catalogData ? (
-            <div className="center grid min-h-50vh">
+            <div className="center grid">
               <Loading />
             </div>
           ) : board && threads ? (

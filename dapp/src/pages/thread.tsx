@@ -125,7 +125,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
   );
 
   return (
-    <div className="bg-primary min-h-100vh">
+    <div className="bg-primary min-h-100vh flex flex-col">
       <ContentHeader
         board={board}
         thread={thread}
