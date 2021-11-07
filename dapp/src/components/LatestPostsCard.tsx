@@ -1,7 +1,6 @@
 import { useQuery } from "@apollo/react-hooks";
 import { Post } from "dchan";
 import POSTS_GET_LAST from "graphql/queries/posts_get_last";
-import Card from "./Card";
 import Loading from "./Loading";
 import PostSearchResult from "./PostSearchResult";
 
@@ -14,14 +13,12 @@ export default function LatestPostsCard() {
   });
 
   return (
-    <Card className="mx-auto pt-4" title={<span>Latest Posts</span>}>
-      <div>
-        {loading && !data ? (
-          <Loading />
-        ) : (
-          data?.posts?.map((post) => <PostSearchResult post={post} key={post.id} />)
-        )}
-      </div>
-    </Card>
+    <div>
+      {loading && !data ? (
+        <Loading />
+      ) : (
+        data?.posts?.map((post) => <PostSearchResult post={post} key={post.id} />)
+      )}
+    </div>
   );
 }

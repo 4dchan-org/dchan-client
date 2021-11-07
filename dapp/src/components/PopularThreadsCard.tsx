@@ -2,7 +2,6 @@ import { useQuery } from "@apollo/react-hooks";
 import { Thread } from "dchan";
 import THREADS_LIST_MOST_POPULAR from "graphql/queries/threads/list_most_popular";
 import CatalogView from "./CatalogView";
-import Card from "./Card";
 import Loading from "./Loading";
 import { DateTime } from "luxon";
 import { useMemo } from "react";
@@ -20,9 +19,7 @@ export default function PopularThreadsCard() {
     }
   });
 
-  return (
-    <Card className="max-w-initial p-2 pt-4" title={<span>Popular threads</span>}>
-      {loading ? <Loading /> : <CatalogView threads={data?.threads || []} showBoard={true} />}
-    </Card>
-  );
+  return loading
+    ? <Loading />
+    : <CatalogView threads={data?.threads || []} showBoard={true} />;
 }

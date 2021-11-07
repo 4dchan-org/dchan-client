@@ -2,7 +2,6 @@ import { useQuery } from "@apollo/react-hooks";
 import THREADS_LIST_FAVORITES from "graphql/queries/threads/list_favorites";
 import useFavorites from "hooks/useFavorites";
 import { useMemo } from "react";
-import Card from "./Card";
 import CatalogView from "./CatalogView";
 import Loading from "./Loading";
 
@@ -21,11 +20,9 @@ export default function WatchedThreadsCard() {
     skip: !favorites,
   });
   const threads = data?.threads
-  return loading || (threads && threads.length > 0) ?
-    <Card className="max-w-initial p-2 pt-4" title={<span>👁 Watched threads</span>}>
-      {loading ? <Loading /> : <CatalogView threads={threads || []} showBoard={true} />}
-    </Card>
-    : (
-      null
-    );
+  return loading || (threads && threads.length > 0)
+    ? loading
+      ? <Loading />
+      : <CatalogView threads={threads || []} showBoard={true} />
+    : null;
 }
