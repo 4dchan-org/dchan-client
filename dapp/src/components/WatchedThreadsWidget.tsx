@@ -34,7 +34,7 @@ export default function WatchedThreadsWidget({ block }: { block?: string }) {
     <div className="text-center bg-primary border border-secondary-accent p-1">
       {loading ? (
         <Loading />
-      ) : ids.length > 0 && threads ? (
+      ) : ids.length > 0 && threads && threads.length > 0 ? (
         <div>
           <div className="mb-2">Watched threads:</div>
           <div className="text-sm">
@@ -81,7 +81,7 @@ export default function WatchedThreadsWidget({ block }: { block?: string }) {
           </div>
         </div>
       ) : (
-        "No posts are being watched. Use the 👁 button on threads to keep track of them here."
+        "No threads are being watched. Use the 👁 button on threads to keep track of them here."
       )}
     </div>
   ) : (

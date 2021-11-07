@@ -29,5 +29,5 @@ export default function WatchedThreadsCard({block} : {block?: number}) {
     ? loading
       ? <Loading />
       : <CatalogView threads={threads || []} showBoard={true} block={block} />
-    : null;
+    : <span>No threads are being watched. Use the 👁 button on threads to keep track of them here.</span>;
 }
