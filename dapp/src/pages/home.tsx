@@ -15,6 +15,8 @@ export default function HomePage({ location }: any) {
   useTitle("dchan.network");
   
   const query = parseQueryString(location.search);
+  const block = parseInt(`${query.block}`);
+  const queriedBlock = isNaN(block) ? undefined : block;
   const dateTime = query.date
     ? DateTime.fromISO(query.date as string)
     : undefined;
@@ -27,7 +29,7 @@ export default function HomePage({ location }: any) {
     <div className="h-full min-h-screen bg-primary pt-8 flex flex-col">
       <HeaderNavigation
         baseUrl="/"
-        block={`${query.block}`}
+        block={queriedBlock ? `${queriedBlock}` : undefined}
         dateTime={dateTime}
       />
       <div className="h-full max-w-full flex flex-col lg:flex-row" style={{flex: "1 1 auto"}}>
@@ -66,10 +68,10 @@ export default function HomePage({ location }: any) {
         <div className="lg:max-h-full lg:w-1/2 lg:float-left lg:px-8">
           <TabbedCard className="mt-8 lg:mt-0 h-full">
             {new Map([
-              ["Popular Boards", <PopularBoardsCard/>],
-              ["Watched Threads", <WatchedThreadsCard/>],
-              ["Popular Threads", <PopularThreadsCard/>],
-              ["Latest Posts", <LatestPostsCard/>],
+              ["Popular Boards", <PopularBoardsCard block={queriedBlock} />],
+              ["Watched Threads", <WatchedThreadsCard block={queriedBlock} />],
+              ["Popular Threads", <PopularThreadsCard block={queriedBlock} />],
+              ["Latest Posts", <LatestPostsCard block={queriedBlock} />],
             ])}
           </TabbedCard>
         </div>

@@ -3,7 +3,7 @@ import { Board } from "dchan";
 import IdLabel from "components/IdLabel";
 import Loading from "components/Loading";
 
-function BoardItem({ id, title, postCount, name, isLocked, isNsfw }: Board) {
+function BoardItem({ id, title, postCount, name, isLocked, isNsfw }: Board, block?: number) {
   return (
     <tr className="relative" key={id}>
       <td>
@@ -15,7 +15,7 @@ function BoardItem({ id, title, postCount, name, isLocked, isNsfw }: Board) {
         <span>
           <Link
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-            to={`/${name}/${id}`}
+            to={`/${name}/${id}${block ? `?block=${block}` : ""}`}
           >
             {title}
           </Link>
@@ -25,7 +25,7 @@ function BoardItem({ id, title, postCount, name, isLocked, isNsfw }: Board) {
         <span>
           <Link
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500 mx-4"
-            to={`/${name}/${id}`}
+            to={`/${name}/${id}${block ? `?block=${block}` : ""}`}
           >
             /{name}/
           </Link>
@@ -54,16 +54,22 @@ export default function BoardList({
   className = "",
   loading = false,
   boards,
+  block
 }: {
   className?: string;
-  loading?: boolean,
+  loading?: boolean;
   boards?: Board[];
+  block?: number;
 }) {
   return (
     <div className={`${className} center`}>
       <table className="mx-8 border-separate" style={{borderSpacing: "0 0.25rem"}}>
         <tbody>
-          {loading? <Loading /> : !boards ? "" : boards.length > 0 ? boards.map(BoardItem) : "No boards"}
+          {loading
+            ? <Loading />
+            : !boards ? "" : boards.length > 0
+              ? boards.map(board => BoardItem(board, block))
+              : "No boards"}
         </tbody>
       </table>
     </div>

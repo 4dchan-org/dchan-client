@@ -90,7 +90,7 @@ export default function HeaderNavigation({
         [
         <Link
           className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-          to="/"
+          to={`/${block ? `?block=${block}` : ""}`}
         >
           dchan.network
         </Link>

@@ -20,7 +20,7 @@ export default function PostSearchResult({ post, block }: { post: Post, block?: 
             <span className="p-1 whitespace-nowrap">
               [
               <Link
-                to={`/${post.id}`}
+                to={`/${post.id}${block ? `?block=${block}` : ""}`}
                 className="text-blue-600 visited:text-purple-600 hover:text-blue-500 inline"
               >
                 View
