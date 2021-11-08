@@ -14,7 +14,7 @@ export default function TabbedCard({
     displayChild = children.keys().next().value;
   }
   return (
-    <article className={`max-h-full ${className}`}>
+    <article className={`${className}`}>
       <header className="bg-white border border-black flex flex-row justify-evenly" style={{flex: "0 1 auto"}}>
         {Array.from(children.keys()).map((key, index) => (
           <React.Fragment key={key}>
@@ -33,19 +33,23 @@ export default function TabbedCard({
           </React.Fragment>
         ))}
       </header>
-      <section className={`bg-white max-w-full border border-black border-t-0 p-4 overflow-y-auto`} style={{flex: "1 1 auto"}}>
-        {Array.from(children.entries()).map(([key, value]) => (
-          <div
-            key={key}
-            className={[
-              "h-min",
-              key !== displayChild ? "hidden" : ""
-            ].join(" ")}
-          >
-            {value}
-          </div>
-        ))}
+      <section className={`bg-white h-full border border-black flex flex-col border-t-0 p-4 overflow-y-auto`} style={{flex: "1 1 auto"}}>
+        <div className="my-auto">
+          {Array.from(children.entries()).map(([key, value]) => (
+            <div
+              key={key}
+              className={[
+                "",
+                key !== displayChild ? "hidden" : ""
+              ].join(" ")}
+              style={{flex: "0 0 auto"}}
+            >
+              {value}
+            </div>
+          ))}
+        </div>
       </section>
+      <div/>
     </article>
   );
 }

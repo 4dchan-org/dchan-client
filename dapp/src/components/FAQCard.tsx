@@ -3,7 +3,7 @@ import { useState } from "react";
 import { singletonHook } from "react-singleton-hook";
 import OverlayComponent from "./OverlayComponent";
 
-function TheGraph() {
+export function TheGraph() {
   return (
     <span>
       <a
@@ -30,7 +30,7 @@ function TheGraph() {
   );
 }
 
-function Polygon() {
+export function Polygon() {
   return (
     <a
       className="text-blue-600 visited:text-purple-600"
@@ -45,7 +45,7 @@ function Polygon() {
 
 export function FAQCard({onExit, className}: {onExit: () => void, className?: string}) {
   return (
-    <Card title={<span>FAQ</span>} className={className} bodyClassName="flex overflow-y-scroll overscroll-contain">
+    <Card title={<span>FAQ</span>} className={className} bodyClassName="flex overflow-y-auto overscroll-contain">
       <div className="text-left p-8 text-sm">
         <div className="pb-2">
           <strong>Q: What is this?</strong>

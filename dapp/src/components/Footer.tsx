@@ -7,11 +7,13 @@ import AbuseButton from "./AbuseCard";
 
 export default function Footer({
   showContentDisclaimer = false,
+  className = "mt-auto",
 }: {
   showContentDisclaimer?: boolean;
+  className?: string;
 }) {
   return (
-    <div className="mt-auto">
+    <div className={` bg-primary ${className}`}>
       <div id="bottom" />
       <footer className="mt-4">
         {showContentDisclaimer ? (

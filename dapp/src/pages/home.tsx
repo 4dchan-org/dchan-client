@@ -10,6 +10,8 @@ import { parse as parseQueryString } from "query-string";
 import { DateTime } from "luxon";
 import { useEffect } from "react";
 import { useTitle } from "react-use";
+import Card from "components/Card";
+import { Polygon, TheGraph } from "components/FAQCard";
 
 export default function HomePage({ location }: any) {
   useTitle("dchan.network");
@@ -26,14 +28,14 @@ export default function HomePage({ location }: any) {
   }, [])
 
   return (
-    <div className="h-full min-h-screen bg-primary pt-8 flex flex-col">
+    <div className="h-screen bg-primary flex flex-col pb-8">
       <HeaderNavigation
         baseUrl="/"
         block={queriedBlock ? `${queriedBlock}` : undefined}
         dateTime={dateTime}
       />
-      <div className="h-full max-w-full flex flex-col lg:flex-row" style={{flex: "1 1 auto"}}>
-        <div className="lg:h-full lg:w-1/2 lg:float-left lg:my-auto px-8">
+      <div className="lg:h-full max-w-full flex flex-col lg:flex-row pt-8" style={{flex: "1 1 auto", paddingBottom: "68.8px"}}>
+        <div className="lg:my-auto lg:w-1/2 lg:float-left px-8 pb-8">
           <div className="mb-7">
             <img
               className="animation-spin w-48 pointer-events-none mx-auto"
@@ -44,7 +46,7 @@ export default function HomePage({ location }: any) {
           </div>
           <div className="px-8 mx-auto">
             Welcome to dchan.network, a decentralized, time-traveling imageboard made entirely
-            using The Graph (ticker: GRT) and Polygon.
+            using <TheGraph/> and <Polygon/>.
             <br/>
             Use with{" "}
             <a
@@ -61,12 +63,10 @@ export default function HomePage({ location }: any) {
               Trust Wallet
             </a>{" "}
             (Mobile).
-            <br/>
-            <span className="font-bold text-contrast">ADD BETTER BLURB TEXT HERE</span>
           </div>
         </div>
-        <div className="lg:max-h-full lg:w-1/2 lg:float-left lg:px-8">
-          <TabbedCard className="mt-8 lg:mt-0 h-full">
+        <div className="lg:h-full lg:w-1/2 lg:float-left flex flex-col lg:px-8">
+          <TabbedCard className="h-full flex flex-col">
             {new Map([
               ["Popular Boards", <PopularBoardsCard block={queriedBlock} />],
               ["Watched Threads", <WatchedThreadsCard block={queriedBlock} />],
@@ -76,7 +76,7 @@ export default function HomePage({ location }: any) {
           </TabbedCard>
         </div>
       </div>
-      <Footer />
+      <Footer className="mt-auto lg:mt-0 lg:fixed lg:bottom-0 lg:left-0 lg:right-0"/>
     </div>
   );
 }
