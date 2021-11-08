@@ -32,7 +32,7 @@ function Reference({link, children}: {link: string; children: string | string[]}
       to={link}
     >
       <wbr/>
-      <span className="whitespace-nowrap">&gt;&gt;{children}</span>
+      <span>&gt;&gt;{children}</span>
     </Link>
   );
 }
