@@ -145,7 +145,7 @@ function Post({
           dchan-post-from-address={address}
         >
           <div
-            className={`${isHighlighted || isFocused ? "bg-tertiary" : !isOp ? "bg-secondary" : ""} ${isYou ? "border-dashed border-2 border-tertiary" : ""} w-full sm:w-full mb-2 pr-4 inline-block relative`}
+            className={`${isHighlighted || isFocused ? "bg-tertiary" : !isOp ? "bg-secondary" : ""} ${isYou ? "border-dashed border-2 border-tertiary" : ""} w-full sm:w-full mb-2 inline-block relative`}
           >
             <div className="flex sm:flex-wrap ml-5 align-center text-center sm:text-left sm:justify-start max-w-100vw">
               <PostHeader thread={thread} post={post} backlinks={backlinks} block={block}>
@@ -250,7 +250,7 @@ function Post({
                   </div>
                   {children}
                   <Link
-                    className="px-1 text-xs opacity-10 hover:opacity-100 absolute bottom-0 right-0"
+                    className="px-1 text-xs opacity-10 hover:opacity-100 absolute bottom-0 right-0 hidden sm:inline"
                     to={`/${post.id}${block ? `?block=${block}` : ""}`} title="Permalink">
                     <small>{post.id}</small>
                   </Link>
