@@ -110,7 +110,7 @@ export default function HeaderNavigation({
           [
           <Link
             className="text-blue-600 visited:text-purple-600 hover:text-blue-500"
-            to="/_/boards"
+            to={`${Router.boards()}${block ? `?block=${block}` : ""}`}
           >
             +
           </Link>
@@ -151,7 +151,7 @@ export default function HeaderNavigation({
               🔍
             </summary>
             <div className="absolute w-screen sm:w-max top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto sm:right-0">
-              <SearchWidget baseUrl={Router.posts()} search={search} />
+              <SearchWidget baseUrl={`${Router.posts()}${block ? `?block=${block}` : ""}`} search={search} />
             </div>
           </details>
           <details className="w-full sm:relative mx-1" open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS} ref={watchedThreadsRef}>

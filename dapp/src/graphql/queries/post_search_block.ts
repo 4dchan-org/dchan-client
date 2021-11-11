@@ -4,8 +4,8 @@ import POST_FRAGMENT from "../fragments/post";
 const POST_SEARCH = gql`
   ${POST_FRAGMENT}
   
-  query PostSearch($search: String!) {
-    postSearch(text: $search, orderBy: createdAt, orderDirection: desc) {
+  query PostSearch($search: String!, $block: Int!) {
+    postSearch(text: $search, orderBy: createdAt, orderDirection: desc, block: {number: $block}) {
       ...Post
     }
   }

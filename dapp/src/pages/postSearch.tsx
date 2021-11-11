@@ -9,6 +9,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { useEffect, useMemo } from "react";
 import { isLowScore, sortByCreatedAt } from "dchan/entities/post";
 import POST_SEARCH from "graphql/queries/post_search";
+import POST_SEARCH_BLOCK from "graphql/queries/post_search_block";
 import { Post } from "dchan";
 import PostComponent from "components/post/Post";
 import { Link } from "react-router-dom";
@@ -29,13 +30,11 @@ export default function PostSearchPage({ location, match: { params } }: any) {
   const s = query.s || query.search;
   const search = isString(s) ? s : "";
 
-  const { lastBlock } = useLastBlock();
-
+  const block = parseInt(`${query.block}`);
+  const queriedBlock = isNaN(block) ? undefined : `${block}`;
   const dateTime = query.date
     ? DateTime.fromISO(query.date as string)
     : undefined;
-  const block = parseInt(`${query.block || lastBlock?.number || ""}`);
-  const isTimeTraveling = query.block && `${query.block}` !== lastBlock?.number;
   const [settings] = useSettings();
 
   const variables = {
@@ -44,7 +43,7 @@ export default function PostSearchPage({ location, match: { params } }: any) {
   };
 
   const { refetch, data, loading } = useQuery<SearchData, SearchVars>(
-    POST_SEARCH,
+    block ? POST_SEARCH_BLOCK : POST_SEARCH,
     {
       variables,
       pollInterval: 60_000,
@@ -76,8 +75,8 @@ export default function PostSearchPage({ location, match: { params } }: any) {
       <ContentHeader
         dateTime={dateTime}
         search={search}
-        baseUrl={Router.posts()}
-        block={isTimeTraveling ? `${block}` : undefined}
+        baseUrl={`${Router.posts()}${search ? `?s=${search}` : ""}`}
+        block={queriedBlock}
         summary={
           results ? (
             <span>
@@ -109,7 +108,7 @@ export default function PostSearchPage({ location, match: { params } }: any) {
                   <PostComponent
                     key={post.id}
                     post={post}
-                    block={isTimeTraveling ? `${block}` : undefined}
+                    block={queriedBlock}
                     header={
                       <span>
                         <span className="p-1">
