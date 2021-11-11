@@ -121,27 +121,43 @@ function Post({
     !bIsLowScore ||
     settings?.content_filter?.show_below_threshold ||
     showAnyway;
+  const toggleRef = useRef<HTMLDetailsElement>(null);
+  const [showBody, setShowBody] = useState<boolean>(canShow);
+  useEffect(() => {
+    if (toggleRef.current) {
+      setShowBody(toggleRef.current.open);
+    }
+  }, [toggleRef, setShowBody]);
 
   return (
-    <div className="flex">
+    <div className="flex relative">
       {!isOp ? <span className="hidden md:block pl-2 text-secondary">&gt;&gt;</span> : ""}
-      <details
-        className="dchan-post-expand mx-auto md:mr-3 md:ml-2 text-left inline"
-        open={canShow}
+      <div
+        className="mx-auto md:mr-3 md:ml-2 text-left inline"
         key={id}
         ref={postRef}
       >
-        <summary
-          className="text-left opacity-50 z-10 whitespace-nowrap overflow-hidden mb-1 flex center"
+        <details
+          className="absolute ml-2 -mt-0.5 z-10" 
+          ref={toggleRef}
+          open={canShow}
+          onToggle={(e: any) => {
+            setShowBody(e.target.open)
+          }}
+        >
+          <summary/>
+        </details>
+        <div
+          className={`text-left opacity-50 whitespace-nowrap mb-1 overflow-hidden flex ml-5 ${showBody ? "hidden" : ""}`}
           title="Hide/Show"
         >
           <PostHeader thread={thread} post={post} block={block}>
             {header}
           </PostHeader>
-        </summary>
-        <article
+        </div>
+        <div
           id={`${n}`}
-          className={`dchan-post text-left w-full`}
+          className={`dchan-post text-left w-full  ${!showBody ? "hidden" : ""}`}
           dchan-post-from-address={address}
         >
           <div
@@ -258,8 +274,8 @@ function Post({
               </div>
             )}
           </div>
-        </article>
-      </details>
+        </div>
+      </div>
     </div>
   );
 }

@@ -44,26 +44,6 @@
 }
 */
 
-.dchan-post-expand[open] > summary {
-    visibility: hidden;
-    list-style: none;
-    position: absolute;
-    background-color: rgba(0,0,0,0);
-    color: rgba(0,0,0,0);
-    user-select: none;
-    
-    &::before { 
-        visibility: visible;
-        color: black;
-        content:"▼";
-        opacity: 1;
-        z-index: 9001;
-        position: relative;
-        padding: 0.2rem;
-        font-size: 0.75rem;
-    }
-}
-
 .dchan-form-expand[open] .dchan-post-fab.absolute {
   display: none;
 }
