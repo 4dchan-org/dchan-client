@@ -17,6 +17,7 @@ export default function WatchedThreadsCard({block} : {block?: number}) {
     block ? THREADS_LIST_FAVORITES_BLOCK : THREADS_LIST_FAVORITES,
     {
       pollInterval: 30_000,
+      fetchPolicy: block ? "cache-first" : "network-only",
       variables: {
         ids,
         block,

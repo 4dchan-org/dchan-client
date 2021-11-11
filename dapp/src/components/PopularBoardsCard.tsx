@@ -9,6 +9,7 @@ export default function PopularBoardsCard({block}: {block?: number}) {
   const query = block ? BOARDS_LIST_MOST_POPULAR_BLOCK : BOARDS_LIST_MOST_POPULAR;
   const { loading, data } = useQuery<{ boards: Board[] }, any>(query, {
     pollInterval: 30_000,
+    fetchPolicy: block ? "cache-first" : "network-only",
     variables: {
       block
     },

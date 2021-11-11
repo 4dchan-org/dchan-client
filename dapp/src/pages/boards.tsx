@@ -52,6 +52,7 @@ export default function BoardListPage({ location, match: { params } }: any) {
     loading: searchLoading,
   } = useQuery<BoardSearchData, BoardSearchVars>(block ? BOARDS_SEARCH_BLOCK : BOARDS_SEARCH, {
     pollInterval: 30_000,
+    fetchPolicy: queriedBlock ? "cache-first" : "network-only",
     variables: {
       searchName: search,
       searchTitle: search.length > 1 ? `${search}:*` : "",
@@ -65,6 +66,7 @@ export default function BoardListPage({ location, match: { params } }: any) {
     BoardListVars
   >(block ? BOARDS_LIST_BLOCK : BOARDS_LIST, {
     pollInterval: 30_000,
+    fetchPolicy: queriedBlock ? "cache-first" : "network-only",
     variables: {block: queriedBlock}
   });
 

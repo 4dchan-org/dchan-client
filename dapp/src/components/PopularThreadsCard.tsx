@@ -13,6 +13,7 @@ export default function PopularThreadsCard({block} : {block?: number}) {
   const query = block ? THREADS_LIST_MOST_POPULAR_BLOCK : THREADS_LIST_MOST_POPULAR;
   const { loading, data } = useQuery<{ threads: Thread[] }, any>(query, {
     pollInterval: 30_000,
+    fetchPolicy: block ? "cache-first" : "network-only",
     variables: {
       cutoff,
       block,
