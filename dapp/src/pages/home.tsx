@@ -10,7 +10,6 @@ import { parse as parseQueryString } from "query-string";
 import { DateTime } from "luxon";
 import { useEffect } from "react";
 import { useTitle } from "react-use";
-import Card from "components/Card";
 import { Polygon, TheGraph } from "components/FAQCard";
 
 export default function HomePage({ location }: any) {
