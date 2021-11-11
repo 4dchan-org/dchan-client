@@ -71,7 +71,7 @@ export default function PostSearchPage({ location, match: { params } }: any) {
   }, [search, block, refetch]);
 
   return (
-    <div className="bg-primary min-h-100vh" data-theme={"blueboard"}>
+    <div className="bg-primary min-h-100vh flex flex-col" data-theme={"blueboard"}>
       <ContentHeader
         dateTime={dateTime}
         search={search}

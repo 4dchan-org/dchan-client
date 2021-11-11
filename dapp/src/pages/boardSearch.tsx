@@ -20,7 +20,7 @@ export default function BoardListPage({
   });
 
   return (
-    <div className="bg-primary min-h-100vh">
+    <div className="bg-primary min-h-100vh flex flex-col">
       <GenericHeader title="Boards" block={query.block ? `${query.block}` : undefined} />
 
       <Link

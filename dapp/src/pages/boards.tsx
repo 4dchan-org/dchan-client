@@ -74,13 +74,17 @@ export default function BoardListPage({ location, match: { params } }: any) {
     searchRefetch();
   }, [search, searchRefetch]);
 
+  useEffect(() => {
+    window.scrollTo({top: 0})
+  }, [search])
+
   const searchResults =
     searchData && (searchData.searchByTitle || searchData.searchByName)
       ? uniqBy([...searchData.searchByName, ...searchData.searchByTitle], "id")
       : [];
 
   return (
-    <div className="bg-primary min-h-100vh">
+    <div className="bg-primary min-h-100vh flex flex-col">
       <GenericHeader
         title="Boards"
         baseUrl={`${Router.boards()}${search ? `?s=${search}` : ""}`}
@@ -88,52 +92,50 @@ export default function BoardListPage({ location, match: { params } }: any) {
         dateTime={dateTime}
       />
       <div>
-        <div>
-          <div className="flex center">
-            <SearchWidget baseUrl={`${Router.boards()}${queriedBlock ? `?block=${queriedBlock}` : ""}`} search={search} />
-          </div>
-          {searchLoading || boardsLoading ? (
-            <div className="center grid">
-              <Loading></Loading>
-            </div>
-          ) : search ? (
-            <div className="center flex">
-              <div className="p-2">
-                {searchResults.length > 0 ? (
-                  <Card title={<span>Results for "{search}"</span>} className="pt-4">
-                    <BoardList boards={searchResults} block={queriedBlock} />
-                  </Card>
-                ) : (
-                  "No boards found"
-                )}
-              </div>
-            </div>
-          ) : boardsData ? (
-            <div>
-              <div className="grid justify-center">
-                <Card title={<span>Most popular</span>} className="pt-4">
-                  <BoardList boards={boardsData.mostPopular} block={queriedBlock} />
-                </Card>
-                <Card title={<span>Last created</span>} className="pt-4">
-                  <BoardList boards={boardsData.lastCreated} block={queriedBlock} />
-                </Card>
-                <Card title={<span>Last bumped</span>} className="pt-4">
-                  <BoardList boards={boardsData.lastBumped} block={queriedBlock} />
-                </Card>
-              </div>
-              <div className="center flex">
-                <div>
-                  <BoardCreationForm />
-                </div>
-              </div>
-            </div>
-          ) : (
-            ""
-          )}
+        <div className="flex center">
+          <SearchWidget baseUrl={`${Router.boards()}${queriedBlock ? `?block=${queriedBlock}` : ""}`} search={search} />
         </div>
-
-        <Footer />
+        {searchLoading || boardsLoading ? (
+          <div className="center grid">
+            <Loading></Loading>
+          </div>
+        ) : search ? (
+          <div className="center flex">
+            <div className="p-2">
+              {searchResults.length > 0 ? (
+                <Card title={<span>Results for "{search}"</span>} className="pt-4">
+                  <BoardList boards={searchResults} block={queriedBlock} />
+                </Card>
+              ) : (
+                "No boards found"
+              )}
+            </div>
+          </div>
+        ) : boardsData ? (
+          <div>
+            <div className="grid justify-center">
+              <Card title={<span>Most popular</span>} className="pt-4">
+                <BoardList boards={boardsData.mostPopular} block={queriedBlock} />
+              </Card>
+              <Card title={<span>Last created</span>} className="pt-4">
+                <BoardList boards={boardsData.lastCreated} block={queriedBlock} />
+              </Card>
+              <Card title={<span>Last bumped</span>} className="pt-4">
+                <BoardList boards={boardsData.lastBumped} block={queriedBlock} />
+              </Card>
+            </div>
+            <div className="center flex">
+              <div>
+                <BoardCreationForm />
+              </div>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
+
+      <Footer />
     </div>
   );
 }
