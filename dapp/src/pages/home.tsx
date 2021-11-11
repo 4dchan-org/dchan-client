@@ -44,7 +44,7 @@ export default function HomePage({ location }: any) {
             <div className="font-mono text-4xl">dchan.network</div>
           </div>
           <div className="px-8 mx-auto">
-            Welcome to dchan.network, a decentralized, time-traveling imageboard made entirely
+            Welcome to dchan.network, a decentralized time-traveling imageboard made entirely
             using <TheGraph/> and <Polygon/>.
             <br/>
             Use with{" "}
