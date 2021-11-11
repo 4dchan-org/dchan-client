@@ -119,7 +119,9 @@ export default forwardRef(({
         const b = result.data?.blocks?.[0];
         if (b != null) {
           const url = !!baseUrl
-            ? `${baseUrl}?block=${b.number}`
+            ? baseUrl.includes("?")
+              ? `${baseUrl}&block=${block}`
+              : `${baseUrl}?block=${block}`
             : undefined;
 
           setWritingState(true);
@@ -138,7 +140,9 @@ export default forwardRef(({
     (block: string) => {
       const url = !!baseUrl
         ? !!block
-          ? `${baseUrl}?block=${block}`
+          ? baseUrl.includes("?")
+            ? `${baseUrl}&block=${block}`
+            : `${baseUrl}?block=${block}`
           : `${baseUrl}`
         : undefined;
 

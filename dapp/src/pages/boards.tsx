@@ -81,14 +81,14 @@ export default function BoardListPage({ location, match: { params } }: any) {
     <div className="bg-primary min-h-100vh">
       <GenericHeader
         title="Boards"
-        baseUrl="/_/boards"
+        baseUrl={`${Router.boards()}${search ? `?s=${search}` : ""}`}
         block={queriedBlock ? `${queriedBlock}` : undefined}
         dateTime={dateTime}
       />
       <div>
         <div>
           <div className="flex center">
-            <SearchWidget baseUrl={Router.boards()} search={search} />
+            <SearchWidget baseUrl={`${Router.boards()}${queriedBlock ? `?block=${queriedBlock}` : ""}`} search={search} />
           </div>
           {searchLoading || boardsLoading ? (
             <div className="center grid">
@@ -99,7 +99,7 @@ export default function BoardListPage({ location, match: { params } }: any) {
               <div className="p-2">
                 {searchResults.length > 0 ? (
                   <Card title={<span>Results for "{search}"</span>} className="pt-4">
-                    <BoardList boards={searchResults} />
+                    <BoardList boards={searchResults} block={queriedBlock} />
                   </Card>
                 ) : (
                   "No boards found"
@@ -110,13 +110,13 @@ export default function BoardListPage({ location, match: { params } }: any) {
             <div>
               <div className="grid justify-center">
                 <Card title={<span>Most popular</span>} className="pt-4">
-                  <BoardList boards={boardsData.mostPopular} />
+                  <BoardList boards={boardsData.mostPopular} block={queriedBlock} />
                 </Card>
                 <Card title={<span>Last created</span>} className="pt-4">
-                  <BoardList boards={boardsData.lastCreated} />
+                  <BoardList boards={boardsData.lastCreated} block={queriedBlock} />
                 </Card>
                 <Card title={<span>Last bumped</span>} className="pt-4">
-                  <BoardList boards={boardsData.lastBumped} />
+                  <BoardList boards={boardsData.lastBumped} block={queriedBlock} />
                 </Card>
               </div>
               <div className="center flex">

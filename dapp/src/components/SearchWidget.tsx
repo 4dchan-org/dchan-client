@@ -13,7 +13,12 @@ export default function SearchWidget({
   const [displayInput, setDisplayInput] = useState<string>(search || "");
   const setSearch = useCallback(
     (search: string) => {
-      history.push(`${baseUrl}${search ? `?s=${search}` : ``}`);
+      const newUrl = search
+        ? baseUrl.includes("?")
+          ? `${baseUrl}&s=${search}`
+          : `${baseUrl}?s=${search}`
+        : baseUrl;
+      history.push(newUrl);
     },
     [history, baseUrl]
   );
