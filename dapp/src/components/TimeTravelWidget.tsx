@@ -8,6 +8,7 @@ import { DateTime } from "luxon";
 import { useCallback, useEffect, useState, useMemo, forwardRef, ForwardedRef } from "react";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
+import { singletonHook } from "react-singleton-hook";
 
 export interface TimeTravelRange {
   min: Block;
@@ -47,6 +48,26 @@ function queryBlockByNumber(client: ApolloClient<any>, block: string): Promise<A
 
 const timeTravelingNote = "You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date.";
 
+let setTraveledBlock: (b: Block | undefined) => void;
+export const useTraveledBlock = singletonHook<Block | undefined>(undefined, () => {
+  let [block, setBlock] = useState<Block | undefined>();
+  setTraveledBlock = (b) => {
+    setBlock(b);
+    console.log(`traveled block set to ${JSON.stringify(b)}`);
+  }
+  return block;
+})
+
+let setCurrentBlock: (b: Block | undefined) => void;
+const useCurrentBlock = singletonHook<Block | undefined>(undefined, () => {
+  let [block, setBlock] = useState<Block | undefined>();
+  setCurrentBlock = (b: Block | undefined) => {
+    setBlock(b);
+    setTraveledBlock(b);
+  }
+  return block;
+})
+
 export default forwardRef(({
   client,
   block,
@@ -75,7 +96,8 @@ export default forwardRef(({
   const history = useHistory();
   const { lastBlock } = useLastBlock();
   const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
-  const [traveledBlock, setTraveledBlock] = useState<Block | undefined>();
+  const currentBlock = useCurrentBlock();
+  const _traveledBlock = useTraveledBlock();
   const [prevQueriedBlock, setPrevQueriedBlock] = useState<string | undefined>(block);
   const [timeTraveledToDate, setTimeTraveledToDate] = useState<DateTime | undefined>(dateTime);
   const [timeTraveledToNumber, setTimeTraveledToNumber] = useState<string | undefined>(block);
@@ -96,11 +118,11 @@ export default forwardRef(({
 
   const changeBlock = useCallback(
     (block: Block) => {
-      setTraveledBlock(block);
+      setCurrentBlock(block);
       //setTimeTraveledToNumber(`${block.number}`);
       setTimeTraveledToDate(DateTime.fromSeconds(parseInt(block.timestamp)));
     },
-    [setTraveledBlock, setTimeTraveledToDate]
+    [setCurrentBlock, setTimeTraveledToDate]
   );
 
   const travelToLatest = useCallback(
@@ -108,6 +130,7 @@ export default forwardRef(({
       if (lastBlock != null) {
         changeBlock(lastBlock);
         setTimeTraveledToNumber(lastBlock.number);
+        setTraveledBlock(undefined);
       }
     },
     [lastBlock, changeBlock, setTimeTraveledToNumber]
@@ -137,7 +160,7 @@ export default forwardRef(({
   );
 
   const changeNumber = useCallback(
-    (block: string) => {
+    (block: string | null) => {
       const url = !!baseUrl
         ? !!block
           ? baseUrl.includes("?")
@@ -173,15 +196,12 @@ export default forwardRef(({
       } else {
         travelToLatest();
       }
-      return;
-    }
-    if (!block && lastBlock && traveledBlock !== lastBlock) {
+    } else if (!block && lastBlock && currentBlock !== lastBlock) {
       // not time traveling
       // move traveledBlock forward to keep in sync with latest
+      console.log("trigger")
       travelToLatest();
-      return;
-    }
-    if (!traveledBlock) {
+    } else if (!currentBlock) {
       if (timeTraveledToDate != null) {
         changeDate(timeTraveledToDate);
       } else if (timeTraveledToNumber != null) {
@@ -194,7 +214,7 @@ export default forwardRef(({
     }
   }, [
     block,
-    traveledBlock,
+    currentBlock,
     changeDate,
     changeNumber,
     travelToLatest,
@@ -205,6 +225,22 @@ export default forwardRef(({
     lastBlock,
     writingState
   ]);
+
+  useEffect(() => {
+    // the widget doesn't persist between pages but the useTraveledBlock
+    // hook does, and if we don't clear it when we unload then the next
+    // rendering of the widget will be in an invalid state, with the
+    // state variables not matching with the actual block
+    // unloading the block here will force the next render to reload its
+    // state as if it were a fresh load of the page
+    // there might be a better way to handle this, maybe by having the widget
+    // depend on the singleton hook instead of the other way around so that
+    // one can avoid having to reload the block that's already there, but
+    // I haven't figured out the best way to do that yet
+    return () => {
+      setCurrentBlock(undefined);
+    };
+  }, []);
 
   useEffect(() => {
     if (startBlock && lastBlock) {
@@ -237,10 +273,9 @@ export default forwardRef(({
 
   const onReturnToPresent = useCallback(
     () => {
-      setTimeTraveledToNumber(lastBlock?.number);
-      changeNumber("");
+      changeNumber(null);
     },
-    [setTimeTraveledToNumber, lastBlock, changeNumber]
+    [changeNumber]
   );
 
   const onInputBlockNumber = useCallback(
@@ -292,7 +327,7 @@ export default forwardRef(({
               </span>
               {" "}
             </> : (
-              ""
+              null
             )}
             <span onClick={onOpen} className="text-xs">
               [
