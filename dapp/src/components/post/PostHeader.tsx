@@ -22,6 +22,32 @@ import { DateTime } from "luxon";
 import { ReactElement, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { Router } from "router";
+import { useTraveledBlock } from "components/TimeTravelWidget";
+
+function DateDisplay({post}: {post: Post}) {
+  const createdAt = fromBigInt(post.createdAtBlock.timestamp);
+  const traveledBlock = useTraveledBlock();
+  const relativeTime = createdAt.toRelative({
+    base: traveledBlock ? fromBigInt(traveledBlock.timestamp) : undefined
+  });
+  const formattedDate = `${
+    createdAt.toLocaleString({ day: "2-digit", month: "2-digit", year: "2-digit" })
+    }(${createdAt.weekdayShort
+    })${createdAt.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+    }`;
+  
+  return <span className="px-0.5 whitespace-nowrap text-sm" title={relativeTime !== null ? relativeTime : undefined}>
+    {formattedDate}
+    <span className="text-xs px-1 opacity-20 hover:opacity-100 hidden sm:inline-block">[
+      <Link
+        title={`Time travel to ${formattedDate}`}
+        to={`${Router.post(post)}?block=${post.createdAtBlock.number}`}
+      >
+        {relativeTime}
+      </Link>
+    ]</span>
+  </span>
+}
 
 export default function PostHeader({
   post,
@@ -41,7 +67,6 @@ export default function PostHeader({
     n,
     name,
     from: { address },
-    createdAtBlock: { timestamp: createdAtUnix },
   } = post;
   const { provider, accounts } = useWeb3();
   const { publish } = usePubSub();
@@ -49,14 +74,6 @@ export default function PostHeader({
   const { isJannyOf } = useUser();
   const isOwner = accounts.length > 0 && accounts[0] === address;
   const [status, setStatus] = useState<string | object>();
-
-  const createdAt = fromBigInt(createdAtUnix);
-  const relativeTime = createdAt.toRelative();
-  const formattedDate = `${
-    createdAt.toLocaleString({ day: "2-digit", month: "2-digit", year: "2-digit" })
-    }(${createdAt.weekdayShort
-    })${createdAt.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-    }`;
 
   const isJanny = thread?.board?.id ? isJannyOf(thread.board.id) : false;
 
@@ -144,17 +161,7 @@ export default function PostHeader({
         )}
         )
       </span>
-      <span className="px-0.5 whitespace-nowrap text-sm" title={relativeTime !== null ? relativeTime : undefined}>
-        {formattedDate}
-        <span className="text-xs px-1 opacity-20 hover:opacity-100  hidden sm:inline-block">[
-          <Link
-            title={`Time travel to ${formattedDate}`}
-            to={`${Router.post(post)}?block=${post.createdAtBlock.number}`}
-          >
-            {relativeTime}
-          </Link>
-        ]</span>
-      </span>
+      <DateDisplay post={post} />
       <span className="whitespace-nowrap">
         <span className="px-0.5 on-parent-target-font-bold text-sm whitespace-nowrap">
           <Link
