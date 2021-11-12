@@ -120,8 +120,8 @@ export default forwardRef(({
         if (b != null) {
           const url = !!baseUrl
             ? baseUrl.includes("?")
-              ? `${baseUrl}&block=${block}`
-              : `${baseUrl}?block=${block}`
+              ? `${baseUrl}&block=${b.number}`
+              : `${baseUrl}?block=${b.number}`
             : undefined;
 
           setWritingState(true);
