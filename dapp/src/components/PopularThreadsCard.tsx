@@ -10,10 +10,12 @@ import { useMemo } from "react";
 
 export default function PopularThreadsCard({block} : {block?: number}) {
   const currentBlock = useTraveledBlock();
-  console.log(`currentBlock is ${JSON.stringify(currentBlock)}`);
-  const timestamp = currentBlock ? parseInt(currentBlock.timestamp) : DateTime.now().toSeconds();
-  console.log(`timestamp is ${timestamp}`);
-  const cutoff = useMemo(() => Math.floor(timestamp-604800), [currentBlock])
+  const cutoff = useMemo(
+    () => Math.floor(
+      (currentBlock ? parseInt(currentBlock.timestamp) : DateTime.now().toSeconds()) - 604800
+    ),
+    [currentBlock]
+  );
 
   const query = block ? THREADS_LIST_MOST_POPULAR_BLOCK : THREADS_LIST_MOST_POPULAR;
   const { loading, data } = useQuery<{ threads: Thread[] }, any>(query, {

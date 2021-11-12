@@ -3,7 +3,7 @@ import BoardList from "components/board/list";
 import GenericHeader from "components/header/generic";
 import Card from "components/Card";
 import Loading from "components/Loading";
-import { useQuery, WatchQueryFetchPolicy } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/react-hooks";
 import { Board } from "dchan";
 import BoardCreationForm from "components/BoardCreationForm";
 import SearchWidget from "components/SearchWidget";

@@ -1,5 +1,4 @@
 import Footer from "components/Footer";
-import useLastBlock from "hooks/useLastBlock";
 import { parse as parseQueryString } from "query-string";
 import { isString } from "lodash";
 import { DateTime } from "luxon";

@@ -48,16 +48,17 @@ function queryBlockByNumber(client: ApolloClient<any>, block: string): Promise<A
 
 const timeTravelingNote = "You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date.";
 
+// Block traveled to when time traveling
+// undefined when in present
 let setTraveledBlock: (b: Block | undefined) => void;
 export const useTraveledBlock = singletonHook<Block | undefined>(undefined, () => {
   let [block, setBlock] = useState<Block | undefined>();
-  setTraveledBlock = (b) => {
-    setBlock(b);
-    console.log(`traveled block set to ${JSON.stringify(b)}`);
-  }
+  setTraveledBlock = setBlock;
   return block;
 })
 
+// Block traveled to when time traveling
+// LastBlock when in present
 let setCurrentBlock: (b: Block | undefined) => void;
 const useCurrentBlock = singletonHook<Block | undefined>(undefined, () => {
   let [block, setBlock] = useState<Block | undefined>();
@@ -97,7 +98,7 @@ export default forwardRef(({
   const { lastBlock } = useLastBlock();
   const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
   const currentBlock = useCurrentBlock();
-  const _traveledBlock = useTraveledBlock();
+  useTraveledBlock();
   const [prevQueriedBlock, setPrevQueriedBlock] = useState<string | undefined>(block);
   const [timeTraveledToDate, setTimeTraveledToDate] = useState<DateTime | undefined>(dateTime);
   const [timeTraveledToNumber, setTimeTraveledToNumber] = useState<string | undefined>(block);
@@ -122,7 +123,7 @@ export default forwardRef(({
       //setTimeTraveledToNumber(`${block.number}`);
       setTimeTraveledToDate(DateTime.fromSeconds(parseInt(block.timestamp)));
     },
-    [setCurrentBlock, setTimeTraveledToDate]
+    [setTimeTraveledToDate]
   );
 
   const travelToLatest = useCallback(
@@ -199,7 +200,6 @@ export default forwardRef(({
     } else if (!block && lastBlock && currentBlock !== lastBlock) {
       // not time traveling
       // move traveledBlock forward to keep in sync with latest
-      console.log("trigger")
       travelToLatest();
     } else if (!currentBlock) {
       if (timeTraveledToDate != null) {
