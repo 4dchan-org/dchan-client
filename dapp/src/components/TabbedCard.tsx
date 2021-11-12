@@ -18,7 +18,7 @@ export default function TabbedCard({
       <header className="bg-white border border-black flex flex-row justify-evenly" style={{flex: "0 1 auto"}}>
         {Array.from(children.keys()).map((key, index) => (
           <React.Fragment key={key}>
-            <div
+            <button
               className={[
                 "bg-highlight py-1 px-4 w-full font-bold",
                 key === displayChild ? "opacity-100" : "opacity-80 hover:opacity-100"
@@ -28,7 +28,7 @@ export default function TabbedCard({
               }}
             >
               {key}
-            </div>
+            </button>
             {index < children.size-1 ? <div className="border-l border-black"/> : null}
           </React.Fragment>
         ))}
