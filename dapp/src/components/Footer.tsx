@@ -13,7 +13,7 @@ export default function Footer({
   className?: string;
 }) {
   return (
-    <div className={` bg-primary ${className}`}>
+    <div className={`bg-primary ${className}`}>
       <div id="bottom" />
       <footer className="mt-4">
         {showContentDisclaimer ? (

@@ -33,7 +33,7 @@ export default function HomePage({ location }: any) {
         block={queriedBlock ? `${queriedBlock}` : undefined}
         dateTime={dateTime}
       />
-      <div className="lg:h-full max-w-full flex flex-col lg:flex-row pt-8" style={{flex: "1 1 auto", paddingBottom: "68.8px"}}>
+      <div className="lg:h-full max-w-full flex flex-col lg:flex-row pt-8" style={{flex: "1 0 auto", paddingBottom: "68.8px"}}>
         <div className="lg:my-auto lg:w-1/2 lg:float-left px-8 pb-8">
           <div className="mb-7">
             <img
@@ -64,7 +64,7 @@ export default function HomePage({ location }: any) {
             (Mobile).
           </div>
         </div>
-        <div className="lg:h-full lg:w-1/2 lg:float-left flex flex-col lg:px-8">
+        <div className="lg:h-full lg:w-1/2 lg:float-left flex flex-col lg:px-8 lg:pb-6">
           <TabbedCard className="h-full flex flex-col">
             {new Map([
               ["Popular Boards", <PopularBoardsCard block={queriedBlock} />],
