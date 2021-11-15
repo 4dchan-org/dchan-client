@@ -4,9 +4,11 @@ import React, { useState } from "react";
 export default function TabbedCard({
   children,
   className = "",
+  containerClassName = "",
 }: {
   children: Map<string, any>;
   className?: string;
+  containerClassName?: string;
 }) {
   const [currentChild, setCurrentChild] = useState<string>(children.keys().next().value);
   let displayChild = currentChild;
@@ -34,7 +36,7 @@ export default function TabbedCard({
         ))}
       </header>
       <section className={`bg-white h-full border border-black flex flex-col border-t-0 p-4 overflow-y-auto`} style={{flex: "1 1 auto"}}>
-        <div className="my-auto">
+        <div className={containerClassName}>
           {Array.from(children.entries()).map(([key, value]) => (
             <div
               key={key}

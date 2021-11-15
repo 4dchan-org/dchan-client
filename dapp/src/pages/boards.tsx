@@ -7,6 +7,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { Board } from "dchan";
 import BoardCreationForm from "components/BoardCreationForm";
 import SearchWidget from "components/SearchWidget";
+import TabbedCard from "components/TabbedCard";
 import { parse as parseQueryString } from "query-string";
 import { isString, uniqBy } from "lodash";
 import { Router } from "router";
@@ -111,26 +112,22 @@ export default function BoardListPage({ location, match: { params } }: any) {
               )}
             </div>
           </div>
-        ) : boardsData ? (
-          <div>
-            <div className="grid justify-center">
-              <Card title={<span>Most popular</span>} className="pt-4">
-                <BoardList boards={boardsData.mostPopular} block={queriedBlock} />
-              </Card>
-              <Card title={<span>Last created</span>} className="pt-4">
-                <BoardList boards={boardsData.lastCreated} block={queriedBlock} />
-              </Card>
-              <Card title={<span>Last bumped</span>} className="pt-4">
-                <BoardList boards={boardsData.lastBumped} block={queriedBlock} />
-              </Card>
-            </div>
-            <div className="center flex">
-              <div>
-                <BoardCreationForm />
-              </div>
+        ) : boardsData ? <>
+          <div className="flex flex-col justify-center">
+            <TabbedCard className="w-screen sm:w-auto mt-4 sm:mx-auto">
+              {new Map([
+                ["Most popular", <BoardList boards={boardsData.mostPopular} block={queriedBlock} />],
+                ["Last created", <BoardList boards={boardsData.lastCreated} block={queriedBlock} />],
+                ["Last bumped",  <BoardList boards={boardsData.lastBumped}  block={queriedBlock} />],
+              ])}
+            </TabbedCard>
+          </div>
+          <div className="center flex">
+            <div>
+              <BoardCreationForm />
             </div>
           </div>
-        ) : (
+        </> : (
           ""
         )}
       </div>

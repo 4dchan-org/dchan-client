@@ -65,7 +65,7 @@ export default function HomePage({ location }: any) {
           </div>
         </div>
         <div className="lg:h-full lg:w-1/2 lg:float-left flex flex-col lg:px-8 lg:pb-6">
-          <TabbedCard className="h-full flex flex-col">
+          <TabbedCard className="h-full flex flex-col" containerClassName="my-auto">
             {new Map([
               ["Popular Boards", <PopularBoardsCard block={queriedBlock} />],
               ["Watched Threads", <WatchedThreadsCard block={queriedBlock} />],
