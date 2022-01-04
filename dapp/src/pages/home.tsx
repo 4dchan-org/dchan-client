@@ -32,11 +32,11 @@ export default function HomePage({ location }: any) {
         dateTime={dateTime}
       />
       <HeaderLogo/>
-      <div className="flex flex-row px-4">
-        <Card title={<span>Watched Threads</span>} className="w-1/2 pr-2 pb-4">
+      <div className="flex flex-col md:flex-row px-4">
+        <Card title={<span>Watched Threads</span>} className="md:w-1/2 md:pr-2 w-full pb-4">
           <WatchedThreadsCard block={queriedBlock} />
         </Card>
-        <Card title={<span>Popular Threads</span>} className="w-1/2 pl-2 pb-4">
+        <Card title={<span>Popular Threads</span>} className="md:w-1/2 md:pr-2 w-full pb-4">
           <PopularThreadsCard block={queriedBlock} />
         </Card>
       </div>
