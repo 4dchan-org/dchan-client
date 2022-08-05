@@ -50,6 +50,7 @@ export default function HeaderNavigation({
   baseUrl?: string;
   search?: string;
 }) {
+  const [isOpen, setIsOpen] = useState<boolean>();
   const [startBlock, setStartBlock] = useState<Block | undefined>();
   const [openedWidget, setOpenedWidget] = useState<OpenedWidgetEnum | null>(
     null
