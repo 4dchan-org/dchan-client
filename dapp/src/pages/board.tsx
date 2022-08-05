@@ -1,4 +1,3 @@
-import Footer from "components/Footer";
 import { useLastBlock, useSettings } from "hooks";
 import { parse as parseQueryString } from "query-string";
 import { DateTime } from "luxon";
@@ -9,11 +8,14 @@ import BOARD_CATALOG from "graphql/queries/board_catalog";
 import BOARD_GET from "graphql/queries/boards/get";
 import { useQuery } from "@apollo/react-hooks";
 import { isLowScore } from "dchan/entities/thread";
-import ContentHeader from "components/ContentHeader";
-import Loading from "components/Loading";
-import Anchor from "components/Anchor";
-import CatalogView from "components/CatalogView";
-import IndexView from "components/IndexView";
+import {
+  Footer,
+  ContentHeader,
+  Loading,
+  Anchor,
+  CatalogView,
+  IndexView,
+} from "components";
 import { Link, useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
 
@@ -55,7 +57,10 @@ export default function BoardPage({ location, match: { params } }: any) {
 
   const history = useHistory();
   const [settings] = useSettings();
-  const boardMode: string = params.view_mode || settings?.content_view?.board_default_view_mode || "catalog"
+  const boardMode: string =
+    params.view_mode ||
+    settings?.content_view?.board_default_view_mode ||
+    "catalog";
   const orderBy =
     settings?.content_view?.board_sort_threads_by || "lastBumpedAt";
   const limit = parseInt(`${settings?.content_view?.page_size || "100"}`);
@@ -66,14 +71,15 @@ export default function BoardPage({ location, match: { params } }: any) {
     orderBy,
     orderDirection: settings?.content_view?.board_sort_direction || "desc",
     limit,
-    skip: limit * (page-1),
+    skip: limit * (page - 1),
   };
 
-  const { refetch, data: catalogData, loading: catalogLoading } = useQuery<
-    BoardCatalogData,
-    BoardCatalogVars
-  >(BOARD_CATALOG, {
-    variables
+  const {
+    refetch,
+    data: catalogData,
+    loading: catalogLoading,
+  } = useQuery<BoardCatalogData, BoardCatalogVars>(BOARD_CATALOG, {
+    variables,
   });
 
   const { loading: boardLoading, data: boardData } = useQuery<
@@ -83,8 +89,8 @@ export default function BoardPage({ location, match: { params } }: any) {
     skip: !block,
     variables: {
       board: board_id,
-      block
-    }
+      block,
+    },
   });
 
   const board: Board | undefined | null = boardData?.board;
@@ -95,16 +101,16 @@ export default function BoardPage({ location, match: { params } }: any) {
   );
 
   useEffect(() => {
-    window.scrollTo({top: 0})
-  }, [board?.id])
+    window.scrollTo({ top: 0 });
+  }, [board?.id]);
 
   useEffect(() => {
     board && board.name !== board_name && history.replace(`/${board.id}`);
-  }, [board, board_name, history])
+  }, [board, board_name, history]);
 
   useEffect(() => {
     !board && boardRef?.board?.id && history.replace(`/${boardRef.board.id}`);
-  }, [board, boardRef, history])
+  }, [board, boardRef, history]);
 
   useEffect(() => {
     refetch();
@@ -119,10 +125,8 @@ export default function BoardPage({ location, match: { params } }: any) {
 
   // @TODO usePagination?
   const maxPage = useMemo(() => {
-    const threadCount = parseInt(`${board?.threadCount || 0}`)
-    return Math.max(
-      Math.ceil(board ? threadCount / limit : 0),
-    1)
+    const threadCount = parseInt(`${board?.threadCount || 0}`);
+    return Math.max(Math.ceil(board ? threadCount / limit : 0), 1);
   }, [board, limit]);
 
   useTitle(
@@ -134,12 +138,19 @@ export default function BoardPage({ location, match: { params } }: any) {
   );
 
   return (
-    <div className="bg-primary min-h-100vh flex flex-col" data-theme={board?.isNsfw ? "nsfw" : "blueboard"}>
+    <div
+      className="bg-primary min-h-100vh flex flex-col"
+      data-theme={board?.isNsfw ? "nsfw" : "blueboard"}
+    >
       <div>
         <ContentHeader
           board={board}
           dateTime={dateTime}
-          baseUrl={board ? Router.board(board, boardMode) : location.pathname + location.hash}
+          baseUrl={
+            board
+              ? Router.board(board, boardMode)
+              : location.pathname + location.hash
+          }
           block={isNaN(queriedBlock) ? undefined : `${queriedBlock}`}
           summary={
             catalogLoading ? (
@@ -158,10 +169,15 @@ export default function BoardPage({ location, match: { params } }: any) {
           {board === null ? (
             <div className="center grid p-8">
               Board does not exist.
-              {!isNaN(queriedBlock) ? <>
-                <br/>
-                You may have time traveled to before it was created, or after it was deleted.
-              </> : ""}
+              {!isNaN(queriedBlock) ? (
+                <>
+                  <br />
+                  You may have time traveled to before it was created, or after
+                  it was deleted.
+                </>
+              ) : (
+                ""
+              )}
             </div>
           ) : catalogLoading && !catalogData ? (
             <div className="center grid">
@@ -169,9 +185,7 @@ export default function BoardPage({ location, match: { params } }: any) {
             </div>
           ) : board && threads ? (
             threads.length === 0 ? (
-              <div className="center grid p-8">
-                No threads.
-              </div>
+              <div className="center grid p-8">No threads.</div>
             ) : (
               <div>
                 {
@@ -198,7 +212,7 @@ export default function BoardPage({ location, match: { params } }: any) {
 
           {board ? (
             <div>
-              <hr/>
+              <hr />
               <div className="p-2">
                 <span>
                   {page > 1 ? (
@@ -236,9 +250,13 @@ export default function BoardPage({ location, match: { params } }: any) {
                       const input = prompt(
                         `Page number: (range: 1-${maxPage})`
                       );
-                      if(input != null) {
+                      if (input != null) {
                         const newPage = parseInt(input || "");
-                        if (isNaN(newPage) || newPage < 1 || newPage > (maxPage)) {
+                        if (
+                          isNaN(newPage) ||
+                          newPage < 1 ||
+                          newPage > maxPage
+                        ) {
                           alert(`Invalid page number: ${input}`);
                         } else {
                           history.push(

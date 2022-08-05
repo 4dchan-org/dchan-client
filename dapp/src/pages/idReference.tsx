@@ -1,15 +1,6 @@
 import { useQuery } from "@apollo/react-hooks";
-import Error from "components/Error";
-import Loading from "components/Loading";
-import StillStuck from "components/StillStuck";
-import {
-  Board,
-  BoardRef,
-  Post,
-  PostRef,
-  Thread,
-  ThreadRef,
-} from "dchan";
+import { Error, Loading, StillStuck } from "components";
+import { Board, BoardRef, Post, PostRef, Thread, ThreadRef } from "dchan";
 import SEARCH_BY_ID from "graphql/queries/search_by_id";
 import SEARCH_BY_ID_BLOCK from "graphql/queries/search_by_id_block";
 import { useEffect, useState } from "react";
@@ -56,14 +47,7 @@ export default function IdReferencePage({ location, match: { params } }: any) {
     if (data) {
       let location = null;
 
-      let {
-        boardRef,
-        threadRef,
-        postRef,
-        board,
-        thread,
-        post,
-      } = data;
+      let { boardRef, threadRef, postRef, board, thread, post } = data;
 
       if (!board && boardRef) {
         board = boardRef.board;
@@ -106,9 +90,13 @@ export default function IdReferencePage({ location, match: { params } }: any) {
           <Loading />
           <div className="text-xs">{id}</div>
           <div>
-            <StillStuck><span>{id.indexOf("-") !== -1
-              ? "The content is being indexed, please wait..."
-              : "Are you sure it's a valid ID?"}</span></StillStuck>
+            <StillStuck>
+              <span>
+                {id.indexOf("-") !== -1
+                  ? "The content is being indexed, please wait..."
+                  : "Are you sure it's a valid ID?"}
+              </span>
+            </StillStuck>
           </div>
         </div>
       )}

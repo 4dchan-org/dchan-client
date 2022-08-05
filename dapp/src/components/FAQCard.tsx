@@ -1,4 +1,4 @@
-import Card from "components/Card";
+import { Card }  from "components";
 import { useState } from "react";
 import { singletonHook } from "react-singleton-hook";
 import Faucets from "./Faucets";
@@ -8,7 +8,7 @@ export function TheGraph() {
   return (
     <span>
       <a
-        className="text-blue-600 visited:text-purple-600"
+        className="dchan-link"
         href="//thegraph.com/"
         target="_blank"
         rel="noreferrer"
@@ -18,7 +18,7 @@ export function TheGraph() {
       <span className="text-xs">
         (ticker:{" "}
         <a
-          className="text-blue-600 visited:text-purple-600"
+          className="dchan-link"
           href="//www.coingecko.com/en/coins/the-graph"
           target="_blank"
           rel="noreferrer"
@@ -34,7 +34,7 @@ export function TheGraph() {
 export function Polygon() {
   return (
     <a
-      className="text-blue-600 visited:text-purple-600"
+      className="dchan-link"
       href="//polygon.network/"
       target="_blank"
       rel="noreferrer"
@@ -46,8 +46,8 @@ export function Polygon() {
 
 export function FAQCard({onExit, className}: {onExit: () => void, className?: string}) {
   return (
-    <Card title={<span>FAQ</span>} className={className} bodyClassName="flex overflow-y-auto overscroll-contain">
-      <div className="text-left p-8 text-sm">
+    <Card title={<span>FAQ</span>} className={className}>
+      <div className="text-left p-4 text-sm">
         <div className="pb-2">
           <strong>Q: What is this?</strong>
           <div>
@@ -90,9 +90,9 @@ export function FAQCard({onExit, className}: {onExit: () => void, className?: st
           <div>
             No. Or rather, they are as anonymous as the address they're posted from. 
             <br/>
-            Due to the public nature of the blockchain, posts are directly tied to whoever signed the post, meaning that <b>your post history is public, tied to your wallet address' identity and to any past activity</b>.
+            Due to the public nature of the blockchain, posts are directly tied to whoever signed the post, meaning that <u><i>your post history is public, tied to your wallet address' identity and to any past activity</i></u>.
             <br />
-            Please be mindful of that when posting.
+            Please keep that in mind when posting.
           </div>
         </div>
 
@@ -107,9 +107,9 @@ export function FAQCard({onExit, className}: {onExit: () => void, className?: st
             <br />
             You cannot change it.
             <br />
-            <b>The blockchain never forgets.</b>
+            <u><i>The blockchain never forgets.</i></u>
             <br />
-            Please be mindful of that when posting.
+            Please keep that in mind when posting.
           </div>
         </div>
         
@@ -120,6 +120,7 @@ export function FAQCard({onExit, className}: {onExit: () => void, className?: st
             <br />
             You can get some free <Polygon /> at the following faucets:
             <div><Faucets /></div>
+            Or you can simply buy it from whatever exchange trades it.
           </div>
         </div>
 
@@ -145,7 +146,7 @@ export function FAQCard({onExit, className}: {onExit: () => void, className?: st
         </div>
 
         <div className="pb-2">
-          <strong>Q: Does dchan.network have a token? I need a useless shitcoin to lose all my life savings on.</strong>
+          <strong>Q: Does dchan.network have a token? I need a useless shitcoin to lose my life savings on.</strong>
           <div>
             dchan.network does not require any token to function except <Polygon /> for
             sending txs, so no. 
@@ -162,7 +163,7 @@ export function FAQCard({onExit, className}: {onExit: () => void, className?: st
             Of course.
             <br/>
             <a
-              className="text-blue-600 visited:text-purple-600"
+              className="dchan-link"
               href="//github.com/dchan-network/"
               target="_blank"
               rel="noreferrer"
@@ -170,10 +171,6 @@ export function FAQCard({onExit, className}: {onExit: () => void, className?: st
               GitHub
             </a>
           </div>
-        </div>
-
-        <div className="mt-4 mb-12 text-center mx-auto cursor-pointer text-blue-600 visited:text-purple-600" onClick={onExit}>
-          Close
         </div>
       </div>
     </Card>
@@ -191,7 +188,6 @@ export function FAQCardOverlay() {
   return openFAQ
     ? <FAQCardOverlayInternal
       onExit={() => setOpenFAQ(false)}
-      className="h-full flex flex-col flex-grow flex-shrink-0"
       overlayClassName="w-full sm:w-4/6 h-5/6"
     />
     : null;

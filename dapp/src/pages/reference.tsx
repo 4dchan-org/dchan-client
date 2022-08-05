@@ -1,6 +1,5 @@
 import { useQuery } from "@apollo/react-hooks";
-import Error from "components/Error";
-import Loading from "components/Loading";
+import { Error, Loading } from "components";
 import { Post, Thread } from "dchan";
 import SEARCH_BY_REF from "graphql/queries/search_by_ref";
 import { useEffect, useState } from "react";
@@ -11,8 +10,8 @@ interface RefSearchData {
   threads: Thread[];
   posts: Post[];
   postRef: {
-    post: Post
-  }
+    post: Post;
+  };
 }
 interface RefSearchVars {
   id: string;
@@ -27,7 +26,7 @@ export default function ReferencePage({ match: { params } }: any) {
 
   const id = `0x${params.id}`;
   const post_n = params.post_n;
-  const post_ref = `${id}/${post_n}`
+  const post_ref = `${id}/${post_n}`;
 
   const { loading, data } = useQuery<RefSearchData, RefSearchVars>(
     SEARCH_BY_REF,
@@ -49,7 +48,7 @@ export default function ReferencePage({ match: { params } }: any) {
       } else if (posts && posts.length > 0) {
         post = posts[0];
       } else if (postRef) {
-        post = postRef.post
+        post = postRef.post;
       }
 
       if (thread) {
@@ -78,9 +77,7 @@ export default function ReferencePage({ match: { params } }: any) {
         </Error>
       ) : (
         <div>
-          {loading ? (
-            <Loading />
-          ) : ""}
+          {loading ? <Loading /> : ""}
           <div className="text-xs">
             {id}/{post_n}
           </div>

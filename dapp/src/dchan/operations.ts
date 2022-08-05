@@ -53,7 +53,7 @@ export async function postMessage(
     input: PostCreateInput,
     accounts: any,
     setStatus: SetStatus,
-    ipfsEndpoint?: string,
+    ipfsEndpoint: string,
 ) {
     const { board, thread, comment, name, subject, sage, nonce } = input;
 

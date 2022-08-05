@@ -21,7 +21,7 @@ export default function Error({
             <BackButton />
           </div>
           <div>
-            <Link className="text-blue-600 visited:text-purple-600 m-4" to="/">
+            <Link className="dchan-link m-4" to="/">
               Go home
             </Link>
           </div>

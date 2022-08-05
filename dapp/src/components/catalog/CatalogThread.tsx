@@ -1,5 +1,5 @@
 import { Thread } from "dchan";
-import IPFSImage from "components/IPFSImage";
+import { IPFSImage, BoardLink } from "components";
 import PostBody from "components/post/PostBody";
 import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
 import { useSettings } from "hooks";
@@ -7,7 +7,6 @@ import { useHistory } from "react-router-dom";
 import { Router } from "router";
 import { DateTime } from "luxon";
 import { useState, useCallback } from "react";
-import BoardLink from "components/BoardLink";
 
 const CatalogThread = ({
   thread,
@@ -47,30 +46,24 @@ const CatalogThread = ({
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const history = useHistory();
 
-  const openThread = useCallback(
-    () => {
-      const url = Router.thread(thread);
-      url && history.push(`${url}${block ? `?block=${block}` : ""}`);
-    },
-    [thread, history, block]
-  );
+  const openThread = useCallback(() => {
+    const url = Router.thread(thread);
+    url && history.push(`${url}${block ? `?block=${block}` : ""}`);
+  }, [thread, history, block]);
 
-  const focusThread = useCallback(
-    () => {
-      setIsFocused(true);
-    },
-    [setIsFocused]
-  );
+  const focusThread = useCallback(() => {
+    setIsFocused(true);
+  }, [setIsFocused]);
 
-  const defocusThread = useCallback(
-    () => {
-      setIsFocused(false);
-    },
-    [setIsFocused]
-  );
+  const defocusThread = useCallback(() => {
+    setIsFocused(false);
+  }, [setIsFocused]);
 
   return (
-    <div className="relative max-w-150px mx-1 w-full" style={{minHeight: "20rem"}}>
+    <div
+      className="relative max-w-150px mx-1 w-full"
+      style={{ minHeight: "20rem" }}
+    >
       <article
         id={id}
         className="dchan-post justify-self-center text-decoration-none leading-4 text-black m-0.5 border-black overflow-hidden max-w-150px break-word w-full place-items-center flex"
@@ -104,16 +97,15 @@ const CatalogThread = ({
         ) : (
           ""
         )}
-        <button
-          className="h-full w-full"
-          onClick={openThread}
-        >
+        <button className="h-full w-full" onClick={openThread}>
           <div
             className={[
-              !isFocused ? "absolute top-0 right-0 left-0" : "relative top-0 z-10 bg-tertiary border border-black h-full",
+              !isFocused
+                ? "absolute top-0 right-0 left-0"
+                : "relative top-0 z-10 bg-tertiary border border-black h-full",
               !isFocused && isLowScore ? "dchan-censor" : "",
             ].join(" ")}
-            style={{maxHeight: "initial"}}
+            style={{ maxHeight: "initial" }}
           >
             <div className="absolute top-0 right-0 z-10">
               {isPinned ? (
@@ -144,13 +136,17 @@ const CatalogThread = ({
             <div className="p-1">
               {showBoard && board ? (
                 <div>
-                  <BoardLink board={board} block={block == null ? undefined : `${block}`} />
+                  <BoardLink
+                    board={board}
+                    block={block == null ? undefined : `${block}`}
+                  />
                 </div>
               ) : (
                 ""
               )}
               <div>
-                <abbr title="Replies">R</abbr>: <strong>{replyCount}</strong>, <abbr title="Images">I</abbr>: <strong>{imageCount}</strong>
+                <abbr title="Replies">R</abbr>: <strong>{replyCount}</strong>,{" "}
+                <abbr title="Images">I</abbr>: <strong>{imageCount}</strong>
               </div>
               <div className="word-wrap">
                 <div>

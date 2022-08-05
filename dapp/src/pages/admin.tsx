@@ -1,4 +1,4 @@
-import Footer from "components/Footer";
+import { Footer } from "components";
 import GenericHeader from "components/header/generic";
 import { Link } from "react-router-dom";
 import { useWeb3, useUser } from "hooks";
@@ -11,28 +11,35 @@ export default function AdminPage() {
   const { accounts } = useWeb3();
 
   useEffect(() => {
-    window.scrollTo({top: 0})
-  }, [])
+    window.scrollTo({ top: 0 });
+  }, []);
 
   const adminClaim = async () => {
     await sendMessage("admin:claim", {}, accounts[0]);
   };
 
   const adminGrant = async () => {
-    const hex_address = prompt("Whomst 0x?")
-    alert(`Granting admin to ${hex_address}`)
-    await sendMessage("admin:grant", {hex_address}, accounts[0]);
+    const hex_address = prompt("Whomst 0x?");
+    alert(`Granting admin to ${hex_address}`);
+    await sendMessage("admin:grant", { hex_address }, accounts[0]);
   };
 
   const clientPublish = async () => {
-    const ipfs_hash = prompt("IPFS hash?")
-    const version = prompt("Version?")
-    const channel = prompt("Channel?") || ""
+    const ipfs_hash = prompt("IPFS hash?");
+    const version = prompt("Version?");
+    const channel = prompt("Channel?") || "";
     const valid = !!ipfs_hash && !!version;
     alert(
-      `${valid ? "Publishing" : "Invalid"} '${ipfs_hash}', version '${version}' on channel '${channel}'`
+      `${
+        valid ? "Publishing" : "Invalid"
+      } '${ipfs_hash}', version '${version}' on channel '${channel}'`
     );
-    (await valid) && sendMessage("client:publish", { ipfs_hash, version, channel }, accounts[0]);
+    (await valid) &&
+      sendMessage(
+        "client:publish",
+        { ipfs_hash, version, channel },
+        accounts[0]
+      );
   };
 
   const chanLock = async () => {
@@ -68,10 +75,7 @@ export default function AdminPage() {
             <button onClick={chanUnlock}>Unlock</button>
           </div>
 
-          <Link
-            className="m-4 dchan-link"
-            to="/"
-          >
+          <Link className="m-4 dchan-link" to="/">
             Home
           </Link>
 

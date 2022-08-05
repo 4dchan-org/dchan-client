@@ -76,6 +76,18 @@
     border-bottom: 1px solid var(--secondary);
 }
 
+.border-top-secondary-accent {
+    border-top: 1px solid var(--secondary-accent);
+}
+
+.border-top-tertiary-accent {
+    border-top: 1px solid var(--tertiary-accent);
+}
+
+.border-tertiary-accent {
+    border: 1px solid var(--tertiary-accent);
+}
+
 .border-bottom-secondary-accent {
     border-bottom: 1px solid var(--secondary-accent);
 }
@@ -86,6 +98,10 @@
 
 .border-bottom-tertiary-accent {
     border-bottom: 1px solid var(--tertiary-accent);
+}
+
+.border-right-tertiary-accent {
+    border-right: 1px solid var(--tertiary-accent);
 }
 
 .border-bottom-highlight {
@@ -216,6 +232,10 @@
     max-width: 8rem;
 }
 
+.max-w-10rem {
+    max-width: 10rem;
+}
+
 .max-w-12rem {
     max-width: 12rem;
 }
@@ -281,4 +301,16 @@
 
 .opacity-2 {
     opacity: 0.02;
+}
+
+.p-none {
+    padding: 0 !important;
+}
+
+.p-01 {
+    padding: 0.1rem;
+}
+
+.b-none {
+    border: 0 !important;
 }

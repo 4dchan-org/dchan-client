@@ -1,4 +1,4 @@
-import Card from "components/Card";
+import { Card } from "components";
 import { useState } from "react";
 import { singletonHook } from "react-singleton-hook";
 import OverlayComponent from "./OverlayComponent";

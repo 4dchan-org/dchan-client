@@ -6,7 +6,7 @@ export default function Loading({
   className?: string
 }) {  
     return (
-      <div className={`${className} grid center`}>
+      <div className={`${className} dchan-loading grid center`}>
           <Spinner speed={"sanic"}></Spinner>
           <div>
             Loading...

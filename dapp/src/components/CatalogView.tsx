@@ -11,7 +11,7 @@ export default function CatalogView({
   showBoard?: boolean
 }) {
   return (
-    <div className="flex flex-row flex-wrap justify-center place-items-start font-size-090rem px-2 sm:px-4">
+    <div className="flex flex-row flex-wrap justify-center place-items-start font-size-090rem px-2 sm:px-4 flex-grow">
       {threads.filter(t => !!t && !!t.board).map(thread => (
         <CatalogThread
           thread={thread}

@@ -1,6 +1,4 @@
 import { useQuery } from "@apollo/react-hooks";
-import ContentHeader from "components/ContentHeader";
-import Footer from "components/Footer";
 import { Board, Post, shortenAddress, Thread } from "dchan";
 import THREAD_GET from "graphql/queries/thread_get";
 import { DateTime } from "luxon";
@@ -8,13 +6,11 @@ import { parse as parseQueryString } from "query-string";
 import { useEffect, useMemo } from "react";
 import { Router } from "router";
 import PostComponent from "components/post/Post";
-import Loading from "components/Loading";
-import Anchor from "components/Anchor";
 import { usePubSub } from "hooks";
 import { useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
 import THREAD_GET_LAST_BLOCK from "graphql/queries/thread_get_last_block";
-
+import { ContentHeader, Footer, Loading, Anchor } from "components";
 interface ThreadContentData {
   board: Board;
   threads: Thread[];
@@ -52,7 +48,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
     ThreadContentData,
     ThreadContentVars
   >(!!block ? THREAD_GET : THREAD_GET_LAST_BLOCK, {
-    variables
+    variables,
   });
 
   const post = data?.posts?.[0];
@@ -64,8 +60,8 @@ export default function ThreadPage({ location, match: { params } }: any) {
   );
 
   useEffect(() => {
-    window.scrollTo({top: 0})
-  }, [thread?.id])
+    window.scrollTo({ top: 0 });
+  }, [thread?.id]);
 
   useEffect(() => {
     const url = !thread && post ? Router.post(post) : undefined;
@@ -73,21 +69,18 @@ export default function ThreadPage({ location, match: { params } }: any) {
   }, [history, thread, block, post]);
 
   useEffect(() => {
-    const filtered = !loading && (focus_user_id || focus_post_n)
-      ? posts.filter(
-        (post) => {
-          const idCheck = (
-            !focus_user_id
-            || post.from.id === focus_user_id
-            || `0x${shortenAddress(post.from.id).replace('-', '')}` === focus_user_id
-          );
-          const numCheck = (
-            !focus_post_n
-            || post.n === focus_post_n
-          );
-          return idCheck && numCheck;
-        })
-      : [];
+    const filtered =
+      !loading && (focus_user_id || focus_post_n)
+        ? posts.filter((post) => {
+            const idCheck =
+              !focus_user_id ||
+              post.from.id === focus_user_id ||
+              `0x${shortenAddress(post.from.id).replace("-", "")}` ===
+                focus_user_id;
+            const numCheck = !focus_post_n || post.n === focus_post_n;
+            return idCheck && numCheck;
+          })
+        : [];
     if (filtered.length === 1) {
       const post = filtered[0];
       // redirect to standard URL no matter what
@@ -105,7 +98,11 @@ export default function ThreadPage({ location, match: { params } }: any) {
   useEffect(() => {
     // above useEffect will automatically redirect for focusing URLs
     // this will handle the normal case
-    if (board && thread && (board_name !== board.name || user_id !== thread.op.from.id)) {
+    if (
+      board &&
+      thread &&
+      (board_name !== board.name || user_id !== thread.op.from.id)
+    ) {
       const url = Router.thread(thread);
       url && history.replace(`${url}${block ? `?block=${block}` : ""}`);
     }
@@ -119,18 +116,24 @@ export default function ThreadPage({ location, match: { params } }: any) {
 
   useTitle(
     board && thread
-      ? `/${board.name}/ - ${thread.subject || thread.op.comment
-      } - dchan.network - [${thread.id}]`
+      ? `/${board.name}/ - ${
+          thread.subject || thread.op.comment
+        } - dchan.network - [${thread.id}]`
       : `/${board_id}/ - Loading... - dchan.network`
   );
 
   return (
-    <div className="bg-primary min-h-100vh flex flex-col" data-theme={board?.isNsfw ? "nsfw" : "blueboard"}>
+    <div
+      className="bg-primary min-h-100vh flex flex-col"
+      data-theme={board?.isNsfw ? "nsfw" : "blueboard"}
+    >
       <ContentHeader
         board={board}
         thread={thread}
         dateTime={dateTime}
-        baseUrl={thread ? Router.thread(thread) : location.pathname + location.hash}
+        baseUrl={
+          thread ? Router.thread(thread) : location.pathname + location.hash
+        }
         block={isNaN(block) ? undefined : `${block}`}
         summary={
           loading ? <span>...</span> : <span>Posts: {posts.length}</span>
@@ -138,7 +141,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
         onRefresh={refetch}
       />
 
-      <div>
+      <div className="flex-grow">
         {loading && !data ? (
           <div className="center grid">
             <Loading />
@@ -158,7 +161,32 @@ export default function ThreadPage({ location, match: { params } }: any) {
               ))}
             </div>
 
-            <Anchor to="#board-header" label="Top" />
+            <div className="flex text-xs pr-1 sticky bottom-0 z-50">
+              <span className="flex bg-primary pl-2 rounded ">
+                <span className="pr-1">
+                  <Anchor to="#board-header" label="Top" />
+                </span>
+                <span className="pr-1">
+                  <div>
+                    [
+                    <button
+                      className="dchan-link"
+                      onClick={() => {
+                        document
+                          .getElementById("board-header")
+                          ?.scrollIntoView();
+                        document
+                          .getElementById("dchan-post-form-textarea")
+                          ?.focus();
+                      }}
+                    >
+                      Reply
+                    </button>
+                    ]
+                  </div>
+                </span>
+              </span>
+            </div>
           </div>
         ) : (
           "Post not found."

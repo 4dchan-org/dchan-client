@@ -9,19 +9,27 @@ import {
 import { Board, shortenAddress, Thread } from "dchan";
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useWeb3, useEventListener, usePubSub, useUser, useFavorites } from "hooks";
-import Status from "components/Status";
+import {
+  useWeb3,
+  useEventListener,
+  usePubSub,
+  useUser,
+  useFavorites,
+  useSettings,
+} from "hooks";
 import { isString, uniqueId } from "lodash";
 import { postMessage } from "dchan/operations";
 import MaxLengthWatch from "./MaxLengthWatch";
-import Loading from "components/Loading";
-import Wallet from "components/Wallet";
-import Menu from "components/Menu";
-import useFormPersist from "hooks/useFormPersist"
-import IdLabel from "components/IdLabel";
-import FAQButton from "components/FAQCard";
-import RulesButton from "components/RulesCard";
-import DefaultSettings from "settings/default";
+import useFormPersist from "hooks/useFormPersist";
+import {
+  Status,
+  Loading,
+  Wallet,
+  Menu,
+  IdLabel,
+  FAQCard,
+  RulesCard,
+} from "components";
 
 export default function FormPost({
   baseUrl,
@@ -33,10 +41,10 @@ export default function FormPost({
   board?: Board;
 }) {
   const { provider, chainId, accounts } = useWeb3();
-  //const [settings] = useSettings();
-
+  const [settings] = useSettings();
   const history = useHistory();
   const formRef = useRef<HTMLFormElement>(null);
+  const [isDirty, setIsDirty] = useState<boolean>(false);
   const [isSending, setIsSending] = useState<boolean>(false);
   const [nonce, setNonce] = useState<string>(uniqueId());
   const [status, setStatus] = useState<string | object>();
@@ -72,14 +80,20 @@ export default function FormPost({
 
   const [formDisabled, setFormDisabled] = useState<boolean>(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const { ref: registerCommentRef, ...registerCommentRest } = register("comment", { required: !thread });
+  const { ref: registerCommentRef, ...registerCommentRest } = register(
+    "comment",
+    { required: !thread }
+  );
 
-  const formId = useMemo(() => thread?.id || board?.id || "form", [thread, board]);
+  const formId = useMemo(
+    () => thread?.id || board?.id || "form",
+    [thread, board]
+  );
   const { clear } = useFormPersist(
     formId,
     { watch, setValue },
     {
-      include: ["name", "comment", "subject"]
+      include: ["name", "comment", "subject"],
     }
   );
 
@@ -144,23 +158,32 @@ export default function FormPost({
     setNonce(uniqueId());
   }, [setNonce]);
 
-  const resetForm = useCallback(() => {
-    if(!window.confirm("Reset form?")) return;
+  const resetForm = useCallback(
+    (forceReset) => {
+      if (!forceReset && !window.confirm("Reset form?")) return;
 
-    reset();
-    trigger();
-    changeNonce();
-    clear();
-  }, [reset, trigger, changeNonce, clear]);
+      reset();
+      trigger();
+      changeNonce();
+      clear();
+      setIsDirty(false);
+    },
+    [reset, trigger, changeNonce, clear, setIsDirty]
+  );
 
   const onSubmit = useCallback(
     async (data: any) => {
-      !!thread && !!addFavorite && addFavorite(thread)
+      !!thread && !!addFavorite && addFavorite(thread);
       setIsSending(true);
 
-      let result: { error?: any, success?: any, events?: any } | null = null;
+      let result: { error?: any; success?: any; events?: any } | null = null;
       try {
-        result = await postMessage(data, accounts, setStatus, DefaultSettings.ipfs.endpoint);
+        result = await postMessage(
+          data,
+          accounts,
+          setStatus,
+          settings.ipfs.endpoint
+        );
       } catch (error) {
         result = { error };
 
@@ -174,13 +197,13 @@ export default function FormPost({
 
         setStatus(result);
 
-        console.log({result});
+        console.log({ result });
       }
 
       setIsSending(false);
 
       if (!!result && !result.error) {
-        resetForm();
+        resetForm(true);
       }
 
       const evtMessage = result?.events?.Message;
@@ -189,14 +212,16 @@ export default function FormPost({
         const url = `/${transactionHash}-${logIndex}`;
         history.push(url);
       }
-    }, [
+    },
+    [
       accounts,
       history,
       setStatus,
       setIsSending,
       resetForm,
       addFavorite,
-      thread
+      thread,
+      settings,
     ]
   );
 
@@ -294,13 +319,16 @@ export default function FormPost({
     [onFileChange, setValue]
   );
 
-  const [currentBaseUrl, setCurrentBaseUrl] = useState<string | undefined>(baseUrl);
+  const [currentBaseUrl, setCurrentBaseUrl] = useState<string | undefined>(
+    baseUrl
+  );
   useEffect(() => {
     if (baseUrl && baseUrl !== currentBaseUrl) {
-      setCurrentBaseUrl(baseUrl)
-      resetForm()
+      setCurrentBaseUrl(baseUrl);
+      // @BUG This causes a popup when writing something and switching from catalog view to index while in board page
+      // resetForm()
     }
-  }, [baseUrl, currentBaseUrl, setCurrentBaseUrl, resetForm])
+  }, [isDirty, baseUrl, currentBaseUrl, setCurrentBaseUrl, resetForm]);
 
   useEventListener("paste", pasteHandler);
 
@@ -308,12 +336,18 @@ export default function FormPost({
   const isJanny = board ? isJannyOf(board.id) : false;
 
   const onBlur = useCallback(() => {
-    changeNonce()
-  }, [changeNonce])
+    changeNonce();
+  }, [changeNonce]);
+
+  const onChange = useCallback(() => {
+    setIsDirty(true);
+  }, [setIsDirty]);
 
   const formPostOptions = () => (
     <span>
-      <span className="text-xs"><button onClick={resetForm}>❌</button></span>
+      <span className="text-xs">
+        <button onClick={resetForm}>❌</button>
+      </span>
       <Menu>
         <div>Options:</div>
         <div className="flex">
@@ -328,7 +362,12 @@ export default function FormPost({
             htmlFor="dchan-input-sage"
             className="text-black font-weight-800 font-family-tahoma"
           >
-            <div title="Does not bump the thread">sage</div>
+            <abbr
+              className="opacity-20 hover:opacity-100"
+              title="Thread will not be bumped."
+            >
+              🍂 Sage
+            </abbr>
           </label>
         </div>
       </Menu>
@@ -338,6 +377,7 @@ export default function FormPost({
   return (
     <div className="z-30">
       <Wallet />
+      <div className="pb-2" />
       {!isJanny && thread?.isLocked ? (
         <div className="text-contrast font-weight-800 font-family-tahoma">
           <div>Thread locked.</div>
@@ -358,6 +398,7 @@ export default function FormPost({
                 className="grid center bg-primary p-2 pointer-events-auto bg-primary"
                 onSubmit={handleSubmit(onSubmit)}
                 onBlur={onBlur}
+                onChange={onChange}
               >
                 <input
                   type="hidden"
@@ -503,11 +544,13 @@ export default function FormPost({
                       <td>
                         <span className="relative">
                           <textarea
+                            id="dchan-post-form-textarea"
+                            autoFocus={true}
                             className="dchan-input-comment px-1 font-sans border border-solid border-gray focus:border-indigo-300"
                             cols={40}
                             rows={4}
                             {...registerCommentRest}
-                            ref={el => {
+                            ref={(el) => {
                               registerCommentRef(el);
                               // typescript thinks this can't be
                               // assigned to, it can
@@ -560,9 +603,12 @@ export default function FormPost({
                                 <img
                                   alt=""
                                   className="max-h-24 max-w-16rem"
-                                  src={thumbnailB64} />
+                                  src={thumbnailB64}
+                                />
                                 <span
-                                  className={`text-xs ${fileSize > 1000 ? "text-contrast" : ""}`}
+                                  className={`text-xs ${
+                                    fileSize > 1000 ? "text-contrast" : ""
+                                  }`}
                                 >
                                   {Math.round(fileSize)} kb
                                 </span>
@@ -625,7 +671,8 @@ export default function FormPost({
                                     </label>
                                   </div>
                                 </details>
-                              </div>) : (
+                              </div>
+                            ) : (
                               ""
                             )}
                           </div>
@@ -654,10 +701,7 @@ export default function FormPost({
                     >
                       <ul>
                         <li>
-                          I've read the{" "}
-                          <RulesButton/>{" "}
-                          and the{" "}
-                          <FAQButton/>{" "}
+                          I've read the <RulesCard /> and the <FAQCard />{" "}
                           before posting.
                         </li>
                         <li>
@@ -670,7 +714,7 @@ export default function FormPost({
                         </li>
                         <li>
                           <i>
-                            {accounts && accounts.length > 0 ?
+                            {accounts && accounts.length > 0 ? (
                               <a
                                 href={`https://polygonscan.com/address/${accounts[0]}`}
                                 target={`_blank`}
@@ -678,14 +722,15 @@ export default function FormPost({
                                 <IdLabel id={accounts[0]}>
                                   {accounts[0]}
                                 </IdLabel>
-                              </a> : (
-                                ""
-                              )}{" "}
+                              </a>
+                            ) : (
+                              ""
+                            )}{" "}
                           </i>
                         </li>
                         <li>
                           and that{" "}
-                          <abbr title="Posts are stored on the blockchain and images are uploaded to IPFS. _This_cannot_be_undone_. Content can be removed, but can still be obtained.">
+                          <abbr title="Posts are stored on the blockchain and images are uploaded to IPFS. _THIS_CANNOT_BE_UNDONE_. Content can be hidden, but can still be trivially obtained. Remember, the blockchain never forgets.">
                             <i>I won't be able to delete the content I post.</i>
                           </abbr>
                         </li>
@@ -704,7 +749,9 @@ export default function FormPost({
             ""
           )}
         </div>
-      ) : <Loading />}
+      ) : (
+        <Loading />
+      )}
     </div>
   );
 }

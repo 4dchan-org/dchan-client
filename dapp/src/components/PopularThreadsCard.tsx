@@ -30,5 +30,5 @@ export default function PopularThreadsCard({block, board} : {block?: number, boa
 
   return loading
     ? <Loading />
-    : data?.threads.length ? <IndexView threads={data.threads} showBoard={true} block={block} /> : <span>No threads active.</span>;
+    : data?.threads.length ? <IndexView threads={data.threads} showBoard={true} block={block} /> : <span>No active threads.</span>;
 }

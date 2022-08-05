@@ -2,9 +2,7 @@ import HeaderNavigation from "components/header/HeaderNavigation";
 import HeaderLogo from "components/header/logo";
 import { Board, Thread } from "dchan";
 import { Link } from "react-router-dom";
-import Status from "components/Status";
-import IdLabel from "components/IdLabel";
-import Menu from "components/Menu";
+import { Status, IdLabel, Menu } from "components";
 import { useState } from "react";
 import { lockBoard, removeBoard, unlockBoard } from "dchan/operations";
 import { useUser, useWeb3 } from "hooks";
@@ -25,9 +23,9 @@ export default function BoardHeader({
   baseUrl?: string;
   search?: string;
 }) {
-  const { accounts } = useWeb3()
-  const { isJannyOf } = useUser()
-  const isJanny = board ? isJannyOf(board.id) : false
+  const { accounts } = useWeb3();
+  const { isJannyOf } = useUser();
+  const isJanny = board ? isJannyOf(board.id) : false;
   const [status, setStatus] = useState<string | object>();
 
   return (
@@ -61,7 +59,15 @@ export default function BoardHeader({
             {board === null ? (
               <div>/?/ - ?????</div>
             ) : (
-              <Link to={board ? `/${board.name}/${board.id}${search || ""}${block ? `?block=${block}` : ""}` : "#"}>
+              <Link
+                to={
+                  board
+                    ? `/${board.name}/${board.id}${search || ""}${
+                        block ? `?block=${block}` : ""
+                      }`
+                    : "#"
+                }
+              >
                 /{board?.name || "?"}/ - {board?.title || "..."}
               </Link>
             )}
@@ -86,7 +92,9 @@ export default function BoardHeader({
                       <span>
                         <input name="lock" type="hidden" value="true"></input>
                         <button
-                          onClick={() => lockBoard(board.id, accounts, setStatus)}
+                          onClick={() =>
+                            lockBoard(board.id, accounts, setStatus)
+                          }
                         >
                           🔒 Lock
                         </button>
@@ -112,10 +120,7 @@ export default function BoardHeader({
                   </div> */}
                 </Menu>
               </span>
-              <Status
-                className="p-4"
-                status={status}
-              ></Status>
+              <Status className="p-4" status={status}></Status>
             </span>
           ) : (
             ""

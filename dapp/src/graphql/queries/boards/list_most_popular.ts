@@ -1,7 +1,7 @@
 import { gql } from "apollo-boost";
 
 const BOARDS_LIST_MOST_POPULAR = gql`
-  fragment Board on Board {
+  fragment MostPopularBoard on Board {
     id
     title
     postCount
@@ -12,7 +12,7 @@ const BOARDS_LIST_MOST_POPULAR = gql`
 
   query Boards {
     boards(orderBy: postCount, orderDirection: desc, first: 10) {
-      ...Board
+      ...MostPopularBoard
     }
   }
 `;

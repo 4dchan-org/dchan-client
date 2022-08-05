@@ -4,10 +4,12 @@ import React, { useState } from "react";
 export default function TabbedCard({
   children,
   className = "",
+  sectionClassName = "",
   containerClassName = "",
 }: {
   children: Map<string, any>;
   className?: string;
+  sectionClassName?: string
   containerClassName?: string;
 }) {
   const [currentChild, setCurrentChild] = useState<string>(children.keys().next().value);
@@ -23,7 +25,7 @@ export default function TabbedCard({
             <button
               className={[
                 "bg-highlight py-1 px-4 w-full font-bold",
-                key === displayChild ? "opacity-100" : "opacity-80 hover:opacity-100"
+                key === displayChild ? "opacity-100" : "opacity-60 hover:opacity-100"
               ].join(" ")}
               onClick={() => {
                 setCurrentChild(key);
@@ -35,7 +37,7 @@ export default function TabbedCard({
           </React.Fragment>
         ))}
       </header>
-      <section className={`bg-white h-full border border-black flex flex-col border-t-0 p-4 overflow-y-auto`} style={{flex: "1 1 auto"}}>
+      <section className={`bg-white border border-black flex flex-col border-t-0 ${sectionClassName}`} style={{flex: "1 1 auto"}}>
         <div className={containerClassName}>
           {Array.from(children.entries()).map(([key, value]) => (
             <div

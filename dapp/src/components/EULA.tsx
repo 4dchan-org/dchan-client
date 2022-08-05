@@ -22,7 +22,7 @@ export default function EULA() {
   }, [agreed, settings, setSettings]);
 
   return (
-    <div className="center-grid w-full min-h-screen bg-primary">
+    <div className="center-grid w-full min-h-screen bg-primary p-2">
       <div className="flex flex-wrap center">
         <Card
           title={

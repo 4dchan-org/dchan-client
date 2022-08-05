@@ -1,12 +1,15 @@
+import React, { ReactElement } from "react";
 import { useLocation } from "react-router";
 import { HashLink } from "react-router-hash-link";
 
 export default function Anchor({
   label,
-  to
+  to,
+  onClick
 }: {
-  label: string
-  to: string
+  label: string | ReactElement
+  to: string,
+  onClick?: any
 }) {
   const search = useLocation().search;
   
@@ -16,6 +19,7 @@ export default function Anchor({
       <HashLink
         className="dchan-link"
         to={`${search}${to}`}
+        onClick={onClick}
       >
         {label}
       </HashLink>

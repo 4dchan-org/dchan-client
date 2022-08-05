@@ -1,8 +1,6 @@
-import Footer from "components/Footer";
 import { parse as parseQueryString } from "query-string";
 import { isString } from "lodash";
 import { DateTime } from "luxon";
-import ContentHeader from "components/ContentHeader";
 import { useSettings } from "hooks";
 import { useQuery } from "@apollo/react-hooks";
 import { useEffect, useMemo } from "react";
@@ -10,11 +8,10 @@ import { isLowScore, sortByCreatedAt } from "dchan/entities/post";
 import POST_SEARCH from "graphql/queries/post_search";
 import POST_SEARCH_BLOCK from "graphql/queries/post_search_block";
 import { Post } from "dchan";
-import PostComponent from "components/post/Post";
 import { Link } from "react-router-dom";
-import IdLabel from "components/IdLabel";
 import { Router } from "router";
-import Loading from "components/Loading";
+import { Footer, ContentHeader, IdLabel, Loading } from "components";
+import PostComponent from "components/post/Post"
 
 interface SearchData {
   postSearch: Post[];
@@ -62,15 +59,18 @@ export default function PostSearchPage({ location, match: { params } }: any) {
   }, [postSearch]);
 
   useEffect(() => {
-    window.scrollTo({top: 0})
-  }, [search])
+    window.scrollTo({ top: 0 });
+  }, [search]);
 
   useEffect(() => {
     refetch();
   }, [search, block, refetch]);
 
   return (
-    <div className="bg-primary min-h-100vh flex flex-col" data-theme={"blueboard"}>
+    <div
+      className="bg-primary min-h-100vh flex flex-col"
+      data-theme={"blueboard"}
+    >
       <ContentHeader
         dateTime={dateTime}
         search={search}
@@ -127,10 +127,7 @@ export default function PostSearchPage({ location, match: { params } }: any) {
                         </span>
                         <span className="p-1">
                           [
-                          <Link
-                            to={`/${post.id}`}
-                            className="dchan-link"
-                          >
+                          <Link to={`/${post.id}`} className="dchan-link">
                             View
                           </Link>
                           ]

@@ -1,16 +1,17 @@
 import { Link } from "react-router-dom";
 import { Board } from "dchan";
-import IdLabel from "components/IdLabel";
-import Loading from "components/Loading";
+import { IdLabel, Loading } from "components";
 import { usePubSub } from "hooks";
 import { useCallback } from "react";
 
 function BoardItem({
   board, 
-  block
+  block,
+  highlight
 }: {
   board: Board, 
-  block?: number
+  block?: number,
+  highlight?: Board
 }) {
   const { id, title, postCount, name, isLocked, isNsfw } = board
 
@@ -25,13 +26,13 @@ function BoardItem({
   }, [board, publish])
 
   return (
-    <tr className="relative" key={id} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <tr className={`relative ${highlight?.id === board.id ? "bg-secondary" : ""}`} key={id} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <td>
         <IdLabel
           id={id}
         ></IdLabel>
       </td>
-      <td className="px-2 whitespace-nowrap hidden sm:block max-w-12rem truncate">
+      <td className="px-2 whitespace-nowrap hidden sm:block max-w-10rem truncate">
         <span>
           <Link
             className="dchan-link"
@@ -74,23 +75,26 @@ export default function BoardList({
   className = "",
   loading = false,
   boards,
+  highlight,
   block
 }: {
   className?: string;
   loading?: boolean;
   boards?: Board[];
   block?: number;
+  highlight?: Board
 }) {
   return (
-    <div className={`${className} center overflow-auto`}>
-      <table className="mx-8 border-separate">
+    <div className={`${className} flex center`}>
+      <table className="flex-grow">
         <tbody>
           {loading
             ? <Loading />
             : !boards ? "" : boards.length > 0
               ? boards.map(board => BoardItem({
                 board, 
-                block
+                block,
+                highlight
               }))
               : "No boards"}
         </tbody>

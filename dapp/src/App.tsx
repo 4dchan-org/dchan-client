@@ -1,20 +1,25 @@
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/react-hooks";
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+} from "@apollo/react-hooks";
 import { useEffect, useMemo } from "react";
 import { SingletonHooksContainer } from "react-singleton-hook";
 
 import "assets/styles/index.scss";
 
-import AdminPage from "pages/admin";
-import BoardListPage from "pages/boards";
-import BoardPage from "pages/board";
-import HomePage from "pages/home";
-import LockBanner from "components/LockBanner";
-import PostSearchPage from "pages/postSearch";
-import ReferencePage from "pages/reference";
-import ThreadPage from "pages/thread";
-import EULA from "components/EULA";
-import IdReferencePage from "pages/idReference";
+import {
+  AdminPage,
+  BoardPage,
+  BoardsPage,
+  HomePage,
+  IdReferencePage,
+  PostSearchPage,
+  ReferencePage,
+  ThreadPage,
+} from "pages";
+import { LockBanner, EULA } from "components";
 import { FAQCardOverlay } from "components/FAQCard";
 import { RulesCardOverlay } from "components/RulesCard";
 import { AbuseCardOverlay } from "components/AbuseCard";
@@ -51,9 +56,11 @@ function useLocalSettings() {
   return useState<Settings>(() => {
     try {
       const item = window.localStorage.getItem("dchan.config");
-      return item ? {...DefaultSettings, ...JSON.parse(item)} : DefaultSettings;
+      return item
+        ? { ...DefaultSettings, ...JSON.parse(item) }
+        : DefaultSettings;
     } catch (error) {
-      console.error({error});
+      console.error({ error });
       return DefaultSettings;
     }
   });
@@ -68,12 +75,12 @@ function WriteEndpointsHack() {
   useEffect(() => {
     if (!endpointsWritten && settings) {
       endpointsWritten = true;
-      let newSettings = {...settings};
+      let newSettings = { ...settings };
       newSettings.subgraph.endpoint = DefaultSettings.subgraph.endpoint;
       newSettings.ipfs.endpoint = DefaultSettings.ipfs.endpoint;
       setSettings(newSettings);
     }
-  }, [setSettings, settings])
+  }, [setSettings, settings]);
   return null;
 }
 
@@ -82,10 +89,11 @@ function App() {
   writeAppSetSettings(setSettings);
 
   const client = useMemo(
-    () => new ApolloClient({
-      uri: DefaultSettings.subgraph.endpoint,
-      cache: new InMemoryCache(),
-    }),
+    () =>
+      new ApolloClient({
+        uri: DefaultSettings.subgraph.endpoint,
+        cache: new InMemoryCache(),
+      }),
     []
   );
 
@@ -93,14 +101,14 @@ function App() {
     <EULA />
   ) : (
     <ApolloProvider client={client}>
-      <SingletonHooksContainer/>
-      <WriteEndpointsHack/>
+      <SingletonHooksContainer />
+      <WriteEndpointsHack />
       <Router basename="/">
         <LockBanner />
         <div className="App text-center">
           <Switch>
             <Route exact path="/" component={HomePage} />
-            <Route exact path="/_/boards" component={BoardListPage} />
+            <Route exact path="/_/boards" component={BoardsPage} />
             <Route path="/_/admin" component={AdminPage} />
             <Route path="/_/posts" component={PostSearchPage} />
             <Route path="/0x:id/:post_n" component={ReferencePage} />
@@ -130,11 +138,11 @@ function App() {
               component={ThreadPage}
             />
             <Route path="/:board_name/0x:board_id" component={BoardPage} />
-            <Route exact path="/:board_name" component={BoardListPage} />
+            <Route exact path="/:board_name" component={BoardsPage} />
           </Switch>
-          <FAQCardOverlay/>
-          <RulesCardOverlay/>
-          <AbuseCardOverlay/>
+          <FAQCardOverlay />
+          <RulesCardOverlay />
+          <AbuseCardOverlay />
         </div>
       </Router>
     </ApolloProvider>

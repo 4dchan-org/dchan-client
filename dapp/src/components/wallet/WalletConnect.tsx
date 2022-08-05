@@ -1,4 +1,4 @@
-import StillStuck from "components/StillStuck";
+import { StillStuck } from "components";
 import { useWeb3 } from "hooks";
 import { useCallback, useState } from "react";
 

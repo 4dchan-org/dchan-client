@@ -1,6 +1,5 @@
-import Menu from "components/Menu";
-import Status from "components/Status";
-import UserLabel from "components/UserLabel";
+import { Menu, Status, UserLabel } from "components";
+import { useTraveledBlock } from "components/TimeTravelWidget";
 import { Post, sendTip, Thread } from "dchan";
 import { fromBigInt } from "dchan/entities/datetime";
 import { isLowScore } from "dchan/entities/post";
@@ -18,7 +17,6 @@ import { DateTime } from "luxon";
 import { ReactElement, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { Router } from "router";
-import { useTraveledBlock } from "components/TimeTravelWidget";
 
 function DateDisplay({ post }: { post: Post }) {
   const createdAt = fromBigInt(post.createdAtBlock.timestamp);

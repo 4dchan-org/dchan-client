@@ -1,7 +1,6 @@
-import Footer from "components/Footer";
+import { Footer, Card } from "components";
 import BoardList from "components/board/list";
 import GenericHeader from "components/header/generic";
-import Card from "components/Card";
 import BOARDS_SEARCH from "graphql/queries/boards/search";
 import { useQuery } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
@@ -21,12 +20,12 @@ export default function BoardListPage({
 
   return (
     <div className="bg-primary min-h-100vh flex flex-col">
-      <GenericHeader title="Boards" block={query.block ? `${query.block}` : undefined} />
+      <GenericHeader
+        title="Boards"
+        block={query.block ? `${query.block}` : undefined}
+      />
 
-      <Link
-        className="dchan-link py-1 px-4"
-        to="/_/boards"
-      >
+      <Link className="dchan-link py-1 px-4" to="/_/boards">
         All boards
       </Link>
       <div className="center flex">

@@ -1,5 +1,6 @@
 import { Web3Provider } from "@ethersproject/providers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import { getBalance, getGasPrice } from "dchan";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { singletonHook } from "react-singleton-hook";
 import Web3Modal from "web3modal";
@@ -10,6 +11,8 @@ export type UseWeb3 = {
   provider: Web3Provider | undefined;
   chainId: string | number | undefined;
   accounts: string[];
+  balance: number | undefined;
+  gasPrice: number | undefined;
   loadWeb3Modal: () => Promise<void>;
   logoutOfWeb3Modal: () => Promise<void>;
 }
@@ -18,13 +21,16 @@ const useWeb3 = singletonHook({
   provider: undefined,
   chainId: undefined,
   accounts: [],
+  balance: undefined,
   loadWeb3Modal: async () => { },
   logoutOfWeb3Modal: async () => { }
 } as any, () => {
   const [provider, setProvider] = useState<Web3Provider>();
   const [chainId, setChainId] = useState<string | number>();
   const [accounts, setAccounts] = useState<string[]>([]);
+  const [balance, setBalance] = useState<number>();
   const [autoloaded, setAutoloaded] = useState(false);
+  const [gasPrice, setGasPrice] = useState<string>();
   const autoload = true;
 
   // Web3Modal also supports many other wallets.
@@ -40,6 +46,30 @@ const useWeb3 = singletonHook({
       },
     });
   }, []);
+
+  useEffect(() => {
+    const refresh = async () => {
+      try {
+        const account = accounts?.[0];
+        if (account) {
+          getBalance(account).then(r => setBalance(parseInt(r) / Math.pow(10, 18)));
+        } else {
+          setBalance(undefined);
+        }
+      } catch (e) {
+        console.error({ refresh: e });
+      }
+
+      getGasPrice().then((result) => {
+        setGasPrice(result);
+      });
+    };
+
+    const interval = setInterval(refresh, 10000);
+    refresh();
+
+    return () => clearInterval(interval);
+  }, [accounts]);
 
   // Open wallet selection modal.
   const loadWeb3Modal = useCallback(async () => {
@@ -87,7 +117,7 @@ const useWeb3 = singletonHook({
   }, [autoload, autoloaded, loadWeb3Modal, setAutoloaded, web3Modal.cachedProvider]);
 
   return {
-    provider, chainId, accounts, loadWeb3Modal, logoutOfWeb3Modal
+    provider, chainId, accounts, balance, gasPrice, loadWeb3Modal, logoutOfWeb3Modal
   }
 });
 

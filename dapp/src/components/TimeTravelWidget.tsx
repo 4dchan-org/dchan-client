@@ -46,7 +46,7 @@ function queryBlockByNumber(client: ApolloClient<any>, block: string): Promise<A
   });
 }
 
-const timeTravelingNote = "You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date.";
+const timeTravelingNote = "You time traveled! The content is being displayed as it was shown to users at the specified date.";
 
 // Block traveled to when time traveling
 // undefined when in present
@@ -93,7 +93,7 @@ export default forwardRef(({
   if (block && isNaN(parseInt(block))) {
     block = undefined;
   }
-  const now = DateTime.now();
+  const [now, setNow] = useState(DateTime.now());
   const history = useHistory();
   const { lastBlock } = useLastBlock();
   const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
@@ -116,6 +116,11 @@ export default forwardRef(({
   // if you find a way to prevent this parallel rerender from occuring, feel
   // free to remove this god-awful hack
   const [writingState, setWritingState] = useState<boolean>(false);
+
+  useEffect(() => {
+    const i = setInterval(() => setNow(DateTime.now()), 1000)
+    return () => clearInterval(i)
+  })
 
   const changeBlock = useCallback(
     (block: Block) => {
@@ -313,59 +318,42 @@ export default forwardRef(({
 
   return (
     <details className="sm:relative" open={open} ref={ref}>
-      <summary className="list-none cursor-pointer w-full mx-1 whitespace-nowrap" onClick={(event) => {
+      <summary className="list-none cursor-pointer w-full whitespace-nowrap" onClick={(event) => {
         event.preventDefault();
       }}>
         {timeTravelRange && baseUrl ? <>
-          <div className="ml-2 hidden sm:block">
-            {isTimeTraveling ? <>
-              <span title={timeTravelingNote} onClick={() => {
-                onReturnToPresent();
-                onClose();
-              }}>
-                <div className="inline-block animation-spin spin-faster animation-direction-reverse">⌛</div> Time traveled to
-              </span>
-              {" "}
-            </> : (
-              null
-            )}
-            <span onClick={onOpen} className="text-xs">
+          <div className="mx-1 hidden sm:flex center">
+            <span>
+              {isTimeTraveling ? <>
+                <span title={timeTravelingNote} onClick={() => {
+                  onReturnToPresent();
+                  onClose();
+                }}>
+                  <div className="inline-block animation-spin spin-faster animation-direction-reverse">⌛</div> Time traveled to
+                </span>
+                {" "}
+              </> : (
+                <span onClick={onOpen}>⌛</span>
+              )}
+            </span>
+            <span onClick={onOpen} className="ml-1 text-xs">
               [
-              <input
-                required
-                type="date"
-                id="dchan-timetravel-date-input"
-                value={(isTimeTraveling && timeTraveledToDate
-                  ? timeTraveledToDate
-                  : now
-                ).toISODate()}
-                onClick={(e) => {
-                  if (!open) {
-                    onOpen();
-                  }
-                  e.stopPropagation();
-                }}
-                onChange={(e) => onDateChange(e.target.value)}
-                min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
-                max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
-              ></input>
-              ,{" "}
               <span className="inline-block min-w-3rem">
                 {(isTimeTraveling && timeTraveledToDate
                   ? timeTraveledToDate
                   : now
-                ).toLocaleString(DateTime.TIME_SIMPLE)}
+                ).toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)}
               </span>
               ]
             </span>
           </div>
-          <div className="ml-2 sm:hidden" onClick={onOpen}>
+          <div className="mx-1 sm:hidden" onClick={onOpen}>
             {isTimeTraveling ? (
               <abbr title={timeTravelingNote}>
-                ⏱️
+                ⌛
               </abbr>
             ) : (
-              <span>⏱️</span>
+              <span>⌛</span>
             )}
           </div>
         </> : (
@@ -375,19 +363,8 @@ export default forwardRef(({
       <div className="absolute w-screen sm:w-max top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto sm:right-0">
         {timeTravelRange ? (
           <div className="bg-primary border border-secondary-accent p-1">
-            <div className="sm:hidden text-xs my-1 ml-2">
-              <span className="mr-2">
-                {isTimeTraveling ? (
-                  <abbr
-                    title="You're currently viewing a past version of the board. The content is displayed as it was shown to users at the specified date."
-                  >
-                    Time traveled to:
-                  </abbr>
-                ) : (
-                  "Current time:"
-                )}
-              </span>
-              <span onClick={onOpen}>
+            <div className="flex center text-xs my-1 ml-2">
+              <span>
                 [
                 <input
                   required

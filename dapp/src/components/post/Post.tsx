@@ -1,4 +1,4 @@
-import IPFSImage from "components/IPFSImage";
+import { IPFSImage, Menu } from "components";
 import { Post as DchanPost, Thread } from "dchan";
 import { isLowScore } from "dchan/entities/post";
 import { usePubSub, useSettings, useUser } from "hooks";
@@ -9,7 +9,6 @@ import PostBody from "./PostBody";
 import PostHeader from "./PostHeader";
 import { isEqual } from "lodash";
 import { Link } from "react-router-dom";
-import Menu from "components/Menu";
 
 function Post({
   children,
@@ -19,7 +18,7 @@ function Post({
   block,
   enableBacklinks = false,
   showNsfw = false,
-  showPostMarker = true
+  showPostMarker = true,
 }: {
   children?: any;
   post: DchanPost;
@@ -30,7 +29,7 @@ function Post({
   showNsfw?: boolean;
   showPostMarker?: boolean;
 }) {
-  const { data: userData } = useUser()
+  const { data: userData } = useUser();
   const [showAnyway, setShowAnyway] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
@@ -52,7 +51,7 @@ function Post({
 
   useEffect(() => {
     const sub = subscribe("POST_FOCUS", (_: any, focusedPost: DchanPost) => {
-      const newIsFocused = post.id === focusedPost.id
+      const newIsFocused = post.id === focusedPost.id;
       setIsFocused(newIsFocused);
       setIsHighlighted(newIsFocused);
       if (newIsFocused) {
@@ -102,7 +101,7 @@ function Post({
             setBacklinks({ ...backlinks, [from.id]: from });
           }
         }
-      )
+      );
 
       return () => {
         !!sub && unsubscribe(sub);
@@ -111,9 +110,9 @@ function Post({
   });
 
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
-  const ipfsUrlURIComponent = encodeURIComponent(ipfsUrl)
+  const ipfsUrlURIComponent = encodeURIComponent(ipfsUrl);
   const isOp = id === thread?.id;
-  const isYou = userData?.user?.id === post.from.id 
+  const isYou = userData?.user?.id === post.from.id;
   const [settings] = useSettings();
   const bIsLowScore = isLowScore(
     post,
@@ -132,25 +131,33 @@ function Post({
   }, [toggleRef, setShowBody]);
 
   return (
-    <div className="flex relative">
-      {!isOp && showPostMarker ? <span className="hidden md:block pl-2 text-secondary">&gt;&gt;</span> : ""}
+    <div className="flex relative ">
+      {!isOp && showPostMarker ? (
+        <span className="hidden md:block pl-2 text-secondary">&gt;&gt;</span>
+      ) : (
+        ""
+      )}
       <div
-        className={`mx-auto md:mr-3 md:ml-2 text-left inline overflow-auto ${isOp ? "w-full" : ""}`}
+        className={`mx-auto md:mr-3 md:ml-2 text-left inline w-screen md:w-auto ${
+          isOp ? "w-full" : ""
+        }`}
         key={id}
         ref={postRef}
       >
         <details
-          className="absolute ml-2 z-10" 
+          className="absolute ml-2 z-10"
           ref={toggleRef}
           open={canShow}
           onToggle={(e: any) => {
-            setShowBody(e.target.open)
+            setShowBody(e.target.open);
           }}
         >
-          <summary/>
+          <summary />
         </details>
         <div
-          className={`text-left opacity-50 whitespace-nowrap mb-1 overflow-hidden flex ml-5 ${showBody ? "hidden" : ""}`}
+          className={`text-left opacity-50 whitespace-nowrap mb-1 overflow-hidden flex ml-5 ${
+            showBody ? "hidden" : ""
+          }`}
           title="Hide/Show"
         >
           <PostHeader thread={thread} post={post} block={block}>
@@ -159,18 +166,42 @@ function Post({
         </div>
         <div
           id={`${n}`}
-          className={`dchan-post text-left w-full  ${!showBody ? "hidden" : ""}`}
+          className={`dchan-post text-left w-full  ${
+            !showBody ? "hidden" : ""
+          }`}
           dchan-post-from-address={address}
         >
           <div
-            className={`${isHighlighted || isFocused ? "bg-tertiary" : !isOp ? "bg-secondary" : ""} ${isYou ? "border-dashed border-2 border-tertiary" : ""} w-full sm:w-full mb-2 inline-block relative`}
+            className={`${
+              isHighlighted || isFocused
+                ? "bg-tertiary"
+                : !isOp
+                ? "bg-secondary border-right-tertiary-accent"
+                : ""
+            } ${
+              isYou ? "dchan-post-you" : ""
+            } w-full sm:w-full mb-2 inline-block relative`}
           >
             <div className="flex sm:flex-wrap ml-5 align-center text-center sm:text-left sm:justify-start max-w-100vw">
-              <PostHeader thread={thread} post={post} backlinks={backlinks} block={block}>
+              <PostHeader
+                thread={thread}
+                post={post}
+                backlinks={backlinks}
+                block={block}
+              >
                 {header}
               </PostHeader>
 
-              {post.sage ? <abbr className="opacity-20 hover:opacity-100" title="Saged. Thread not bumped.">🍂</abbr> : ""}
+              {post.sage ? (
+                <abbr
+                  className="opacity-20 hover:opacity-100"
+                  title="Saged. Thread not bumped."
+                >
+                  🍂
+                </abbr>
+              ) : (
+                ""
+              )}
             </div>
 
             {!canShow ? (
@@ -218,10 +249,46 @@ function Post({
                           <div>
                             Reverse search:
                             <div>
-                              <div><a target="_blank" rel="noreferrer" className="dchan-link pr-1" href={`https://www.google.com/searchbyimage?image_url=${ipfsUrlURIComponent}amp;safe=off`}>google</a></div>
-                              <div><a target="_blank" rel="noreferrer" className="dchan-link pr-1" href={`https://yandex.com/images/search?rpt=imageview&amp;url=${ipfsUrlURIComponent}`}>yandex</a></div>
-                              <div><a target="_blank" rel="noreferrer" className="dchan-link pr-1" href={`//iqdb.org/?url=${ipfsUrlURIComponent}`}>iqdb</a></div>
-                              <div><a target="_blank" rel="noreferrer" className="dchan-link pr-1" href={`https://trace.moe/?auto&amp;url=${ipfsUrlURIComponent}`}>wait</a></div>
+                              <div>
+                                <a
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="dchan-link pr-1"
+                                  href={`https://www.google.com/searchbyimage?image_url=${ipfsUrlURIComponent}amp;safe=off`}
+                                >
+                                  google
+                                </a>
+                              </div>
+                              <div>
+                                <a
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="dchan-link pr-1"
+                                  href={`https://yandex.com/images/search?rpt=imageview&amp;url=${ipfsUrlURIComponent}`}
+                                >
+                                  yandex
+                                </a>
+                              </div>
+                              <div>
+                                <a
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="dchan-link pr-1"
+                                  href={`//iqdb.org/?url=${ipfsUrlURIComponent}`}
+                                >
+                                  iqdb
+                                </a>
+                              </div>
+                              <div>
+                                <a
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="dchan-link pr-1"
+                                  href={`https://trace.moe/?auto&amp;url=${ipfsUrlURIComponent}`}
+                                >
+                                  wait
+                                </a>
+                              </div>
                             </div>
                           </div>
                         </Menu>
@@ -234,7 +301,9 @@ function Post({
                 <div className="y-1">
                   <div
                     className={`h-full max-w-max flex flex-wrap text-left sm:items-start pb-1 ${
-                      isOp ? `max-w-100vw` : "max-w-90vw border-bottom-tertiary-accent"
+                      isOp
+                        ? `max-w-100vw`
+                        : "max-w-90vw border-bottom-tertiary-accent"
                     }`}
                   >
                     <span className="w-full">
@@ -243,9 +312,17 @@ function Post({
                           <IPFSImage
                             hash={image.ipfsHash}
                             isSpoiler={image.isSpoiler}
-                            isNsfw={(!showNsfw && (image.isNsfw || post.board?.isNsfw)) || false}
+                            isNsfw={
+                              (!showNsfw &&
+                                (image.isNsfw || post.board?.isNsfw)) ||
+                              false
+                            }
                             thumbnail={true}
-                            thumbnailClass={isOp ? "max-w-8rem max-h-32 md:max-w-16rem md:max-h-64" : undefined}
+                            thumbnailClass={
+                              isOp
+                                ? "max-w-8rem max-h-32 md:max-w-16rem md:max-h-64"
+                                : undefined
+                            }
                             expandable={true}
                           />
                         </div>
@@ -280,7 +357,9 @@ function Post({
                   {children}
                   <Link
                     className="px-1 text-xs opacity-5 hover:opacity-100 absolute bottom-0 right-0 hidden sm:inline"
-                    to={`/${post.id}${block ? `?block=${block}` : ""}`} title="Permalink">
+                    to={`/${post.id}${block ? `?block=${block}` : ""}`}
+                    title="Permalink"
+                  >
                     <small>{post.id}</small>
                   </Link>
                 </div>

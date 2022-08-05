@@ -42,7 +42,7 @@ export function writeAppSetSettings(func: (s: Settings) => void) {
     appSetSettings = func;
 }
 
-const useSettings = singletonHook<[Settings|undefined, any | undefined]>([undefined, undefined], () => {
+const useSettings = singletonHook<[Settings, any | undefined]>([DefaultSettings, () => {}], () => {
     let [settings, setSettings] = useLocalStorage("dchan.config", DefaultSettings)
 
     const setSettingsCallback = useCallback(

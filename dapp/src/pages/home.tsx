@@ -1,18 +1,20 @@
-import Card from "components/Card";
-import Footer from "components/Footer";
 import HeaderNavigation from "components/header/HeaderNavigation";
-import LatestPostsCard from "components/LatestPostsCard";
-import PopularThreadsCard from "components/PopularThreadsCard";
-import WatchedThreadsCard from "components/WatchedThreadsCard";
+import { WatchedThreadsCard } from "components";
+import HeaderLogo from "components/header/logo";
 import { parse as parseQueryString } from "query-string";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
 import { useTitle } from "react-use";
 import { subscribe, unsubscribe } from "pubsub-js";
-import HeaderLogo from "components/header/logo";
-import PopularBoardsCard from "components/PopularBoardsCard";
 import { Board } from "dchan";
-import BoardLink from "components/BoardLink";
+import {
+  Card,
+  Footer,
+  BoardLink,
+  PopularBoardsCard,
+  ThreadTabs,
+  LatestPostsCard,
+} from "components";
 
 export default function HomePage({ location }: any) {
   useTitle("dchan.network");
@@ -30,9 +32,12 @@ export default function HomePage({ location }: any) {
   }, []);
 
   useEffect(() => {
-    const sub = subscribe("BOARD_ITEM_HOVER_ENTER", (_: any, hoverBoard: Board) => {
-      setBoard(hoverBoard);
-    })
+    const sub = subscribe(
+      "BOARD_ITEM_HOVER_ENTER",
+      (_: any, hoverBoard: Board) => {
+        setBoard(hoverBoard);
+      }
+    );
 
     return () => unsubscribe(sub);
   }, [setBoard]);
@@ -40,26 +45,27 @@ export default function HomePage({ location }: any) {
   useEffect(() => {
     const sub = subscribe("BOARD_ALL_HOVER_ENTER", () => {
       setBoard(undefined);
-    })
+    });
 
     return () => unsubscribe(sub);
   }, [setBoard]);
 
   return (
-    <div className="h-screen bg-primary flex flex-col pb-8">
+    <div className="h-screen bg-primary flex flex-col pb-2">
       <HeaderNavigation
         baseUrl="/"
         block={queriedBlock ? `${queriedBlock}` : undefined}
         dateTime={dateTime}
       />
       <HeaderLogo />
-      <div className="flex flex-col grid-cols-3 xl:grid px-4">
-        <div className="w-full px-2 pb-2">
+      <div className="flex flex-grow flex-col grid-cols-3 xl:grid px-4 text-sm">
+        <div>
           <Card
-            title={<span>Popular Boards</span>}
+            title={<span>Boards</span>}
             className="md:px-1 w-full pb-4"
+            bodyClassName="p-none b-none"
           >
-            <PopularBoardsCard block={queriedBlock} />
+            <PopularBoardsCard block={queriedBlock} highlight={board} />
           </Card>
           <Card
             title={<span>Watched Threads</span>}
@@ -68,14 +74,48 @@ export default function HomePage({ location }: any) {
             <WatchedThreadsCard block={queriedBlock} />
           </Card>
         </div>
-        <Card title={<span>Latest Posts {board ? <span>on <BoardLink board={board} block={block == null ? undefined : `${block}`} /></span> : ""}</span>} className="w-full px-2 pb-2">
-          <LatestPostsCard block={queriedBlock} board={board} />
+        <Card
+          title={
+            <span>
+              Threads{" "}
+              {board ? (
+                <span>
+                  on{" "}
+                  <BoardLink
+                    board={board}
+                    block={block == null ? undefined : `${block}`}
+                  />
+                </span>
+              ) : (
+                ""
+              )}
+            </span>
+          }
+          className="md:px-1 w-full pb-4"
+          bodyClassName="p-none b-none"
+        >
+          <ThreadTabs block={block} limit={10} board={board} />
         </Card>
         <Card
-          title={<span>Popular Threads {board ? <span>on <BoardLink board={board} block={block == null ? undefined : `${block}`} /></span> : ""}</span>}
+          title={
+            <span>
+              Latest posts{" "}
+              {board ? (
+                <span>
+                  on{" "}
+                  <BoardLink
+                    board={board}
+                    block={block == null ? undefined : `${block}`}
+                  />
+                </span>
+              ) : (
+                ""
+              )}
+            </span>
+          }
           className="md:px-1 w-full pb-4"
         >
-          <PopularThreadsCard block={queriedBlock} board={board} />
+          <LatestPostsCard block={block} limit={10} board={board} />
         </Card>
       </div>
       <Footer />

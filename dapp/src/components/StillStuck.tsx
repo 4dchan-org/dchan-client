@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 
 export default function StillStuck({
     ms = 10_000,
@@ -9,9 +9,13 @@ export default function StillStuck({
 }) {
     const [stillStuck, setStillStuck] = useState<boolean>(false);
 
-    setTimeout(() => {
-        setStillStuck(true);
-    }, ms);
+    useEffect(() => {
+        const t = setTimeout(() => {
+            setStillStuck(true);
+        }, ms);
+
+        return () => clearTimeout(t)
+    }, [ms])
 
     return (
         stillStuck ? children : <span />

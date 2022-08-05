@@ -135,8 +135,12 @@ export function createJsonMessage(op: string, data: object) {
     })
 }
 
+export function getCurrentProvider() {
+    return window.ethereum || window.web3.currentProvider;
+} 
+
 export async function sendMessage(operation: string, data: object, from: string) {
-    const web3 = new Web3(window.web3.currentProvider);
+    const web3 = getWeb3()
 
     const relayContract = new web3.eth.Contract(abi as AbiItem[], DefaultSettings.contract.address)
     const msg = await relayContract.methods.message(createJsonMessage(operation, data))
@@ -147,17 +151,23 @@ export async function sendMessage(operation: string, data: object, from: string)
 }
 
 export async function sendTip(from: string, to: string, amount: number) {
-    const web3 = new Web3(window.web3.currentProvider);
+    const web3 = getWeb3()
 
     const value = amount * Math.pow(10, 18); // Convert to wei value
 
     return web3.eth.sendTransaction({ from, to, value })
 }
 
-export async function getBalance(account: string) {
-    const web3 = new Web3(window.web3.currentProvider);
+export function getWeb3() {
+    return new Web3(getCurrentProvider());
+}
 
-    return web3.eth.getBalance(account)
+export async function getBalance(account: string) {
+    return getWeb3().eth.getBalance(account)
+}
+
+export async function getGasPrice() {
+    return getWeb3().eth.getGasPrice()
 }
 
 export function isMaticChainId(chainId: string | number | undefined) {

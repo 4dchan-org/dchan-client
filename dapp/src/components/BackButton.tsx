@@ -8,5 +8,5 @@ export default function BackButton() {
         history.goBack()
     }, [history])
 
-    return (<button className="text-blue-600 visited:text-purple-600 m-4" onClick={back}>Go back</button>)
+    return (<button className="dchan-link m-4" onClick={back}>Go back</button>)
 }

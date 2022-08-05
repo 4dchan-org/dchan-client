@@ -16,7 +16,7 @@ interface BoardListData {
   boards: Board[];
 }
 
-interface BoardListVars { }
+interface BoardListVars {}
 
 enum OpenedWidgetEnum {
   TIMETRAVEL = "TIMETRAVEL",
@@ -28,7 +28,7 @@ enum OpenedWidgetEnum {
 const siteCreatedAtBlock: Block = {
   id: "0x04eeaa77c96947c5efca4abd8e3f8de005369390409d79dfef81aa983eb69e89",
   number: "17766365",
-  timestamp: "1628450632"
+  timestamp: "1628450632",
 };
 
 const SettingsWidgetOverlay = OverlayComponent(SettingsWidget);
@@ -49,7 +49,9 @@ export default function HeaderNavigation({
   search?: string;
 }) {
   const [startBlock, setStartBlock] = useState<Block | undefined>();
-  const [openedWidget, setOpenedWidget] = useState<OpenedWidgetEnum | null>(null);
+  const [openedWidget, setOpenedWidget] = useState<OpenedWidgetEnum | null>(
+    null
+  );
   const timeTravelRef = useRef<HTMLElement>(null);
   const searchRef = useRef<HTMLElement>(null);
   const watchedThreadsRef = useRef<HTMLElement>(null);
@@ -57,26 +59,13 @@ export default function HeaderNavigation({
 
   useEffect(() => {
     setStartBlock(
-      thread ? thread.createdAtBlock : board ? board.createdAtBlock : siteCreatedAtBlock
+      thread
+        ? thread.createdAtBlock
+        : board
+        ? board.createdAtBlock
+        : siteCreatedAtBlock
     );
   }, [thread, board, setStartBlock]);
-
-  useEffect(() => {
-    const listener = (event: any) => {
-      const widgetRefs = [timeTravelRef, searchRef, watchedThreadsRef, settingsRef];
-      if (widgetRefs.every(r => r.current && !r.current.contains(event.target))) {
-        setOpenedWidget(null);
-      }
-    };
-
-    document.addEventListener("mousedown", listener);
-    //document.addEventListener("touchstart", listener);
-
-    return () => {
-      document.removeEventListener("mousedown", listener);
-      //document.removeEventListener("touchstart", listener);
-    };
-  }, [timeTravelRef, searchRef, watchedThreadsRef, settingsRef])
 
   const { data } = useQuery<BoardListData, BoardListVars>(
     BOARDS_LIST_MOST_POPULAR,
@@ -85,88 +74,122 @@ export default function HeaderNavigation({
 
   const boards = data?.boards;
   return (
-    <div className="mb-8">
-      <div className="text-sm p-1 border-solid border-bottom-secondary-accent bg-primary border-0 border-b-2 text-left fixed top-0 left-0 right-0 shadow-md z-50">
-        [
-        <Link
-          className="dchan-link"
-          to={`/${block ? `?block=${block}` : ""}`}
-        >
-          dchan.network
-        </Link>
-        ]
-        <span className="text-black text-opacity-50">
-          <span className="hidden sm:inline-block">
-            [
-            {!!boards &&
-              boards.map((board) => (
-                <span className="dchan-navigation-board" key={board.id}>
-                  <wbr />
-                  <BoardLink board={board} block={block} />
-                </span>
-              ))}
-            ]
-          </span>
+    <div className="mb-8 dchan-header-navigation">
+      <div className="text-sm p-01 border-solid border-bottom-tertiary-accent bg-secondary border-0 border-b-2 text-left fixed top-0 left-0 right-0 shadow-md z-50">
+        <span className="text-black text-opacity-50 hover:text-opacity-100 pr-1">
           [
           <Link
             className="dchan-link"
-            to={`${Router.boards()}${block ? `?block=${block}` : ""}`}
+            to={`/${block ? `?block=${block}` : ""}`}
           >
-            +
+            dchan.network
           </Link>
           ]
         </span>
+        <span className="text-black text-opacity-50 hover:text-opacity-100 pr-1">
+          <details className="inline">
+            <summary className="inline">
+              [
+                <span className="dchan-link">+</span>
+              ]
+            </summary>
+            <span className="inline">
+              <span className="hidden sm:inline-block">
+                [
+                {!!boards &&
+                  boards.map((board) => (
+                    <span className="dchan-navigation-board" key={board.id}>
+                      <wbr />
+                      <BoardLink board={board} block={block} />
+                    </span>
+                  ))}
+                ]
+              </span>
+              [
+              <Link
+                className="dchan-link"
+                to={`${Router.boards()}${block ? `?block=${block}` : ""}`}
+              >
+                ...
+              </Link>
+              ]
+            </span>
+          </details>
+        </span>
         <span className="float-right flex flex-row">
-          <ApolloConsumer>{(client: ApolloClient<any>) => (
-            <TimeTravelWidget
-              client={client}
-              ref={timeTravelRef}
-              open={openedWidget === OpenedWidgetEnum.TIMETRAVEL}
-              onOpen={() => {
+          <ApolloConsumer>
+            {(client: ApolloClient<any>) => (
+              <TimeTravelWidget
+                client={client}
+                ref={timeTravelRef}
+                open={openedWidget === OpenedWidgetEnum.TIMETRAVEL}
+                onOpen={() => {
+                  setOpenedWidget(
+                    openedWidget === OpenedWidgetEnum.TIMETRAVEL
+                      ? null
+                      : OpenedWidgetEnum.TIMETRAVEL
+                  );
+                }}
+                onClose={() => setOpenedWidget(null)}
+                block={block}
+                baseUrl={baseUrl || ""}
+                startBlock={startBlock}
+                dateTime={dateTime}
+                startRangeLabel={
+                  thread
+                    ? "Thread creation"
+                    : board
+                    ? "Board creation"
+                    : "Site creation"
+                }
+              />
+            )}
+          </ApolloConsumer>
+          <details
+            className="w-full sm:relative mx-1"
+            open={openedWidget === OpenedWidgetEnum.SEARCH}
+            ref={searchRef}
+          >
+            <summary
+              className="list-none cursor-pointer"
+              onClick={(event) => {
+                event.preventDefault();
                 setOpenedWidget(
-                  openedWidget === OpenedWidgetEnum.TIMETRAVEL
+                  openedWidget === OpenedWidgetEnum.SEARCH
                     ? null
-                    : OpenedWidgetEnum.TIMETRAVEL
+                    : OpenedWidgetEnum.SEARCH
                 );
               }}
-              onClose={() => setOpenedWidget(null)}
-              block={block}
-              baseUrl={baseUrl || ""}
-              startBlock={startBlock}
-              dateTime={dateTime}
-              startRangeLabel={
-                thread ? "Thread creation" : board ? "Board creation" : "Site creation"
-              }
-            />
-          )}</ApolloConsumer>
-          <details className="w-full sm:relative mx-1" open={openedWidget === OpenedWidgetEnum.SEARCH} ref={searchRef}>
-            <summary className="list-none cursor-pointer" onClick={(event) => {
-              event.preventDefault();
-              setOpenedWidget(
-                openedWidget === OpenedWidgetEnum.SEARCH
-                  ? null
-                  : OpenedWidgetEnum.SEARCH
-              );
-            }}>
+            >
               🔍
             </summary>
             <div className="absolute w-screen sm:w-max top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto sm:right-0">
-              <SearchWidget baseUrl={`${Router.posts()}${block ? `?block=${block}` : ""}`} search={search} />
+              <SearchWidget
+                baseUrl={`${Router.posts()}${block ? `?block=${block}` : ""}`}
+                search={search}
+              />
             </div>
           </details>
-          <details className="w-full sm:relative mx-1" open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS} ref={watchedThreadsRef}>
-            <summary className="list-none cursor-pointer" onClick={(event) => {
-              event.preventDefault();
-              setOpenedWidget(
-                openedWidget === OpenedWidgetEnum.WATCHEDTHREADS
-                  ? null
-                  : OpenedWidgetEnum.WATCHEDTHREADS
-              );
-            }}>
+          <details
+            className="w-full sm:relative mx-1"
+            open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS}
+            ref={watchedThreadsRef}
+          >
+            <summary
+              className="list-none cursor-pointer"
+              onClick={(event) => {
+                event.preventDefault();
+                setOpenedWidget(
+                  openedWidget === OpenedWidgetEnum.WATCHEDTHREADS
+                    ? null
+                    : OpenedWidgetEnum.WATCHEDTHREADS
+                );
+              }}
+            >
               👁
             </summary>
             <div className="absolute w-screen sm:w-max top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto sm:right-0">
-              <WatchedThreadsWidget block={block}/>
+              <WatchedThreadsWidget block={block} />
             </div>
           </details>
           <span

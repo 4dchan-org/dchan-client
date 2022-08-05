@@ -1,5 +1,4 @@
 import { SetStatus } from "components/Status";
-import Config from "settings/default";
 
 export type IpfsUploadResult = {
     ipfs: {
@@ -11,7 +10,7 @@ export type IpfsUploadResult = {
 export async function upload(
     files: FileList,
     setStatus: SetStatus,
-    ipfsEndpoint?: string,
+    ipfsEndpoint: string,
 ): Promise<IpfsUploadResult | undefined> {
     if (!!files) {
         const file = files[0];
@@ -24,7 +23,7 @@ export async function upload(
                 let formData = new FormData();
                 formData.append("file", file);
                 const ipfsResponse = await fetch(
-                    `${ipfsEndpoint || Config.ipfs.endpoint}/add`,
+                    `${ipfsEndpoint}/add`,
                     { method: "POST", body: formData, referrer: "" }
                 );
 

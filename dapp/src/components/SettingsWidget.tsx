@@ -57,7 +57,7 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
     <div className="bg-secondary border-secondary-accent border-2 flex flex-col h-full">
       <div className="mb-2 mt-1 px-3" style={{flex: "0 1 auto"}}>
         <div className="float-left">
-          <span className="font-bold">dchan Settings</span>
+          <span className="font-bold">dchan.network Settings</span>
         </div>
         <div className="float-right">
           <button onClick={onExit}>
