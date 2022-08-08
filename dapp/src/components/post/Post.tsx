@@ -130,6 +130,26 @@ function Post({
     }
   }, [toggleRef, setShowBody]);
 
+  const bodyClass = [
+    /*
+    isHighlighted || isFocused
+                ? "bg-tertiary"
+                : !isOp
+                ? "bg-secondary border-right-tertiary-accent"
+                : ""
+            } ${
+              isYou ? "dchan-post-you" : ""
+            } w-full sm:w-full mb-2 inline-block relative`
+            */
+    isHighlighted || isFocused
+      ? "bg-tertiary"
+      : !isOp
+      ? "bg-secondary border-bottom-tertiary-accent border-right-tertiary-accent"
+      : "",
+    isYou ? "dchan-post-you" : "",
+    "w-full sm:w-full mb-2 inline-block relative",,
+  ].join(" ");
+
   return (
     <div className="flex relative ">
       {!isOp && showPostMarker ? (
@@ -166,22 +186,12 @@ function Post({
         </div>
         <div
           id={`${n}`}
-          className={`dchan-post text-left w-full  ${
+          className={`dchan-post text-left w-full ${
             !showBody ? "hidden" : ""
           }`}
           dchan-post-from-address={address}
         >
-          <div
-            className={`${
-              isHighlighted || isFocused
-                ? "bg-tertiary"
-                : !isOp
-                ? "bg-secondary border-right-tertiary-accent"
-                : ""
-            } ${
-              isYou ? "dchan-post-you" : ""
-            } w-full sm:w-full mb-2 inline-block relative`}
-          >
+          <div className={bodyClass}>
             <div className="flex sm:flex-wrap ml-5 align-center text-center sm:text-left sm:justify-start max-w-100vw">
               <PostHeader
                 thread={thread}
@@ -301,9 +311,7 @@ function Post({
                 <div className="y-1">
                   <div
                     className={`h-full max-w-max flex flex-wrap text-left sm:items-start pb-1 ${
-                      isOp
-                        ? `max-w-100vw`
-                        : "max-w-90vw border-bottom-tertiary-accent"
+                      isOp ? `max-w-100vw` : "max-w-90vw border-bottom-tertiary-accent"
                     }`}
                   >
                     <span className="w-full">
