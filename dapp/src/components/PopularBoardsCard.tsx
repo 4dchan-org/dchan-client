@@ -6,7 +6,7 @@ import BoardTabs from "./BoardTabs";
 
 export default function PopularBoardsCard({block, highlight}: {block?: number, highlight?: Board}) {
   const onMouseEnter = useCallback(() => {
-    publish("BOARD_ALL_HOVER_ENTER")
+    publish("BOARD_ITEM_HOVER_ENTER", undefined)
   }, [])
 
   return (
