@@ -80,7 +80,7 @@ export default function ReferencePage({ location, match: { params } }: any) {
         history.replace(newLocation);
       }
     }
-  }, [history, data]);
+  }, [history, data, queriedBlock]);
 
   return (
     <div className="bg-primary center grid w-screen h-screen">
