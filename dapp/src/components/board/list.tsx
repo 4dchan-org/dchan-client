@@ -26,7 +26,10 @@ function BoardItem({
   }, [board, publish])
 
   return (
-    <tr className={`relative ${highlight?.id === board.id ? "bg-secondary" : ""}`} key={id} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <tr className={`relative ${highlight?.id === board.id ? "bg-secondary" : ""}`}
+        key={id}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}>
       <td>
         <IdLabel
           id={id}
