@@ -3,7 +3,7 @@ import { WatchedThreadsCard } from "components";
 import HeaderLogo from "components/header/logo";
 import { parse as parseQueryString } from "query-string";
 import { DateTime } from "luxon";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useTitle } from "react-use";
 import { subscribe, unsubscribe } from "pubsub-js";
 import { Board } from "dchan";
@@ -15,6 +15,7 @@ import {
   ThreadTabs,
   LatestPostsCard,
 } from "components";
+import { debounce } from "lodash";
 
 export default function HomePage({ location }: any) {
   useTitle("dchan.network");
@@ -31,24 +32,29 @@ export default function HomePage({ location }: any) {
     window.scrollTo({ top: 0 });
   }, []);
 
+  const setBoardDebounce = useMemo(
+    () => debounce(setBoard, 500),
+    [setBoard],
+  );
+
   useEffect(() => {
     const sub = subscribe(
       "BOARD_ITEM_HOVER_ENTER",
       (_: any, hoverBoard: Board) => {
-        setBoard(hoverBoard);
+        setBoardDebounce(hoverBoard);
       }
     );
 
     return () => unsubscribe(sub);
-  }, [setBoard]);
+  }, [setBoardDebounce]);
 
   useEffect(() => {
     const sub = subscribe("BOARD_ALL_HOVER_ENTER", () => {
-      setBoard(undefined);
+      setBoardDebounce(undefined);
     });
 
     return () => unsubscribe(sub);
-  }, [setBoard]);
+  }, [setBoardDebounce]);
 
   return (
     <div className="h-screen bg-primary flex flex-col pb-2">
