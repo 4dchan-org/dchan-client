@@ -131,23 +131,13 @@ function Post({
   }, [toggleRef, setShowBody]);
 
   const bodyClass = [
-    /*
-    isHighlighted || isFocused
-                ? "bg-tertiary"
-                : !isOp
-                ? "bg-secondary border-right-tertiary-accent"
-                : ""
-            } ${
-              isYou ? "dchan-post-you" : ""
-            } w-full sm:w-full mb-2 inline-block relative`
-            */
     isHighlighted || isFocused
       ? "bg-tertiary"
       : !isOp
       ? "bg-secondary border-bottom-tertiary-accent border-right-tertiary-accent"
       : "",
     isYou ? "dchan-post-you" : "",
-    "w-full sm:w-full mb-2 inline-block relative",,
+    "w-full sm:w-full mb-2 inline-block relative",
   ].join(" ");
 
   return (
