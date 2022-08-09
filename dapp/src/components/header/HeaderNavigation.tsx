@@ -55,7 +55,6 @@ export default function HeaderNavigation({
   baseUrl?: string;
   search?: string;
 }) {
-  const [isOpen, setIsOpen] = useState<boolean>();
   const [startBlock, setStartBlock] = useState<StartBlock>({
     label: "Site creation",
     block: siteCreatedAtBlock,
