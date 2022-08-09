@@ -26,7 +26,7 @@ export default function ContentNavigation({
 
   return (
     <span className="whitespace-nowrap sm:flex">
-      <span className="pr-1">
+      <span>
         <span className="pr-1">
           [
           <Link
