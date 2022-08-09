@@ -301,7 +301,7 @@ function Post({
                 <div className="y-1">
                   <div
                     className={`h-full max-w-max flex flex-wrap text-left sm:items-start pb-1 ${
-                      isOp ? `max-w-100vw` : "max-w-90vw border-bottom-tertiary-accent"
+                      isOp ? `max-w-100vw` : "max-w-90vw"
                     }`}
                   >
                     <span className="w-full">
