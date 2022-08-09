@@ -1,16 +1,18 @@
 import { ApolloConsumer, ApolloClient, useQuery } from "@apollo/react-hooks";
-import BoardLink from "components/BoardLink";
 import { Board, Thread, Block } from "dchan";
 import BOARDS_LIST_MOST_POPULAR from "graphql/queries/boards/list_most_popular";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { DateTime } from "luxon";
 import { Router } from "router";
-import TimeTravelWidget from "components/TimeTravelWidget";
-import SearchWidget from "components/SearchWidget";
-import WatchedThreadsWidget from "components/WatchedThreadsWidget";
-import SettingsWidget from "components/SettingsWidget";
-import OverlayComponent from "components/OverlayComponent";
+import {
+  BoardLink,
+  TimeTravelWidget,
+  SearchWidget,
+  WatchedThreadsWidget,
+  SettingsWidget,
+  OverlayComponent
+} from "components";
 
 interface BoardListData {
   boards: Board[];

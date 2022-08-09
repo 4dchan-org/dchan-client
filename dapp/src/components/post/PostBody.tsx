@@ -255,7 +255,7 @@ function renderValue(
           <iframe
             title={`Youtube video ${val.id}`}
             itemType="text/html"
-            src={`http://www.youtube.com/embed/${val.id}`}
+            src={`//www.youtube.com/embed/${val.id}`}
             frameBorder="0"
           ></iframe>
         </details>
