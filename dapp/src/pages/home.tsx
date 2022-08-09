@@ -3,7 +3,7 @@ import { WatchedThreadsCard } from "components";
 import HeaderLogo from "components/header/logo";
 import { parse as parseQueryString } from "query-string";
 import { DateTime } from "luxon";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useTitle } from "react-use";
 import { subscribe, unsubscribe } from "pubsub-js";
 import { Board } from "dchan";
@@ -38,23 +38,23 @@ export default function HomePage({ location }: any) {
     [setBoard],
   );
 
+  const clearBoard = useCallback(
+    (e: any) => {
+      e.preventDefault();
+      setHighlight(undefined);
+      setBoard(undefined);
+    },
+    [setHighlight, setBoardDebounce],
+  );
+  
   useEffect(() => {
     const sub = subscribe(
-      "BOARD_ITEM_HOVER_ENTER",
+      "BOARD_ITEM_SELECT",
       (_: any, hoverBoard: Board) => {
         setHighlight(hoverBoard);
-        setBoardDebounce(hoverBoard);
+        setBoard(hoverBoard);
       }
     );
-
-    return () => unsubscribe(sub);
-  }, [setHighlight, setBoardDebounce]);
-
-  useEffect(() => {
-    const sub = subscribe("BOARD_ALL_HOVER_LEAVE", () => {
-      setHighlight(undefined);
-      setBoardDebounce(undefined);
-    });
 
     return () => unsubscribe(sub);
   }, [setHighlight, setBoardDebounce]);
@@ -70,7 +70,16 @@ export default function HomePage({ location }: any) {
       <div className="flex flex-grow flex-col grid-cols-3 xl:grid px-4 text-sm">
         <div>
           <Card
-            title={<span>Boards</span>}
+            title="Boards"
+            titleRight={<>
+              {board != null ?
+                <div className="absolute top-1/2 bottom-1/2 right-0 mr-4">
+                  [<div className="inline dchan-link" onClick={clearBoard}>Clear Board</div>]
+                </div>
+              :
+                ""
+              }
+            </>}
             className="md:px-1 w-full pb-4"
             bodyClassName="p-none b-none"
           >

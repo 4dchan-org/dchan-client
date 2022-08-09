@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Board } from "dchan";
 import { IdLabel, Loading } from "components";
 import { usePubSub } from "hooks";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 function BoardItem({
   board, 
@@ -17,19 +17,27 @@ function BoardItem({
 
   const { publish } = usePubSub();
 
-  const onMouseEnter = useCallback(() => {
-    publish("BOARD_ITEM_HOVER_ENTER", board)
-  }, [board, publish])
+  const [isHovering, setIsHovering] = useState(false);
 
-  const onMouseLeave = useCallback(() => {
-    publish("BOARD_ITEM_HOVER_LEAVE", board)
-  }, [board, publish])
+  const handleMouseOver = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovering(false);
+  };
+
+  const onClick = useCallback(() => {
+    publish("BOARD_ITEM_SELECT", board);
+  }, [board, publish]);
 
   return (
-    <tr className={`relative ${highlight?.id === board.id ? "bg-secondary" : ""}`}
+    <tr className={`relative ${isHovering ? "bg-secondary" : highlight?.id === board.id ? "bg-tertiary" : ""}`}
         key={id}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}>
+        title="Click to view threads on homepage"
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
+        onClick={onClick}>
       <td>
         <IdLabel
           id={id}
