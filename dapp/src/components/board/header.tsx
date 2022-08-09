@@ -10,6 +10,7 @@ import { DateTime } from "luxon";
 
 export default function BoardHeader({
   block,
+  title,
   dateTime,
   board,
   thread,
@@ -17,6 +18,7 @@ export default function BoardHeader({
   search,
 }: {
   block?: string;
+  title?: string;
   dateTime?: DateTime;
   board?: Board | null;
   thread?: Thread;
@@ -57,7 +59,7 @@ export default function BoardHeader({
           </span>{" "}
           <span className="font-semibold">
             {board === null ? (
-              <div>/?/ - ?????</div>
+              <div>{title ? title : "/?/ - ?????"}</div>
             ) : (
               <Link
                 to={
