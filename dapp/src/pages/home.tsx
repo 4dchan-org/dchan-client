@@ -21,6 +21,7 @@ export default function HomePage({ location }: any) {
   useTitle("dchan.network");
 
   const [board, setBoard] = useState<Board>();
+  const [highlight, setHighlight] = useState<Board>();
   const query = parseQueryString(location.search);
   const block = parseInt(`${query.block}`);
   const queriedBlock = isNaN(block) ? undefined : block;
@@ -41,20 +42,22 @@ export default function HomePage({ location }: any) {
     const sub = subscribe(
       "BOARD_ITEM_HOVER_ENTER",
       (_: any, hoverBoard: Board) => {
+        setHighlight(hoverBoard);
         setBoardDebounce(hoverBoard);
       }
     );
 
     return () => unsubscribe(sub);
-  }, [setBoardDebounce]);
+  }, [setHighlight, setBoardDebounce]);
 
   useEffect(() => {
-    const sub = subscribe("BOARD_ALL_HOVER_ENTER", () => {
+    const sub = subscribe("BOARD_ALL_HOVER_LEAVE", () => {
+      setHighlight(undefined);
       setBoardDebounce(undefined);
     });
 
     return () => unsubscribe(sub);
-  }, [setBoardDebounce]);
+  }, [setHighlight, setBoardDebounce]);
 
   return (
     <div className="h-screen bg-primary flex flex-col pb-2">
@@ -71,7 +74,7 @@ export default function HomePage({ location }: any) {
             className="md:px-1 w-full pb-4"
             bodyClassName="p-none b-none"
           >
-            <PopularBoardsCard block={queriedBlock} highlight={board} />
+            <PopularBoardsCard block={queriedBlock} highlight={highlight} />
           </Card>
           <Card
             title={<span>Watched Threads</span>}
