@@ -33,6 +33,11 @@ const siteCreatedAtBlock: Block = {
   timestamp: "1628450632",
 };
 
+type StartBlock = {
+  label: string,
+  block: Block,
+};
+
 const SettingsWidgetOverlay = OverlayComponent(SettingsWidget);
 
 export default function HeaderNavigation({
@@ -50,7 +55,10 @@ export default function HeaderNavigation({
   baseUrl?: string;
   search?: string;
 }) {
-  const [startBlock, setStartBlock] = useState<Block | undefined>();
+  const [startBlock, setStartBlock] = useState<StartBlock>({
+    label: "Site creation",
+    block: siteCreatedAtBlock,
+  });
   const [openedWidget, setOpenedWidget] = useState<OpenedWidgetEnum | null>(
     null
   );
@@ -60,12 +68,20 @@ export default function HeaderNavigation({
   const settingsRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    if (!thread && !board) {
+      // persist the current start block until we know it's actually changed
+      // this is to prevent the time travel range jumping around every time
+      // the user time travels
+      return;
+    }
     setStartBlock(
       thread
-        ? thread.createdAtBlock
-        : board
-        ? board.createdAtBlock
-        : siteCreatedAtBlock
+        ? {label: "Thread creation", block: thread.createdAtBlock
+       }
+      : board
+        ? {label: "Board creation", block: board.createdAtBlock
+       }
+      : {label: "Site creation", block: siteCreatedAtBlock}
     );
   }, [thread, board, setStartBlock]);
 
@@ -135,15 +151,9 @@ export default function HeaderNavigation({
                 onClose={() => setOpenedWidget(null)}
                 block={block}
                 baseUrl={baseUrl || ""}
-                startBlock={startBlock}
+                startBlock={startBlock.block}
                 dateTime={dateTime}
-                startRangeLabel={
-                  thread
-                    ? "Thread creation"
-                    : board
-                    ? "Board creation"
-                    : "Site creation"
-                }
+                startRangeLabel={startBlock.label}
               />
             )}
           </ApolloConsumer>

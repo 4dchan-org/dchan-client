@@ -15,8 +15,9 @@ import {
 import { usePubSub, useSettings, useUser, useWeb3, useFavorites } from "hooks";
 import { DateTime } from "luxon";
 import { ReactElement, useCallback, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Router } from "router";
+import { parse as parseQueryString } from "query-string";
 
 function DateDisplay({ post }: { post: Post }) {
   const createdAt = fromBigInt(post.createdAtBlock.timestamp);
@@ -37,6 +38,11 @@ function DateDisplay({ post }: { post: Post }) {
     DateTime.TIME_24_WITH_SECONDS
   )}`;
 
+  const location = useLocation();
+  const locationParams = parseQueryString(location.search);
+  locationParams.block = `${post.createdAtBlock.number}`;
+  const timeTravelLink = `${location.pathname}?${new URLSearchParams(locationParams as any).toString()}`;
+
   return (
     <span
       className="px-0.5 whitespace-nowrap text-sm"
@@ -47,7 +53,7 @@ function DateDisplay({ post }: { post: Post }) {
         [
         <Link
           title={`Time travel to ${formattedDate}`}
-          to={`${Router.post(post)}?block=${post.createdAtBlock.number}`}
+          to={timeTravelLink}
         >
           {traveledBlock ? (
             <span>

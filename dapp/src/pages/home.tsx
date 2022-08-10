@@ -3,7 +3,7 @@ import { WatchedThreadsCard } from "components";
 import HeaderLogo from "components/header/logo";
 import { parse as parseQueryString } from "query-string";
 import { DateTime } from "luxon";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useTitle } from "react-use";
 import { subscribe, unsubscribe } from "pubsub-js";
 import { Board } from "dchan";
@@ -15,11 +15,13 @@ import {
   ThreadTabs,
   LatestPostsCard,
 } from "components";
+import { debounce } from "lodash";
 
 export default function HomePage({ location }: any) {
   useTitle("dchan.network");
 
   const [board, setBoard] = useState<Board>();
+  const [highlight, setHighlight] = useState<Board>();
   const query = parseQueryString(location.search);
   const block = parseInt(`${query.block}`);
   const queriedBlock = isNaN(block) ? undefined : block;
@@ -31,24 +33,31 @@ export default function HomePage({ location }: any) {
     window.scrollTo({ top: 0 });
   }, []);
 
+  const setBoardDebounce = useMemo(
+    () => debounce(setBoard, 500),
+    [setBoard],
+  );
+
+  const clearBoard = useCallback(
+    (e: any) => {
+      e.preventDefault();
+      setHighlight(undefined);
+      setBoard(undefined);
+    },
+    [setHighlight, setBoardDebounce],
+  );
+  
   useEffect(() => {
     const sub = subscribe(
-      "BOARD_ITEM_HOVER_ENTER",
+      "BOARD_ITEM_SELECT",
       (_: any, hoverBoard: Board) => {
+        setHighlight(hoverBoard);
         setBoard(hoverBoard);
       }
     );
 
     return () => unsubscribe(sub);
-  }, [setBoard]);
-
-  useEffect(() => {
-    const sub = subscribe("BOARD_ALL_HOVER_ENTER", () => {
-      setBoard(undefined);
-    });
-
-    return () => unsubscribe(sub);
-  }, [setBoard]);
+  }, [setHighlight, setBoardDebounce]);
 
   return (
     <div className="h-screen bg-primary flex flex-col pb-2">
@@ -61,11 +70,20 @@ export default function HomePage({ location }: any) {
       <div className="flex flex-grow flex-col grid-cols-3 xl:grid px-4 text-sm">
         <div>
           <Card
-            title={<span>Boards</span>}
+            title="Boards"
+            titleRight={<>
+              {board != null ?
+                <div className="absolute top-1/2 bottom-1/2 right-0 mr-4">
+                  [<div className="inline dchan-link" onClick={clearBoard}>Clear Board</div>]
+                </div>
+              :
+                ""
+              }
+            </>}
             className="md:px-1 w-full pb-4"
             bodyClassName="p-none b-none"
           >
-            <PopularBoardsCard block={queriedBlock} highlight={board} />
+            <PopularBoardsCard block={queriedBlock} highlight={highlight} />
           </Card>
           <Card
             title={<span>Watched Threads</span>}

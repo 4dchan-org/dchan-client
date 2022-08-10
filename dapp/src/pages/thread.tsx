@@ -22,7 +22,17 @@ interface ThreadContentVars {
   block?: number;
 }
 
-export default function ThreadPage({ location, match: { params } }: any) {
+export default function ThreadPage({
+  location,
+  match: { params },
+  pageTheme,
+  setPageTheme,
+}: {
+  location: any,
+  match: {params: any},
+  pageTheme: string,
+  setPageTheme: (theme: string) => void,
+}) {
   let { board_name, board_id, user_id, thread_n } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 
@@ -114,6 +124,17 @@ export default function ThreadPage({ location, match: { params } }: any) {
     });
   }, [block, refetch]);
 
+  useEffect(() => {
+    if (!board) {
+      // persist theme until we know for sure it's different for this board
+      // this is to prevent the theme changing back to default for every
+      // loading screen, e.g. during time travels or when switching to the
+      // board view or between threads
+      return;
+    }
+    setPageTheme(board?.isNsfw ? "nsfw" : "blueboard");
+  }, [board, setPageTheme]);
+
   useTitle(
     board && thread
       ? `/${board.name}/ - ${
@@ -123,10 +144,7 @@ export default function ThreadPage({ location, match: { params } }: any) {
   );
 
   return (
-    <div
-      className="bg-primary min-h-100vh flex flex-col"
-      data-theme={board?.isNsfw ? "nsfw" : "blueboard"}
-    >
+    <div className="bg-primary min-h-100vh flex flex-col" data-theme={pageTheme}>
       <ContentHeader
         board={board}
         thread={thread}

@@ -40,7 +40,17 @@ interface BoardVars {
   block: number;
 }
 
-export default function BoardPage({ location, match: { params } }: any) {
+export default function BoardPage({
+  location,
+  match: { params },
+  pageTheme,
+  setPageTheme
+}: {
+  location: any,
+  match: {params: any},
+  pageTheme: string,
+  setPageTheme: (theme: string) => void,
+}) {
   let { board_id, board_name } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 
@@ -137,10 +147,21 @@ export default function BoardPage({ location, match: { params } }: any) {
       : `Loading... - dchan.network - [${board_id}]`
   );
 
+  useEffect(() => {
+    if (!board) {
+      // persist theme until we know for sure it's different for this board
+      // this is to prevent the theme changing back to default for every
+      // loading screen, e.g. during time travels or when switching between
+      // boards
+      return;
+    }
+    setPageTheme(board?.isNsfw ? "nsfw" : "blueboard");
+  }, [board, setPageTheme]);
+
   return (
     <div
       className="bg-primary min-h-100vh flex flex-col"
-      data-theme={board?.isNsfw ? "nsfw" : "blueboard"}
+      data-theme={pageTheme}
     >
       <div>
         <ContentHeader

@@ -100,6 +100,18 @@
     border-bottom: 1px solid var(--tertiary-accent);
 }
 
+.border-right-secondary {
+    border-right: 1px solid var(--secondary);
+}
+
+.border-right-secondary-accent {
+    border-right: 1px solid var(--secondary-accent);
+}
+
+.border-right-tertiary {
+    border-right: 1px solid var(--tertiary);
+}
+
 .border-right-tertiary-accent {
     border-right: 1px solid var(--tertiary-accent);
 }

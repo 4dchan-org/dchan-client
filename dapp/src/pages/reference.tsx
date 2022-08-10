@@ -1,10 +1,11 @@
 import { useQuery } from "@apollo/react-hooks";
 import { Error, Loading } from "components";
 import { Post, Thread } from "dchan";
-import SEARCH_BY_REF from "graphql/queries/search_by_ref";
+import queries from "graphql/queries/search_by_ref";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
+import { parse as parseQueryString } from "query-string";
 
 interface RefSearchData {
   threads: Thread[];
@@ -17,9 +18,10 @@ interface RefSearchVars {
   id: string;
   post_n: string;
   post_ref: string;
+  block?: number;
 }
 
-export default function ReferencePage({ match: { params } }: any) {
+export default function ReferencePage({ location, match: { params } }: any) {
   const [error, setError] = useState<string>();
 
   const history = useHistory();
@@ -27,17 +29,26 @@ export default function ReferencePage({ match: { params } }: any) {
   const id = `0x${params.id}`;
   const post_n = params.post_n;
   const post_ref = `${id}/${post_n}`;
+  const query = parseQueryString(location.search);
+  const block = `${query.block}`;
+  let queriedBlock: number | undefined;
+  if (block) {
+    queriedBlock = parseInt(block);
+    if (isNaN(queriedBlock)) {
+      queriedBlock = undefined;
+    }
+  }
 
   const { loading, data } = useQuery<RefSearchData, RefSearchVars>(
-    SEARCH_BY_REF,
+    queriedBlock ? queries.query_ref_by_block : queries.query_ref,
     {
-      variables: { id, post_n, post_ref },
+      variables: { id, post_n, post_ref, block: queriedBlock },
     }
   );
 
   useEffect(() => {
     if (data) {
-      let location = null;
+      let newLocation = null;
       let thread = null;
       let post = null;
 
@@ -51,23 +62,25 @@ export default function ReferencePage({ match: { params } }: any) {
         post = postRef.post;
       }
 
+      let queriedBlockUrl = queriedBlock ? `?block=${queriedBlock}` : "";
+
       if (thread) {
-        location = `${Router.thread(thread)}`;
+        newLocation = `${Router.thread(thread)}${queriedBlockUrl}`;
       } else if (post) {
-        location = `${Router.post(post)}`;
+        newLocation = `${Router.post(post)}${queriedBlockUrl}`;
       }
 
-      if ((thread || post || postRef) && !location) {
+      if ((thread || post || postRef) && !newLocation) {
         setError(
           "Content not found. It may have been deleted, or the ID is invalid."
         );
       }
 
-      if (location) {
-        history.replace(location);
+      if (newLocation) {
+        history.replace(newLocation);
       }
     }
-  }, [history, data]);
+  }, [history, data, queriedBlock]);
 
   return (
     <div className="bg-primary center grid w-screen h-screen">

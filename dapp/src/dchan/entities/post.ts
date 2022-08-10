@@ -3,7 +3,7 @@ import { reverse, sortBy } from "lodash";
 
 export function sortByCreatedAt(posts: Post[] | undefined) {
     return posts && posts.length > 0
-        ? reverse(sortBy(posts, ["createdAtBlock"])) : undefined
+        ? reverse(sortBy(posts, post => parseInt(post.createdAtBlock.timestamp))) : undefined
 }
 export function isLowScore({
     score

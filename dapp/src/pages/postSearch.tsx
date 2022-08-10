@@ -76,6 +76,8 @@ export default function PostSearchPage({ location, match: { params } }: any) {
         search={search}
         baseUrl={`${Router.posts()}${search ? `?s=${search}` : ""}`}
         block={queriedBlock}
+        board={null}
+        title="Post Search"
         summary={
           results ? (
             <span>

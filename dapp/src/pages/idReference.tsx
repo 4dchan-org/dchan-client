@@ -39,7 +39,7 @@ export default function IdReferencePage({ location, match: { params } }: any) {
   const graphQuery = queriedBlock ? SEARCH_BY_ID_BLOCK : SEARCH_BY_ID;
 
   const { data } = useQuery<IdSearchData, IdSearchVars>(graphQuery, {
-    variables: { id, block: queriedBlock ? queriedBlock : undefined },
+    variables: { id, block: queriedBlock },
     pollInterval: 5_000,
   });
 

@@ -256,6 +256,7 @@ function renderValue(
             title={`Youtube video ${val.id}`}
             itemType="text/html"
             src={`//www.youtube.com/embed/${val.id}`}
+            allowFullScreen={true}
             frameBorder="0"
           ></iframe>
         </details>

@@ -88,6 +88,8 @@ function App() {
   const [settings, setSettings] = useLocalSettings();
   writeAppSetSettings(setSettings);
 
+  const [pageTheme, setPageTheme] = useState<string>("blueboard");
+
   const client = useMemo(
     () =>
       new ApolloClient({
@@ -115,29 +117,81 @@ function App() {
             <Route path="/0x:id" component={IdReferencePage} />
             <Route
               path="/:board_name/0x:board_id/:view_mode(index|catalog)"
-              component={BoardPage}
+              render={(props) => (
+                <BoardPage
+                  location={props.location}
+                  match={props.match}
+                  pageTheme={pageTheme}
+                  setPageTheme={setPageTheme}
+                />
+              )}
             />
             <Route
               path="/:board_name/0x:board_id/0x:user_id/:thread_n/0x:focus_user_id/:focus_post_n"
-              component={ThreadPage}
+              render={(props) => (
+                <ThreadPage
+                  location={props.location}
+                  match={props.match}
+                  pageTheme={pageTheme}
+                  setPageTheme={setPageTheme}
+                />
+              )}
             />
             <Route
               path="/:board_name/0x:board_id/0x:user_id/:thread_n/0x:focus_user_id"
-              component={ThreadPage}
+              render={(props) => (
+                <ThreadPage
+                  location={props.location}
+                  match={props.match}
+                  pageTheme={pageTheme}
+                  setPageTheme={setPageTheme}
+                />
+              )}
             />
             <Route
               path="/:board_name/0x:board_id/0x:user_id/:thread_n/:focus_post_n"
-              component={ThreadPage}
+              render={(props) => (
+                <ThreadPage
+                  location={props.location}
+                  match={props.match}
+                  pageTheme={pageTheme}
+                  setPageTheme={setPageTheme}
+                />
+              )}
             />
             <Route
               path="/:board_name/0x:board_id/0x:user_id/:thread_n/:post_n"
-              component={ThreadPage}
+              render={(props) => (
+                <ThreadPage
+                  location={props.location}
+                  match={props.match}
+                  pageTheme={pageTheme}
+                  setPageTheme={setPageTheme}
+                />
+              )}
             />
             <Route
               path="/:board_name/0x:board_id/0x:user_id/:thread_n"
-              component={ThreadPage}
+              render={(props) => (
+                <ThreadPage
+                  location={props.location}
+                  match={props.match}
+                  pageTheme={pageTheme}
+                  setPageTheme={setPageTheme}
+                />
+              )}
             />
-            <Route path="/:board_name/0x:board_id" component={BoardPage} />
+            <Route
+              path="/:board_name/0x:board_id" 
+              render={(props) => (
+                <BoardPage
+                  location={props.location}
+                  match={props.match}
+                  pageTheme={pageTheme}
+                  setPageTheme={setPageTheme}
+                />
+              )}
+            />
             <Route exact path="/:board_name" component={BoardsPage} />
           </Switch>
           <FAQCardOverlay />

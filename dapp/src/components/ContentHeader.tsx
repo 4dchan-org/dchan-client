@@ -13,6 +13,7 @@ import ContentNavigation from "./ContentNavigation";
 export default function ContentHeader({
   board,
   thread,
+  title,
   search,
   baseUrl,
   block,
@@ -22,6 +23,7 @@ export default function ContentHeader({
 }: {
   board?: Board | null;
   thread?: Thread;
+  title?: string;
   search?: string;
   baseUrl?: string;
   block?: string;
@@ -36,6 +38,7 @@ export default function ContentHeader({
     <div>
       <BoardHeader
         block={block}
+        title={title}
         dateTime={dateTime}
         board={board}
         thread={thread}
@@ -49,9 +52,13 @@ export default function ContentHeader({
        ? <FormPost baseUrl={baseUrl} thread={thread} board={board} />
        : <Loading />}
 
-      <div className="p-2">
-        <hr></hr>
-      </div>
+      {board !== null ?
+        <div className="p-2">
+          <hr></hr>
+        </div>
+      :
+        ""
+      }
 
       <div className="text-center sm:text-left grid xl:grid-cols-3 text-xs">
         <div className="mx-2 flex flex-wrap sm:flex-nowrap justify-center md:justify-start items-center">
