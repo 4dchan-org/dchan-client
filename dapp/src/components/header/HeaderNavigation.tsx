@@ -10,9 +10,9 @@ import {
   TimeTravelWidget,
   SearchWidget,
   WatchedThreadsWidget,
-  SettingsWidget,
-  OverlayComponent
+  SettingsWidget
 } from "components";
+import OverlayComponent from "components/OverlayComponent";
 
 interface BoardListData {
   boards: Board[];
