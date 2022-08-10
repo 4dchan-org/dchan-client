@@ -25,7 +25,7 @@ export default function Card({
           </header>
         </summary>
         <section
-          className={`${bodyClassName} bg-white border border-black border-t-0 w-full p-1`}
+          className={`${bodyClassName} bg-white border border-black border-t-0 w-full p-1 overflow-auto`}
           style={{ flex: "1 1 auto" }}
         >
           {children}

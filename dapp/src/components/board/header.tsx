@@ -41,7 +41,7 @@ export default function BoardHeader({
         search={search}
       />
 
-      <HeaderLogo></HeaderLogo>
+      <HeaderLogo block={block}></HeaderLogo>
 
       <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative">
         <div className="text-xs pb-2">

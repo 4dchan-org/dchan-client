@@ -47,10 +47,10 @@ const fragments = gql`
 const QUERY_REF = gql`
   ${fragments}
   query SearchByRef($id: String!, $post_n: BigInt!, $post_ref: String!) {
-    threads(where: {board: $id, n: $post_n}) {
+    threads(where: { board: $id, n: $post_n }) {
       ...SearchThread
     }
-    posts(where: {from: $id, n: $post_n}) {
+    posts(where: { from: $id, n: $post_n }) {
       ...SearchPost
     }
     postRef(id: $post_ref) {
@@ -61,17 +61,27 @@ const QUERY_REF = gql`
 
 const QUERY_REF_BY_BLOCK = gql`
   ${fragments}
-  query SearchByRef($id: String!, $post_n: BigInt!, $post_ref: String!, $block: Int!) {
-    threads(where: {board: $id, n: $post_n}, block: {number: $block}) {
+  query SearchByRef(
+    $id: String!
+    $post_n: BigInt!
+    $post_ref: String!
+    $block: Int!
+  ) {
+    threads(where: { board: $id, n: $post_n }, block: { number: $block }) {
       ...Thread
     }
-    posts(where: {from: $id, n: $post_n}, block: {number: $block}) {
+    posts(where: { from: $id, n: $post_n }, block: { number: $block }) {
       ...Post
     }
-    postRef(id: $post_ref, block: {number: $block}) {
+    postRef(id: $post_ref, block: { number: $block }) {
       ...PostRef
     }
   }
 `;
 
-export default {query_ref: QUERY_REF, query_ref_by_block: QUERY_REF_BY_BLOCK};
+const queries = {
+  query_ref: QUERY_REF,
+  query_ref_by_block: QUERY_REF_BY_BLOCK,
+};
+
+export default queries;
