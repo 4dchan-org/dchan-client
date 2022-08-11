@@ -1,4 +1,4 @@
-import { Thread } from "dchan";
+import { Board, Thread } from "dchan";
 import { Link } from "react-router-dom";
 import { Router } from "router";
 import BoardLink from "./BoardLink";
@@ -6,10 +6,12 @@ import Post from "./post/Post";
 
 export default function IndexView({
   threads,
+  board,
   block,
   showBoard = false,
 }: {
   threads: Thread[];
+  board?: Board;
   block?: number;
   showBoard?: boolean;
 }) {
@@ -25,6 +27,7 @@ export default function IndexView({
           <Post
             post={thread.op}
             thread={thread}
+            showNsfw={board?.isNsfw}
             key={thread.op.id}
             block={block == null ? undefined : `${block}`}
             header={
@@ -74,6 +77,7 @@ export default function IndexView({
                 post={post}
                 thread={thread}
                 key={post.id}
+                showNsfw={board?.isNsfw}
                 block={block == null ? undefined : `${block}`}
               />
             ))}

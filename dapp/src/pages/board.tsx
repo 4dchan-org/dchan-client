@@ -213,12 +213,14 @@ export default function BoardPage({
                   {
                     catalog: (
                       <CatalogView
+                        board={board}
                         threads={filteredThreads}
                         block={queriedBlock}
                       />
                     ),
                     index: (
                       <IndexView
+                        board={board}
                         threads={filteredThreads}
                         block={queriedBlock}
                       />

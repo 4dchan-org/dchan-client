@@ -1,4 +1,4 @@
-import { Thread } from "dchan";
+import { Board, Thread } from "dchan";
 import { IPFSImage, BoardLink } from "components";
 import PostBody from "components/post/PostBody";
 import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
@@ -10,10 +10,12 @@ import { useState, useCallback } from "react";
 
 const CatalogThread = ({
   thread,
+  board,
   block,
   showBoard = false,
 }: {
   thread: Thread;
+  board?: Board;
   block?: number;
   showBoard?: boolean;
 }) => {
@@ -26,7 +28,6 @@ const CatalogThread = ({
     replyCount,
     imageCount,
     replies,
-    board,
   } = thread;
   const { image } = op;
   const { ipfsHash, isNsfw, isSpoiler } = image || {
@@ -127,17 +128,17 @@ const CatalogThread = ({
                   expandable={false}
                   thumbnail={false}
                   isSpoiler={isSpoiler}
-                  isNsfw={(isNsfw && !thread.board?.isNsfw) || false}
+                  isNsfw={(isNsfw && !(true === board?.isNsfw) && !thread.board?.isNsfw) || false}
                 />
               </div>
             ) : (
               ""
             )}
             <div className="p-1">
-              {showBoard && board ? (
+              {showBoard && thread.board ? (
                 <div>
                   <BoardLink
-                    board={board}
+                    board={thread.board}
                     block={block == null ? undefined : `${block}`}
                   />
                 </div>
