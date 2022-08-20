@@ -265,14 +265,14 @@ export default forwardRef(
 
     const getNextBlock = useCallback(
       () => {
-        if (timeTraveledToNumber && timeTraveledToNumber !== timeTravelRange?.max?.number) {
-          queryGetNextBlock(client, timeTraveledToNumber).then((result) => {
+        if (currentBlock && timeTravelRange && currentBlock.number !== timeTravelRange.max.number) {
+          queryGetNextBlock(client, currentBlock.number).then((result) => {
             const b = result.data?.blocks?.[0];
             
             if (b == null) {
               return;
             }
-            if (b.number === timeTravelRange?.max?.number) {
+            if (b.number === timeTravelRange.max.number) {
               onReturnToPresent();
               return
             }
@@ -301,18 +301,18 @@ export default forwardRef(
         setPrevQueriedBlock,
         setWritingState,
         client,
-        timeTraveledToNumber,
+        currentBlock,
         timeTravelRange,
       ]
     );
 
     const getPrevBlock = useCallback(
       () => {
-        if (block !== timeTravelRange?.min?.number && timeTraveledToNumber) {
-          queryGetPrevBlock(client, timeTraveledToNumber).then((result) => {
+        if (currentBlock && timeTravelRange && currentBlock.number !== timeTravelRange.min.number) {
+          queryGetPrevBlock(client, currentBlock.number).then((result) => {
             const b = result.data?.blocks?.[0];
             
-            if (b == null || b.number === timeTravelRange?.min?.number) {
+            if (b == null || b.number === timeTravelRange.min.number) {
               return;
             }
             const url = !!baseUrl
@@ -340,7 +340,7 @@ export default forwardRef(
         setPrevQueriedBlock,
         setWritingState,
         client,
-        timeTraveledToNumber,
+        currentBlock,
         timeTravelRange,
       ]
     );
