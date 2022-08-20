@@ -101,3 +101,11 @@
 .dchan-post-you {
     border: 2px dashed var(--tertiary) !important;
 }
+
+.dchan-brackets::before {
+    content: "[";
+}
+
+.dchan-brackets::after {
+    content: "]";
+}
