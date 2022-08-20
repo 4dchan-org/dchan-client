@@ -3,6 +3,8 @@ import { Block } from "dchan";
 import { fromBigInt } from "dchan/entities/datetime";
 import BLOCK_BY_DATE from "graphql/queries/block_by_date";
 import BLOCK_BY_NUMBER from "graphql/queries/block_by_number";
+import GET_NEXT_BLOCK from "graphql/queries/get_next_block";
+import GET_PREV_BLOCK from "graphql/queries/get_prev_block";
 import { useLastBlock } from "hooks";
 import { DateTime } from "luxon";
 import {
@@ -59,6 +61,30 @@ function queryBlockByNumber(
   });
 }
 
+function queryGetPrevBlock(
+  client: ApolloClient<any>,
+  block: string
+): Promise<ApolloQueryResult<BlockData>> {
+  return client.query<BlockData, BlockByNumberVars>({
+    query: GET_PREV_BLOCK,
+    variables: {
+      number: block,
+    },
+  });
+}
+
+function queryGetNextBlock(
+  client: ApolloClient<any>,
+  block: string
+): Promise<ApolloQueryResult<BlockData>> {
+  return client.query<BlockData, BlockByNumberVars>({
+    query: GET_NEXT_BLOCK,
+    variables: {
+      number: block,
+    },
+  });
+}
+
 const timeTravelingNote =
   "You time traveled! The content is being displayed as it was shown to users at the specified date.";
 
@@ -95,6 +121,7 @@ export default forwardRef(
       dateTime,
       startRangeLabel,
       baseUrl,
+      widgetClassName,
       open,
       onOpen,
       onClose,
@@ -105,6 +132,7 @@ export default forwardRef(
       dateTime?: DateTime;
       startRangeLabel: string;
       baseUrl: string;
+      widgetClassName?: string;
       open: boolean;
       onOpen: () => void;
       onClose: () => void;
@@ -231,6 +259,92 @@ export default forwardRef(
       ]
     );
 
+    const onReturnToPresent = useCallback(() => {
+      changeNumber(null);
+    }, [changeNumber]);
+
+    const getNextBlock = useCallback(
+      () => {
+        if (timeTraveledToNumber && timeTraveledToNumber !== timeTravelRange?.max?.number) {
+          queryGetNextBlock(client, timeTraveledToNumber).then((result) => {
+            const b = result.data?.blocks?.[0];
+            
+            if (b == null) {
+              return;
+            }
+            if (b.number === timeTravelRange?.max?.number) {
+              onReturnToPresent();
+              return
+            }
+            const url = !!baseUrl
+              ? !!b
+                ? baseUrl.includes("?")
+                  ? `${baseUrl}&block=${b.number}`
+                  : `${baseUrl}?block=${b.number}`
+                : `${baseUrl}`
+              : undefined;
+
+            setWritingState(true);
+            setPrevQueriedBlock(block || undefined);
+            url && history.replace(url);
+            setWritingState(false);
+            changeBlock(b);
+          });
+        }
+      },
+      [
+        changeBlock,
+        baseUrl,
+        block,
+        history,
+        onReturnToPresent,
+        setPrevQueriedBlock,
+        setWritingState,
+        client,
+        timeTraveledToNumber,
+        timeTravelRange,
+      ]
+    );
+
+    const getPrevBlock = useCallback(
+      () => {
+        if (block !== timeTravelRange?.min?.number && timeTraveledToNumber) {
+          queryGetPrevBlock(client, timeTraveledToNumber).then((result) => {
+            const b = result.data?.blocks?.[0];
+            
+            if (b == null || b.number === timeTravelRange?.min?.number) {
+              return;
+            }
+            const url = !!baseUrl
+              ? !!b
+                ? baseUrl.includes("?")
+                  ? `${baseUrl}&block=${b.number}`
+                  : `${baseUrl}?block=${b.number}`
+                : `${baseUrl}`
+              : undefined;
+
+            setWritingState(true);
+            setPrevQueriedBlock(block || undefined);
+            url && history.replace(url);
+            setWritingState(false);
+            changeBlock(b);
+          });
+        }
+      },
+      [
+        changeBlock,
+        baseUrl,
+        block,
+        history,
+        travelToLatest,
+        setPrevQueriedBlock,
+        setWritingState,
+        client,
+        timeTraveledToNumber,
+        timeTravelRange,
+      ]
+    );
+
     useEffect(() => {
       if (block !== prevQueriedBlock && !writingState) {
         // out of sync with URL
@@ -315,10 +429,6 @@ export default forwardRef(
       [setTimeTraveledToNumber, debouncedNumberChange]
     );
 
-    const onReturnToPresent = useCallback(() => {
-      changeNumber(null);
-    }, [changeNumber]);
-
     const onInputBlockNumber = useCallback(() => {
       if (timeTravelRange == null) {
         return;
@@ -400,7 +510,7 @@ export default forwardRef(
             </>
           ) : null}
         </summary>
-        <div className="absolute w-screen sm:w-max top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto sm:right-0">
+        <div className={widgetClassName}>
           {timeTravelRange ? (
             <div className="bg-primary border border-secondary-accent p-1">
               <div className="flex center text-xs my-1 ml-2">
@@ -424,9 +534,13 @@ export default forwardRef(
                 </span>
               </div>
               <div className="grid align-center text-xs w-full">
-                <button className="dchan-link" onClick={onInputBlockNumber}>
-                  {`Block #${timeTraveledToNumber || "?"}`}
-                </button>
+                <span className="mx-auto">
+                  <span className="dchan-link mr-2" onClick={getPrevBlock}>&lt;&lt;&lt;</span>
+                  <button className="dchan-link" onClick={onInputBlockNumber}>
+                    {`Block #${timeTraveledToNumber || "?"}`}
+                  </button>
+                  <span className="dchan-link ml-2" onClick={getNextBlock}>&gt;&gt;&gt;</span>
+                </span>
 
                 {isTimeTraveling ? (
                   <div className="text-xs text-center">

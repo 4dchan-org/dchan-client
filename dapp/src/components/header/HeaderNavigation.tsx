@@ -1,7 +1,7 @@
 import { ApolloConsumer, ApolloClient, useQuery } from "@apollo/react-hooks";
 import { Board, Thread, Block } from "dchan";
 import BOARDS_LIST_MOST_POPULAR from "graphql/queries/boards/list_most_popular";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { DateTime } from "luxon";
 import { Router } from "router";
@@ -61,6 +61,7 @@ export default function HeaderNavigation({
   const [openedWidget, setOpenedWidget] = useState<OpenedWidgetEnum | null>(
     null
   );
+  const [showBoards, setShowBoards] = useState<boolean>(false);
   const timeTravelRef = useRef<HTMLElement>(null);
   const watchedThreadsRef = useRef<HTMLElement>(null);
   const settingsRef = useRef<HTMLElement>(null);
@@ -88,49 +89,48 @@ export default function HeaderNavigation({
     { variables: {}, pollInterval: 30_000 }
   );
 
+  const toggleShowBoards = useCallback(() => {
+    setShowBoards(!showBoards);
+  }, [showBoards, setShowBoards]);
+
+  const widgetClass = [
+    "absolute w-screen sm:w-max mt-1 md:mt-1 left-0 right-0 sm:left-auto sm:right-0",
+    showBoards ? "top-11 md:top-full" : "top-full md:top-5"
+  ].join(" ");
+
   const boards = data?.boards;
   return (
     <div className="mb-8 dchan-header-navigation">
       <div className="text-sm p-01 border-solid border-bottom-tertiary-accent bg-secondary border-0 border-b-2 text-left fixed top-0 left-0 right-0 shadow-md z-50">
-        <span className="text-black text-opacity-50 hover:text-opacity-100 pr-1">
-          [
+        <span className="text-black text-opacity-50 hover:text-opacity-100 pr-1 dchan-brackets">
           <Link
             className="dchan-link"
             to={`/${block ? `?block=${block}` : ""}`}
           >
             dchan.network
           </Link>
-          ]
         </span>
         <span className="text-black text-opacity-50 hover:text-opacity-100 pr-1">
-          <details className="inline">
-            <summary className="inline">
-              [
-                <span className="dchan-link">+</span>
-              ]
-            </summary>
-            <span className="inline">
-              <span className="hidden sm:inline-block">
-                [
-                {!!boards &&
-                  boards.map((board) => (
-                    <span className="dchan-navigation-board" key={board.id}>
-                      <wbr />
-                      <BoardLink board={board} block={block} />
-                    </span>
-                  ))}
-                ]
-              </span>
-              [
-              <Link
-                className="dchan-link"
-                to={`${Router.boards()}${block ? `?block=${block}` : ""}`}
-              >
-                ...
-              </Link>
-              ]
+          <span className="inline dchan-brackets" onClick={toggleShowBoards}>
+            <span className="dchan-link">+</span>
+          </span>
+          <span className={showBoards ? "hidden md:inline" : "hidden"}>
+            <span className="hidden sm:inline-block dchan-brackets">
+              {!!boards &&
+                boards.map((board) => (
+                  <span className="dchan-navigation-board" key={board.id}>
+                    <wbr />
+                    <BoardLink board={board} block={block} />
+                  </span>
+                ))}
             </span>
-          </details>
+          </span>
+          <Link
+            className={"dchan-brackets " + (showBoards ? "" : "hidden")}
+            to={`${Router.boards()}${block ? `?block=${block}` : ""}`}
+          >
+            <span className="dchan-link">...</span>
+          </Link>
         </span>
         <span className="text-black text-opacity-50 hover:text-opacity-100 pr-1">
           [
@@ -149,6 +149,7 @@ export default function HeaderNavigation({
                 client={client}
                 ref={timeTravelRef}
                 open={openedWidget === OpenedWidgetEnum.TIMETRAVEL}
+                widgetClassName={widgetClass}
                 onOpen={() => {
                   setOpenedWidget(
                     openedWidget === OpenedWidgetEnum.TIMETRAVEL
@@ -183,7 +184,7 @@ export default function HeaderNavigation({
             >
               👁
             </summary>
-            <div className="absolute w-screen sm:w-max top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto sm:right-0">
+            <div className={widgetClass}>
               <WatchedThreadsWidget block={block} />
             </div>
           </details>
@@ -209,6 +210,17 @@ export default function HeaderNavigation({
             )}
           </span>
         </span>
+        <div className={"w-min top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto mx-auto " + (showBoards ? "block md:hidden" : "hidden")}>
+          <span className="dchan-brackets flex">
+            {!!boards &&
+              boards.map((board) => (
+                <span className="dchan-navigation-board" key={board.id}>
+                  <wbr />
+                  <BoardLink board={board} block={block} />
+                </span>
+              ))}
+          </span>
+        </div>
       </div>
     </div>
   );
