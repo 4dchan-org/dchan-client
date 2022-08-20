@@ -7,6 +7,7 @@ export function AbuseCard() {
   return (
   <Card
     title={<div className="">Abuse (DMCA/CSAM)</div>}
+    collapsible={false}
   >
   <div className="text-left p-4">
     This is a decentralized application: the content shown here is not hosted on this website's servers, but is instead retrieved via <a className="dchan-link" href="https://ipfs.io/" rel="nofollow">IPFS</a>.

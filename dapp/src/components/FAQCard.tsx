@@ -65,7 +65,7 @@ export function FAQCard({
   className?: string;
 }) {
   return (
-    <Card title={<span>FAQ</span>} className={className}>
+    <Card title={<span>FAQ</span>} className={className} collapsible={false}>
       <div className="text-left p-4 text-sm">
         <div className="pb-2">
           <strong>Q: What is this?</strong>
