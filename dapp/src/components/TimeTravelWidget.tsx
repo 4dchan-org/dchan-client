@@ -537,7 +537,7 @@ export default forwardRef(
                 <span className="mx-auto">
                   <span className="dchan-link mr-2" onClick={getPrevBlock}>&lt;&lt;&lt;</span>
                   <button className="dchan-link" onClick={onInputBlockNumber}>
-                    {`Block #${timeTraveledToNumber || "?"}`}
+                    {`Block #${timeTraveledToNumber || "????????"}`}
                   </button>
                   <span className="dchan-link ml-2" onClick={getNextBlock}>&gt;&gt;&gt;</span>
                 </span>
