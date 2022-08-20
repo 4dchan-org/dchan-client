@@ -265,6 +265,12 @@ export function FAQCard({
             </a>
           </div>
         </div>
+
+        <div className="flex flex-row justify-center mt-4 dchan-brackets sm:hidden">
+          <span className="dchan-link" onClick={onExit}>
+            Go back
+          </span>
+        </div>
       </div>
     </Card>
   );
