@@ -5,7 +5,12 @@ import OverlayComponent from "./OverlayComponent";
 
 export function RulesCard() {
   return (
-    <Card title={<span>The rules</span>} className="flex flex-col flex-grow flex-shrink-0" bodyClassName="flex">
+    <Card
+      title={<span>The rules</span>}
+      className="flex flex-col flex-grow flex-shrink-0"
+      bodyClassName="flex"
+      collapsible={false}
+    >
       <div className="p-8">
       <ul className="list-disc text-wrap text-left m-auto">
         <li>
