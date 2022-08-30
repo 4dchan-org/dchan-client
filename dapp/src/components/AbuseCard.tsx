@@ -9,9 +9,9 @@ export function AbuseCard() {
     title={<div className="">Abuse (DMCA/CSAM)</div>}
   >
   <div className="text-left p-4">
-    This is a decentralized application: the content shown here is not hosted on this website's servers, but is instead retrieved via <a className="dchan-link" href="https://ipfs.io/" rel="nofollow">IPFS</a>.
+    This is a decentralized application: the content shown here is not hosted on this website's servers, but is instead retrieved via <a className="dchan-link" href="https://ipfs.io/" target="_blank" rel="noreferrer">IPFS</a>.
     <br />
-    Please refer to the IPFS Gateway Service's <a className="dchan-link" href="https://ipfs.io/legal/" rel="nofollow">legal page</a> to report any offending content.
+    Please refer to the IPFS Gateway Service's <a className="dchan-link" href="https://ipfs.io/legal/" target="_blank" rel="noreferrer">legal page</a> to report any offending content.
   </div></Card>
   );
 }

@@ -11,10 +11,7 @@ export default function GasPriceWidget() {
   useEffect(() => {
     if (!!gasPrice) {
       setTxPrice(
-        round(
-          parseFloat(getWeb3().utils.fromWei(gasPrice, "ether")) * 50000,
-          5
-        )
+        round(parseFloat(getWeb3().utils.fromWei(gasPrice, "ether")) * 50000, 5)
       );
       setGweiPrice(
         round(parseFloat(getWeb3().utils.fromWei(gasPrice, "gwei")))
@@ -23,16 +20,18 @@ export default function GasPriceWidget() {
   }, [gasPrice]);
 
   return (
-    <div className="text-xs text-gray-400 hover:text-gray-600 pt-1">
+    <div className="text-xs pt-1">
       <small>
-        <div>Using dchan is free, posting costs gas.</div>
-        <div>
-          ⛽️ Current est. tx price: {txPrice} MATIC @ {gweiPrice} gwei.{" "}
-          {txPrice !== 0 ? (
-            <span>(~{Math.floor(balance / txPrice)} posts left)</span>
-          ) : (
-            ""
-          )}
+        <div className="text-gray-400 hover:text-gray-600">Posting costs gas.</div>
+        <div className="text-gray-400 hover:text-gray-600">
+          <a href="//polygonscan.com/gastracker" target="_blank" rel="noreferrer">
+            ⛽️ Current est. tx price: {txPrice} MATIC @ {gweiPrice} gwei.{" "}
+            {txPrice !== 0 ? (
+              <span>(~{Math.floor(balance / txPrice)} posts left)</span>
+            ) : (
+              ""
+            )}
+          </a>
         </div>
       </small>
     </div>
