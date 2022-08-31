@@ -1,4 +1,5 @@
 import { Board } from "dchan";
+import { Router } from "router";
 import { Link } from "react-router-dom";
 import BoardTabs from "./BoardTabs";
 
@@ -10,7 +11,7 @@ export default function PopularBoardsCard({block, highlight}: {block?: number, h
         [
         <Link
           className="dchan-link py-1 px-4"
-          to="/_/boards"
+          to={Router.boards()}
         >
           All boards
         </Link>

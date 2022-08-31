@@ -16,8 +16,9 @@ import {
   CatalogView,
   IndexView,
 } from "components";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
+import Paging from "components/Paging";
 
 interface BoardCatalogData {
   board: Board;
@@ -236,94 +237,7 @@ export default function BoardPage({
           {board ? (
             <div>
               <hr />
-              <div className="p-2">
-                <span>
-                  {page > 1 ? (
-                    <Link
-                      className="dchan-link px-2"
-                      to={`${Router.board(board, boardMode)}?page=1${
-                        queriedBlock ? `&block=${queriedBlock}` : ""
-                      }`}
-                    >
-                      &lt;&lt;
-                    </Link>
-                  ) : (
-                    ""
-                  )}
-                </span>
-                <span>
-                  {page > 1 ? (
-                    <Link
-                      className="dchan-link px-2"
-                      to={`${Router.board(board, boardMode)}?page=${page - 1}${
-                        queriedBlock ? `&block=${queriedBlock}` : ""
-                      }`}
-                    >
-                      &lt;
-                    </Link>
-                  ) : (
-                    ""
-                  )}
-                </span>
-                <span>
-                  [
-                  <button
-                    className="dchan-link px-2"
-                    onClick={() => {
-                      const input = prompt(
-                        `Page number: (range: 1-${maxPage})`
-                      );
-                      if (input != null) {
-                        const newPage = parseInt(input || "");
-                        if (
-                          isNaN(newPage) ||
-                          newPage < 1 ||
-                          newPage > maxPage
-                        ) {
-                          alert(`Invalid page number: ${input}`);
-                        } else {
-                          history.push(
-                            `${Router.board(board, boardMode)}?page=${newPage}${
-                              queriedBlock ? `&block=${queriedBlock}` : ""
-                            }`
-                          );
-                        }
-                      }
-                    }}
-                  >
-                    Page {page} of {maxPage}
-                  </button>
-                  ]
-                </span>
-                <span>
-                  {page < maxPage ? (
-                    <Link
-                      className="dchan-link px-2"
-                      to={`${Router.board(board, boardMode)}?page=${page + 1}${
-                        queriedBlock ? `&block=${queriedBlock}` : ""
-                      }`}
-                    >
-                      &gt;
-                    </Link>
-                  ) : (
-                    ""
-                  )}
-                </span>
-                <span>
-                  {page < maxPage ? (
-                    <Link
-                      className="dchan-link px-2"
-                      to={`${Router.board(board, boardMode)}?page=${maxPage}${
-                        queriedBlock ? `&block=${queriedBlock}` : ""
-                      }`}
-                    >
-                      &gt;&gt;
-                    </Link>
-                  ) : (
-                    ""
-                  )}
-                </span>
-              </div>
+              <Paging url={location.pathname} page={page} maxPage={maxPage} block={block} />
 
               <Anchor to="#board-header" label="Top" />
             </div>

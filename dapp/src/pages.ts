@@ -4,7 +4,7 @@ import BoardsPage from "./pages/boards";
 import BoardSearchPage from "./pages/boardSearch";
 import HomePage from "./pages/home";
 import IdReferencePage from "./pages/idReference";
-import PostSearchPage from "./pages/postSearch";
+import PostsPage from "./pages/posts";
 import ReferencePage from "./pages/reference";
 import ThreadPage from "./pages/thread";
 
@@ -15,7 +15,7 @@ export {
   BoardSearchPage,
   HomePage,
   IdReferencePage,
-  PostSearchPage,
+  PostsPage,
   ReferencePage,
   ThreadPage,
 };

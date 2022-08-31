@@ -101,3 +101,8 @@
 .dchan-post-you {
     border: 2px dashed var(--tertiary) !important;
 }
+
+.dchan-link-disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}

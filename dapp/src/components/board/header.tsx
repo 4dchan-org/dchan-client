@@ -46,6 +46,7 @@ export default function BoardHeader({
       <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative">
         <div className="text-xs pb-2">
           <IdLabel
+            className={board?.id ? "" : "invisible"}
             id={board?.id || "0x0000000000000000000000000000000000000000"}
           ></IdLabel>
         </div>
@@ -57,7 +58,7 @@ export default function BoardHeader({
               <span></span>
             )}
           </span>{" "}
-          <span className="font-semibold">
+          <span className={`font-semibold ${!!board?.name || !!title ? "" : "invisible"}`}>
             {board === null ? (
               <div>{title ? title : "/?/ - ?????"}</div>
             ) : (

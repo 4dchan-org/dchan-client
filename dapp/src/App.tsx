@@ -15,7 +15,7 @@ import {
   BoardsPage,
   HomePage,
   IdReferencePage,
-  PostSearchPage,
+  PostsPage,
   ReferencePage,
   ThreadPage,
 } from "pages";
@@ -112,7 +112,7 @@ function App() {
             <Route exact path="/" component={HomePage} />
             <Route exact path="/_/boards" component={BoardsPage} />
             <Route path="/_/admin" component={AdminPage} />
-            <Route path="/_/posts" component={PostSearchPage} />
+            <Route path="/_/posts" component={PostsPage} />
             <Route path="/0x:id/:post_n" component={ReferencePage} />
             <Route path="/0x:id" component={IdReferencePage} />
             <Route

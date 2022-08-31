@@ -8,7 +8,6 @@ import { Router } from "router";
 import {
   BoardLink,
   TimeTravelWidget,
-  SearchWidget,
   WatchedThreadsWidget
 } from "components";
 import OverlayComponent from "components/OverlayComponent";
@@ -63,7 +62,6 @@ export default function HeaderNavigation({
     null
   );
   const timeTravelRef = useRef<HTMLElement>(null);
-  const searchRef = useRef<HTMLElement>(null);
   const watchedThreadsRef = useRef<HTMLElement>(null);
   const settingsRef = useRef<HTMLElement>(null);
 
@@ -134,6 +132,16 @@ export default function HeaderNavigation({
             </span>
           </details>
         </span>
+        <span className="text-black text-opacity-50 hover:text-opacity-100 pr-1">
+          [
+          <Link
+            className="dchan-link"
+            to={`${Router.posts()}${block ? `?block=${block}` : ""}`}
+          >
+            🔍
+          </Link>
+          ]
+        </span>
         <span className="float-right flex flex-row">
           <ApolloConsumer>
             {(client: ApolloClient<any>) => (
@@ -157,31 +165,6 @@ export default function HeaderNavigation({
               />
             )}
           </ApolloConsumer>
-          <details
-            className="w-full sm:relative mx-1"
-            open={openedWidget === OpenedWidgetEnum.SEARCH}
-            ref={searchRef}
-          >
-            <summary
-              className="list-none cursor-pointer"
-              onClick={(event) => {
-                event.preventDefault();
-                setOpenedWidget(
-                  openedWidget === OpenedWidgetEnum.SEARCH
-                    ? null
-                    : OpenedWidgetEnum.SEARCH
-                );
-              }}
-            >
-              🔍
-            </summary>
-            <div className="absolute w-screen sm:w-max top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto sm:right-0">
-              <SearchWidget
-                baseUrl={`${Router.posts()}${block ? `?block=${block}` : ""}`}
-                search={search}
-              />
-            </div>
-          </details>
           <details
             className="w-full sm:relative mx-1"
             open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS}

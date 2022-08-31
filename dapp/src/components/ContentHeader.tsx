@@ -7,7 +7,6 @@ import BoardHeader from "./board/header";
 import FormPost from "./form/FormPost";
 import RefreshWidget from "./RefreshWidget";
 import BoardViewSettings from "./settings/BoardViewSettings";
-import Loading from "./Loading";
 import ContentNavigation from "./ContentNavigation";
 
 export default function ContentHeader({
@@ -50,7 +49,7 @@ export default function ContentHeader({
        ? ""
        : (thread || board)
        ? <FormPost baseUrl={baseUrl} thread={thread} board={board} />
-       : <Loading />}
+       : "..."}
 
       {board !== null ?
         <div className="p-2">
@@ -73,7 +72,7 @@ export default function ContentHeader({
         <div className="center grid">
           {summary ? <span className="py-2 text-xs text-gray-600">{summary}</span> : <span/>}
         </div>
-        <div className="flex flex-wrap justify-center md:justify-end items-center pr-2">{!thread ? <BoardViewSettings /> : ""}</div>
+        <div className="flex flex-wrap justify-center md:justify-end items-center pr-2">{!thread && !!board ? <BoardViewSettings /> : ""}</div>
       </div>
 
       <div className="p-2">

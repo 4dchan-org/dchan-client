@@ -5,6 +5,7 @@ import BOARDS_SEARCH from "graphql/queries/boards/search";
 import { useQuery } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
 import { parse as parseQueryString } from "query-string";
+import { Router } from "router";
 
 export default function BoardListPage({
   location,
@@ -25,7 +26,7 @@ export default function BoardListPage({
         block={query.block ? `${query.block}` : undefined}
       />
 
-      <Link className="dchan-link py-1 px-4" to="/_/boards">
+      <Link className="dchan-link py-1 px-4" to={Router.boards()}>
         All boards
       </Link>
       <div className="center flex">

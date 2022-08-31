@@ -31,7 +31,7 @@ export default function ContentNavigation({
           [
           <Link
             className="dchan-link"
-            to={`${Router.board(board)}/index${timeTravelURL}`}
+            to={`${Router.board(board, "index")}${timeTravelURL}`}
           >
             Index
           </Link>
@@ -41,7 +41,7 @@ export default function ContentNavigation({
           [
           <Link
             className="dchan-link"
-            to={`${Router.board(board)}/catalog${timeTravelURL}`}
+            to={`${Router.board(board, "catalog")}${timeTravelURL}`}
           >
             Catalog
           </Link>

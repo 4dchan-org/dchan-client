@@ -109,15 +109,15 @@ export function FAQCard({
         <div className="pb-2">
           <strong>Q: Is it free?</strong>
           <div>
-            Kind of. 
+            Yes, but also no.
             <br />
-            You will need a crypto wallet to post and some <Polygon />{" "}
-            to pay the TX fee to post.
+            Browsing <DchanNetwork /> is free, but to post you will need a
+            crypto wallet and some <Polygon /> to pay the TX fee.
             <br />
             At the time of writing this FAQ (August 2022) TX fees for a post is
             around ~$0.001 per post, so $10 worth of MATIC would allow you to
-            post ~10000 times, although it is possible that fees will be higher during
-            high on-chain activity.
+            post ~10000 times, although it is possible that fees will be higher
+            during high on-chain activity.
             <br />
             You can get some free <Polygon /> at the following faucets:
             <div>
@@ -130,22 +130,30 @@ export function FAQCard({
         <div className="pb-2">
           <strong>Q: Is it uncensorable?</strong>
           <div>
-            Kind of.
+            Short answer: Yes, but <DchanNetwork /> can still hide content if
+            necessary.
+            <br />
+            Long answer:
             <br />
             While the content is stored on decentralized services (<Polygon />{" "}
-            and IPFS), the way it's served (as of now) does have some
-            centralization to it and can therefore be censored.
+            and IPFS), the way it's served does have some centralization to it
+            and can therefore be censored (as of now, at least).
             <br />
-            As previously said, posts are stored on the blockchain; more
-            specifically, every single action that alters the website state,
-            such as posting, board creations, moderator actions, etc ... is stored publicly on the
-            blockchain.
+            Again, posts are stored on the blockchain; more specifically, every
+            single action that alters the website state, such as creating a
+            post, a board, a thread, any moderator actions, etc ... is stored
+            publicly on the blockchain.{" "}
+            <i>
+              THESE RAW ACTIONS CANNOT BE DELETED NOR MODIFIED BY ANYONE.
+              FOREVER.
+            </i>
             <br />
             Those actions are then parsed by <TheGraph />
-            's indexers, a decentralized network of nodes whose job is to run a
-            program (called "subgraph") which defines how to handle those raw
-            actions and how to "index" them into a format usable by the{" "}
-            <DchanNetwork /> client, and then serve that content.
+            's indexers, a decentralized network of nodes whose job is to
+            execute a program (a "subgraph") which defines how to handle those
+            raw actions and how to "index" them into a format usable by the{" "}
+            <DchanNetwork /> client, and then serve the data needed to display
+            the content.
             <br />
             But that subgraph, as well the client served by <DchanNetwork />,
             and the server it is served from, and the domain that points to that
@@ -153,27 +161,43 @@ export function FAQCard({
             's owner, me.
             <br />
             That means I have total control over what <DchanNetwork />
-            's users can and cannot see, so it's fully possible for me to censor
-            content, change the rules as I please, ban whoever I like for
-            whatever reason I fancy, shut down the website, and whatever else I
-            deem necessary to protect myself and <DchanNetwork />
-            's users from malicious actors.
+            's users can and cannot see. I can censor content, change the rules
+            as I please, ban whoever I like for whatever reason, shut down the
+            website, and whatever else, and I will do whatever I consider
+            necessary to protect myself and <DchanNetwork />
+            's users and <DchanNetwork /> itself from malicious actors, up to
+            and including nuking everything. Absolutely nothing of value will be
+            lost.
             <br />
-            <i>HOWEVER.</i>
+            <i>
+              <u>HOWEVER</u>.
+            </i>
             <br />
-            That doesn't mean I can alter or delete the content itself.
-            Remember, the blockchain cannot be changed and images are stored on
-            IPFS, out of my reach.
+            I can only do that exclusively within <DchanNetwork />.
+            <br />
+            <i>I cannot alter or delete the content users posted.</i>
+            <br />
+            The blockchain cannot be changed and images are stored on IPFS.
+            Forever.
             <br />
             Thus, while I can arbitrarily choose to avoid displaying content on
-            my own website, it's fairly trivial for anyone to deploy a version
-            of the subgraph/client/website to display that content, regardless of
-            my decisions and actions.
+            my own website or outright kill everything, it's fairly trivial for
+            anyone to deploy a version of the subgraph/client/website/etc to
+            display all content regardless.
             <br />
-            (Also worth noting that, in the event that none of <TheGraph />
-            's indexers will be willing to serve the subgraph via the
-            decentralized network, it will still be possible to run a subgraph
-            node and retrieve the content in a centralized manner.)
+            In short, if you are not happy with the way <DchanNetwork /> is
+            moderated, I encourage you to fork off the code and make your own
+            instance, with (or without) all the posts and boards from this
+            website intact. (
+            <a
+              className="dchan-link"
+              href="//github.com/dchan-network/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub
+            </a>
+            )
             <br />
           </div>
         </div>
@@ -234,6 +258,17 @@ export function FAQCard({
             (if you're on Mobile). Other wallets might not be supported. You'll
             need to connect your crypto wallet to post on <DchanNetwork />, but
             it's not required if you just want to lurk.
+          </div>
+        </div>
+
+        <div className="pb-2">
+          <strong>
+            Q: Does <DchanNetwork /> use cookies?
+          </strong>
+          <div>
+            No. Web3 applications don't use centralized servers, and thus
+            cookies serve no purpose. To put it simply, if a "dapp" uses cookies
+            it's not true Web3.
           </div>
         </div>
 

@@ -10,8 +10,16 @@ import POST_SEARCH_BLOCK from "graphql/queries/post_search_block";
 import { Post } from "dchan";
 import { Link } from "react-router-dom";
 import { Router } from "router";
-import { Footer, ContentHeader, IdLabel, Loading } from "components";
-import PostComponent from "components/post/Post"
+import {
+  Footer,
+  ContentHeader,
+  IdLabel,
+  Loading,
+  SearchWidget,
+  LatestPostsCard,
+} from "components";
+import PostComponent from "components/post/Post";
+import Paging from "components/Paging";
 
 interface SearchData {
   postSearch: Post[];
@@ -21,11 +29,11 @@ interface SearchVars {
   search: string;
 }
 
-export default function PostSearchPage({ location, match: { params } }: any) {
+export default function PostsPage({ location, match: { params } }: any) {
   const query = parseQueryString(location.search);
   const s = query.s || query.search;
   const search = isString(s) ? s : "";
-
+  const page = parseInt(`${query.page || "1"}`);
   const block = parseInt(`${query.block}`);
   const queriedBlock = isNaN(block) ? undefined : `${block}`;
   const dateTime = query.date
@@ -35,7 +43,7 @@ export default function PostSearchPage({ location, match: { params } }: any) {
 
   const variables = {
     block,
-    search: search.length > 1 ? `${search}:*` : "",
+    search: search.length > 1 ? `${search}:*` : "*:*",
   };
 
   const { refetch, data, loading } = useQuery<SearchData, SearchVars>(
@@ -77,7 +85,7 @@ export default function PostSearchPage({ location, match: { params } }: any) {
         baseUrl={`${Router.posts()}${search ? `?s=${search}` : ""}`}
         block={queriedBlock}
         board={null}
-        title="Post Search"
+        title="Posts"
         summary={
           results ? (
             <span>
@@ -95,8 +103,24 @@ export default function PostSearchPage({ location, match: { params } }: any) {
         }
         onRefresh={refetch}
       />
+      <div className="relative">
+        <div className="flex justify-center md:justify-start p-2">
+          <SearchWidget
+            baseUrl={`${Router.posts()}${
+              queriedBlock ? `?block=${queriedBlock}` : ""
+            }`}
+            search={search}
+            open={true}
+          />
+          <span className="grid center bg-secondary border border-secondary-accent mx-2">
+            {!loading ? <Paging page={page} url={Router.posts()} /> : <span/>}
+          </span>
+        </div>
 
-      <div>
+        <div className="p-2">
+          <hr></hr>
+        </div>
+
         {loading ? (
           <div className="center grid">
             <Loading />
@@ -140,9 +164,15 @@ export default function PostSearchPage({ location, match: { params } }: any) {
                 </div>
               ))}
             </div>
+            <Paging page={page} url={Router.posts()} />
           </div>
+        ) : !!search ? (
+          <div className="py-4">No results</div>
         ) : (
-          "No results"
+          <div>
+            <LatestPostsCard limit={25} skip={page > 1 ? page * 25 : 0} />
+            <Paging page={page} url={Router.posts()} />
+          </div>
         )}
       </div>
 

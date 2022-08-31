@@ -4,6 +4,7 @@ import IPFSClientWidget from "./IPFSClientWidget";
 import FAQButton from "./FAQCard";
 import RulesButton from "./RulesCard";
 import AbuseButton from "./AbuseCard";
+import { name, version } from "../../package.json"
 
 export default function Footer({
   showContentDisclaimer = false,
@@ -19,7 +20,7 @@ export default function Footer({
         <footer className="mt-4">
           <div className="bg-primary flex mt-1 border-t border-top-tertiary-accent text-xs relative w-100vw overflow-visible">
             <div className="flex flex-wrap px-6 text-xs text-gray-600 w-screen">
-              <div className="pb-2 lg:pb-0 flex center dchan-footer-buttons">
+              <div className="pb-2 lg:pb-0 flex justify-center align-start items-start dchan-footer-buttons">
                 <RulesButton className="border border-tertiary-accent px-4 mx-1 bg-white" />
                 <AbuseButton className="border border-tertiary-accent px-4 mx-1 bg-white whitespace-nowrap" />
                 <FAQButton className="border border-tertiary-accent px-4 mx-1 bg-white" />
@@ -37,7 +38,7 @@ export default function Footer({
               </div>
               <div className="flex text-right justify-end flex-grow md:flex-shrink">
                 <details>
-                  <summary>v0.0.2</summary>
+                  <summary>{name} v{version}</summary>
                   <div>
                     <a
                       className="dchan-link"
