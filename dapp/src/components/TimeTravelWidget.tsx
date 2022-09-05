@@ -336,7 +336,6 @@ export default forwardRef(
         baseUrl,
         block,
         history,
-        travelToLatest,
         setPrevQueriedBlock,
         setWritingState,
         client,
