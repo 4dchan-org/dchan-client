@@ -280,37 +280,47 @@ export default function FormPost({
       const clipboardData =
         event.clipboardData || event.originalEvent.clipboardData;
       const { files, items } = clipboardData;
-      if (!!items && items.length > 0) {
-        const item = items[0];
-        if (item.kind === "file") {
-          const blob = item.getAsFile();
-          const reader = new FileReader();
-          reader.onload = async (event) => {
-            const dataUrl = event?.target?.result;
-            if (isString(dataUrl)) {
-              const mimeType = dataUrl.substring(
-                dataUrl.indexOf(":") + 1,
-                dataUrl.indexOf(";")
+      
+      let file
+      if (!!items && items.length) {
+        let i = 0
+        while(i < items.length) {
+          const item = items[i];
+          if (item.kind === "file") {
+            file = item.getAsFile();
+            break
+          }
+          i++
+        }
+      }
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+          const dataUrl = event?.target?.result;
+          if (isString(dataUrl)) {
+            const mimeType = dataUrl.substring(
+              dataUrl.indexOf(":") + 1,
+              dataUrl.indexOf(";")
+            );
+
+            const file = await fetch(dataUrl)
+              .then((res) => res.arrayBuffer())
+              .then(
+                (buf) =>
+                  new File([buf], `file.${mimeType.split("/")[1]}`, {
+                    type: mimeType,
+                  })
               );
 
-              const file = await fetch(dataUrl)
-                .then((res) => res.arrayBuffer())
-                .then(
-                  (buf) =>
-                    new File([buf], `file.${mimeType.split("/")[1]}`, {
-                      type: mimeType,
-                    })
-                );
+            const list = new DataTransfer();
+            list.items.add(file);
 
-              const list = new DataTransfer();
-              list.items.add(file);
-
-              setValue("file", list.files);
-              onFileChange();
-            }
-          };
-          reader.readAsDataURL(blob);
-        }
+            setValue("file", list.files);
+            onFileChange();
+          }
+        };
+        reader.readAsDataURL(file);
       } else if (!!files && files.length > 0) {
         setValue("file", files);
         onFileChange();
