@@ -61,7 +61,7 @@ export default function ContentHeader({
 
       <div className="text-center sm:text-left grid xl:grid-cols-3 text-xs">
         <div className="mx-2 flex flex-wrap sm:flex-nowrap justify-center md:justify-start items-center">
-          {board ? <ContentNavigation board={board} /> : <span />}
+          {board ? <ContentNavigation board={board} block={block} /> : <span />}
 
           {!block || (lastBlock && `${lastBlock.number}` === block) ? (
             <RefreshWidget onRefresh={throttledRefresh} />
