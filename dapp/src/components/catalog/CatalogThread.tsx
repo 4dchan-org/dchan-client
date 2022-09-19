@@ -3,7 +3,7 @@ import { IPFSImage, BoardLink } from "components";
 import PostBody from "components/post/PostBody";
 import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
 import { useSettings } from "hooks";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Router } from "router";
 import { DateTime } from "luxon";
 import { useState, useCallback } from "react";
@@ -45,12 +45,6 @@ const CatalogThread = ({
   );
 
   const [isFocused, setIsFocused] = useState<boolean>(false);
-  const history = useHistory();
-
-  const openThread = useCallback(() => {
-    const url = Router.thread(thread);
-    url && history.push(`${url}${block ? `?block=${block}` : ""}`);
-  }, [thread, history, block]);
 
   const focusThread = useCallback(() => {
     setIsFocused(true);
@@ -98,7 +92,7 @@ const CatalogThread = ({
         ) : (
           ""
         )}
-        <button className="h-full w-full" onClick={openThread}>
+        <Link to={`${Router.thread(thread) || "/"}${block ? `?block=${block}` : ""}`} className="h-full w-full">
           <div
             className={[
               !isFocused
@@ -178,7 +172,7 @@ const CatalogThread = ({
               </div>
             </div>
           </div>
-        </button>
+        </Link>
       </article>
     </div>
   );
