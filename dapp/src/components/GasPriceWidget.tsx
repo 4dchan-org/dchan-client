@@ -26,7 +26,7 @@ export default function GasPriceWidget() {
         <div className="text-gray-400 hover:text-gray-600">
           <a href="//polygonscan.com/gastracker" target="_blank" rel="noreferrer">
             ⛽️ Current est. tx price: {txPrice} MATIC @ {gweiPrice} gwei.{" "}
-            {txPrice !== 0 ? (
+            {txPrice !== 0 && balance ? (
               <span>(~{Math.floor(balance / txPrice)} posts left)</span>
             ) : (
               ""

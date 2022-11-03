@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef, useEffect } from "react";
+import useMouse from '@react-hook/mouse-position';
 import spoilerSrc from "assets/images/spoiler.png";
 import nsfwSrc from "assets/images/nsfw.png";
 import ipfsLoadingSrc from "assets/images/ipfs.png";
@@ -25,6 +26,11 @@ export default function IPFSImage({
   thumbnail?: boolean;
   thumbnailClass?: string;
 }) {
+  const mouseRef = useRef(null);
+  const mouse = useMouse(mouseRef, {
+    enterDelay: 100,
+    leaveDelay: 100
+  });
   const ipfsSrc = `https://ipfs.io/ipfs/${hash}`;
   const [imgError, setImgError] = useState<any>(false);
   const [imgLoading, setImgLoading] = useState<boolean>(true);
@@ -32,6 +38,7 @@ export default function IPFSImage({
   const [showSpoiler, setShowSpoiler] = useState<boolean>(false);
   const [showNsfw, setShowNsfw] = useState<boolean>(false);
   const [expand, setExpand] = useState<boolean>(!thumbnail);
+  const [hoverPosition, setHoverPosition] = useState<{x: number, y: number} | null>(null);
 
   thumbnailClass = thumbnail ? thumbnailClass : "";
   const canShow = (!isNsfw || showNsfw) && (!isSpoiler || showSpoiler);
@@ -42,8 +49,13 @@ export default function IPFSImage({
     setImgError(undefined);
   }, [ipfsSrc, setImgLoading, setImgSrc, setImgError]);
 
+  useEffect(() => {
+    mouse.screenX !== null && mouse.screenY !== null ? mouse.screenX && mouse.screenY && setHoverPosition({x: mouse.screenX, y: mouse.screenY}) : setHoverPosition(null)
+  }, [mouse, setHoverPosition])
+
+  console.log({mouse})
   return (
-    <span>
+    <span ref={mouseRef} className="relative">
       <img
         className={`${className} ${
           !expand || imgError ? thumbnailClass : ""
@@ -69,6 +81,16 @@ export default function IPFSImage({
         }}
         alt=""
       />
+      {hoverPosition && !imgLoading && !imgError ? <div className="absolute top-0 left-0 overflow-hidden pointer-events-none"><img
+        className={`fixed max-w-100vw max-h-100vh z-50 overflow-hidden`}
+        style={{
+          left: `${hoverPosition.x}px`,
+          top: `${hoverPosition.y}px`,
+          transform: "translate(-50%, -50%)"
+      }}
+        src={imgSrc}
+        alt=""
+      /></div> : <></>}
       <div className={`${className} relative`}>
         <span>
           <div>
@@ -80,9 +102,9 @@ export default function IPFSImage({
                     style={style}
                     src={ipfsLoadingSrc}
                     onClick={retry}
-                    alt=""
+                    alt={``}
                   />
-                  <div className="p-2">Loading...</div>
+                  <div className="p-2" title={`Retrieving image from IPFS.`}>Loading...</div>
                 </div>
               ) : imgError ? (
                 <div className="relative center grid">
@@ -91,7 +113,7 @@ export default function IPFSImage({
                     style={style}
                     src={ipfsErrorSrc}
                     onClick={retry}
-                    alt=""
+                    alt={``}
                   />
                   <div className="p-2">IPFS image load error</div>
                 </div>
@@ -105,8 +127,7 @@ export default function IPFSImage({
                   className={thumbnailClass}
                   src={spoilerSrc}
                   alt="SPOILER"
-                  onClick={() => setShowSpoiler(true)}
-                ></img>
+                  onClick={() => setShowSpoiler(true)}/>
               ) : (
                 ""
               )}
@@ -119,8 +140,7 @@ export default function IPFSImage({
                   className={thumbnailClass}
                   src={nsfwSrc}
                   alt="NSFW"
-                  onClick={() => setShowNsfw(true)}
-                ></img>
+                  onClick={() => setShowNsfw(true)}/>
               ) : (
                 ""
               )}
