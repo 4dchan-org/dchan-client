@@ -39,10 +39,7 @@ export default function WalletAccount() {
                   Or <a className="dchan-link" href="https://wallet.polygon.technology/gas-swap" target="_blank" rel="noreferrer">swap tokens for Matic.</a>
                 </div>
                 <div className="pt-2">
-                  Or buy some from <a className="dchan-link" href="https://changenow.io?link_id=f853ad9ab5b428" target="_blank" rel="noreferrer">changenow.io</a>
-                  <div className="grid center" style={{height: "30rem"}}>
-                    <iframe title="changenow" id='iframe-widget' src='https://changenow.io/embeds/exchange-widget/v2/widget.html?FAQ=true&amount=0.01&amountFiat=10&backgroundColor=FFFFFF&darkMode=false&from=usd&horizontal=true&isFiat&lang=en-US&link_id=f853ad9ab5b428&locales=true&logo=true&primaryColor=00C26F&to=matic&toFiat=matic&toTheMoon=true'  style={{height: "25rem"}}></iframe>
-                  </div>
+                  Or <a className="dchan-link" href="https://presearch.com/search?q=buy+matic" target="_blank" rel="noreferrer">buy some.</a>
                 </div>
                 </details>
               </div>
