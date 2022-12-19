@@ -57,6 +57,19 @@ export function DchanNetwork() {
   );
 }
 
+export function IPFS() {
+  return (
+    <a
+      className="dchan-link"
+      href="//ipfs.io/"
+      target="_blank"
+      rel="noreferrer"
+    >
+      IPFS
+    </a>
+  );
+}
+
 export function FAQCard({
   onExit,
   className,
@@ -79,8 +92,10 @@ export function FAQCard({
           <div>
             <DchanNetwork /> is a Web3 imageboard whose posts and images are
             respectively stored on <Polygon />
-            's blockchain and on IPFS, using <TheGraph /> to index and serve the
+            's blockchain and on <IPFS />, using <TheGraph /> to index and serve the
             content in a decentralized manner.
+            <br />
+            None of the content you see is hosted on <DchanNetwork />'s servers.
           </div>
         </div>
 
@@ -91,8 +106,9 @@ export function FAQCard({
             's backend was built using <TheGraph />, which is capable of
             obtaining data as it was at any point in time, allowing you to read{" "}
             <DchanNetwork />
-            's content exactly as it was whenever in the past. This also means
-            that there is no need for an archive, as it is already built in the
+            's content exactly as it was whenever in the past. 
+            <br />
+            This also means that there is no need for an archive, as it is already built in the
             protocol. Use the ⏳ button in the header to try it out!
           </div>
         </div>
@@ -107,17 +123,50 @@ export function FAQCard({
         </div>
 
         <div className="pb-2">
+          <strong>Q: How does this work?</strong>
+          <div>
+            <DchanNetwork />'s backend is comprised of the Polygon blockchain, IPFS, a subgraph, and a <a 
+              className="dchan-link" 
+              target="_blank"
+              rel="noreferrer"
+              href="https://polygonscan.com/address/0x5a139ee9f56c4f24240af366807490c171922b0e#code#L1">one-line smart contract</a>.
+            <br/>
+            Users interact with <DchanNetwork /> by writing their actions directly on the blockchain in JSON form, stating the intended operation and the payload; for example, making a post is as simple as making a transaction with:
+            <br />
+            <code>{`{"op":"post:create", "data":{"comment":"it's over"}}`}</code> 
+            <br />
+            This happens for every single action that alters the website state, such as creating a
+            post, a board, a thread, or for any moderator and administrator action, or every . {" "}
+            <br />
+            Those actions are then parsed by <TheGraph />
+            's indexers, a decentralized network of nodes whose job is to
+            execute a program (a "subgraph") which handles those
+            raw actions by "indexing" them into a format usable by the{" "}
+            <DchanNetwork /> client.
+            <br />
+            You can see the code for the subgraph here:
+            <br />
+            <a 
+              className="dchan-link" 
+              target="_blank"
+              rel="noreferrer"
+              href="https://github.com/dchan-network/dchan-subgraph">https://github.com/dchan-network/dchan-subgraph</a>
+            <br />
+            Please note that this is experimental software and that this is a very simplified explanation! 
+          </div>
+        </div>
+
+        <div className="pb-2">
           <strong>Q: Is it free?</strong>
           <div>
-            Yes, but also no.
+            Browsing <DchanNetwork /> is free, but in order to post you will need a
+            crypto wallet and some <Polygon /> to pay the transaction fee.
             <br />
-            Browsing <DchanNetwork /> is free, but to post you will need a
-            crypto wallet and some <Polygon /> to pay the TX fee.
+            At the time of writing this FAQ (December 2022) the transaction fee for a post is
+            around 0.001 MATIC, or around than ~$0.001 per post, so $10 worth of MATIC would allow you to
+            post more than 10000 times!
             <br />
-            At the time of writing this FAQ (August 2022) TX fees for a post is
-            around ~$0.001 per post, so $10 worth of MATIC would allow you to
-            post ~10000 times, although it is possible that fees will be higher
-            during high on-chain activity.
+            It is possible that fees will be higher during high on-chain activity.
             <br />
             You can get some free <Polygon /> at the following faucets:
             <div>
@@ -130,32 +179,9 @@ export function FAQCard({
         <div className="pb-2">
           <strong>Q: Is it uncensorable?</strong>
           <div>
-            Short answer: Yes, but <DchanNetwork /> can still hide content if
-            necessary.
+            Kind of. While the content and actions cannot be deleted from <Polygon /> and <IPFS />, <DchanNetwork /> can still refuse to show that content.
             <br />
-            Long answer:
-            <br />
-            While the content is stored on decentralized services (<Polygon />{" "}
-            and IPFS), the way it's served does have some centralization to it
-            and can therefore be censored (as of now, at least).
-            <br />
-            Again, posts are stored on the blockchain; more specifically, every
-            single action that alters the website state, such as creating a
-            post, a board, a thread, any moderator actions, etc ... is stored
-            publicly on the blockchain.{" "}
-            <i>
-              THESE RAW ACTIONS CANNOT BE DELETED NOR MODIFIED BY ANYONE.
-              FOREVER.
-            </i>
-            <br />
-            Those actions are then parsed by <TheGraph />
-            's indexers, a decentralized network of nodes whose job is to
-            execute a program (a "subgraph") which defines how to handle those
-            raw actions and how to "index" them into a format usable by the{" "}
-            <DchanNetwork /> client, and then serve the data needed to display
-            the content.
-            <br />
-            But that subgraph, as well the client served by <DchanNetwork />,
+            As of now, the subgraph, as well the client served by <DchanNetwork />,
             and the server it is served from, and the domain that points to that
             server ... are all controlled by <DchanNetwork />
             's owner, me.
@@ -163,51 +189,48 @@ export function FAQCard({
             That means I have total control over what <DchanNetwork />
             's users can and cannot see. I can censor content, change the rules
             as I please, ban whoever I like for whatever reason, shut down the
-            website, and whatever else, and I will do whatever I consider
-            necessary to protect myself and <DchanNetwork />
-            's users and <DchanNetwork /> itself from malicious actors, up to
-            and including nuking everything. Absolutely nothing of value will be
-            lost.
+            website, and anything else I consider necessary to protect <DchanNetwork />
+            's users, <DchanNetwork /> itself and myself from malicious actors.
             <br />
             <i>
               <u>HOWEVER</u>.
             </i>
             <br />
-            I can only do that exclusively within <DchanNetwork />.
+            <i><b>No one</b> can alter or delete the content users posted, nor can prevent users from performing actions on the blockchain.</i>
             <br />
-            <i>I cannot alter or delete the content users posted.</i>
+            What I can do, at most, is ignore malicious actions and hide malicious content.
             <br />
-            The blockchain cannot be changed and images are stored on IPFS.
-            Forever.
+            Even if I wanted to nuke absolutely everything, that still would only mean that, at best, I would not show content on <DchanNetwork />.
             <br />
-            Thus, while I can arbitrarily choose to avoid displaying content on
-            my own website or outright kill everything, it's fairly trivial for
-            anyone to deploy a version of the subgraph/client/website/etc to
-            display all content regardless.
-            <br />
-            In short, if you are not happy with the way <DchanNetwork /> is
-            moderated, I encourage you to fork off the code and make your own
-            instance, with (or without) all the posts and boards from this
-            website intact. (
-            <a
-              className="dchan-link"
-              href="//github.com/dchan-network/"
+            It is still possible for anyone to deploy a client and subgraph that bypasses this censoring, as every action and content posted is public and <b>undeletable</b>.
+          </div>
+        </div>
+
+        <div className="pb-2">
+          <strong>Q: How do I post?</strong>
+          <div>
+            You'll need to install{" "}
+            <a className="dchan-link" 
               target="_blank"
-              rel="noreferrer"
-            >
-              GitHub
-            </a>
-            )
-            <br />
+              rel="noreferrer" 
+              href="//metamask.io">
+              Metamask
+            </a>{" "}
+            (if you're on Desktop) or{" "}
+            <a className="dchan-link" 
+              target="_blank"
+              rel="noreferrer" 
+              href="//trustwallet.com/">
+              Trust Wallet
+            </a>{" "}
+            (if you're on Mobile). Other wallets might not be supported. You'll
+            need to connect your crypto wallet to post on <DchanNetwork />.
           </div>
         </div>
 
         <div className="pb-2">
           <strong>Q: Are posts anonymous?</strong>
           <div>
-            No. Or rather, they are as anonymous as the address they're posted
-            from.
-            <br />
             Due to the public nature of the blockchain, posts are directly tied
             to whoever signed the post, meaning that{" "}
             <u>
@@ -218,46 +241,11 @@ export function FAQCard({
             </u>
             .
             <br />
-            Please keep that in mind when posting.
-          </div>
-        </div>
-
-        <div className="pb-2">
-          <strong>
-            Q: Oh crap oh no I posted something I shouldn't have, how can I
-            delete it?
-          </strong>
-          <div>
-            Too bad.
+            Please keep this in mind when posting.
             <br />
-            Once you post on the blockchain, it's forever.
+            Because every poster's wallet address is public, it is treated as that poster's <i>pseudonym</i> across the entire network: if the same address posts in two different threads/boards, it will have the same "ID".
             <br />
-            You cannot delete it.
-            <br />
-            You cannot change it.
-            <br />
-            <u>
-              <i>The blockchain never forgets.</i>
-            </u>
-            <br />
-            Please keep that in mind when posting.
-          </div>
-        </div>
-
-        <div className="pb-2">
-          <strong>Q: How do I post?</strong>
-          <div>
-            You'll need to install{" "}
-            <a className="dchan-link" href="//metamask.io">
-              Metamask
-            </a>{" "}
-            (if you're on Desktop) or{" "}
-            <a className="dchan-link" href="//trustwallet.com/">
-              Trust Wallet
-            </a>{" "}
-            (if you're on Mobile). Other wallets might not be supported. You'll
-            need to connect your crypto wallet to post on <DchanNetwork />, but
-            it's not required if you just want to lurk.
+            In short: If you want to be as anonymous as possible, use the faucet and change account after every post.  If you want to be a tripfag, use your ENS-associated address.
           </div>
         </div>
 
@@ -279,9 +267,61 @@ export function FAQCard({
           </strong>
           <div>
             <DchanNetwork /> does not require any token to function except{" "}
-            <Polygon /> for sending txs, so no.
+            <Polygon /> for actions such as posting or creating boards, so no.
             <br />
-            This may change in the future.
+            This will change in the future.
+          </div>
+        </div>
+
+        <div className="pb-2">
+          <strong>
+            Q: I acted like a dipshit and got banned! What about muh free speech?
+          </strong>
+          <div>
+            If you are not happy with the way <DchanNetwork /> is
+            moderated, I encourage you to fork off the code and make your own
+            instance, with (or without) all the posts and boards from this
+            website intact. (
+            <a
+              className="dchan-link"
+              href="//github.com/dchan-network/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub
+            </a>
+            )
+            <br />
+          </div>
+        </div>
+
+        <div className="pb-2">
+          <strong>
+            Q: Oh crap oh no I posted something I shouldn't have, how can I
+            delete it?
+          </strong>
+          <div>
+            Too bad.
+            <br />
+            Once you post on the blockchain, it's forever.
+            <br />
+            You cannot delete it.
+            <br />
+            You cannot change it.
+            <br />
+            <u>
+              <i>The blockchain never forgets.</i>
+            </u>
+            <br />
+            Please keep this in mind when posting.
+          </div>
+        </div>
+
+        <div className="pb-2">
+          <strong>Q: Can I run this locally?</strong>
+          <div>
+            If you're on desktop you can save the page and open it with your browser, so that if dchan.network ever goes down you can still use the client. <br/>
+            You may incur in some bugs like missing logos or being unable to post, but you should be able to view the content just fine, as long as you are online and the subgraph is being served.
           </div>
         </div>
 

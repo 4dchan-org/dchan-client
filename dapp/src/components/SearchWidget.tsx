@@ -5,7 +5,7 @@ import { debounce } from "lodash";
 export default function SearchWidget({
   baseUrl,
   search = "",
-  open = false
+  open = true
 }: {
   baseUrl: string;
   search?: string;
