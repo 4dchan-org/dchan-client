@@ -179,7 +179,7 @@ export default function ThreadPage({
               ))}
             </div>
 
-            <div className="flex text-xs pr-1 sticky bottom-0 z-50">
+            <div className="flex text-xs pr-1 sticky bottom-0 z-40">
               <span className="flex bg-primary pl-2 rounded ">
                 <span className="pr-1">
                   <Anchor to="#board-header" label="Top" />

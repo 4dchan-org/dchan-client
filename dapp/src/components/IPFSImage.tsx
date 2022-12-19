@@ -51,7 +51,7 @@ export default function IPFSImage({
   }, [ipfsSrc, setImgLoading, setImgSrc, setImgError]);
 
   useEffect(() => {
-    const { width, height } = imgRef.current || {width: 0, height: 0}
+    const { naturalWidth: width, naturalHeight: height } = imgRef.current || {naturalWidth: 0, naturalHeight: 0}
     mouse.screenX !== null && mouse.screenY !== null ? mouse.screenX && mouse.screenY && setHoverPosition({x: Math.max(width / 2, Math.min(window.outerWidth - width / 2, mouse.screenX)), y: Math.max(height / 2, Math.min(window.outerHeight - height / 2, mouse.screenY))}) : setHoverPosition(null)
   }, [imgRef, mouse, setHoverPosition])
 
@@ -81,6 +81,7 @@ export default function IPFSImage({
           setImgError(e);
         }}
         alt=""
+        ref={imgRef}
       />
       {hoverPosition && !imgLoading && !imgError ? <div className="absolute top-0 left-0 overflow-hidden pointer-events-none"><img
         className={`fixed max-w-100vw max-h-100vh z-50 overflow-hidden`}
@@ -91,7 +92,6 @@ export default function IPFSImage({
       }}
         src={imgSrc}
         alt=""
-        ref={imgRef}
       /></div> : <></>}
       <div className={`${className} relative`}>
         <span>
