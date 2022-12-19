@@ -39,6 +39,7 @@ export default function IPFSImage({
   const [showNsfw, setShowNsfw] = useState<boolean>(false);
   const [expand, setExpand] = useState<boolean>(!thumbnail);
   const [hoverPosition, setHoverPosition] = useState<{x: number, y: number} | null>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   thumbnailClass = thumbnail ? thumbnailClass : "";
   const canShow = (!isNsfw || showNsfw) && (!isSpoiler || showSpoiler);
@@ -50,10 +51,10 @@ export default function IPFSImage({
   }, [ipfsSrc, setImgLoading, setImgSrc, setImgError]);
 
   useEffect(() => {
-    mouse.screenX !== null && mouse.screenY !== null ? mouse.screenX && mouse.screenY && setHoverPosition({x: mouse.screenX, y: mouse.screenY}) : setHoverPosition(null)
-  }, [mouse, setHoverPosition])
+    const { width, height } = imgRef.current || {width: 0, height: 0}
+    mouse.screenX !== null && mouse.screenY !== null ? mouse.screenX && mouse.screenY && setHoverPosition({x: Math.max(width / 2, Math.min(window.outerWidth - width / 2, mouse.screenX)), y: Math.max(height / 2, Math.min(window.outerHeight - height / 2, mouse.screenY))}) : setHoverPosition(null)
+  }, [imgRef, mouse, setHoverPosition])
 
-  console.log({mouse})
   return (
     <span ref={mouseRef} className="relative">
       <img
@@ -90,6 +91,7 @@ export default function IPFSImage({
       }}
         src={imgSrc}
         alt=""
+        ref={imgRef}
       /></div> : <></>}
       <div className={`${className} relative`}>
         <span>
