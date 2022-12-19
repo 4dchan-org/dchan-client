@@ -29,7 +29,6 @@ export default function SearchWidget({
 
   const resetSearch = useCallback(() => {
     setSearch("");
-    console.log({inputRef})
     if(!!inputRef?.current) {
       (inputRef as any).current.value = ""
     }

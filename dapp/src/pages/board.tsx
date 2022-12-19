@@ -105,7 +105,6 @@ export default function BoardPage({
   });
 
   const board: Board | undefined | null = boardData?.board;
-  const boardRef: BoardRef | undefined | null = boardData?.boardRef;
   const threads = useMemo(
     () => [...(catalogData?.pinned || []), ...(catalogData?.threads || [])],
     [catalogData]
@@ -116,12 +115,10 @@ export default function BoardPage({
   }, [board?.id]);
 
   useEffect(() => {
-    board && board.name !== board_name && history.replace(`/${board.id}`);
+    if(board && board.name !== board_name) {
+      history.replace(`/${board.id}`);
+    }
   }, [board, board_name, history]);
-
-  useEffect(() => {
-    !board && boardRef?.board?.id && history.replace(`/${boardRef.board.id}`);
-  }, [board, boardRef, history]);
 
   useEffect(() => {
     refetch();
@@ -237,7 +234,7 @@ export default function BoardPage({
           {board ? (
             <div>
               <hr />
-              <Paging url={location.pathname} page={page} maxPage={maxPage} block={block} />
+              <Paging url={location.pathname} page={page} maxPage={maxPage} block={queriedBlock} />
 
               <Anchor to="#board-header" label="Top" />
             </div>
