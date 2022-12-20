@@ -24,6 +24,7 @@ const useFavorites = singletonHook<{
     }, [settings, setSettings])
 
     const addFavorite = useCallback((thread: Thread) => {
+        console.log({thread})
         setSettings({
             ...settings,
             favorites: {

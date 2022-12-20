@@ -91,11 +91,14 @@ export default function PostHeader({
   const { provider, accounts } = useWeb3();
   const { publish } = usePubSub();
   const [settings] = useSettings();
-  const { isJannyOf } = useUser();
+  const selfUser = useUser();
+  const postUser = useUser(address);
   const isOwner = accounts.length > 0 && accounts[0] === address;
   const [status, setStatus] = useState<string | object>();
 
-  const isJanny = thread?.board?.id ? isJannyOf(thread.board.id) : false;
+  const isSelfJanny = thread?.board?.id && selfUser.isJannyOf(thread.board.id);
+  const isPostUserAdmin = postUser.isAdmin()
+  const isPostUserJanny = thread?.board?.id && postUser.isJannyOf(thread?.board.id)
 
   const replyTo = useCallback(
     (from: string, n: number | string) => {
@@ -126,10 +129,10 @@ export default function PostHeader({
   const isLocked = thread?.isLocked;
 
   const isOp = id === thread?.id;
-  const canPin = isOp && isJanny;
-  const canRemove = isOwner || isJanny;
-  const canBan = isJanny;
-  const canLock = isOp && (isOwner || isJanny);
+  const canPin = isOp && isSelfJanny;
+  const canRemove = isOwner || isSelfJanny;
+  const canBan = isSelfJanny;
+  const canLock = isOp && (isOwner || isSelfJanny);
   const postBacklinks: Post[] = backlinks ? Object.values(backlinks) : [];
 
   const { isFavorite, addFavorite, removeFavorite } = useFavorites();
@@ -163,8 +166,9 @@ export default function PostHeader({
         <span></span>
       )}
       <span className="px-0.5 whitespace-nowrap">
-        <span className="text-accent font-bold">
+        <span className={`font-bold font-size-090rem ${isPostUserAdmin ? "text-red-600" : isPostUserJanny ? "text-purple-600" : "text-accent"}`} title={isPostUserAdmin ? "This user is an administrator." : isPostUserJanny ? "This user is a moderator for this board." : ""}>
           {!name || "" === name ? "Anonymous" : name}
+          {isPostUserAdmin ? " ## Admin" : isPostUserJanny ? " ## Mod" : ""}
         </span>
       </span>
       <span className="px-1 whitespace-nowrap text-sm">

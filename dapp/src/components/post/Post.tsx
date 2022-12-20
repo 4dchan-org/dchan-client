@@ -29,14 +29,6 @@ function Post({
   showNsfw?: boolean;
   showPostMarker?: boolean;
 }) {
-  const { data: userData } = useUser();
-  const [showAnyway, setShowAnyway] = useState<boolean>(false);
-  const [isFocused, setIsFocused] = useState<boolean>(false);
-  const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
-  const [backlinks, setBacklinks] = useState<object>({});
-  const postRef = useRef<HTMLInputElement>(null);
-  const { subscribe, unsubscribe } = usePubSub();
-
   let {
     id,
     from: { id: address },
@@ -44,6 +36,14 @@ function Post({
     image,
     bans,
   } = post;
+
+  const { data: selfUserData } = useUser();
+  const [showAnyway, setShowAnyway] = useState<boolean>(false);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
+  const [backlinks, setBacklinks] = useState<object>({});
+  const postRef = useRef<HTMLInputElement>(null);
+  const { subscribe, unsubscribe } = usePubSub();
 
   const onFocus = useCallback(() => {
     postRef.current?.scrollIntoView();
@@ -112,7 +112,7 @@ function Post({
   const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
   const ipfsUrlURIComponent = encodeURIComponent(ipfsUrl);
   const isOp = id === thread?.id;
-  const isYou = userData?.user?.id === post.from.id;
+  const isYou = selfUserData?.user?.id === post.from.id;
   const [settings] = useSettings();
   const bIsLowScore = isLowScore(
     post,

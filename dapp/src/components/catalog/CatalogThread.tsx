@@ -3,7 +3,7 @@ import { IPFSImage, BoardLink } from "components";
 import PostBody from "components/post/PostBody";
 import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
 import { useSettings } from "hooks";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Router } from "router";
 import { DateTime } from "luxon";
 import { useState, useCallback } from "react";
@@ -38,6 +38,7 @@ const CatalogThread = ({
 
   const imgClassName =
     "w-full pointer-events-none shadow-xl object-contain max-h-320px";
+  const history = useHistory();
   const [settings] = useSettings();
   const isLowScore = isLowScoreThread(
     thread,
@@ -45,6 +46,10 @@ const CatalogThread = ({
   );
 
   const [isFocused, setIsFocused] = useState<boolean>(false);
+
+  const goToThread = useCallback(() => {
+    history.push(`${Router.thread(thread) || "/"}${block ? `?block=${block}` : ""}`)
+  }, [history, thread, block])
 
   const focusThread = useCallback(() => {
     setIsFocused(true);
@@ -92,7 +97,7 @@ const CatalogThread = ({
         ) : (
           ""
         )}
-        <Link to={`${Router.thread(thread) || "/"}${block ? `?block=${block}` : ""}`} className="h-full w-full">
+        <div onClick={goToThread} className="h-full w-full">
           <div
             className={[
               !isFocused
@@ -172,7 +177,7 @@ const CatalogThread = ({
               </div>
             </div>
           </div>
-        </Link>
+        </div>
       </article>
     </div>
   );

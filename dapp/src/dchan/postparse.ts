@@ -156,7 +156,7 @@ const txHashReference: Parjser<TxHashReferenceValue> = regexp(
 ).pipe(map((vals) => ({ type: "txhashref", key: vals[1], id: vals[1] })));
 
 const postReference: Parjser<PostReferenceValue> = regexp(
-  />>(0[xX][0-9a-fA-F]+)\/(\d+)/
+  />>(?:(0[xX][0-9a-fA-F]+)\/)?(\d+)/
 ).pipe(
   map((vals) => ({
     type: "postref",

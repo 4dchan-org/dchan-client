@@ -90,9 +90,7 @@ export function FAQCard({
         <div className="pb-2">
           <strong>Q: ...Decentralized?</strong>
           <div>
-            <DchanNetwork /> is a Web3 imageboard whose posts and images are
-            respectively stored on <Polygon />
-            's blockchain and on <IPFS />, using <TheGraph /> to index and serve the
+            <DchanNetwork /> is a Web3 imageboard whose posts are stored on <Polygon />'s blockchain and whose images are stored on <IPFS />, using <TheGraph /> to index and serve the
             content in a decentralized manner.
             <br />
             None of the content you see is hosted on <DchanNetwork />'s servers.
@@ -103,10 +101,10 @@ export function FAQCard({
           <strong>Q: ...Time-Traveling?</strong>
           <div>
             <DchanNetwork />
-            's backend was built using <TheGraph />, which is capable of
-            obtaining data as it was at any point in time, allowing you to read{" "}
+            's backend is powered by <TheGraph />, which is capable of
+            obtaining data as it was at any point in time, allowing you to browse{" "}
             <DchanNetwork />
-            's content exactly as it was whenever in the past. 
+            's content exactly as it was whenever in the past.
             <br />
             This also means that there is no need for an archive, as it is already built in the
             protocol. Use the ⏳ button in the header to try it out!
@@ -125,34 +123,23 @@ export function FAQCard({
         <div className="pb-2">
           <strong>Q: How does this work?</strong>
           <div>
-            <DchanNetwork />'s backend is comprised of the Polygon blockchain, IPFS, a subgraph, and a <a 
+            Simply put, users interact with <DchanNetwork /> by performing their actions directly on the blockchain through a <a 
               className="dchan-link" 
               target="_blank"
               rel="noreferrer"
               href="https://polygonscan.com/address/0x5a139ee9f56c4f24240af366807490c171922b0e#code#L1">one-line smart contract</a>.
-            <br/>
-            Users interact with <DchanNetwork /> by writing their actions directly on the blockchain in JSON form, stating the intended operation and the payload; for example, making a post is as simple as making a transaction with:
             <br />
-            <code>{`{"op":"post:create", "data":{"comment":"it's over"}}`}</code> 
+            For example, a user can create a thread by writing a JSON stating: I want create a post on this board, with the comment "it's over" and an IPFS reference to crying_pepe.jpg.
             <br />
-            This happens for every single action that alters the website state, such as creating a
-            post, a board, a thread, or for any moderator and administrator action, or every . {" "}
-            <br />
-            Those actions are then parsed by <TheGraph />
-            's indexers, a decentralized network of nodes whose job is to
-            execute a program (a "subgraph") which handles those
-            raw actions by "indexing" them into a format usable by the{" "}
-            <DchanNetwork /> client.
-            <br />
-            You can see the code for the subgraph here:
-            <br />
-            <a 
+            The contract only acts as a public record of all of <DchanNetwork />'s users' actions, which are then parsed as a sequence of events by <a 
               className="dchan-link" 
               target="_blank"
               rel="noreferrer"
-              href="https://github.com/dchan-network/dchan-subgraph">https://github.com/dchan-network/dchan-subgraph</a>
+              href="https://github.com/dchan-network/dchan-subgraph">a subgraph</a> running on <TheGraph />
+            's indexer network, whose job is to "make sense" of these raw actions into a simple GraphQL schema, which is then used by{" "}
+            <DchanNetwork />'s client to retrieve the content.
             <br />
-            Please note that this is experimental software and that this is a very simplified explanation! 
+            Please note that this is experimental software and that this is a <i>very</i> simplified explanation! 
           </div>
         </div>
 
@@ -183,11 +170,10 @@ export function FAQCard({
             <br />
             As of now, the subgraph, as well the client served by <DchanNetwork />,
             and the server it is served from, and the domain that points to that
-            server ... are all controlled by <DchanNetwork />
-            's owner, me.
+            server ... are all controlled by <DchanNetwork />'s owner, me.
             <br />
             That means I have total control over what <DchanNetwork />
-            's users can and cannot see. I can censor content, change the rules
+            's users can and cannot see; I can censor content, change the rules
             as I please, ban whoever I like for whatever reason, shut down the
             website, and anything else I consider necessary to protect <DchanNetwork />
             's users, <DchanNetwork /> itself and myself from malicious actors.
@@ -196,13 +182,11 @@ export function FAQCard({
               <u>HOWEVER</u>.
             </i>
             <br />
-            <i><b>No one</b> can alter or delete the content users posted, nor can prevent users from performing actions on the blockchain.</i>
+            <i><b>No one</b> can alter or delete the content users posted or the actions they performed, nor can prevent users from further interacting with the contract.</i>
             <br />
-            What I can do, at most, is ignore malicious actions and hide malicious content.
+            What I can do, at most, is ignore malicious actions and hide malicious content, meaning that even if I wanted to nuke absolutely everything, that still would only mean that, at best, I would not show content on <DchanNetwork />.
             <br />
-            Even if I wanted to nuke absolutely everything, that still would only mean that, at best, I would not show content on <DchanNetwork />.
-            <br />
-            It is still possible for anyone to deploy a client and subgraph that bypasses this censoring, as every action and content posted is public and <b>undeletable</b>.
+            It would still possible for anyone to deploy a client and subgraph that bypasses this censoring, as every action and content posted is public and <b>undeletable</b>.
           </div>
         </div>
 
@@ -320,8 +304,8 @@ export function FAQCard({
         <div className="pb-2">
           <strong>Q: Can I run this locally?</strong>
           <div>
-            If you're on desktop you can save the page and open it with your browser, so that if dchan.network ever goes down you can still use the client. <br/>
-            You may incur in some bugs like missing logos or being unable to post, but you should be able to view the content just fine, as long as you are online and the subgraph is being served.
+            You can run the client locally... somewhat. If you're on desktop, you can save the page and open it with your browser, so that if dchan.network ever goes down you can still use the client. <br/>
+            You may incur in some bugs like missing logos or being unable to post, but you should be able to view the content just fine as long as you are online.
           </div>
         </div>
 

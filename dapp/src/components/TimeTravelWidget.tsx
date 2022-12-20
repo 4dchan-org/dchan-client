@@ -180,7 +180,6 @@ export default forwardRef(
     const changeBlock = useCallback(
       (block: Block) => {
         setCurrentBlock(block);
-        //setTimeTraveledToNumber(`${block.number}`);
         setTimeTraveledToDate(DateTime.fromSeconds(parseInt(block.timestamp)));
       },
       [setTimeTraveledToDate]
@@ -528,17 +527,17 @@ export default forwardRef(
                     onChange={(e) => onDateChange(e.target.value)}
                     min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
                     max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
-                  ></input>
+                  />
                   ]
                 </span>
               </div>
               <div className="grid align-center text-xs w-full">
                 <span className="mx-auto">
-                  <span className="dchan-link mr-2" onClick={getPrevBlock}>&lt;&lt;&lt;</span>
+                  <span className="dchan-link mr-2" onClick={getPrevBlock}>&lt;</span>
                   <button className="dchan-link" onClick={onInputBlockNumber}>
                     {`Block #${timeTraveledToNumber || "????????"}`}
                   </button>
-                  <span className="dchan-link ml-2" onClick={getNextBlock}>&gt;&gt;&gt;</span>
+                  <span className="dchan-link ml-2" onClick={getNextBlock}>&gt;</span>
                 </span>
 
                 {isTimeTraveling ? (
@@ -563,7 +562,7 @@ export default forwardRef(
                     min={parseInt(timeTravelRange.min.number)}
                     max={parseInt(timeTravelRange.max.number)}
                     onChange={(e) => onBlockNumberChange(e.target.value)}
-                    value={timeTraveledToNumber}
+                    value={timeTraveledToNumber ? timeTraveledToNumber : 0}
                   />{" "}
                   <span className="mx-1">Now</span>
                 </div>

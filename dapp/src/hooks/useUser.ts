@@ -12,9 +12,9 @@ interface UserVars {
   address: string;
 }
 
-const useUser = () => {
+const useUser = (userAddress?: string) => {
   const { accounts } = useWeb3()
-  const address = accounts.length > 0 ? accounts[0] : ""
+  const address = userAddress ?? (accounts.length > 0 ? accounts[0] : "")
 
   const query = useQuery<UserData, UserVars>(USER_GET, {
     variables: { address },

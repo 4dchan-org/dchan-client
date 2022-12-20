@@ -91,15 +91,14 @@ export default function ThreadPage({
             return idCheck && numCheck;
           })
         : [];
-    if (filtered.length === 1) {
+    // @NOTE It is possible multiple posts will be found, as per https://dchan.network/#/0x19110a8734d710406836a2b4a7f5f61ddf3743181029b8e2ff3826c6c916f1d5
+    if (filtered.length > 0) {
       const post = filtered[0];
       // redirect to standard URL no matter what
       // if the real URL is invalid, it'll get replaced
       // if it's already in use, this will just raise a warning in the console
       history.replace(`${Router.post(post)}${block ? `?block=${block}` : ""}`);
       publish("POST_FOCUS", post);
-    } else if (filtered.length > 1) {
-      throw new Error("Somehow multiple posts were focused?");
     } else if (!loading && focus_user_id && focus_post_n) {
       history.replace(`/${focus_user_id}/${focus_post_n}`);
     }

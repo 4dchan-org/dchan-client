@@ -3,7 +3,7 @@ import parseComment, {
   ParserResult,
   PostReferenceValue,
 } from "dchan/postparse";
-import { ReactElement, useCallback, useEffect, useMemo, memo } from "react";
+import { ReactElement, useCallback, useEffect, useMemo, memo, useState } from "react";
 import usePubSub from "hooks/usePubSub";
 import useWeb3 from "hooks/useWeb3";
 import { isEqual } from "lodash";
@@ -70,17 +70,19 @@ function PostReference({
   block?: string;
 }) {
   const { publish } = usePubSub();
-  const postLink = `${value.id}/${value.n}`;
+  const postLink = value.id ? `${value.id}/${value.n}` : value.n;
 
   const refPost = useMemo(
     () =>
       thread &&
       [thread.op, ...(thread.replies || [])].find(
         (p) =>
-          `${p.from.id}/${p.n}` === postLink ||
-          `0x${shortenAddress(p.from.id).replace("-", "")}/${p.n}` === postLink
+          value.id ? (`${p.from.id}/${p.n}` === postLink ||
+          `0x${shortenAddress(p.from.id).replace("-", "")}/${p.n}` === postLink) : (
+            p.n === value.n
+          )
       ),
-    [thread, postLink]
+    [thread, value, postLink]
   );
 
   useEffect(() => {
@@ -186,6 +188,26 @@ function IPFSImage({ hash }: { hash: string }) {
   );
 }
 
+function YoutubeLink({url, id}: {url: string, id: string}) {
+  const [isEnabled, setIsEnabled] = useState(false)
+  const onClick = useCallback(() => {
+    setIsEnabled(!isEnabled)
+  }, [isEnabled, setIsEnabled])
+
+  return (
+    <span>
+        <ExternalLink link={url} /> <button className="dchan-link" onClick={onClick} >({isEnabled ? "unembed" : "embed"})</button>
+        {isEnabled ? <iframe
+          title={`Youtube video ${id}`}
+          itemType="text/html"
+          src={`//www.youtube.com/embed/${id}`}
+          allowFullScreen={true}
+          frameBorder="0"
+          ></iframe> : ""}
+    </span>
+  );
+}
+
 function renderValue(
   val: ParserResult,
   post: Post,
@@ -250,16 +272,7 @@ function renderValue(
       );
     case "youtubelink":
       return (
-        <details key={val.key}>
-          <summary><ExternalLink link={val.url} /></summary>
-          <iframe
-            title={`Youtube video ${val.id}`}
-            itemType="text/html"
-            src={`//www.youtube.com/embed/${val.id}`}
-            allowFullScreen={true}
-            frameBorder="0"
-          ></iframe>
-        </details>
+        <YoutubeLink key={val.key} url={val.url} id={val.id} />
       );
   }
 }
