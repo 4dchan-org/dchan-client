@@ -129,7 +129,7 @@ export default function PostsPage({ location, match: { params } }: any) {
           <div>
             <div>
               {results?.map((post) => (
-                <div className="p-2 flex flex-wrap">
+                <div className="p-2 flex flex-wrap" key={post.id}>
                   <PostComponent
                     key={post.id}
                     post={post}
