@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { Router } from "router";
 import BoardLink from "./BoardLink";
 import Loading from "./Loading";
+import Twemoji from "./Twemoji";
 
 export default function WatchedThreadsWidget({ block }: { block?: string }) {
   const { favorites, removeFavorite } = useFavorites();
@@ -54,7 +55,7 @@ export default function WatchedThreadsWidget({ block }: { block?: string }) {
 
               return (
                 <div key={thread.id}>
-                  <button onClick={() => onRemove(thread)}>✖</button>{" "}
+                  <button onClick={() => onRemove(thread)}><Twemoji emoji={"✖"} /></button>{" "}
                   {board ? (
                     <span>
                       <BoardLink board={board} block={block} />
@@ -71,17 +72,15 @@ export default function WatchedThreadsWidget({ block }: { block?: string }) {
                     {truncate(thread.subject || thread.op.comment, {
                       length: 32,
                     })}{" "}
-                    {thread.isLocked ? "🔒" : ""}{" "}
-                    {thread.isPinned ? "📌" : ""}
+                    {thread.isLocked ? <Twemoji emoji={"🔒"} /> : ""}{" "}
+                    {thread.isPinned ? <Twemoji emoji={"📌"} /> : ""}
                   </Link>
                 </div>
               );
             })}
           </div>
         </div>
-      ) : (
-        "No threads are being watched. Use the 👁 button on threads to keep track of them here."
-      )}
+      ) : <span>No threads are being watched. Use the <Twemoji emoji={"❤️"} /> button on threads to keep track of them here.</span>}
     </div>
   ) : (
     <div className="bg-primary border border-secondary-accent p-1">

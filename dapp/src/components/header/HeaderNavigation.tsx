@@ -8,7 +8,8 @@ import { Router } from "router";
 import {
   BoardLink,
   TimeTravelWidget,
-  WatchedThreadsWidget
+  WatchedThreadsWidget,
+  Twemoji
 } from "components";
 import OverlayComponent from "components/OverlayComponent";
 import SettingsWidget from "components/SettingsWidget";
@@ -138,11 +139,11 @@ export default function HeaderNavigation({
             className="dchan-link"
             to={`${Router.posts()}${block ? `?block=${block}` : ""}`}
           >
-            🔍
+            <Twemoji emoji={"🔍"} />
           </Link>
           ]
         </span>
-        <span className="float-right flex flex-row">
+        <span className="float-right flex flex-row mx-1">
           <ApolloConsumer>
             {(client: ApolloClient<any>) => (
               <TimeTravelWidget
@@ -167,7 +168,7 @@ export default function HeaderNavigation({
             )}
           </ApolloConsumer>
           <details
-            className="w-full sm:relative mx-1"
+            className="mx-1"
             open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS}
             ref={watchedThreadsRef}
           >
@@ -182,7 +183,7 @@ export default function HeaderNavigation({
                 );
               }}
             >
-              👁
+              <Twemoji emoji={"❤️"} />
             </summary>
             <div className={widgetClass}>
               <WatchedThreadsWidget block={block} />
@@ -199,7 +200,7 @@ export default function HeaderNavigation({
               );
             }}
           >
-            ⚙️
+            <Twemoji emoji={"⚙️"} />
             {openedWidget === OpenedWidgetEnum.SETTINGS ? (
               <SettingsWidgetOverlay
                 onExit={() => setOpenedWidget(null)}

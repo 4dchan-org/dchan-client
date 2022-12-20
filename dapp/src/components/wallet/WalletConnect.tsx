@@ -1,4 +1,4 @@
-import { StillStuck } from "components";
+import { StillStuck, Twemoji } from "components";
 import { useWeb3 } from "hooks";
 import { useCallback, useState } from "react";
 
@@ -35,7 +35,7 @@ export default function WalletConnect() {
         ]
       </div>
       <span className="text-sm">
-      {hasError ? <span>⚠️ Something went wrong. <br/>Check that your wallet is unlocked and doesn't have any pending modals, then try again.</span> : ""}
+      {hasError ? <span><Twemoji emoji={"⚠️"} /> Something went wrong. <br/>Check that your wallet is unlocked and doesn't have any pending modals, then try again.</span> : ""}
       {!hasError && isConnecting ? <StillStuck ms={2000}><span>If the above button does not work, try unlocking your wallet first, then retry.</span></StillStuck> : ""}
       </span>
       {!provider ? (

@@ -2,7 +2,7 @@ import HeaderNavigation from "components/header/HeaderNavigation";
 import HeaderLogo from "components/header/logo";
 import { Board, Thread } from "dchan";
 import { Link } from "react-router-dom";
-import { Status, IdLabel, Menu } from "components";
+import { Status, IdLabel, Menu, Twemoji } from "components";
 import { useState } from "react";
 import { lockBoard, removeBoard, unlockBoard } from "dchan/operations";
 import { useUser, useWeb3 } from "hooks";
@@ -53,7 +53,7 @@ export default function BoardHeader({
         <div>
           <span>
             {board?.isLocked ? (
-              <span title="Board locked. You cannot reply anymore.">🔒</span>
+              <span title="Board locked. You cannot reply anymore."><Twemoji emoji={"🔒"} /></span>
             ) : (
               <span></span>
             )}
@@ -88,7 +88,7 @@ export default function BoardHeader({
                             unlockBoard(board?.id, accounts, setStatus)
                           }
                         >
-                          🔓 Unlock
+                          <Twemoji emoji={"🔓"} /> Unlock
                         </button>
                       </span>
                     ) : (
@@ -99,7 +99,7 @@ export default function BoardHeader({
                             lockBoard(board.id, accounts, setStatus)
                           }
                         >
-                          🔒 Lock
+                          <Twemoji emoji={"🔒"} /> Lock
                         </button>
                       </span>
                     )}
@@ -108,17 +108,17 @@ export default function BoardHeader({
                     <button
                       onClick={() => removeBoard(board.id, accounts, setStatus)}
                     >
-                      ❌ Remove
+                      <Twemoji emoji={"❌"} /> Remove
                     </button>
                   </div>
                   {/* <div>
                     <button onClick={() => grantJanny(board.id, accounts, setStatus)}>
-                      🧹 Add Janny
+                      <Twemoji emoji={"🧹"} /> Add Janny
                     </button>
                   </div>
                   <div>
                     <button onClick={() => removeJanny(board.id, accounts, setStatus)}>
-                      🧹 Remove Janny
+                      <Twemoji emoji={"🧹"} /> Remove Janny
                     </button>
                   </div> */}
                 </Menu>

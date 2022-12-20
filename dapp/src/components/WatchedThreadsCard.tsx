@@ -1,4 +1,5 @@
 import { useQuery } from "@apollo/react-hooks";
+import { Twemoji } from "components";
 import THREADS_LIST_FAVORITES from "graphql/queries/threads/list_favorites";
 import THREADS_LIST_FAVORITES_BLOCK from "graphql/queries/threads/list_favorites_block";
 import { useFavorites } from "hooks";
@@ -30,5 +31,5 @@ export default function WatchedThreadsCard({block} : {block?: number}) {
     ? loading
       ? <Loading />
       : <CatalogView threads={threads || []} showBoard={true} block={block} />
-    : <span>No threads are being watched. Use the 👁 button on threads to keep track of them here.</span>;
+    : <span>No threads are being watched. Use the <Twemoji emoji={"❤️"} /> button on threads to keep track of them here.</span>;
 }

@@ -29,6 +29,7 @@ import {
   IdLabel,
   FAQCard,
   RulesCard,
+  Twemoji
 } from "components";
 
 export default function FormPost({
@@ -356,7 +357,7 @@ export default function FormPost({
   const formPostOptions = () => (
     <span>
       <span className="text-xs">
-        <button onClick={resetForm}>❌</button>
+        <button onClick={resetForm}><Twemoji emoji={"❌"} /></button>
       </span>
       <Menu>
         <div>Options:</div>
@@ -635,7 +636,7 @@ export default function FormPost({
                                     type="button"
                                     onClick={fileRename}
                                   >
-                                    ✎
+                                    <Twemoji emoji={"✎"} />
                                   </button>
                                   <button
                                     className="dchan-input-file-remove mx-0.5"
@@ -643,12 +644,12 @@ export default function FormPost({
                                     type="button"
                                     onClick={fileRemove}
                                   >
-                                    ❌
+                                    <Twemoji emoji={"❌"} />
                                   </button>
                                 </span>
                                 <details className="mx-0.5">
                                   <summary className="marker-closed-hide">
-                                    ⚙️
+                                    <Twemoji emoji={"⚙️"} />
                                   </summary>
                                   <div>
                                     <input

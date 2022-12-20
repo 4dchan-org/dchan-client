@@ -1,5 +1,5 @@
 import { Board, Thread } from "dchan";
-import { IPFSImage, BoardLink } from "components";
+import { IPFSImage, BoardLink, Twemoji } from "components";
 import PostBody from "components/post/PostBody";
 import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
 import { useSettings } from "hooks";
@@ -90,7 +90,7 @@ const CatalogThread = ({
             onClick={focusThread}
             className="absolute text-2xl text-gray-800 top-0 left-0 right-0 bottom-0"
           >
-            <div>⚠️</div>
+            <div><Twemoji emoji={"⚠️"} /></div>
             <div>Post hidden due to reports.</div>
             <div className="text-sm text-gray-600">Click to show anyway.</div>
           </button>
@@ -109,12 +109,12 @@ const CatalogThread = ({
           >
             <div className="absolute top-0 right-0 z-10">
               {isPinned ? (
-                <span title="Thread pinned. This might be important.">📌</span>
+                <span title="Thread pinned. This might be important."><Twemoji emoji={"📌"} /></span>
               ) : (
                 ""
               )}
               {isLocked ? (
-                <span title="Thread locked. You cannot post.">🔒</span>
+                <span title="Thread locked. You cannot post."><Twemoji emoji={"🔒"} /></span>
               ) : (
                 ""
               )}

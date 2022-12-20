@@ -1,4 +1,4 @@
-import { IPFSImage, Menu } from "components";
+import { IPFSImage, Menu, Twemoji } from "components";
 import { Post as DchanPost, Thread } from "dchan";
 import { isLowScore } from "dchan/entities/post";
 import { usePubSub, useSettings, useUser } from "hooks";
@@ -209,7 +209,7 @@ function Post({
                 onClick={() => setShowAnyway(true)}
                 className="text-2xl text-gray-800"
               >
-                <div>⚠️</div>
+                <div><Twemoji emoji={"⚠️"} /></div>
                 <div>Post hidden due to reports.</div>
                 <div className="text-sm text-gray-600">
                   Click to show anyway.

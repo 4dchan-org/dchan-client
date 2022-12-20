@@ -1,4 +1,4 @@
-import { Menu, Status, UserLabel } from "components";
+import { Menu, Status, UserLabel, Twemoji } from "components";
 import { useTraveledBlock } from "components/TimeTravelWidget";
 import { Post, sendTip, Thread } from "dchan";
 import { fromBigInt } from "dchan/entities/datetime";
@@ -160,7 +160,7 @@ export default function PostHeader({
           title={favorite ? "Remove from watched" : "Add to watched"}
           onClick={onFavorite}
         >
-          👁
+          <Twemoji emoji={"❤️"} />
         </button>
       ) : (
         <span></span>
@@ -210,18 +210,18 @@ export default function PostHeader({
         </span>
         <span>
           {isOp && isPinned ? (
-            <span title="Thread pinned. This might be important.">📌</span>
+            <span title="Thread pinned. This might be important."><Twemoji emoji={"📌"} /></span>
           ) : (
             <span></span>
           )}
           {isOp && isLocked ? (
-            <span title="Thread locked. You cannot reply anymore.">🔒</span>
+            <span title="Thread locked. You cannot reply anymore."><Twemoji emoji={"🔒"} /></span>
           ) : (
             <span></span>
           )}
           {isLowScore(post, settings?.content_filter?.score_threshold) ? (
             <span title="Post hidden due to reports. Click to show anyway.">
-              ⚠️
+              <Twemoji emoji={"⚠️"} />
             </span>
           ) : (
             <span></span>
@@ -235,14 +235,14 @@ export default function PostHeader({
               target="_blank"
               rel="noreferrer"
             >
-              🔍 TX Details
+              <Twemoji emoji={"🔍"} /> TX Details
             </a>
           </div>
           <div>
             <Link
               to={`${Router.post(post)}?block=${post.createdAtBlock.number}`}
             >
-              ⏱️ Time travel to
+              <Twemoji emoji={"⏱️"} /> Time travel to
             </Link>
           </div>
           {accounts && accounts[0] ? (
@@ -255,7 +255,7 @@ export default function PostHeader({
                       <button
                         onClick={() => unlockThread(id, accounts, setStatus)}
                       >
-                        🔓 Unlock
+                        <Twemoji emoji={"🔓"} /> Unlock
                       </button>
                     </span>
                   ) : (
@@ -264,7 +264,7 @@ export default function PostHeader({
                       <button
                         onClick={() => lockThread(id, accounts, setStatus)}
                       >
-                        🔒 Lock
+                        <Twemoji emoji={"🔒"} /> Lock
                       </button>
                     </span>
                   )}
@@ -280,7 +280,7 @@ export default function PostHeader({
                       <button
                         onClick={() => unpinThread(id, accounts, setStatus)}
                       >
-                        📌 Unpin
+                        <Twemoji emoji={"📌"} /> Unpin
                       </button>
                     </span>
                   ) : (
@@ -289,7 +289,7 @@ export default function PostHeader({
                       <button
                         onClick={() => pinThread(id, accounts, setStatus)}
                       >
-                        📌 Pin
+                        <Twemoji emoji={"📌"} /> Pin
                       </button>
                     </span>
                   )}
@@ -300,7 +300,7 @@ export default function PostHeader({
               {canRemove ? (
                 <div>
                   <button onClick={() => removePost(id, accounts, setStatus)}>
-                    ❌ Remove
+                    <Twemoji emoji={"❌"} /> Remove
                   </button>
                 </div>
               ) : (
@@ -309,7 +309,7 @@ export default function PostHeader({
               {canBan ? (
                 <div>
                   <button onClick={() => banPost(id, accounts, setStatus)}>
-                    🔫 Ban
+                    <Twemoji emoji={"🔫"} /> Ban
                   </button>
                 </div>
               ) : (
@@ -317,7 +317,7 @@ export default function PostHeader({
               )}
               <div>
                 <button onClick={() => reportPost(id, accounts, setStatus)}>
-                  ⚠️ Report
+                  <Twemoji emoji={"⚠️"} /> Report
                 </button>
               </div>
             </div>

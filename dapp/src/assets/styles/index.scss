@@ -19,11 +19,28 @@ body {
     overflow-y: scroll;
     overflow-x: hidden;
     scrollbar-width: thin;
-    font-family: arial,helvetica,sans-serif;
+    font-family: arial, helvetica, sans-serif;
 }  
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+
 select {
     padding: 0.1rem;
     margin: 0.1rem;
     border: solid 1px gray;
     border-radius: 0.25rem;
+}
+
+.emoji {
+    display: inline-block;
+    width: auto;
+    height: 1em;
+    vertical-align: -0.125em;
+}
+
+[alt="❤️"] {
+    filter: grayscale(1)
 }

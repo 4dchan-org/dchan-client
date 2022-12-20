@@ -2,6 +2,7 @@ import { useSettings } from "hooks";
 import { useMemo, useState } from "react";
 import { debounce } from "lodash";
 import { Settings } from "hooks/useSettings";
+import Twemoji from "./Twemoji";
 // import DefaultSettings from "settings/default";
 
 export default function SettingsWidget({onExit}: {onExit: () => void}) {
@@ -61,7 +62,7 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
         </div>
         <div className="float-right">
           <button onClick={onExit}>
-            ❌
+            <Twemoji emoji={"❌"} />
           </button>
         </div>
       </div>

@@ -39,6 +39,7 @@ import StillStuck from "./components/StillStuck";
 import TabbedCard from "./components/TabbedCard";
 import ThreadTabs from "./components/ThreadTabs";
 import TimeTravelWidget from "./components/TimeTravelWidget";
+import Twemoji from "./components/Twemoji";
 import UserLabel from "./components/UserLabel";
 import Wallet from "./components/Wallet";
 import WatchedThreadsCard from "./components/WatchedThreadsCard";
@@ -86,6 +87,7 @@ export {
     TabbedCard,
     ThreadTabs,
     TimeTravelWidget,
+    Twemoji,
     UserLabel,
     Wallet,
     WatchedThreadsCard,

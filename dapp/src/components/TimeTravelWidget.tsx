@@ -18,6 +18,7 @@ import {
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import { singletonHook } from "react-singleton-hook";
+import Twemoji from "./Twemoji";
 
 export interface TimeTravelRange {
   min: Block;
@@ -478,12 +479,12 @@ export default forwardRef(
                     {isTimeTraveling ? (
                       <span>
                         <div className="inline-block animation-spin spin-faster animation-direction-reverse">
-                          ⌛
+                          <Twemoji emoji={"⌛"} />
                         </div>{" "}
                         Time traveled to
                       </span>
                     ) : (
-                      <span>⌛</span>
+                      <span><Twemoji emoji={"⌛"} /></span>
                     )}
                   </span>
                   <span className="ml-1 text-xs">
@@ -500,9 +501,9 @@ export default forwardRef(
               </div>
               <div className="mx-1 sm:hidden" onClick={onOpen}>
                 {isTimeTraveling ? (
-                  <abbr title={timeTravelingNote}>⌛</abbr>
+                  <abbr title={timeTravelingNote}><Twemoji emoji={"⌛"} /></abbr>
                 ) : (
-                  <span>⌛</span>
+                  <span><Twemoji emoji={"⌛"} /></span>
                 )}
               </div>
             </>
