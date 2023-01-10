@@ -4,8 +4,7 @@ import parseComment, {
   PostReferenceValue,
 } from "dchan/postparse";
 import { ReactElement, useCallback, useEffect, useMemo, memo, useState } from "react";
-import usePubSub from "hooks/usePubSub";
-import useWeb3 from "hooks/useWeb3";
+import { usePubSub, useWeb3 } from "hooks";
 import { isEqual } from "lodash";
 import { Router } from "router";
 import { Link } from "react-router-dom";

@@ -2,7 +2,7 @@ dchan-client
 -----
 Official client for the [dchan.network](https://dchan.network) decentralized imageboard.
 
-* <2 mb build size
+* Lightweight
 * IPFS hostable
 * Built with [React](https://reactjs.org/)
 * Powered by [The Graph](https://thegraph.com)
@@ -13,13 +13,18 @@ Required:
 - [`docker-compose`](https://docs.docker.com/compose/install/)
 
 ## Start development
-- `./bin/docker_setup.sh` (only 1st time)
-- `./bin/docker_dev.sh`
-  - `./bin/yarn_start.sh`
+- `./scripts/docker/setup.sh` 
+  - Only run the first time
+- `./scripts/docker/dev.sh`
+  - `yarn start`
+
+## Release production build
+- `./scripts/docker/dapp/release.sh`
+  - or `yarn build` in docker dev
 
 ## Serve production build
-- `./bin/docker_release.sh`
-- `http://localhost:8080`
+- `./scripts/docker/dapp/serve.sh`
+  - `http://localhost:8080`
 
 # Links
 - Official website: https://dchan.network/

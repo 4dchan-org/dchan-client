@@ -1,6 +1,6 @@
 #!/bin/bash
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-cd $SCRIPT_DIR/..
+cd $SCRIPT_DIR/../../../dapp
 
-docker-compose down && docker-compose up -d www
+docker-compose run dapp yarn build

@@ -29,7 +29,7 @@ export default function IPFSImage({
   const mouseRef = useRef(null);
   const mouse = useMouse(mouseRef, {
     enterDelay: 100,
-    leaveDelay: 100
+    leaveDelay: 10000
   });
   const ipfsSrc = `https://ipfs.io/ipfs/${hash}`;
   const [imgError, setImgError] = useState<any>(false);
@@ -84,7 +84,7 @@ export default function IPFSImage({
         ref={imgRef}
       />
       {hoverPosition && !imgLoading && !imgError ? <div className="absolute top-0 left-0 overflow-hidden pointer-events-none"><img
-        className={`fixed max-w-100vw max-h-100vh z-50 overflow-hidden`}
+        className={`fixed max-w-75vw max-h-75vh z-50 overflow-hidden`}
         style={{
           left: `${hoverPosition.x}px`,
           top: `${hoverPosition.y}px`,
