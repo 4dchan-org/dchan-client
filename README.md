@@ -13,17 +13,17 @@ Required:
 - [`docker-compose`](https://docs.docker.com/compose/install/)
 
 ## Start development
-- `./scripts/docker/setup.sh` 
+- `./bin/docker/setup.sh` 
   - Only run the first time
-- `./scripts/docker/dev.sh`
+- `./bin/docker/dev.sh`
   - `yarn start`
 
 ## Release production build
-- `./scripts/docker/dapp/release.sh`
+- `./bin/docker/dapp/release.sh`
   - or `yarn build` in docker dev
 
 ## Serve production build
-- `./scripts/docker/dapp/serve.sh`
+- `./bin/docker/dapp/serve.sh`
   - `http://localhost:8080`
 
 # Links
