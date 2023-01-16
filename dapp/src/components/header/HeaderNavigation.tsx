@@ -63,9 +63,9 @@ export default function HeaderNavigation({
     null
   );
   const [showBoards, setShowBoards] = useState<boolean>(false);
-  const timeTravelRef = useRef<HTMLElement>(null);
-  const watchedThreadsRef = useRef<HTMLElement>(null);
-  const settingsRef = useRef<HTMLElement>(null);
+  const timeTravelRef = useRef<HTMLDetailsElement>(null);
+  const watchedThreadsRef = useRef<HTMLDetailsElement>(null);
+  const settingsRef = useRef<HTMLDetailsElement>(null);
 
   useEffect(() => {
     if (!thread && !board) {

@@ -1,11 +1,10 @@
-import { ComponentType } from "react";
-
 interface ContainerProps {
-  onExit?: () => void;
+  onExit: () => void;
   overlayClassName?: string;
+  className?: string;
 }
 
-export default function OverlayComponent<P>(WrappedComponent: ComponentType<P>) {
+export default function OverlayComponent<P>(WrappedComponent: (props: ContainerProps) => JSX.Element) {
   return <Q extends P & ContainerProps>(props: Q) => {
     let {onExit, overlayClassName} = props;
     return (

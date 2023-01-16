@@ -138,7 +138,7 @@ export default forwardRef(
       onOpen: () => void;
       onClose: () => void;
     },
-    ref: ForwardedRef<HTMLElement>
+    ref: ForwardedRef<HTMLDetailsElement>
   ) => {
     if (block && isNaN(parseInt(block))) {
       block = undefined;

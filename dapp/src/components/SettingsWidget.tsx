@@ -5,7 +5,7 @@ import { Settings } from "hooks/useSettings";
 import Twemoji from "./Twemoji";
 // import DefaultSettings from "settings/default";
 
-export default function SettingsWidget({onExit}: {onExit: () => void}) {
+export default function SettingsWidget({ onExit }: { onExit: () => void }) {
   const [settings, setSettings] = useSettings();
 
   /*
@@ -46,17 +46,18 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
     number | undefined
   >(settings?.content_filter?.score_threshold);
   const writeScoreThresholdDebounced = useMemo(
-    () => debounce((settings: Settings, val: number) => {
-      let updatedSettings = {...settings};
-      settings.content_filter.score_threshold = val;
-      setSettings(updatedSettings);
-    }, 500),
+    () =>
+      debounce((settings: Settings, val: number) => {
+        let updatedSettings = { ...settings };
+        settings.content_filter.score_threshold = val;
+        setSettings(updatedSettings);
+      }, 500),
     [setSettings]
   );
 
-  return (settings ? (
+  return settings ? (
     <div className="bg-secondary border-secondary-accent border-2 flex flex-col h-full">
-      <div className="mb-2 mt-1 px-3" style={{flex: "0 1 auto"}}>
+      <div className="mb-2 mt-1 px-3" style={{ flex: "0 1 auto" }}>
         <div className="float-left">
           <span className="font-bold">dchan.network Settings</span>
         </div>
@@ -66,7 +67,10 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
           </button>
         </div>
       </div>
-      <div className="h-full overflow-y-scroll overscroll-contain" style={{flex: "1 1 auto"}}>
+      <div
+        className="h-full overflow-y-scroll overscroll-contain"
+        style={{ flex: "1 1 auto" }}
+      >
         {/*
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">Subgraph Endpoint</legend>
@@ -118,8 +122,9 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">Filter Settings</legend>
           <div className="text-contrast">
-            ⚠ By disabling/changing filters, it's possible you may view/download highly disturbing content, or content which may be illegal
-            in your jurisdiction.
+            ⚠ By disabling/changing filters, it's possible you may view/download
+            highly disturbing content, or content which may be illegal in your
+            jurisdiction.
             <div>Do so at your own risk.</div>
           </div>
           <input
@@ -128,7 +133,7 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
             type="checkbox"
             checked={settings.content_filter.show_below_threshold}
             onChange={(e) => {
-              let updatedSettings = {...settings};
+              let updatedSettings = { ...settings };
               settings.content_filter.show_below_threshold = e.target.checked;
               setSettings(updatedSettings);
             }}
@@ -136,7 +141,7 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
           <label htmlFor="dchan-input-show-below-threshold">
             Show hidden content
           </label>
-          <br/>
+          <br />
           <label htmlFor="dchan-input-score-threshold">
             Score hide threshold
           </label>
@@ -176,7 +181,5 @@ export default function SettingsWidget({onExit}: {onExit: () => void}) {
         </fieldset>
       </div>
     </div>
-  ) : (
-    null
-  ));
+  ) : <></>;
 }

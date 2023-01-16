@@ -47,7 +47,7 @@ export default function HomePage({ location }: any) {
       setBoard(hoverBoard);
     });
 
-    return () => unsubscribe(sub);
+    return () => { unsubscribe(sub) };
   }, [setHighlight]);
 
   return (

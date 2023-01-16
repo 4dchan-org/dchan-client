@@ -1,5 +1,5 @@
 # Node: https://hub.docker.com/_/node/
-FROM node:16
+FROM node:19
 
 RUN mkdir /dapp
 WORKDIR /dapp

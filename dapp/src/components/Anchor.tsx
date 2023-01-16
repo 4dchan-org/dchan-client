@@ -1,4 +1,3 @@
-import React, { ReactElement } from "react";
 import { useLocation } from "react-router";
 import { HashLink } from "react-router-hash-link";
 
@@ -7,7 +6,7 @@ export default function Anchor({
   to,
   onClick
 }: {
-  label: string | ReactElement
+  label: string
   to: string,
   onClick?: any
 }) {
