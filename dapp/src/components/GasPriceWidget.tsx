@@ -21,19 +21,22 @@ export default function GasPriceWidget() {
   }, [gasPrice]);
 
   return (
-    <div className="text-xs pt-1">
+    <div className="text-xs pt-1 text-gray-400 hover:text-gray-600">
       <small>
-        <div className="text-gray-400 hover:text-gray-600">Posting costs gas.</div>
-        <div className="text-gray-400 hover:text-gray-600">
-          <a href="//polygonscan.com/gastracker" target="_blank" rel="noreferrer">
-            <Twemoji emoji={"⛽️"} /> Current est. tx price: {txPrice} MATIC @ {gweiPrice} gwei.{" "}
+        <a href="//polygonscan.com/gastracker" target="_blank" rel="noreferrer">
+          <div>
+            Posting costs gas.
+          </div>
+          <div>
+            <Twemoji emoji={"⛽️"} /> Current est. tx price: {txPrice || `?`}{" "}
+            MATIC @ {gweiPrice || `?`} gwei.{" "}
             {txPrice !== 0 && balance ? (
-              <span>(~{Math.floor(balance / txPrice)} posts left)</span>
+              <span>(~{Math.floor(balance / txPrice) || `?`} posts left)</span>
             ) : (
               ""
             )}
-          </a>
-        </div>
+          </div>
+        </a>
       </small>
     </div>
   );

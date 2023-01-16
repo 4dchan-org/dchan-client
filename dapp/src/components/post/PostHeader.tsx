@@ -160,7 +160,7 @@ export default function PostHeader({
           title={favorite ? "Remove from watched" : "Add to watched"}
           onClick={onFavorite}
         >
-          <Twemoji emoji={"❤️"} />
+          <Twemoji emoji={"⭐️"} />
         </button>
       ) : (
         <span></span>

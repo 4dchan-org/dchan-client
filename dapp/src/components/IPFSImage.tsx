@@ -29,7 +29,7 @@ export default function IPFSImage({
   const mouseRef = useRef(null);
   const mouse = useMouse(mouseRef, {
     enterDelay: 100,
-    leaveDelay: 10000
+    leaveDelay: 100
   });
   const ipfsSrc = `https://ipfs.io/ipfs/${hash}`;
   const [imgError, setImgError] = useState<any>(false);

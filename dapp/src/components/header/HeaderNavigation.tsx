@@ -183,7 +183,7 @@ export default function HeaderNavigation({
                 );
               }}
             >
-              <Twemoji emoji={"❤️"} />
+              <Twemoji emoji={"⭐️"} />
             </summary>
             <div className={widgetClass}>
               <WatchedThreadsWidget block={block} />

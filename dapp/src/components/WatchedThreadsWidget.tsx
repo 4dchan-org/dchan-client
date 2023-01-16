@@ -80,7 +80,7 @@ export default function WatchedThreadsWidget({ block }: { block?: string }) {
             })}
           </div>
         </div>
-      ) : <span>No threads are being watched. Use the <Twemoji emoji={"❤️"} /> button on threads to keep track of them here.</span>}
+      ) : <span>No threads are being watched. Use the <Twemoji emoji={"⭐️"} /> button on threads to keep track of them here.</span>}
     </div>
   ) : (
     <div className="bg-primary border border-secondary-accent p-1">

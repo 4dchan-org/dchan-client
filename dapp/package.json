@@ -26,15 +26,15 @@
     "graphql": "^16.6.0",
     "lodash": "^4.17.21",
     "luxon": "^2.0.1",
-    "node-sass": "^6.0.1",
+    "node-sass": "^8.0.0",
     "nprogress": "^0.2.0",
     "parjs": "^0.12.7",
     "pubsub-js": "^1.9.3",
     "query-string": "^7.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-hook-form": "^7.12.2",
-    "react-hook-form-persist": "^2.1.0",
+    "react-hook-form": "^7.42.1",
+    "react-hook-form-persist": "^3.0.0",
     "react-router-dom": "^5.2.0",
     "react-router-hash-link": "^2.4.3",
     "react-singleton-hook": "^3.2.1",
@@ -71,10 +71,10 @@
     "extends": "react-app"
   },
   "scripts": {
-    "build": "NODE_ENV=production GENERATE_SOURCEMAP=false react-scripts build",
+    "build": "NODE_ENV=production GENERATE_SOURCEMAP=false react-scripts  build",
     "eject": "react-scripts eject",
     "ipfs": "yarn build && node scripts/ipfs.js",
-    "start": "react-scripts start",
+    "start": "react-scripts --openssl-legacy-provider start",
     "test": "react-scripts test"
   }
 }

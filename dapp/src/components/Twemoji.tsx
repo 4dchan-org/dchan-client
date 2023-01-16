@@ -7,7 +7,8 @@ const Twemoji = ({ emoji }: { emoji: string }) => (
     dangerouslySetInnerHTML={{
       __html: twemoji.parse(emoji, {
         folder: 'svg',
-        ext: '.svg'
+        ext: '.svg',
+        base: "/vendors/twemoji"
       })
     }}
   />

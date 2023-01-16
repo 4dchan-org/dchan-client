@@ -31,5 +31,5 @@ export default function WatchedThreadsCard({block} : {block?: number}) {
     ? loading
       ? <Loading />
       : <CatalogView threads={threads || []} showBoard={true} block={block} />
-    : <span>No threads are being watched. Use the <Twemoji emoji={"❤️"} /> button on threads to keep track of them here.</span>;
+    : <span>No threads are being watched. Use the <Twemoji emoji={"⭐️"} /> button on threads to keep track of them here.</span>;
 }

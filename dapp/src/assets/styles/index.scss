@@ -1,7 +1,5 @@
 @import "nprogress/nprogress.css";
 
-@import "../vendors/tailwindcss/tailwind.min.css";
-
 @import "./theme.scss";
 @import "./atoms.scss";
 @import "./components.scss";
@@ -41,6 +39,6 @@ select {
     vertical-align: -0.125em;
 }
 
-[alt="❤️"] {
+[alt="⭐️"] {
     filter: grayscale(1)
 }
