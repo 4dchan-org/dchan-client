@@ -1,6 +1,6 @@
 import { Web3Provider } from "@ethersproject/providers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import { getBalance, getGasPrice } from "dchan";
+import { getBalance, getGasPrice } from "services";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { singletonHook } from "react-singleton-hook";
 import Web3Modal from "web3modal";

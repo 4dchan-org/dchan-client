@@ -1,4 +1,4 @@
-import { Board } from "dchan";
+import { Board } from "services/dchan/types";
 import { DateTime } from "luxon";
 import { Router } from "router";
 import Anchor from "./Anchor";

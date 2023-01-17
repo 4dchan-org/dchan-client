@@ -1,7 +1,7 @@
 import { gql } from "apollo-boost";
 import THREAD_FRAGMENT from "graphql/fragments/thread";
 
-const THREADS_LIST_FAVORITES_BLOCK = gql`
+export const THREADS_LIST_FAVORITES_BLOCK = gql`
   ${THREAD_FRAGMENT}
 
   query FavoriteThreads($ids: [String!]!, $block: Int!) {

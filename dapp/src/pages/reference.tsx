@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 import { Error, Loading } from "components";
-import { Post, Thread } from "dchan";
-import queries from "graphql/queries/search_by_ref";
+import { Post, Thread } from "services/dchan/types";
+import { queries } from "graphql/queries";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";

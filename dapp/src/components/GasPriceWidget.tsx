@@ -1,4 +1,4 @@
-import { getWeb3 } from "dchan";
+import { getWeb3 } from "services";
 import { useEffect, useState } from "react";
 import { round } from "lodash";
 import { useWeb3 } from "hooks";

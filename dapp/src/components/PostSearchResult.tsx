@@ -1,4 +1,4 @@
-import { Post } from "dchan";
+import { Post } from "services/dchan/types";
 import { useCallback } from "react";
 import { Link, useHistory } from "react-router-dom";
 import BoardLink from "./BoardLink";

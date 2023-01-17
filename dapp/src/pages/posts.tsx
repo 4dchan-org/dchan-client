@@ -4,10 +4,9 @@ import { DateTime } from "luxon";
 import { useSettings } from "hooks";
 import { useQuery } from "@apollo/react-hooks";
 import { useEffect, useMemo } from "react";
-import { isLowScore, sortByCreatedAt } from "dchan/entities/post";
-import POST_SEARCH from "graphql/queries/post_search";
-import POST_SEARCH_BLOCK from "graphql/queries/post_search_block";
-import { Post } from "dchan";
+import { isLowScore, sortByCreatedAt } from "services/dchan/entities/post";
+import { POST_SEARCH, POST_SEARCH_BLOCK } from "graphql/queries";
+import { Post } from "services/dchan/types";
 import { Link } from "react-router-dom";
 import { Router } from "router";
 import {

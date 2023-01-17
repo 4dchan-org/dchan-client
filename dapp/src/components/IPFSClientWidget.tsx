@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
-import { Client } from "dchan";
-import { fromBigInt } from "dchan/entities/datetime";
-import IPFS_CLIENT from "graphql/queries/ipfs_client";
+import { Client } from "services/dchan/types";
+import { fromBigInt } from "services/datetime";
+import { IPFS_CLIENT } from "graphql/queries";
 import { DateTime } from "luxon";
 
 type Channel = Client[];

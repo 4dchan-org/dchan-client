@@ -1,4 +1,4 @@
-import { backgroundColorAddress, shortenAddress } from "dchan";
+import { backgroundColorAddress, shortenAddress } from "services";
 
 export default function IdLabel({
   id,

@@ -1,7 +1,7 @@
 import { gql } from "apollo-boost";
 import THREAD_FRAGMENT from "graphql/fragments/thread";
 
-const THREADS_LIST_MOST_POPULAR = gql`
+export const THREADS_LIST_MOST_POPULAR = gql`
   ${THREAD_FRAGMENT}
 
   query ThreadsListMostPopular($cutoff: Int!, $board: String!) {

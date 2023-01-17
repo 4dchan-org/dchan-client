@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/react-hooks";
-import CHAN_STATUS from "graphql/queries/chan_status";
+import { CHAN_STATUS } from "graphql/queries";
 import poopieSrc from "assets/images/poopie.png";
 import Card from "./Card";
 import { useSettings } from "hooks";

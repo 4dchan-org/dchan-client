@@ -1,7 +1,7 @@
 import { gql } from "apollo-boost";
 import USER_FRAGMENT from "graphql/fragments/user";
 
-const USER_GET = gql`
+export const USER_GET = gql`
   ${USER_FRAGMENT}
   query User($address: String!) {
     admin(id: $address) {
@@ -17,5 +17,3 @@ const USER_GET = gql`
     }
   }
 `;
-
-export default USER_GET

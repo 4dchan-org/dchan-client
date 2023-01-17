@@ -9,13 +9,12 @@ import {
 import BoardList from "components/board/list";
 import GenericHeader from "components/header/generic";
 import { useQuery } from "@apollo/react-hooks";
-import { Board } from "dchan";
+import { Board } from "services/dchan/types";
 import { parse as parseQueryString } from "query-string";
 import { isString, uniqBy } from "lodash";
 import { Router } from "router";
 import { useEffect } from "react";
-import BOARDS_SEARCH from "graphql/queries/boards/search";
-import BOARDS_SEARCH_BLOCK from "graphql/queries/boards/search";
+import { BOARDS_SEARCH, BOARDS_SEARCH_BLOCK } from "graphql/queries";
 import { DateTime } from "luxon";
 
 interface BoardSearchData {

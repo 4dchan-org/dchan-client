@@ -1,8 +1,9 @@
 import { Menu, Status, UserLabel, Twemoji } from "components";
 import { useTraveledBlock } from "components/TimeTravelWidget";
-import { Post, sendTip, Thread } from "dchan";
-import { fromBigInt } from "dchan/entities/datetime";
-import { isLowScore } from "dchan/entities/post";
+import { sendTip } from "services";
+import { Post, Thread } from "services/dchan/types";
+import { fromBigInt } from "services/datetime";
+import { isLowScore } from "services/dchan/entities/post";
 import {
   banPost,
   lockThread,
@@ -11,7 +12,7 @@ import {
   reportPost,
   unlockThread,
   unpinThread,
-} from "dchan/operations";
+} from "services/actions";
 import { usePubSub, useSettings, useUser, useWeb3, useFavorites } from "hooks";
 import { DateTime } from "luxon";
 import { ReactElement, useCallback, useState } from "react";

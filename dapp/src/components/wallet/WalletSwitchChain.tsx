@@ -1,6 +1,6 @@
 import { StillStuck } from "components";
-import { isMaticChainId } from "dchan";
-import { switchChain } from "dchan/chain";
+import { isMaticChainId } from "services";
+import { switchChain } from "services/chain";
 import { useWeb3 } from "hooks";
 import { useCallback } from "react";
 import { useState } from "react";

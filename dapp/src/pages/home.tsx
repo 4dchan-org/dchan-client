@@ -6,7 +6,7 @@ import { DateTime } from "luxon";
 import { useEffect, useState, useCallback } from "react";
 import { useTitle } from "react-use";
 import { subscribe, unsubscribe } from "pubsub-js";
-import { Board } from "dchan";
+import { Board } from "services/dchan/types";
 import {
   Card,
   Footer,

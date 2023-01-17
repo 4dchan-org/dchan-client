@@ -1,7 +1,7 @@
 import { gql } from "apollo-boost";
 import BOARD_FRAGMENT from "graphql/fragments/board";
 
-const BOARD_TABS_AT_BLOCK = gql`
+export const BOARD_TABS_AT_BLOCK = gql`
   ${BOARD_FRAGMENT}
   
   query Boards($block: Int, $limit: Int) {

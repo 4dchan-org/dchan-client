@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
-import { Board, Post, shortenAddress, Thread } from "dchan";
-import THREAD_GET from "graphql/queries/thread_get";
+import { shortenAddress } from "services";
+import { Board, Post, Thread } from "services/dchan/types";
+import { THREAD_GET, THREAD_GET_LAST_BLOCK } from "graphql/queries";
 import { DateTime } from "luxon";
 import { parse as parseQueryString } from "query-string";
 import { useEffect, useMemo } from "react";
@@ -9,7 +10,6 @@ import PostComponent from "components/post/Post";
 import { usePubSub } from "hooks";
 import { useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
-import THREAD_GET_LAST_BLOCK from "graphql/queries/thread_get_last_block";
 import { ContentHeader, Footer, Loading, Anchor } from "components";
 interface ThreadContentData {
   board: Board;

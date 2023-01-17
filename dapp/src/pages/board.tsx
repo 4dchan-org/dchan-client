@@ -1,13 +1,12 @@
 import { useLastBlock, useSettings } from "hooks";
 import { parse as parseQueryString } from "query-string";
 import { DateTime } from "luxon";
-import { Board, BoardRef, Thread } from "dchan";
+import { Board, BoardRef, Thread } from "services/dchan/types";
 import { useEffect, useMemo } from "react";
 import { Router } from "router";
-import BOARD_CATALOG from "graphql/queries/board_catalog";
-import BOARD_GET from "graphql/queries/boards/get";
+import { BOARD_GET, BOARD_CATALOG } from "graphql/queries";
 import { useQuery } from "@apollo/react-hooks";
-import { isLowScore } from "dchan/entities/thread";
+import { isLowScore } from "services/dchan/entities/thread";
 import {
   Footer,
   ContentHeader,

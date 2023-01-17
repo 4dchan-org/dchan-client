@@ -2,7 +2,7 @@ import { Footer } from "components";
 import GenericHeader from "components/header/generic";
 import { Link } from "react-router-dom";
 import { useWeb3, useUser } from "hooks";
-import { sendMessage } from "dchan";
+import { sendMessage } from "services";
 import WalletConnect from "components/wallet/WalletConnect";
 import { useEffect } from "react";
 

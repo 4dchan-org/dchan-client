@@ -1,7 +1,7 @@
-import { Board, Thread } from "dchan";
+import { Board, Thread } from "services/dchan/types";
 import { IPFSImage, BoardLink, Twemoji } from "components";
 import PostBody from "components/post/PostBody";
-import { isLowScore as isLowScoreThread } from "dchan/entities/thread";
+import { isLowScore as isLowScoreThread } from "services/dchan/entities/thread";
 import { useSettings } from "hooks";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";

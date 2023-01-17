@@ -1,4 +1,4 @@
-import { createBoard } from "dchan/operations";
+import { createBoard } from "services/actions";
 import { useWeb3 } from "hooks";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

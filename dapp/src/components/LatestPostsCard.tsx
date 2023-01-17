@@ -1,7 +1,6 @@
 import { useQuery } from "@apollo/react-hooks";
-import { Board, Post } from "dchan";
-import POSTS_GET_LAST from "graphql/queries/posts_get_last";
-import POSTS_GET_LAST_BLOCK from "graphql/queries/posts_get_last_block";
+import { Board, Post } from "services/dchan/types";
+import { POSTS_GET_LAST, POSTS_GET_LAST_BLOCK } from "graphql/queries";
 import Loading from "./Loading";
 import PostSearchResult from "./PostSearchResult";
 

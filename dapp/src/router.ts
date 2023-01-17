@@ -1,4 +1,4 @@
-import { Board, Post, Thread } from "dchan";
+import { Board, Post, Thread } from "services/dchan/types";
 
 export abstract class Router {
     public static post({

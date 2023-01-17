@@ -1,10 +1,10 @@
 import HeaderNavigation from "components/header/HeaderNavigation";
 import HeaderLogo from "components/header/logo";
-import { Board, Thread } from "dchan";
+import { Board, Thread } from "services/dchan/types";
 import { Link } from "react-router-dom";
 import { Status, IdLabel, Menu, Twemoji } from "components";
 import { useState } from "react";
-import { lockBoard, removeBoard, unlockBoard } from "dchan/operations";
+import { lockBoard, removeBoard, unlockBoard } from "services/actions";
 import { useUser, useWeb3 } from "hooks";
 import { DateTime } from "luxon";
 

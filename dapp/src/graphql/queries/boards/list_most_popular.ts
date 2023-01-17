@@ -1,6 +1,6 @@
 import { gql } from "apollo-boost";
 
-const BOARDS_LIST_MOST_POPULAR = gql`
+export const BOARDS_LIST_MOST_POPULAR = gql`
   fragment MostPopularBoard on Board {
     id
     title

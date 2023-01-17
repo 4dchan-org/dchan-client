@@ -1,4 +1,4 @@
-import { Board, Thread } from "dchan";
+import { Board, Thread } from "services/dchan/types";
 import CatalogThread from "./catalog/CatalogThread";
 
 export default function CatalogView({

@@ -1,9 +1,8 @@
 import BoardList from "components/board/list";
 import { useQuery } from "@apollo/react-hooks";
-import { Board } from "dchan";
+import { Board } from "services/dchan/types";
 import { TabbedCard } from "components";
-import BOARD_TABS from "graphql/queries/boards/tabs";
-import BOARD_TABS_AT_BLOCK from "graphql/queries/boards/tabs_at_block";
+import { BOARD_TABS, BOARD_TABS_AT_BLOCK }  from "graphql/queries";
 import Loading from "./Loading";
 
 interface BoardListData {

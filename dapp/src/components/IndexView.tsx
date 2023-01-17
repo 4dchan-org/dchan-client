@@ -1,4 +1,4 @@
-import { Board, Thread } from "dchan";
+import { Board, Thread } from "services/dchan/types";
 import { Link } from "react-router-dom";
 import { Router } from "router";
 import BoardLink from "./BoardLink";

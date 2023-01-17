@@ -1,7 +1,6 @@
 import { useQuery } from "@apollo/react-hooks";
-import { Board, Thread } from "dchan";
-import THREADS_LIST_MOST_POPULAR from "graphql/queries/threads/list_most_popular";
-import THREADS_LIST_MOST_POPULAR_BLOCK from "graphql/queries/threads/list_most_popular_block";
+import { Board, Thread } from "services/dchan/types";
+import { THREADS_LIST_MOST_POPULAR, THREADS_LIST_MOST_POPULAR_BLOCK } from "graphql/queries";
 import IndexView from "./IndexView";
 import Loading from "./Loading";
 import { useTraveledBlock } from "./TimeTravelWidget";

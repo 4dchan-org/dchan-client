@@ -1,5 +1,5 @@
 import { useThrottleCallback } from "@react-hook/throttle";
-import { Board, Thread } from "dchan";
+import { Board, Thread } from "services/dchan/types";
 import { useLastBlock } from "hooks";
 import { DateTime } from "luxon";
 import { ReactElement } from "react";

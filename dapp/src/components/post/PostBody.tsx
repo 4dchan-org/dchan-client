@@ -1,8 +1,10 @@
-import { Post, shortenAddress, Thread } from "dchan";
+
+import { shortenAddress } from "services";
+import { Post, Thread } from "services/dchan/types";
 import parseComment, {
   ParserResult,
   PostReferenceValue,
-} from "dchan/postparse";
+} from "services/postparser";
 import { ReactElement, useCallback, useEffect, useMemo, memo, useState } from "react";
 import { usePubSub, useWeb3 } from "hooks";
 import { isEqual } from "lodash";

@@ -1,8 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 import { Error, Loading, StillStuck } from "components";
-import { Board, BoardRef, Post, PostRef, Thread, ThreadRef } from "dchan";
-import SEARCH_BY_ID from "graphql/queries/search_by_id";
-import SEARCH_BY_ID_BLOCK from "graphql/queries/search_by_id_block";
+import { Board, BoardRef, Post, PostRef, Thread, ThreadRef } from "services/dchan/types";
+import { SEARCH_BY_ID, SEARCH_BY_ID_BLOCK } from "graphql/queries";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";

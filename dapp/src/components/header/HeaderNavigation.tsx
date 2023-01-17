@@ -1,6 +1,6 @@
 import { ApolloConsumer, ApolloClient, useQuery } from "@apollo/react-hooks";
-import { Board, Thread, Block } from "dchan";
-import BOARDS_LIST_MOST_POPULAR from "graphql/queries/boards/list_most_popular";
+import { Board, Thread, Block } from "services/dchan/types";
+import { BOARDS_LIST_MOST_POPULAR } from "graphql/queries";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { DateTime } from "luxon";

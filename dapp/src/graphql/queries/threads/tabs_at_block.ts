@@ -1,7 +1,7 @@
 import { gql } from "apollo-boost";
 import THREAD_FRAGMENT from "graphql/fragments/thread";
 
-const THREADS_TABS_AT_BLOCK = gql`
+export const THREADS_TABS_BLOCK = gql`
   ${THREAD_FRAGMENT}
   
   query ThreadsTabs($cutoff: Int!, $block: Int!, $board: String = "", $limit: Int = 10) {
@@ -17,4 +17,4 @@ const THREADS_TABS_AT_BLOCK = gql`
   }
 `;
 
-export default THREADS_TABS_AT_BLOCK;
+export default THREADS_TABS_BLOCK;

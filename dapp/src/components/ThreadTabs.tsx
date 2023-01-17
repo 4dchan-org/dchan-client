@@ -1,8 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
-import { Board, Thread } from "dchan";
+import { Board, Thread } from "services/dchan/types";
 import { TabbedCard } from "components";
-import THREAD_TABS from "graphql/queries/threads/tabs";
-import THREAD_TABS_AT_BLOCK from "graphql/queries/threads/tabs_at_block";
+import { THREADS_TABS, THREADS_TABS_BLOCK } from "graphql/queries";
 import Loading from "./Loading";
 import { useTraveledBlock } from "./TimeTravelWidget";
 import { useMemo } from "react";
@@ -37,7 +36,7 @@ export default function ThreadTabs({
     [currentBlock]
   );
   const { data, loading } = useQuery<ThreadListData, ThreadListVars>(
-    block ? THREAD_TABS_AT_BLOCK : THREAD_TABS,
+    block ? THREADS_TABS_BLOCK : THREADS_TABS,
     {
       pollInterval: 30_000,
       fetchPolicy: block ? "cache-first" : "network-only",

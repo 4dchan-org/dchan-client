@@ -1,4 +1,4 @@
-import { User } from "dchan";
+import { User } from "services/dchan/types";
 import IdLabel from "./IdLabel";
 
 export default function UserLabel({ user, className = ""}: { className?: string, user: User }) {

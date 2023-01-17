@@ -6,7 +6,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { Board, shortenAddress, Thread } from "dchan";
+import { shortenAddress } from "services";
+import { Board, Thread } from "services/dchan/types";
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
@@ -18,7 +19,7 @@ import {
   useSettings,
 } from "hooks";
 import { isString, uniqueId } from "lodash";
-import { postMessage } from "dchan/operations";
+import { postMessage } from "services/actions";
 import MaxLengthWatch from "./MaxLengthWatch";
 import useFormPersist from "hooks/useFormPersist";
 import {

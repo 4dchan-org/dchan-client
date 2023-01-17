@@ -1,4 +1,4 @@
-import { isMaticChainId } from "dchan";
+import { isMaticChainId } from "services";
 import { UserLabel, Faucets } from "components";
 import polygonLogo from "assets/images/polygon.png";
 import { useWeb3, useUser } from "hooks";

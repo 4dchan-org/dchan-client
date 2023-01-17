@@ -1,7 +1,7 @@
 import { Footer, Card } from "components";
 import BoardList from "components/board/list";
 import GenericHeader from "components/header/generic";
-import BOARDS_SEARCH from "graphql/queries/boards/search";
+import { BOARDS_SEARCH } from "graphql/queries";
 import { useQuery } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
 import { parse as parseQueryString } from "query-string";

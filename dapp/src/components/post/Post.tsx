@@ -1,6 +1,6 @@
 import { IPFSImage, Menu, Twemoji } from "components";
-import { Post as DchanPost, Thread } from "dchan";
-import { isLowScore } from "dchan/entities/post";
+import { Post as DchanPost, Thread } from "services/dchan/types";
+import { isLowScore } from "services/dchan/entities/post";
 import { usePubSub, useSettings, useUser } from "hooks";
 import { truncate } from "lodash";
 import { useCallback } from "react";

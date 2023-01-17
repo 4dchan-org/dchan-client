@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Board } from "dchan";
+import { Board } from "services/dchan/types";
 import { IdLabel, Loading, Twemoji } from "components";
 import { usePubSub } from "hooks";
 import { useCallback, useState } from "react";

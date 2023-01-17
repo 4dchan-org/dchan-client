@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 import { useThrottleCallback } from "@react-hook/throttle";
-import { Thread } from "dchan";
-import THREADS_LIST_FAVORITES from "graphql/queries/threads/list_favorites";
+import { Thread } from "services/dchan/types";
+import { THREADS_LIST_FAVORITES } from "graphql/queries";
 import { useFavorites } from "hooks";
 import { truncate } from "lodash";
 import { useCallback, useMemo } from "react";

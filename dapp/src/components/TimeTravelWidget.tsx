@@ -1,10 +1,7 @@
 import { ApolloQueryResult, ApolloClient } from "@apollo/react-hooks";
-import { Block } from "dchan";
-import { fromBigInt } from "dchan/entities/datetime";
-import BLOCK_BY_DATE from "graphql/queries/block_by_date";
-import BLOCK_BY_NUMBER from "graphql/queries/block_by_number";
-import GET_NEXT_BLOCK from "graphql/queries/get_next_block";
-import GET_PREV_BLOCK from "graphql/queries/get_prev_block";
+import { Block } from "services/dchan/types";
+import { fromBigInt } from "services/datetime";
+import { BLOCK_BY_DATE, BLOCK_BY_NUMBER, GET_NEXT_BLOCK, GET_PREV_BLOCK } from "graphql/queries";
 import { useLastBlock } from "hooks";
 import { DateTime } from "luxon";
 import {

@@ -1,4 +1,4 @@
-import { Board } from "dchan";
+import { Board } from "services/dchan/types";
 import { Link } from "react-router-dom";
 import { Router } from "router";
 import IdLabel from "./IdLabel";
