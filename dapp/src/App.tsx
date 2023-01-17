@@ -1,13 +1,13 @@
+import "assets/styles/index.scss";
+
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
+import { useState, useEffect, useMemo } from "react";
+import { SingletonHooksContainer } from "react-singleton-hook";
 import {
   ApolloProvider,
   ApolloClient,
   InMemoryCache,
 } from "@apollo/react-hooks";
-import { useEffect, useMemo } from "react";
-import { SingletonHooksContainer } from "react-singleton-hook";
-
-import "assets/styles/index.scss";
 
 import {
   AdminPage,
@@ -18,12 +18,11 @@ import {
   PostsPage,
   ReferencePage,
   ThreadPage,
-} from "pages";
-import { LockBanner, EULA, FAQCardOverlay, RulesCardOverlay, AbuseCardOverlay } from "components";
-import DefaultSettings from "settings/default";
-import { useState } from "react";
-import { useSettings } from "hooks";
-import { Settings, writeAppSetSettings } from "hooks/useSettings";
+} from "dchan/pages";
+import { LockBanner, EULA, FAQCardOverlay, RulesCardOverlay, AbuseCardOverlay } from "dchan/components";
+import DefaultSettings from "dchan/settings";
+import { useSettings } from "dchan/hooks";
+import { Settings, writeAppSetSettings } from "dchan/hooks/useSettings";
 
 // So there's an issue with how settings works
 //

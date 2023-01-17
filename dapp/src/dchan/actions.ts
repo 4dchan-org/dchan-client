@@ -1,7 +1,7 @@
-import { SetStatus } from "components/Status";
-import { sendMessage } from "services/web3";
+import { SetStatus } from "dchan/components/Status";
+import { sendMessage } from "dchan/services/web3";
 import { DateTime } from "luxon";
-import { IpfsUploadResult, upload } from "services/ipfs";
+import { IpfsUploadResult, upload } from "dchan/services/ipfs";
 
 type PostCreateInput = {
     board?: string;

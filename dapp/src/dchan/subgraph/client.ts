@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import DefaultSettings from "settings/default";
+import DefaultSettings from "dchan/settings";
 
 let client = new ApolloClient({
     uri: DefaultSettings.subgraph.endpoint,
