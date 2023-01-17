@@ -24,7 +24,7 @@ const useUser = (userAddress?: string) => {
   const { refetch, loading, data } = query
 
   const isAdmin = useCallback(() => {
-    if (loading) return undefined
+    if (loading) return
 
     const isAdmin = !!(data?.admin?.id)
 
@@ -32,7 +32,7 @@ const useUser = (userAddress?: string) => {
   }, [loading, data])
 
   const isJannyOf = useCallback((boardId: string) => {
-    if (loading) return undefined
+    if (loading) return
 
     const isJanny = isAdmin() || !!(data?.user?.jannies?.filter(({ board }) => board?.id === boardId).length)
 

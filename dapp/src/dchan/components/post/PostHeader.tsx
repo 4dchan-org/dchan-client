@@ -89,6 +89,7 @@ export const PostHeader = ({
     name,
     from: { address },
   } = post;
+  console.log({post})
   const { provider, accounts } = useWeb3();
   const { publish } = usePubSub();
   const [settings] = useSettings();

@@ -26,7 +26,7 @@ export const Status = ({
           </div>
         ) : status.progress ? (
           <div className="text-gray-900 flex center">
-            <Spinner size={4} speed={"faster"}></Spinner>
+            <Spinner size={4} speed={"faster"} />
             <span className="px-2">{status.progress}</span>
           </div>
         ) : status.success ? (

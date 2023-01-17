@@ -1,8 +1,9 @@
-import { useCallback, useState, useRef } from "react";
+import { useCallback, useState, useRef, useEffect } from "react";
 import spoilerSrc from "assets/images/spoiler.png";
 import nsfwSrc from "assets/images/nsfw.png";
 import ipfsLoadingSrc from "assets/images/ipfs.png";
 import ipfsErrorSrc from "assets/images/ipfs_error.png";
+import useMouse from "@react-hook/mouse-position";
 
 export const IPFSImage = ({
   hash,
@@ -44,37 +45,32 @@ export const IPFSImage = ({
     setImgError(undefined);
   }, [ipfsSrc, setImgLoading, setImgSrc, setImgError]);
 
-  // @TODO Fix this buggy POS
-  const [hoverPosition] = useState<{
+  const [hoverPosition, setHoverPosition] = useState<{
     x: number;
     y: number;
   } | null>(null);
-  // const mouse = useMouse(mouseRef, {
-  //   enterDelay: 100,
-  //   leaveDelay: 100,
-  // });
-  // useEffect(() => {
-  //   const { naturalWidth: width, naturalHeight: height } = imgRef.current || {
-  //     naturalWidth: 0,
-  //     naturalHeight: 0,
-  //   };
-  //   if (mouse.screenX !== null && mouse.screenY !== null) {
-  //     const position = {
-  //       x: Math.max(
-  //         width / 2,
-  //         Math.min(window.outerWidth - width / 2, mouse.screenX)
-  //       ),
-  //       y: Math.max(
-  //         height / 2,
-  //         Math.min(window.outerHeight - height / 2, mouse.screenY)
-  //       ),
-  //     };
-  //     console.log(JSON.stringify(position))
-  //     // setHoverPosition(position);
-  //   } else {
-  //     setHoverPosition(null);
-  //   }
-  // }, [imgRef, mouse, setHoverPosition]);
+  const mouse = useMouse(mouseRef);
+  useEffect(() => {
+    const { naturalWidth: width, naturalHeight: height } = imgRef.current || {
+      naturalWidth: 0,
+      naturalHeight: 0,
+    };
+    if (mouse.clientX !== null && mouse.clientY !== null) {
+      const position = {
+        x: Math.max(
+          width / 2,
+          Math.min(window.outerWidth - width / 2, mouse.clientX)
+        ),
+        y: Math.max(
+          height / 2,
+          Math.min(window.outerHeight - height / 2, mouse.clientY)
+        ),
+      };
+      setHoverPosition(position);
+    } else {
+      setHoverPosition(null);
+    }
+  }, [hash, imgRef, mouse, setHoverPosition]);
 
   return (
     <span ref={mouseRef} className="relative">
@@ -105,13 +101,14 @@ export const IPFSImage = ({
         ref={imgRef}
       />
       {hoverPosition && !imgLoading && !imgError ? (
-        <div className="absolute top-0 left-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-0 overflow-hidden pointer-events-none opacity-95 z-50">
           <img
             className={`fixed max-w-75vw max-h-75vh z-50 overflow-hidden`}
             style={{
               left: `${hoverPosition.x}px`,
               top: `${hoverPosition.y}px`,
               transform: "translate(-50%, -50%)",
+              transition: "position 50ms ease-out"
             }}
             src={imgSrc}
             alt=""

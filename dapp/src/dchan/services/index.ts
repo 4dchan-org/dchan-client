@@ -7,3 +7,7 @@ export function shortenAddress(address: string) {
 export function backgroundColorAddress(address: string) {
     return `#${shortenAddress(address).replace("-", "")}`
 }
+
+export function lerp(a: number, b: number, t: number) {
+    return a * (1 - t) + b * t
+}
