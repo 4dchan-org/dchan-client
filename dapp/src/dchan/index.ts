@@ -143,10 +143,14 @@ export async function sendMessage(operation: string, data: object, from: string)
     const web3 = getWeb3()
 
     const relayContract = new web3.eth.Contract(abi as AbiItem[], DefaultSettings.contract.address)
-    const msg = await relayContract.methods.message(createJsonMessage(operation, data))
+    const [msg, nonce] = await Promise.all([
+        relayContract.methods.message(createJsonMessage(operation, data)),
+        getNextNonce(from)
+    ])
 
     return msg.send({
-        from
+        from,
+        nonce
     })
 }
 
@@ -168,6 +172,10 @@ export async function getBalance(account: string) {
 
 export async function getGasPrice() {
     return getWeb3().eth.getGasPrice()
+}
+
+export async function getNextNonce(account: string) {
+    return getWeb3().eth.getTransactionCount(account).then(txCount => txCount + 1)
 }
 
 export function isMaticChainId(chainId: string | number | undefined) {
