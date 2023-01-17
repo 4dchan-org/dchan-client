@@ -1,5 +1,4 @@
-import { useCallback, useState, useRef, useEffect } from "react";
-import useMouse from '@react-hook/mouse-position';
+import { useCallback, useState, useRef } from "react";
 import spoilerSrc from "assets/images/spoiler.png";
 import nsfwSrc from "assets/images/nsfw.png";
 import ipfsLoadingSrc from "assets/images/ipfs.png";
@@ -27,10 +26,6 @@ export const IPFSImage = ({
   thumbnailClass?: string;
 }) => {
   const mouseRef = useRef(null);
-  const mouse = useMouse(mouseRef, {
-    enterDelay: 100,
-    leaveDelay: 100
-  });
   const ipfsSrc = `https://ipfs.io/ipfs/${hash}`;
   const [imgError, setImgError] = useState<any>(false);
   const [imgLoading, setImgLoading] = useState<boolean>(true);
@@ -38,7 +33,6 @@ export const IPFSImage = ({
   const [showSpoiler, setShowSpoiler] = useState<boolean>(false);
   const [showNsfw, setShowNsfw] = useState<boolean>(false);
   const [expand, setExpand] = useState<boolean>(!thumbnail);
-  const [hoverPosition, setHoverPosition] = useState<{x: number, y: number} | null>(null);
   const imgRef = useRef<HTMLImageElement>(null);
 
   thumbnailClass = thumbnail ? thumbnailClass : "";
@@ -50,10 +44,37 @@ export const IPFSImage = ({
     setImgError(undefined);
   }, [ipfsSrc, setImgLoading, setImgSrc, setImgError]);
 
-  useEffect(() => {
-    const { naturalWidth: width, naturalHeight: height } = imgRef.current || {naturalWidth: 0, naturalHeight: 0}
-    mouse.screenX !== null && mouse.screenY !== null ? mouse.screenX && mouse.screenY && setHoverPosition({x: Math.max(width / 2, Math.min(window.outerWidth - width / 2, mouse.screenX)), y: Math.max(height / 2, Math.min(window.outerHeight - height / 2, mouse.screenY))}) : setHoverPosition(null)
-  }, [imgRef, mouse, setHoverPosition])
+  // @TODO Fix this buggy POS
+  const [hoverPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+  // const mouse = useMouse(mouseRef, {
+  //   enterDelay: 100,
+  //   leaveDelay: 100,
+  // });
+  // useEffect(() => {
+  //   const { naturalWidth: width, naturalHeight: height } = imgRef.current || {
+  //     naturalWidth: 0,
+  //     naturalHeight: 0,
+  //   };
+  //   if (mouse.screenX !== null && mouse.screenY !== null) {
+  //     const position = {
+  //       x: Math.max(
+  //         width / 2,
+  //         Math.min(window.outerWidth - width / 2, mouse.screenX)
+  //       ),
+  //       y: Math.max(
+  //         height / 2,
+  //         Math.min(window.outerHeight - height / 2, mouse.screenY)
+  //       ),
+  //     };
+  //     console.log(JSON.stringify(position))
+  //     // setHoverPosition(position);
+  //   } else {
+  //     setHoverPosition(null);
+  //   }
+  // }, [imgRef, mouse, setHoverPosition]);
 
   return (
     <span ref={mouseRef} className="relative">
@@ -83,16 +104,22 @@ export const IPFSImage = ({
         alt=""
         ref={imgRef}
       />
-      {hoverPosition && !imgLoading && !imgError ? <div className="absolute top-0 left-0 overflow-hidden pointer-events-none"><img
-        className={`fixed max-w-75vw max-h-75vh z-50 overflow-hidden`}
-        style={{
-          left: `${hoverPosition.x}px`,
-          top: `${hoverPosition.y}px`,
-          transform: "translate(-50%, -50%)"
-      }}
-        src={imgSrc}
-        alt=""
-      /></div> : <></>}
+      {hoverPosition && !imgLoading && !imgError ? (
+        <div className="absolute top-0 left-0 overflow-hidden pointer-events-none">
+          <img
+            className={`fixed max-w-75vw max-h-75vh z-50 overflow-hidden`}
+            style={{
+              left: `${hoverPosition.x}px`,
+              top: `${hoverPosition.y}px`,
+              transform: "translate(-50%, -50%)",
+            }}
+            src={imgSrc}
+            alt=""
+          />
+        </div>
+      ) : (
+        <></>
+      )}
       <div className={`${className} relative`}>
         <span>
           <div>
@@ -106,7 +133,9 @@ export const IPFSImage = ({
                     onClick={retry}
                     alt={``}
                   />
-                  <div className="p-2" title={`Retrieving image from IPFS.`}>Loading...</div>
+                  <div className="p-2" title={`Retrieving image from IPFS.`}>
+                    Loading...
+                  </div>
                 </div>
               ) : imgError ? (
                 <div className="relative center grid">
@@ -129,7 +158,8 @@ export const IPFSImage = ({
                   className={thumbnailClass}
                   src={spoilerSrc}
                   alt="SPOILER"
-                  onClick={() => setShowSpoiler(true)}/>
+                  onClick={() => setShowSpoiler(true)}
+                />
               ) : (
                 ""
               )}
@@ -142,7 +172,8 @@ export const IPFSImage = ({
                   className={thumbnailClass}
                   src={nsfwSrc}
                   alt="NSFW"
-                  onClick={() => setShowNsfw(true)}/>
+                  onClick={() => setShowNsfw(true)}
+                />
               ) : (
                 ""
               )}
@@ -152,4 +183,4 @@ export const IPFSImage = ({
       </div>
     </span>
   );
-}
+};
