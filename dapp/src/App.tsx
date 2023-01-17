@@ -5,8 +5,6 @@ import { useState, useEffect, useMemo } from "react";
 import { SingletonHooksContainer } from "react-singleton-hook";
 import {
   ApolloProvider,
-  ApolloClient,
-  InMemoryCache,
 } from "@apollo/react-hooks";
 
 import {
@@ -23,6 +21,7 @@ import { LockBanner, EULA, FAQCardOverlay, RulesCardOverlay, AbuseCardOverlay } 
 import DefaultSettings from "dchan/settings";
 import { useSettings } from "dchan/hooks";
 import { Settings, writeAppSetSettings } from "dchan/hooks/useSettings";
+import subgraphClient from "dchan/subgraph/client";
 
 // So there's an issue with how settings works
 //
@@ -85,14 +84,7 @@ function App() {
 
   const [pageTheme, setPageTheme] = useState<string>("blueboard");
 
-  const client = useMemo(
-    () =>
-      new ApolloClient({
-        uri: DefaultSettings.subgraph.endpoint,
-        cache: new InMemoryCache(),
-      }),
-    []
-  );
+  const client = useMemo(() => subgraphClient, []);
 
   return settings?.eula?.agreed === false ? (
     <EULA />
