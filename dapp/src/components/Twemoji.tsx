@@ -8,7 +8,7 @@ const Twemoji = ({ emoji }: { emoji: string }) => (
       __html: twemoji.parse(emoji, {
         folder: 'svg',
         ext: '.svg',
-        base: "/vendors/twemoji"
+        base: "/vendors/twemoji/"
       })
     }}
   />
