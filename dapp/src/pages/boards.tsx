@@ -5,16 +5,16 @@ import {
   BoardCreationForm,
   SearchWidget,
   BoardTabs,
+  BoardList,
+  GenericHeader
 } from "components";
-import BoardList from "components/board/list";
-import GenericHeader from "components/header/generic";
 import { useQuery } from "@apollo/react-hooks";
-import { Board } from "services/dchan/types";
+import { Board } from "dchan/subgraph/types";
 import { parse as parseQueryString } from "query-string";
 import { isString, uniqBy } from "lodash";
 import { Router } from "router";
 import { useEffect } from "react";
-import { BOARDS_SEARCH, BOARDS_SEARCH_BLOCK } from "graphql/queries";
+import { BOARDS_SEARCH, BOARDS_SEARCH_BLOCK } from "dchan/subgraph/graphql/queries";
 import { DateTime } from "luxon";
 
 interface BoardSearchData {
@@ -28,7 +28,7 @@ interface BoardSearchVars {
   block?: number;
 }
 
-export default function BoardListPage({ location, match: { params } }: any) {
+export const BoardListPage = ({ location, match: { params } }: any) => {
   const query = parseQueryString(location.search);
   const search =
     `${params?.board_name || ""}` || (isString(query.s) ? query.s : "");

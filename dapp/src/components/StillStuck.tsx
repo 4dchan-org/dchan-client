@@ -1,12 +1,12 @@
 import { ReactElement, useEffect, useState } from "react";
 
-export default function StillStuck({
+export const StillStuck = ({
     ms = 10_000,
     children,
 }: {
     ms?: number,
     children: ReactElement
-}) {
+}) => {
     const [stillStuck, setStillStuck] = useState<boolean>(false);
 
     useEffect(() => {

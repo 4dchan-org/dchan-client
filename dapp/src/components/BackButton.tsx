@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 
-export default function BackButton() {
+export const BackButton = () => {
     const history = useHistory();
 
     const back = useCallback(() => {

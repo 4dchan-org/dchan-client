@@ -1,10 +1,9 @@
-import { Board, Thread } from "services/dchan/types";
+import { Board, Thread } from "dchan/subgraph/types";
 import { Link } from "react-router-dom";
 import { Router } from "router";
-import BoardLink from "./BoardLink";
-import Post from "./post/Post";
+import { BoardLink, Post } from ".";
 
-export default function IndexView({
+export const IndexView = ({
   threads,
   board,
   block,
@@ -14,7 +13,7 @@ export default function IndexView({
   board?: Board;
   block?: number;
   showBoard?: boolean;
-}) {
+}) => {
   return (
     <div>
       {threads

@@ -1,18 +1,15 @@
 import polygonSrc from "assets/images/polygon.png";
 import thegraphSrc from "assets/images/thegraph.png";
-import IPFSClientWidget from "./IPFSClientWidget";
-import FAQButton from "./FAQCard";
-import RulesButton from "./RulesCard";
-import AbuseButton from "./AbuseCard";
+import { IPFSClientWidget, FAQButton, RulesButton, AbuseButton } from ".";
 import { name, version } from "../../package.json"
 
-export default function Footer({
+export const Footer = ({
   showContentDisclaimer = false,
   className = "mt-auto",
 }: {
   showContentDisclaimer?: boolean;
   className?: string;
-}) {
+}) => {
   return (
     <div>
       <div className={`${className}`}>

@@ -1,12 +1,11 @@
 import { useQuery } from "@apollo/react-hooks";
 import { Twemoji } from "components";
-import { THREADS_LIST_FAVORITES, THREADS_LIST_FAVORITES_BLOCK } from "graphql/queries"
+import { THREADS_LIST_FAVORITES, THREADS_LIST_FAVORITES_BLOCK } from "dchan/subgraph/graphql/queries"
 import { useFavorites } from "hooks";
 import { useMemo } from "react";
-import CatalogView from "./CatalogView";
-import Loading from "./Loading";
+import { CatalogView, Loading } from ".";
 
-export default function WatchedThreadsCard({block} : {block?: number}) {
+export const WatchedThreadsCard = ({block} : {block?: number}) => {
   const { favorites } = useFavorites();
   const ids = useMemo(
     () => (favorites ? Object.keys(favorites) : []),

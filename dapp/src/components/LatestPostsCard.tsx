@@ -1,10 +1,9 @@
 import { useQuery } from "@apollo/react-hooks";
-import { Board, Post } from "services/dchan/types";
-import { POSTS_GET_LAST, POSTS_GET_LAST_BLOCK } from "graphql/queries";
-import Loading from "./Loading";
-import PostSearchResult from "./PostSearchResult";
+import { Board, Post } from "dchan/subgraph/types";
+import { POSTS_GET_LAST, POSTS_GET_LAST_BLOCK } from "dchan/subgraph/graphql/queries";
+import { Loading, PostSearchResult } from ".";
 
-export default function LatestPostsCard({
+export const LatestPostsCard = ({
   block,
   limit,
   skip,
@@ -14,7 +13,7 @@ export default function LatestPostsCard({
   limit?: number;
   skip?: number;
   board?: Board;
-}) {
+}) => {
   const query = block ? POSTS_GET_LAST_BLOCK : POSTS_GET_LAST;
   const { loading, data } = useQuery<{ posts: Post[] }, any>(query, {
     pollInterval: 5_000,

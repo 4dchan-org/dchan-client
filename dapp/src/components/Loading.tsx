@@ -1,10 +1,10 @@
-import Spinner from "./Spinner";
+import { Spinner } from ".";
 
-export default function Loading({
+export const Loading = ({
   className = ""
 }: {
   className?: string
-}) {  
+}) => {  
     return (
       <div className={`${className} dchan-loading grid center`}>
           <Spinner speed={"sanic"}></Spinner>

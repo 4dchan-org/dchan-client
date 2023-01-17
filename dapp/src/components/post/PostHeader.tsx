@@ -1,9 +1,9 @@
 import { Menu, Status, UserLabel, Twemoji } from "components";
 import { useTraveledBlock } from "components/TimeTravelWidget";
-import { sendTip } from "services";
-import { Post, Thread } from "services/dchan/types";
+import { sendTip } from "services/web3";
+import { Post, Thread } from "dchan/subgraph";
 import { fromBigInt } from "services/datetime";
-import { isLowScore } from "services/dchan/entities/post";
+import { isLowScore } from "dchan/subgraph/entities/post";
 import {
   banPost,
   lockThread,
@@ -12,7 +12,7 @@ import {
   reportPost,
   unlockThread,
   unpinThread,
-} from "services/actions";
+} from "dchan/actions";
 import { usePubSub, useSettings, useUser, useWeb3, useFavorites } from "hooks";
 import { DateTime } from "luxon";
 import { ReactElement, useCallback, useState } from "react";
@@ -20,7 +20,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Router } from "router";
 import { parse as parseQueryString } from "query-string";
 
-function DateDisplay({ post }: { post: Post }) {
+export const DateDisplay = ({ post }: { post: Post }) => {
   const createdAt = fromBigInt(post.createdAtBlock.timestamp);
   const traveledBlock = useTraveledBlock();
   const relativeTime = createdAt.toRelative();
@@ -70,7 +70,7 @@ function DateDisplay({ post }: { post: Post }) {
   );
 }
 
-export default function PostHeader({
+export const PostHeader = ({
   post,
   thread,
   backlinks,
@@ -82,7 +82,7 @@ export default function PostHeader({
   backlinks?: object;
   block?: string;
   children?: ReactElement;
-}) {
+}) => {
   const {
     id,
     n,

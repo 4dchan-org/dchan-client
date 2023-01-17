@@ -1,12 +1,11 @@
-import { createBoard } from "services/actions";
+import { actions } from "dchan";
 import { useWeb3 } from "hooks";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router";
-import Card from "./Card";
-import WalletConnect from "./wallet/WalletConnect";
+import { Card, WalletConnect } from ".";
 
-export default function BoardCreationForm() {
+export const BoardCreationForm = () => {
   const { accounts, provider } = useWeb3();
   const history = useHistory();
   const [status, setStatus] = useState<string | object>();
@@ -15,7 +14,7 @@ export default function BoardCreationForm() {
   const { register, handleSubmit } = useForm();
   const onSubmit = async (data: any) => {
     setIsCreating(true);
-    const result = await createBoard(data, accounts, setStatus);
+    const result = await actions.createBoard(data, accounts, setStatus);
     const events = result?.events;
     if (events && events.length > 0) {
       const { transactionHash, logIndex } = events[0];

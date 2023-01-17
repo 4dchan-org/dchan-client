@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { debounce } from "lodash";
 
-export default function SearchWidget({
+export const SearchWidget = ({
   baseUrl,
   search = "",
   open = true
@@ -10,7 +10,7 @@ export default function SearchWidget({
   baseUrl: string;
   search?: string;
   open?: boolean
-}) {
+}) => {
   const history = useHistory();
   const [displayInput, setDisplayInput] = useState<string>(search || "");
   const setSearch = useCallback(

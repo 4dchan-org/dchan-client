@@ -1,9 +1,9 @@
 import { useSettings } from "hooks";
 import { useCallback, useState } from "react";
-import Card from "./Card";
+import { Card } from ".";
 import logo from "assets/images/dchan.png";
 
-export default function EULA() {
+export const EULA = () => {
   const [settings, setSettings] = useSettings();
   const [agreed, setAgreed] = useState<boolean>(false);
 

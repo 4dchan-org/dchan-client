@@ -1,14 +1,13 @@
-import { Board, Thread } from "services/dchan/types";
-import { IPFSImage, BoardLink, Twemoji } from "components";
-import PostBody from "components/post/PostBody";
-import { isLowScore as isLowScoreThread } from "services/dchan/entities/thread";
+import { Board, Thread } from "dchan/subgraph/types";
+import { IPFSImage, BoardLink, Twemoji, PostBody } from "components";
+import { isLowScore as isLowScoreThread } from "dchan/subgraph/entities/thread";
 import { useSettings } from "hooks";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
 import { DateTime } from "luxon";
 import { useState, useCallback } from "react";
 
-const CatalogThread = ({
+export const CatalogThread = ({
   thread,
   board,
   block,
@@ -48,8 +47,10 @@ const CatalogThread = ({
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const goToThread = useCallback(() => {
-    history.push(`${Router.thread(thread) || "/"}${block ? `?block=${block}` : ""}`)
-  }, [history, thread, block])
+    history.push(
+      `${Router.thread(thread) || "/"}${block ? `?block=${block}` : ""}`
+    );
+  }, [history, thread, block]);
 
   const focusThread = useCallback(() => {
     setIsFocused(true);
@@ -90,7 +91,9 @@ const CatalogThread = ({
             onClick={focusThread}
             className="absolute text-2xl text-gray-800 top-0 left-0 right-0 bottom-0"
           >
-            <div><Twemoji emoji={"⚠️"} /></div>
+            <div>
+              <Twemoji emoji={"⚠️"} />
+            </div>
             <div>Post hidden due to reports.</div>
             <div className="text-sm text-gray-600">Click to show anyway.</div>
           </button>
@@ -109,12 +112,16 @@ const CatalogThread = ({
           >
             <div className="absolute top-0 right-0 z-10">
               {isPinned ? (
-                <span title="Thread pinned. This might be important."><Twemoji emoji={"📌"} /></span>
+                <span title="Thread pinned. This might be important.">
+                  <Twemoji emoji={"📌"} />
+                </span>
               ) : (
                 ""
               )}
               {isLocked ? (
-                <span title="Thread locked. You cannot post."><Twemoji emoji={"🔒"} /></span>
+                <span title="Thread locked. You cannot post.">
+                  <Twemoji emoji={"🔒"} />
+                </span>
               ) : (
                 ""
               )}
@@ -127,7 +134,12 @@ const CatalogThread = ({
                   expandable={false}
                   thumbnail={false}
                   isSpoiler={isSpoiler}
-                  isNsfw={(isNsfw && !(true === board?.isNsfw) && !thread.board?.isNsfw) || false}
+                  isNsfw={
+                    (isNsfw &&
+                      !(true === board?.isNsfw) &&
+                      !thread.board?.isNsfw) ||
+                    false
+                  }
                 />
               </div>
             ) : (
@@ -181,6 +193,4 @@ const CatalogThread = ({
       </article>
     </div>
   );
-};
-
-export default CatalogThread;
+}

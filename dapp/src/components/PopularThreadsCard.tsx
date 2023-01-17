@@ -1,13 +1,12 @@
 import { useQuery } from "@apollo/react-hooks";
-import { Board, Thread } from "services/dchan/types";
-import { THREADS_LIST_MOST_POPULAR, THREADS_LIST_MOST_POPULAR_BLOCK } from "graphql/queries";
-import IndexView from "./IndexView";
-import Loading from "./Loading";
+import { Board, Thread } from "dchan/subgraph/types";
+import { THREADS_LIST_MOST_POPULAR, THREADS_LIST_MOST_POPULAR_BLOCK } from "dchan/subgraph/graphql/queries";
+import { IndexView, Loading } from ".";
 import { useTraveledBlock } from "./TimeTravelWidget";
 import { DateTime } from "luxon";
 import { useMemo } from "react";
 
-export default function PopularThreadsCard({block, board} : {block?: number, board?: Board}) {
+export const PopularThreadsCard = ({block, board} : {block?: number, board?: Board}) => {
   const currentBlock = useTraveledBlock();
   const cutoff = useMemo(
     () => Math.floor(

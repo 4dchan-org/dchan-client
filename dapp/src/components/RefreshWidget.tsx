@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { useEffect } from "react";
 import { useInterval } from "react-use";
 
-export default function RefreshWidget({ onRefresh }: { onRefresh: () => void }) {
+export const RefreshWidget = ({ onRefresh }: { onRefresh: () => void }) => {
   const [settings, setSettings] = useSettings();
 
   const [lastRefreshedRelative, setLastRefreshedAtRelative] =

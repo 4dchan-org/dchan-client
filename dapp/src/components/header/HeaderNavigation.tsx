@@ -1,6 +1,6 @@
 import { ApolloConsumer, ApolloClient, useQuery } from "@apollo/react-hooks";
-import { Board, Thread, Block } from "services/dchan/types";
-import { BOARDS_LIST_MOST_POPULAR } from "graphql/queries";
+import { Board, Thread, Block } from "dchan/subgraph/types";
+import { BOARDS_LIST_MOST_POPULAR } from "dchan/subgraph/graphql/queries";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { DateTime } from "luxon";
@@ -9,10 +9,10 @@ import {
   BoardLink,
   TimeTravelWidget,
   WatchedThreadsWidget,
-  Twemoji
+  Twemoji,
+  SettingsWidget 
 } from "components";
 import OverlayComponent from "components/OverlayComponent";
-import SettingsWidget from "components/SettingsWidget";
 
 interface BoardListData {
   boards: Board[];
@@ -40,7 +40,7 @@ type StartBlock = {
 
 const SettingsWidgetOverlay = OverlayComponent(SettingsWidget);
 
-export default function HeaderNavigation({
+export const HeaderNavigation = ({
   block,
   dateTime,
   board,
@@ -54,7 +54,7 @@ export default function HeaderNavigation({
   thread?: Thread;
   baseUrl?: string;
   search?: string;
-}) {
+}) => {
   const [startBlock, setStartBlock] = useState<StartBlock>({
     label: "Site creation",
     block: siteCreatedAtBlock,

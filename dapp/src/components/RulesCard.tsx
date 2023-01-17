@@ -3,7 +3,7 @@ import { useState } from "react";
 import { singletonHook } from "react-singleton-hook";
 import OverlayComponent from "./OverlayComponent";
 
-export function RulesCard() {
+export const RulesCard = () => {
   return (
     <Card
       title={<span>The rules</span>}
@@ -30,7 +30,7 @@ export const useRules = singletonHook<[boolean, (open: boolean) => void]>([false
   return useState<boolean>(false);
 })
 
-export function RulesCardOverlay() {
+export const RulesCardOverlay = () => {
   const [openRules, setOpenRules] = useRules();
   return openRules
     ? <RulesCardOverlayInternal
@@ -39,7 +39,7 @@ export function RulesCardOverlay() {
     : null;
 }
 
-export default function RulesButton({className = ""}: {className?: string}) {
+export const RulesButton = ({className = ""}: {className?: string}) => {
   const [, setOpenRules] = useRules();
   return (
     <>

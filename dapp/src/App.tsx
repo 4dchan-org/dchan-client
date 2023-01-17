@@ -12,19 +12,15 @@ import "assets/styles/index.scss";
 import {
   AdminPage,
   BoardPage,
-  BoardsPage,
+  BoardListPage,
   HomePage,
   IdReferencePage,
   PostsPage,
   ReferencePage,
   ThreadPage,
 } from "pages";
-import { LockBanner, EULA } from "components";
-import { FAQCardOverlay } from "components/FAQCard";
-import { RulesCardOverlay } from "components/RulesCard";
-import { AbuseCardOverlay } from "components/AbuseCard";
+import { LockBanner, EULA, FAQCardOverlay, RulesCardOverlay, AbuseCardOverlay } from "components";
 import DefaultSettings from "settings/default";
-
 import { useState } from "react";
 import { useSettings } from "hooks";
 import { Settings, writeAppSetSettings } from "hooks/useSettings";
@@ -110,7 +106,7 @@ function App() {
         <div className="App text-center">
           <Switch>
             <Route exact path="/" component={HomePage} />
-            <Route exact path="/_/boards" component={BoardsPage} />
+            <Route exact path="/_/boards" component={BoardListPage} />
             <Route path="/_/admin" component={AdminPage} />
             <Route path="/_/posts" component={PostsPage} />
             <Route path="/0x:id/:post_n" component={ReferencePage} />
@@ -192,7 +188,7 @@ function App() {
                 />
               )}
             />
-            <Route exact path="/:board_name" component={BoardsPage} />
+            <Route exact path="/:board_name" component={BoardListPage} />
           </Switch>
           <FAQCardOverlay />
           <RulesCardOverlay />

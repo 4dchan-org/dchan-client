@@ -1,14 +1,14 @@
 import { ReactElement } from "react";
 import { Link } from "react-router-dom";
-import BackButton from "./BackButton";
+import { BackButton } from ".";
 
-export default function Error({
+export const Error = ({
   subject,
   children,
 }: {
   subject: string;
   children: ReactElement
-}) {
+}) => {
   return (
     <div className="font-family-arial text-center">
       <div className="grid center min-h-100vh">

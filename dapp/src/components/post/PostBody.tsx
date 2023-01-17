@@ -1,17 +1,18 @@
 
 import { shortenAddress } from "services";
-import { Post, Thread } from "services/dchan/types";
-import parseComment, {
+import { Post, Thread } from "dchan/subgraph/types";
+import {
   ParserResult,
   PostReferenceValue,
-} from "services/postparser";
+  parseComment
+} from "dchan/postparser";
 import { ReactElement, useCallback, useEffect, useMemo, memo, useState } from "react";
 import { usePubSub, useWeb3 } from "hooks";
 import { isEqual } from "lodash";
 import { Router } from "router";
 import { Link } from "react-router-dom";
 
-function TextQuote({
+export const TextQuote = ({
   children,
   post,
   thread,
@@ -21,7 +22,7 @@ function TextQuote({
   post: Post;
   thread?: Thread;
   block?: string;
-}) {
+}) => {
   return (
     <span className="text-quote">
       &gt;{children.map((v) => renderValue(v, post, thread, block))}
@@ -278,7 +279,7 @@ function renderValue(
   }
 }
 
-function PostBody({
+export const PostBody = memo(({
   post,
   thread,
   block,
@@ -290,7 +291,7 @@ function PostBody({
   block?: string;
   thread?: Thread;
   post: Post;
-}) {
+}) => {
   const parsedComment = useMemo(
     () => parseComment(post.comment),
     [post.comment]
@@ -304,9 +305,7 @@ function PostBody({
       style={style}
       key={`${post.id}-${thread?.id}`}
     >
-      {parsedComment.map((v) => renderValue(v, post, thread, block))}
+      {parsedComment.map((v: any) => renderValue(v, post, thread, block))}
     </div>
   );
-}
-
-export default memo(PostBody, isEqual);
+}, isEqual)

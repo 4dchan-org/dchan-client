@@ -1,7 +1,7 @@
 import { useLocation } from "react-router";
 import { HashLink } from "react-router-hash-link";
 
-export default function Anchor({
+export const Anchor = ({
   label,
   to,
   onClick
@@ -9,7 +9,7 @@ export default function Anchor({
   label: string
   to: string,
   onClick?: any
-}) {
+}) => {
   const search = useLocation().search;
   
   return (

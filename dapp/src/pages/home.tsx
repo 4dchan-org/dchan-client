@@ -1,12 +1,10 @@
-import HeaderNavigation from "components/header/HeaderNavigation";
-import { WatchedThreadsCard } from "components";
-import HeaderLogo from "components/header/logo";
+import { HeaderNavigation, HeaderLogo, WatchedThreadsCard } from "components";
 import { parse as parseQueryString } from "query-string";
 import { DateTime } from "luxon";
 import { useEffect, useState, useCallback } from "react";
 import { useTitle } from "react-use";
 import { subscribe, unsubscribe } from "pubsub-js";
-import { Board } from "services/dchan/types";
+import { Board } from "dchan/subgraph/types";
 import {
   Card,
   Footer,
@@ -16,7 +14,7 @@ import {
   LatestPostsCard,
 } from "components";
 
-export default function HomePage({ location }: any) {
+export const HomePage = ({ location }: any) => {
   useTitle("dchan.network");
 
   const [board, setBoard] = useState<Board>();

@@ -2,7 +2,7 @@ import { StillStuck, Twemoji } from "components";
 import { useWeb3 } from "hooks";
 import { useCallback, useState } from "react";
 
-export default function WalletConnect() {
+export const WalletConnect = () => {
   const [isConnecting, setIsConnecting] = useState<boolean>(false)
   const [hasError, setHasError] = useState<any | false>(false)
   const { provider, loadWeb3Modal, logoutOfWeb3Modal } = useWeb3();

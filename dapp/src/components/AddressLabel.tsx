@@ -1,6 +1,6 @@
-import IdLabel from "./IdLabel";
+import { IdLabel } from ".";
 
-export default function AddressLabel({ address, className = "", etherscannable = true }: { className?: string, address: string, etherscannable?: boolean }) {
+export const AddressLabel = ({ address, className = "", etherscannable = true }: { className?: string, address: string, etherscannable?: boolean }) => {
   return (
     <a
       className="dchan-link"

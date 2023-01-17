@@ -1,12 +1,11 @@
 import { useQuery } from "@apollo/react-hooks";
-import { Board, Thread } from "services/dchan/types";
+import { Board, Thread } from "dchan/subgraph/types";
 import { TabbedCard } from "components";
-import { THREADS_TABS, THREADS_TABS_BLOCK } from "graphql/queries";
-import Loading from "./Loading";
+import { THREADS_TABS, THREADS_TABS_BLOCK } from "dchan/subgraph/graphql/queries";
+import { Loading, CatalogView } from ".";
 import { useTraveledBlock } from "./TimeTravelWidget";
 import { useMemo } from "react";
 import { DateTime } from "luxon";
-import CatalogView from "./CatalogView";
 
 interface ThreadListData {
   mostPopular: Thread[];
@@ -16,7 +15,7 @@ interface ThreadListData {
 
 interface ThreadListVars {}
 
-export default function ThreadTabs({
+export const ThreadTabs = ({
   className = "",
   block,
   limit,
@@ -27,7 +26,7 @@ export default function ThreadTabs({
   limit?: number;
   highlight?: Thread;
   board?: Board;
-}) {
+}) => {
   const currentBlock = useTraveledBlock();
   const cutoff = useMemo(
     () => Math.floor(

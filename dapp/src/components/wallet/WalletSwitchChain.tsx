@@ -6,7 +6,7 @@ import { useCallback } from "react";
 import { useState } from "react";
 import polygonLogo from "assets/images/polygon.png";
 
-export default function WalletSwitchChain() {
+export const WalletSwitchChain = () => {
   const { provider, chainId } = useWeb3();
   const [switchingChain, setSwitchingChain] = useState<boolean>(false);
 

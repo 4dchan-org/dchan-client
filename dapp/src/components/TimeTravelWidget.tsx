@@ -1,7 +1,7 @@
 import { ApolloQueryResult, ApolloClient } from "@apollo/react-hooks";
-import { Block } from "services/dchan/types";
+import { Block } from "dchan/subgraph/types";
 import { fromBigInt } from "services/datetime";
-import { BLOCK_BY_DATE, BLOCK_BY_NUMBER, GET_NEXT_BLOCK, GET_PREV_BLOCK } from "graphql/queries";
+import { BLOCK_BY_DATE, BLOCK_BY_NUMBER, GET_NEXT_BLOCK, GET_PREV_BLOCK } from "dchan/subgraph/graphql/queries";
 import { useLastBlock } from "hooks";
 import { DateTime } from "luxon";
 import {
@@ -15,7 +15,7 @@ import {
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import { singletonHook } from "react-singleton-hook";
-import Twemoji from "./Twemoji";
+import { Twemoji } from ".";
 
 export interface TimeTravelRange {
   min: Block;
@@ -110,7 +110,7 @@ const useCurrentBlock = singletonHook<Block | undefined>(undefined, () => {
   return block;
 });
 
-export default forwardRef(
+export const TimeTravelWidget = forwardRef(
   (
     {
       client,

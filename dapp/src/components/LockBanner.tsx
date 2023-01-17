@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
-import { CHAN_STATUS } from "graphql/queries";
+import { CHAN_STATUS } from "dchan/subgraph/graphql/queries";
 import poopieSrc from "assets/images/poopie.png";
-import Card from "./Card";
+import { Card } from ".";
 import { useSettings } from "hooks";
 interface ChanStatusData {
   chanStatus: {
@@ -13,7 +13,7 @@ interface ChanStatusVars {
   id: string;
 }
 
-export default function LockBanner() {
+export const LockBanner = () => {
   const [settings] = useSettings();
   const { data } = useQuery<ChanStatusData, ChanStatusVars>(CHAN_STATUS, {
     variables: {

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import BackButton from "./BackButton";
+import { BackButton } from ".";
 
-export default function SimpleFooter() {
+export const SimpleFooter = () => {
   return (
     <div className="p-4">
       <div>

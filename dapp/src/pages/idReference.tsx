@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 import { Error, Loading, StillStuck } from "components";
-import { Board, BoardRef, Post, PostRef, Thread, ThreadRef } from "services/dchan/types";
-import { SEARCH_BY_ID, SEARCH_BY_ID_BLOCK } from "graphql/queries";
+import { Board, BoardRef, Post, PostRef, Thread, ThreadRef } from "dchan/subgraph/types";
+import { SEARCH_BY_ID, SEARCH_BY_ID_BLOCK } from "dchan/subgraph/graphql/queries";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
@@ -20,7 +20,7 @@ interface IdSearchVars {
   block?: number;
 }
 
-export default function IdReferencePage({ location, match: { params } }: any) {
+export const IdReferencePage = ({ location, match: { params } }: any) => {
   const [error, setError] = useState<string>();
   const history = useHistory();
 

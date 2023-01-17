@@ -1,10 +1,9 @@
-import { Post } from "services/dchan/types";
+import { Post } from "dchan/subgraph/types";
 import { useCallback } from "react";
 import { Link, useHistory } from "react-router-dom";
-import BoardLink from "./BoardLink";
-import PostComponent from "./post/Post";
+import { BoardLink, Post as PostComponent } from ".";
 
-export default function PostSearchResult({ post, block }: { post: Post, block?: string }) {
+export const PostSearchResult = ({ post, block }: { post: Post, block?: string }) => {
   const history = useHistory();
   const postLink = `/${post.id}${block ? `?block=${block}` : ""}`;
   const openPost = useCallback(() => {

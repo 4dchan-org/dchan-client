@@ -1,4 +1,4 @@
-import { Thread } from "services/dchan/types";
+import { Thread } from "dchan/subgraph/types";
 import { omit } from "lodash";
 import { useCallback, useMemo } from "react";
 import { singletonHook } from "react-singleton-hook";

@@ -1,10 +1,9 @@
-import { Card } from "components";
+import { Card, Faucets } from ".";
 import { useState } from "react";
 import { singletonHook } from "react-singleton-hook";
-import Faucets from "./Faucets";
 import OverlayComponent from "./OverlayComponent";
 
-export function TheGraph() {
+export const TheGraph = () => {
   return (
     <span>
       <a
@@ -31,7 +30,7 @@ export function TheGraph() {
   );
 }
 
-export function Polygon() {
+export const Polygon = () => {
   return (
     <a
       className="dchan-link"
@@ -44,7 +43,7 @@ export function Polygon() {
   );
 }
 
-export function DchanNetwork() {
+export const DchanNetwork = () => {
   return (
     <a
       className="dchan-link"
@@ -57,7 +56,7 @@ export function DchanNetwork() {
   );
 }
 
-export function IPFS() {
+export const IPFS = () => {
   return (
     <a
       className="dchan-link"
@@ -70,13 +69,13 @@ export function IPFS() {
   );
 }
 
-export function FAQCard({
+export const FAQCard = ({
   onExit,
   className,
 }: {
   onExit: () => void;
   className?: string;
-}) {
+}) => {
   return (
     <Card title={<span>FAQ</span>} className={className} collapsible={false}>
       <div className="text-left p-4 text-sm">
@@ -299,7 +298,7 @@ export function FAQCard({
             lose my life savings on.
           </strong>
           <div>
-            <DchanNetwork /> does not require any token to function except{" "}
+            <DchanNetwork /> does not require any token to const except{" "}
             <Polygon /> for actions such as posting or creating boards, so no.
             <br />
             This will change in the future.
@@ -397,7 +396,7 @@ export const useFAQ = singletonHook<[boolean, (open: boolean) => void]>(
   }
 );
 
-export function FAQCardOverlay() {
+export const FAQCardOverlay = () => {
   const [openFAQ, setOpenFAQ] = useFAQ();
   return openFAQ ? (
     <FAQCardOverlayInternal
@@ -407,7 +406,7 @@ export function FAQCardOverlay() {
   ) : null;
 }
 
-export default function FAQButton({ className = "" }: { className?: string }) {
+export const FAQButton = ({ className = "" }: { className?: string }) => {
   const [, setOpenFAQ] = useFAQ();
   return (
     <>

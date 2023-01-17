@@ -1,10 +1,10 @@
-import { Board } from "services/dchan/types";
+import { Board } from "dchan/subgraph/types";
 import { DateTime } from "luxon";
 import { Router } from "router";
-import Anchor from "./Anchor";
+import { Anchor } from ".";
 import { Link } from "react-router-dom";
 
-export default function ContentNavigation({
+export const ContentNavigation = ({
   board,
   block,
   dateTime,
@@ -12,7 +12,7 @@ export default function ContentNavigation({
   board: Board;
   block?: string;
   dateTime?: DateTime;
-}) {
+}) => {
   let timeTravelParameters: {block?: string, date?: string} = {};
   if (block) {
     timeTravelParameters.block = `${block}`;

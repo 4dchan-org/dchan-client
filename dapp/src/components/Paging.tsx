@@ -1,6 +1,6 @@
 import { Link, useHistory } from "react-router-dom";
 
-export default function Paging({ url, page, maxPage, block }: any) {
+export const Paging = ({ url, page, maxPage, block }: any) => {
   const history = useHistory();
   return (
     <div className="p-2">

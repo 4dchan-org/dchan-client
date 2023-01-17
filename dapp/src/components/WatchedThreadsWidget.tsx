@@ -1,17 +1,15 @@
 import { useQuery } from "@apollo/react-hooks";
 import { useThrottleCallback } from "@react-hook/throttle";
-import { Thread } from "services/dchan/types";
-import { THREADS_LIST_FAVORITES } from "graphql/queries";
+import { Thread } from "dchan/subgraph/types";
+import { THREADS_LIST_FAVORITES } from "dchan/subgraph/graphql/queries";
 import { useFavorites } from "hooks";
 import { truncate } from "lodash";
 import { useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Router } from "router";
-import BoardLink from "./BoardLink";
-import Loading from "./Loading";
-import Twemoji from "./Twemoji";
+import { BoardLink, Loading, Twemoji } from ".";
 
-export default function WatchedThreadsWidget({ block }: { block?: string }) {
+export const WatchedThreadsWidget = ({ block }: { block?: string }) => {
   const { favorites, removeFavorite } = useFavorites();
   const ids = useMemo(
     () => (favorites ? Object.keys(favorites) : []),

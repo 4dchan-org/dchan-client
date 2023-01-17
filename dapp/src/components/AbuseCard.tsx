@@ -32,7 +32,7 @@ export function AbuseCardOverlay() {
     : null;
 }
 
-export default function AbuseButton({className = ""}: {className?: string}) {
+export const AbuseButton = ({className = ""}: {className?: string}) => {
   const [, setOpenAbuse] = useAbuse();
   return (
     <>

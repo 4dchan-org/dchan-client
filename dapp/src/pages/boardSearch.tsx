@@ -1,18 +1,16 @@
-import { Footer, Card } from "components";
-import BoardList from "components/board/list";
-import GenericHeader from "components/header/generic";
-import { BOARDS_SEARCH } from "graphql/queries";
+import { Footer, Card, BoardList, GenericHeader } from "components";
+import { BOARDS_SEARCH } from "dchan/subgraph/graphql/queries";
 import { useQuery } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
 import { parse as parseQueryString } from "query-string";
 import { Router } from "router";
 
-export default function BoardListPage({
+export const BoardSearchPage = ({
   location,
   match: {
     params: { boardName: name },
   },
-}: any) {
+}: any) => {
   const query = parseQueryString(location.search);
   const { data } = useQuery(BOARDS_SEARCH, {
     variables: { name },

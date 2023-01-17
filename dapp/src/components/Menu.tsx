@@ -1,4 +1,4 @@
-export default function Menu({ children }: any) {
+export const Menu = ({ children }: any) => {
   const els = children ? children.map ? children : [children] : []
 
   return (

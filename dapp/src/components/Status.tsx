@@ -1,15 +1,15 @@
 import { isString } from "lodash";
-import Spinner from "./Spinner";
+import { Spinner } from ".";
 
 export type SetStatus = React.Dispatch<React.SetStateAction<any>>;
 
-export default function Status({
+export const Status = ({
   status,
   className = "",
 }: {
   status: any;
   className?: string;
-}) {
+}) => {
   return status ? (
     <div className={className + " inline-block text-xs"}>
       <div className="bg-secondary px-1 border border-black">

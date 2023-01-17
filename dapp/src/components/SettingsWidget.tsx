@@ -2,10 +2,10 @@ import { useSettings } from "hooks";
 import { useMemo, useState } from "react";
 import { debounce } from "lodash";
 import { Settings } from "hooks/useSettings";
-import Twemoji from "./Twemoji";
+import { Twemoji } from ".";
 // import DefaultSettings from "settings/default";
 
-export default function SettingsWidget({ onExit }: { onExit: () => void }) {
+export const SettingsWidget = ({ onExit }: { onExit: () => void }) => {
   const [settings, setSettings] = useSettings();
 
   /*

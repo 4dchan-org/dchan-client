@@ -1,12 +1,12 @@
 import { useLastBlock, useSettings } from "hooks";
 import { parse as parseQueryString } from "query-string";
 import { DateTime } from "luxon";
-import { Board, BoardRef, Thread } from "services/dchan/types";
+import { Board, BoardRef, Thread } from "dchan/subgraph/types";
 import { useEffect, useMemo } from "react";
 import { Router } from "router";
-import { BOARD_GET, BOARD_CATALOG } from "graphql/queries";
+import { BOARD_GET, BOARD_CATALOG } from "dchan/subgraph/graphql/queries";
 import { useQuery } from "@apollo/react-hooks";
-import { isLowScore } from "services/dchan/entities/thread";
+import { isLowScore } from "dchan/subgraph/entities/thread";
 import {
   Footer,
   ContentHeader,
@@ -14,10 +14,10 @@ import {
   Anchor,
   CatalogView,
   IndexView,
+  Paging
 } from "components";
 import { useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
-import Paging from "components/Paging";
 
 interface BoardCatalogData {
   board: Board;
@@ -40,7 +40,7 @@ interface BoardVars {
   block: number;
 }
 
-export default function BoardPage({
+export const BoardPage = ({
   location,
   match: { params },
   pageTheme,
@@ -50,7 +50,7 @@ export default function BoardPage({
   match: {params: any},
   pageTheme: string,
   setPageTheme: (theme: string) => void,
-}) {
+}) => {
   let { board_id, board_name } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 

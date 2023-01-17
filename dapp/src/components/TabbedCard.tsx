@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 
-export default function TabbedCard({
+export const TabbedCard = ({
   children,
   className = "",
   sectionClassName = "",
@@ -11,7 +11,7 @@ export default function TabbedCard({
   className?: string;
   sectionClassName?: string
   containerClassName?: string;
-}) {
+}) => {
   const [currentChild, setCurrentChild] = useState<string>(children.keys().next().value);
   let displayChild = currentChild;
   if (!children.has(currentChild)) {

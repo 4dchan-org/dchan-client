@@ -1,9 +1,6 @@
-import GasPriceWidget from "./GasPriceWidget";
-import WalletAccount from "./wallet/WalletAccount";
-import WalletConnect from "./wallet/WalletConnect";
-import WalletSwitchChain from "./wallet/WalletSwitchChain";
+import { GasPriceWidget, WalletAccount, WalletConnect, WalletSwitchChain } from ".";
 
-export default function Wallet() {
+export const Wallet = () => {
   return (
     <span>
       <WalletConnect />

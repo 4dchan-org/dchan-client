@@ -1,6 +1,6 @@
 import { useSettings } from "hooks";
 
-export default function BoardViewSettings() {
+export const BoardViewSettings = () => {
   const [settings, setSettings] = useSettings();
 
   return (

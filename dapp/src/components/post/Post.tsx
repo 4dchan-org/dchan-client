@@ -1,16 +1,15 @@
 import { IPFSImage, Menu, Twemoji } from "components";
-import { Post as DchanPost, Thread } from "services/dchan/types";
-import { isLowScore } from "services/dchan/entities/post";
+import { Post as DchanPost, Thread } from "dchan/subgraph/types";
+import { isLowScore } from "dchan/subgraph/entities/post";
 import { usePubSub, useSettings, useUser } from "hooks";
 import { truncate } from "lodash";
 import { useCallback } from "react";
 import { ReactElement, useEffect, useRef, useState, memo } from "react";
-import PostBody from "./PostBody";
-import PostHeader from "./PostHeader";
+import { PostBody, PostHeader } from ".";
 import { isEqual } from "lodash";
 import { Link } from "react-router-dom";
 
-function Post({
+export const Post = memo(({
   children,
   post,
   thread,
@@ -28,7 +27,7 @@ function Post({
   enableBacklinks?: boolean;
   showNsfw?: boolean;
   showPostMarker?: boolean;
-}) {
+}) => {
   let {
     id,
     from: { id: address },
@@ -368,6 +367,4 @@ function Post({
       </div>
     </div>
   );
-}
-
-export default memo(Post, isEqual);
+}, isEqual);

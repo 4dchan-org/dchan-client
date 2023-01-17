@@ -1,4 +1,4 @@
-export default function Faucets() {
+export const Faucets = () => {
   return (
     <ul>
       <li>

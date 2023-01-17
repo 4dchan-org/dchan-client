@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 
-export default function Card({
+export const Card = ({
   className = "grid",
   bodyClassName = "",
   title,
@@ -16,7 +16,7 @@ export default function Card({
   titleRight?: ReactElement;
   open?: boolean;
   collapsible?: boolean;
-}) {
+}) => {
   return (
     collapsible ? <>
       <article className={`${className} max-w-100vw`}>

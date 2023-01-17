@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
-import { Client } from "services/dchan/types";
+import { Client } from "dchan/subgraph/types";
 import { fromBigInt } from "services/datetime";
-import { IPFS_CLIENT } from "graphql/queries";
+import { IPFS_CLIENT } from "dchan/subgraph/graphql/queries";
 import { DateTime } from "luxon";
 
 type Channel = Client[];
@@ -15,7 +15,7 @@ interface IPFSClientVars {
   id: string;
 }
 
-export default function IPFSClientWidget() {
+export const IPFSClientWidget = () => {
   const { data } = useQuery<IPFSClientData, IPFSClientVars>(IPFS_CLIENT, {});
 
   const stable = data?.stable?.[0];

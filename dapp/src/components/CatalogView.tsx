@@ -1,7 +1,7 @@
-import { Board, Thread } from "services/dchan/types";
-import CatalogThread from "./catalog/CatalogThread";
+import { Board, Thread } from "dchan/subgraph/types";
+import { CatalogThread } from ".";
 
-export default function CatalogView({
+export const CatalogView = ({
   threads,
   board,
   block,
@@ -11,7 +11,7 @@ export default function CatalogView({
   board?: Board,
   block?: number,
   showBoard?: boolean
-}) {
+}) => {
   return (
     <div className="flex flex-row flex-wrap justify-center place-items-start font-size-090rem px-2 sm:px-4 flex-grow">
       {threads.filter(t => !!t && !!t.board).map(thread => (

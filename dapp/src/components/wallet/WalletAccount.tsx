@@ -3,7 +3,7 @@ import { UserLabel, Faucets } from "components";
 import polygonLogo from "assets/images/polygon.png";
 import { useWeb3, useUser } from "hooks";
 
-export default function WalletAccount() {
+export const WalletAccount = () => {
   const { provider, accounts, balance, chainId } = useWeb3();
   const user = useUser().data?.user;
   const account = accounts[0];

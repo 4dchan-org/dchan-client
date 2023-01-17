@@ -1,9 +1,9 @@
-import { Board } from "services/dchan/types";
+import { Board } from "dchan/subgraph/types";
 import { Router } from "router";
 import { Link } from "react-router-dom";
-import BoardTabs from "./BoardTabs";
+import { BoardTabs } from ".";
 
-export default function PopularBoardsCard({block, highlight}: {block?: number, highlight?: Board}) {
+export const PopularBoardsCard = ({block, highlight}: {block?: number, highlight?: Board}) => {
   return (
     <div className="dchan-popular-boards">
       <BoardTabs block={block} limit={10} highlight={highlight} />

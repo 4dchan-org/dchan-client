@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { singletonHook } from "react-singleton-hook";
 import DefaultSettings from "settings/default";
-import useLocalStorage from "./useLocalStorage";
+import { useLocalStorage } from ".";
 
 export type Settings = {
     contract: {

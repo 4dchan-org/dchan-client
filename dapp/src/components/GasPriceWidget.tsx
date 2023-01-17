@@ -1,10 +1,10 @@
-import { getWeb3 } from "services";
+import { getWeb3 } from "services/web3";
 import { useEffect, useState } from "react";
 import { round } from "lodash";
 import { useWeb3 } from "hooks";
 import { Twemoji } from "components";
 
-export default function GasPriceWidget() {
+export const GasPriceWidget = () => {
   const { balance, gasPrice } = useWeb3();
   const [gweiPrice, setGweiPrice] = useState(NaN);
   const [txPrice, setTxPrice] = useState(NaN);

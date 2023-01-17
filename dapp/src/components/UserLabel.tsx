@@ -1,7 +1,7 @@
-import { User } from "services/dchan/types";
-import IdLabel from "./IdLabel";
+import { User } from "dchan/subgraph/types";
+import { IdLabel } from ".";
 
-export default function UserLabel({ user, className = ""}: { className?: string, user: User }) {
+export const UserLabel = ({ user, className = ""}: { className?: string, user: User }) => {
   return (
     <a
       className="dchan-link"

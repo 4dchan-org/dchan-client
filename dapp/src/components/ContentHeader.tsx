@@ -1,15 +1,11 @@
 import { useThrottleCallback } from "@react-hook/throttle";
-import { Board, Thread } from "services/dchan/types";
+import { Board, Thread } from "dchan/subgraph/types";
 import { useLastBlock } from "hooks";
 import { DateTime } from "luxon";
 import { ReactElement } from "react";
-import BoardHeader from "./board/header";
-import FormPost from "./form/FormPost";
-import RefreshWidget from "./RefreshWidget";
-import BoardViewSettings from "./settings/BoardViewSettings";
-import ContentNavigation from "./ContentNavigation";
+import { BoardHeader, FormPost, RefreshWidget, BoardViewSettings, ContentNavigation } from ".";
 
-export default function ContentHeader({
+export const ContentHeader = ({
   board,
   thread,
   title,
@@ -29,7 +25,7 @@ export default function ContentHeader({
   summary?: ReactElement;
   dateTime?: DateTime;
   onRefresh: () => void;
-}) {
+}) => {
   const { lastBlock } = useLastBlock();
   const throttledRefresh = useThrottleCallback(onRefresh, 1, true);
 

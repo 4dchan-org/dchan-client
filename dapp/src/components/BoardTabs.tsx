@@ -1,9 +1,8 @@
-import BoardList from "components/board/list";
+import { BoardList, Loading } from "components";
 import { useQuery } from "@apollo/react-hooks";
-import { Board } from "services/dchan/types";
+import { Board } from "dchan/subgraph/types";
 import { TabbedCard } from "components";
-import { BOARD_TABS, BOARD_TABS_AT_BLOCK }  from "graphql/queries";
-import Loading from "./Loading";
+import { BOARD_TABS, BOARD_TABS_AT_BLOCK }  from "dchan/subgraph/graphql/queries";
 
 interface BoardListData {
   mostPopular: Board[];
@@ -13,7 +12,7 @@ interface BoardListData {
 
 interface BoardListVars {}
 
-export default function BoardTabs({
+export const BoardTabs = ({
   className = "",
   block,
   limit,
@@ -23,7 +22,7 @@ export default function BoardTabs({
   block?: number;
   limit?: number;
   highlight?: Board;
-}) {
+}) => {
   const { data, loading } = useQuery<BoardListData, BoardListVars>(
     block ? BOARD_TABS_AT_BLOCK : BOARD_TABS,
     {

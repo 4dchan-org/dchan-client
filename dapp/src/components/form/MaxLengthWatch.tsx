@@ -1,4 +1,4 @@
-export default function MaxLengthWatcher({
+export const MaxLengthWatch = ({
   value,
   className = "",
   maxLength,
@@ -6,7 +6,7 @@ export default function MaxLengthWatcher({
   className?: string,
   value: number;
   maxLength: number;
-}) {
+}) => {
   return (
     <span
       className={[

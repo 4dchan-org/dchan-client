@@ -5,7 +5,7 @@ import nsfwSrc from "assets/images/nsfw.png";
 import ipfsLoadingSrc from "assets/images/ipfs.png";
 import ipfsErrorSrc from "assets/images/ipfs_error.png";
 
-export default function IPFSImage({
+export const IPFSImage = ({
   hash,
   style,
   htmlLoading = "lazy",
@@ -25,7 +25,7 @@ export default function IPFSImage({
   expandable?: boolean;
   thumbnail?: boolean;
   thumbnailClass?: string;
-}) {
+}) => {
   const mouseRef = useRef(null);
   const mouse = useMouse(mouseRef, {
     enterDelay: 100,

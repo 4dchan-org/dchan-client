@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { USER_GET } from "graphql/queries";
-import { Admin, User } from "services/dchan/types";
+import { USER_GET } from "dchan/subgraph/graphql/queries";
+import { Admin, User } from "dchan/subgraph/types";
 import useWeb3 from "./useWeb3";
 
 interface UserData {

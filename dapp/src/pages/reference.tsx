@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 import { Error, Loading } from "components";
-import { Post, Thread } from "services/dchan/types";
-import { queries } from "graphql/queries";
+import { Post, Thread } from "dchan/subgraph/types";
+import { queries } from "dchan/subgraph/graphql/queries";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
@@ -21,7 +21,7 @@ interface RefSearchVars {
   block?: number;
 }
 
-export default function ReferencePage({ location, match: { params } }: any) {
+export const ReferencePage = ({ location, match: { params } }: any) => {
   const [error, setError] = useState<string>();
 
   const history = useHistory();

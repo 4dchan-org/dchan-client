@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { shortenAddress } from "services";
-import { Board, Thread } from "services/dchan/types";
+import { Board, Thread } from "dchan/subgraph/types";
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
@@ -19,8 +19,8 @@ import {
   useSettings,
 } from "hooks";
 import { isString, uniqueId } from "lodash";
-import { postMessage } from "services/actions";
-import MaxLengthWatch from "./MaxLengthWatch";
+import { postMessage } from "dchan/actions";
+import { MaxLengthWatch } from ".";
 import useFormPersist from "hooks/useFormPersist";
 import {
   Status,
@@ -28,12 +28,12 @@ import {
   Wallet,
   Menu,
   IdLabel,
-  FAQCard,
-  RulesCard,
+  FAQButton,
+  RulesButton,
   Twemoji
 } from "components";
 
-export default function FormPost({
+export const FormPost = ({
   baseUrl,
   thread,
   board,
@@ -41,7 +41,7 @@ export default function FormPost({
   baseUrl?: string; // @HACK this is only needed to keep track of when to reset the form
   thread?: Thread;
   board?: Board;
-}) {
+}) => {
   const { provider, chainId, accounts } = useWeb3();
   const [settings] = useSettings();
   const history = useHistory();
@@ -713,7 +713,7 @@ export default function FormPost({
                     >
                       <ul>
                         <li>
-                          I've read the <RulesCard /> and the <FAQCard />{" "}
+                          I've read the <RulesButton /> and the <FAQButton />{" "}
                           before posting.
                         </li>
                         <li>

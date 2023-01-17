@@ -4,9 +4,9 @@ import { DateTime } from "luxon";
 import { useSettings } from "hooks";
 import { useQuery } from "@apollo/react-hooks";
 import { useEffect, useMemo } from "react";
-import { isLowScore, sortByCreatedAt } from "services/dchan/entities/post";
-import { POST_SEARCH, POST_SEARCH_BLOCK } from "graphql/queries";
-import { Post } from "services/dchan/types";
+import { isLowScore, sortByCreatedAt } from "dchan/subgraph/entities/post";
+import { POST_SEARCH, POST_SEARCH_BLOCK } from "dchan/subgraph/graphql/queries";
+import { Post } from "dchan/subgraph/types";
 import { Link } from "react-router-dom";
 import { Router } from "router";
 import {
@@ -16,9 +16,9 @@ import {
   Loading,
   SearchWidget,
   LatestPostsCard,
+  Post as PostComponent,
+  Paging
 } from "components";
-import PostComponent from "components/post/Post";
-import Paging from "components/Paging";
 
 interface SearchData {
   postSearch: Post[];
@@ -28,7 +28,7 @@ interface SearchVars {
   search: string;
 }
 
-export default function PostsPage({ location, match: { params } }: any) {
+export const PostsPage = ({ location, match: { params } }: any) => {
   const query = parseQueryString(location.search);
   const s = query.s || query.search;
   const search = isString(s) ? s : "";

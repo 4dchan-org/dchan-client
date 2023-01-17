@@ -1,6 +1,6 @@
 import { backgroundColorAddress, shortenAddress } from "services";
 
-export default function IdLabel({
+export const IdLabel = ({
   id,
   className = "",
   children
@@ -8,7 +8,7 @@ export default function IdLabel({
   className?: string;
   id: string;
   children?: any;
-}) {
+}) => {
   const shortId = shortenAddress(id);
   if (children == null) {
     children = shortId;

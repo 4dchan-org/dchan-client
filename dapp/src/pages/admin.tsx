@@ -1,12 +1,10 @@
-import { Footer } from "components";
-import GenericHeader from "components/header/generic";
+import { Footer, GenericHeader, WalletConnect } from "components";
 import { Link } from "react-router-dom";
 import { useWeb3, useUser } from "hooks";
-import { sendMessage } from "services";
-import WalletConnect from "components/wallet/WalletConnect";
+import { sendMessage } from "services/web3";
 import { useEffect } from "react";
 
-export default function AdminPage() {
+export const AdminPage = () => {
   const { isAdmin } = useUser();
   const { accounts } = useWeb3();
 

@@ -1,16 +1,15 @@
 import { useQuery } from "@apollo/react-hooks";
 import { shortenAddress } from "services";
-import { Board, Post, Thread } from "services/dchan/types";
-import { THREAD_GET, THREAD_GET_LAST_BLOCK } from "graphql/queries";
+import { Board, Post, Thread } from "dchan/subgraph/types";
+import { THREAD_GET, THREAD_GET_LAST_BLOCK } from "dchan/subgraph/graphql/queries";
 import { DateTime } from "luxon";
 import { parse as parseQueryString } from "query-string";
 import { useEffect, useMemo } from "react";
 import { Router } from "router";
-import PostComponent from "components/post/Post";
 import { usePubSub } from "hooks";
 import { useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
-import { ContentHeader, Footer, Loading, Anchor } from "components";
+import { ContentHeader, Footer, Loading, Anchor, Post as PostComponent } from "components";
 interface ThreadContentData {
   board: Board;
   threads: Thread[];
@@ -22,7 +21,7 @@ interface ThreadContentVars {
   block?: number;
 }
 
-export default function ThreadPage({
+export const ThreadPage = ({
   location,
   match: { params },
   pageTheme,
@@ -32,7 +31,7 @@ export default function ThreadPage({
   match: {params: any},
   pageTheme: string,
   setPageTheme: (theme: string) => void,
-}) {
+}) => {
   let { board_name, board_id, user_id, thread_n } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 
