@@ -12,19 +12,14 @@ Required:
 - [`docker`](https://docs.docker.com/engine/install/#server) 
 - [`docker-compose`](https://docs.docker.com/compose/install/)
 
+## Setup
+- `cp docker-compose.dev.yml docker-compose.yml`
+
 ## Start development
-- `./bin/docker/setup.sh` 
-  - Only run the first time
-- `./bin/docker/dev.sh`
-  - `yarn start`
+- `./bin/docker/start.sh`
 
-## Release production build
-- `./bin/docker/dapp/release.sh`
-  - or `yarn build` in docker dev
-
-## Serve production build
-- `./bin/docker/dapp/serve.sh`
-  - `http://localhost:8080`
+## Build production release
+- `./bin/docker/build.sh`
 
 # Links
 - Official website: https://dchan.network/

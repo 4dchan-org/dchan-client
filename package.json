@@ -74,6 +74,6 @@
     "eject": "react-scripts --openssl-legacy-provider eject",
     "start": "react-scripts --openssl-legacy-provider start",
     "test": "react-scripts --openssl-legacy-provider test",
-    "ipfs": "yarn build && node scripts/ipfs.js"
+    "ipfs": "yarn build && node ./bin/scripts/ipfs.js"
   }
 }

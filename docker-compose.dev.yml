@@ -1,9 +1,9 @@
-version: "2"
+version: '3'
 services:
-  www:
-    image: httpd:2.4
-    restart: unless-stopped
+  dapp:
+    build: .
+    restart: "never"
     volumes:
-      - "$PWD/dapp/build:/usr/local/apache2/htdocs/"
+      - .:/dapp
     ports:
-      - 127.0.0.1:8080:80
+      - 127.0.0.1:3000:3000
