@@ -51,9 +51,9 @@ export const IPFSImage = ({
   } | null>(null);
   const mouse = useMouse(mouseRef);
   useEffect(() => {
-    const { naturalWidth: width, naturalHeight: height } = imgRef.current || {
-      naturalWidth: 0,
-      naturalHeight: 0,
+    const { clientWidth: width, clientHeight: height } = imgRef.current || {
+      clientWidth: 0,
+      clientHeight: 0,
     };
     if (mouse.clientX !== null && mouse.clientY !== null) {
       const position = {
@@ -101,7 +101,7 @@ export const IPFSImage = ({
         ref={imgRef}
       />
       {hoverPosition && !imgLoading && !imgError ? (
-        <div className="absolute top-0 left-0 overflow-hidden pointer-events-none opacity-98 z-50">
+        <div className="absolute top-0 left-0 right-0 bottom-0 overflow-hidden pointer-events-none opacity-98 z-50">
           <img
             className={`fixed max-w-75vw max-h-75vh z-50 overflow-hidden`}
             style={{
