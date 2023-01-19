@@ -1,7 +1,6 @@
-import { Card, Faucets } from ".";
+import { Card, Faucets, Overlay } from ".";
 import { useState } from "react";
 import { singletonHook } from "react-singleton-hook";
-import OverlayComponent from "./OverlayComponent";
 
 export const TheGraph = () => {
   return (
@@ -73,7 +72,7 @@ export const FAQCard = ({
   onExit,
   className,
 }: {
-  onExit: () => void;
+  onExit?: () => void;
   className?: string;
 }) => {
   return (
@@ -387,8 +386,6 @@ export const FAQCard = ({
   );
 }
 
-const FAQCardOverlayInternal = OverlayComponent(FAQCard);
-
 export const useFAQ = singletonHook<[boolean, (open: boolean) => void]>(
   [false, () => {}],
   () => {
@@ -399,10 +396,10 @@ export const useFAQ = singletonHook<[boolean, (open: boolean) => void]>(
 export const FAQCardOverlay = () => {
   const [openFAQ, setOpenFAQ] = useFAQ();
   return openFAQ ? (
-    <FAQCardOverlayInternal
+    <Overlay
       onExit={() => setOpenFAQ(false)}
       overlayClassName="w-full sm:w-4/6 h-5/6"
-    />
+    ><FAQCard /></Overlay>
   ) : null;
 }
 

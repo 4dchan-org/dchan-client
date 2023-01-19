@@ -4,12 +4,10 @@ import { CatalogThread } from ".";
 export const CatalogView = ({
   threads,
   board,
-  block,
   showBoard = false
 }: {
   threads: Thread[];
   board?: Board,
-  block?: number,
   showBoard?: boolean
 }) => {
   return (
@@ -19,7 +17,6 @@ export const CatalogView = ({
           board={board}
           thread={thread}
           key={thread.id}
-          block={block}
           showBoard={showBoard}
         />
       ))}

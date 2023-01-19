@@ -2,18 +2,18 @@ import { useQuery } from "@apollo/react-hooks";
 import { Board, Post } from "dchan/subgraph/types";
 import { POSTS_GET_LAST, POSTS_GET_LAST_BLOCK } from "dchan/subgraph/graphql/queries";
 import { Loading, PostSearchResult } from ".";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 export const LatestPostsCard = ({
-  block,
   limit,
   skip,
   board,
 }: {
-  block?: number;
   limit?: number;
   skip?: number;
   board?: Board;
 }) => {
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const query = block ? POSTS_GET_LAST_BLOCK : POSTS_GET_LAST;
   const { loading, data } = useQuery<{ posts: Post[] }, any>(query, {
     pollInterval: 5_000,
@@ -34,7 +34,6 @@ export const LatestPostsCard = ({
           <PostSearchResult
             post={post}
             key={post.id}
-            block={block ? `${block}` : undefined}
           />
         ))
       )}

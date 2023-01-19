@@ -3,10 +3,10 @@ import { Router } from "router";
 import { Link } from "react-router-dom";
 import { BoardTabs } from ".";
 
-export const PopularBoardsCard = ({block, highlight}: {block?: number, highlight?: Board}) => {
+export const PopularBoardsCard = ({highlight}: {highlight?: Board}) => {
   return (
     <div className="dchan-popular-boards">
-      <BoardTabs block={block} limit={10} highlight={highlight} />
+      <BoardTabs limit={10} highlight={highlight} />
       <div className="border border-solid border-black border-t-0 p-2">
         [
         <Link

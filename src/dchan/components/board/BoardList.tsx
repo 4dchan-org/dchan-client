@@ -3,16 +3,16 @@ import { Board } from "dchan/subgraph/types";
 import { IdLabel, Loading, Twemoji } from "dchan/components";
 import { usePubSub } from "dchan/hooks";
 import { useCallback, useState } from "react";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 export const BoardItem = ({
   board,
-  block,
   highlight,
 }: {
   board: Board;
-  block?: number;
   highlight?: Board;
 }) => {
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const { id, title, postCount, name, isLocked, isNsfw } = board;
 
   const { publish } = usePubSub();
@@ -97,12 +97,10 @@ export const BoardList = ({
   loading = false,
   boards,
   highlight,
-  block,
 }: {
   className?: string;
   loading?: boolean;
   boards?: Board[];
-  block?: number;
   highlight?: Board;
 }) => {
   return (
@@ -117,7 +115,6 @@ export const BoardList = ({
             boards.map((board) =>
               BoardItem({
                 board,
-                block,
                 highlight,
               })
             )

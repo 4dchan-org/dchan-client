@@ -15,7 +15,7 @@ import { isString, uniqBy } from "lodash";
 import { Router } from "router";
 import { useEffect } from "react";
 import { BOARDS_SEARCH, BOARDS_SEARCH_BLOCK } from "dchan/subgraph/graphql/queries";
-import { DateTime } from "luxon";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 interface BoardSearchData {
   searchByName: Board[];
@@ -32,12 +32,7 @@ export const BoardListPage = ({ location, match: { params } }: any) => {
   const query = parseQueryString(location.search);
   const search =
     `${params?.board_name || ""}` || (isString(query.s) ? query.s : "");
-  const block = parseInt(`${query.block}`);
-  const queriedBlock = isNaN(block) ? undefined : block;
-  const dateTime = query.date
-    ? DateTime.fromISO(query.date as string)
-    : undefined;
-
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const {
     refetch: searchRefetch,
     data: searchData,
@@ -46,11 +41,11 @@ export const BoardListPage = ({ location, match: { params } }: any) => {
     block ? BOARDS_SEARCH_BLOCK : BOARDS_SEARCH,
     {
       pollInterval: 30_000,
-      fetchPolicy: queriedBlock ? "cache-first" : "network-only",
+      fetchPolicy: block ? "cache-first" : "network-only",
       variables: {
         searchName: search,
         searchTitle: search.length > 1 ? `${search}:*` : "",
-        block: queriedBlock,
+        block,
       },
       skip: !search,
     }
@@ -74,14 +69,12 @@ export const BoardListPage = ({ location, match: { params } }: any) => {
       <GenericHeader
         title="Boards"
         baseUrl={`${Router.boards()}${search ? `?s=${search}` : ""}`}
-        block={queriedBlock ? `${queriedBlock}` : undefined}
-        dateTime={dateTime}
       />
       <div className="relative">
         <div className="flex center">
           <SearchWidget
             baseUrl={`${Router.boards()}${
-              queriedBlock ? `?block=${queriedBlock}` : ""
+              block ? `?block=${block}` : ""
             }`}
             search={search}
           />
@@ -99,7 +92,7 @@ export const BoardListPage = ({ location, match: { params } }: any) => {
                     title={<span>Results for "{search}"</span>}
                     className="pt-4"
                   >
-                    <BoardList boards={searchResults} block={queriedBlock} />
+                    <BoardList boards={searchResults} />
                   </Card>
                 ) : (
                   "No boards found"

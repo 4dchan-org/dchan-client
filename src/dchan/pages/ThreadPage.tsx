@@ -2,14 +2,13 @@ import { useQuery } from "@apollo/react-hooks";
 import { shortenAddress } from "dchan/services";
 import { Board, Post, Thread } from "dchan/subgraph/types";
 import { THREAD_GET, THREAD_GET_LAST_BLOCK } from "dchan/subgraph/graphql/queries";
-import { DateTime } from "luxon";
-import { parse as parseQueryString } from "query-string";
 import { useEffect, useMemo } from "react";
 import { Router } from "router";
 import { usePubSub } from "dchan/hooks";
 import { useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
 import { ContentHeader, Footer, Loading, Anchor, Post as PostComponent } from "dchan/components";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 interface ThreadContentData {
   board: Board;
   threads: Thread[];
@@ -37,12 +36,7 @@ export const ThreadPage = ({
 
   const history = useHistory();
   const { publish } = usePubSub();
-
-  const query = parseQueryString(location.search);
-  const block = parseInt(`${query.block}`);
-  const dateTime = query.date
-    ? DateTime.fromISO(query.date as string)
-    : undefined;
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
 
   const focus_user_id = params.focus_user_id ? `0x${params.focus_user_id}` : "";
   const focus_post_n = params.focus_post_n || "";
@@ -146,11 +140,9 @@ export const ThreadPage = ({
       <ContentHeader
         board={board}
         thread={thread}
-        dateTime={dateTime}
         baseUrl={
           thread ? Router.thread(thread) : location.pathname + location.hash
         }
-        block={isNaN(block) ? undefined : `${block}`}
         summary={
           loading ? <span>...</span> : <span>Posts: {posts.length}</span>
         }
@@ -167,7 +159,6 @@ export const ThreadPage = ({
             <div>
               {posts.map((post) => (
                 <PostComponent
-                  block={isNaN(block) ? undefined : `${block}`}
                   post={post}
                   thread={thread}
                   key={post.id}

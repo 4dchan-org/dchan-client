@@ -74,14 +74,16 @@ export async function sendMessage(operation: string, data: object, from: string)
     const web3 = getWeb3()
 
     const relayContract = new web3.eth.Contract(abi as AbiItem[], DefaultSettings.contract.address)
-    const [msg, nonce] = await Promise.all([
+    const [msg, nonce, gasPrice] = await Promise.all([
         relayContract.methods.message(createJsonMessage(operation, data)),
-        getNextNonce(from)
+        getNextNonce(from),
+        getGasPrice()
     ])
 
     return msg.send({
         from,
-        nonce
+        nonce,
+        gasPrice
     })
 }
 
@@ -102,7 +104,7 @@ export async function getBalance(account: string) {
 }
 
 export async function getGasPrice() {
-    return getWeb3().eth.getGasPrice()
+    return getWeb3().eth.getGasPrice().then(Number).then(r => Math.floor(r * 1.20).toString()) // @HACK 20% more to base gas fee for posting at "market" price @TODO make optional
 }
 
 export async function getNextNonce(account: string) {

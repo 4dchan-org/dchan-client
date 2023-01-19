@@ -1,6 +1,5 @@
 import { useLastBlock, useSettings } from "dchan/hooks";
 import { parse as parseQueryString } from "query-string";
-import { DateTime } from "luxon";
 import { Board, BoardRef, Thread } from "dchan/subgraph/types";
 import { useEffect, useMemo } from "react";
 import { Router } from "router";
@@ -18,6 +17,7 @@ import {
 } from "dchan/components";
 import { useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 interface BoardCatalogData {
   board: Board;
@@ -54,19 +54,14 @@ export const BoardPage = ({
   let { board_id, board_name } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 
-  const { lastBlock } = useLastBlock();
+  const { timeTraveledToBlockNumber } = useTimeTravel()
   const query = parseQueryString(location.search);
   const page = parseInt(`${query.page || "1"}`);
-  const queriedBlock = parseInt(`${query.block}`);
-  const block = !isNaN(queriedBlock)
-    ? queriedBlock
-    : parseInt(`${lastBlock?.number || "0"}`);
-  const dateTime = query.date
-    ? DateTime.fromISO(query.date as string)
-    : undefined;
 
   const history = useHistory();
   const [settings] = useSettings();
+  const {lastBlock} = useLastBlock();
+  const block = Number(timeTraveledToBlockNumber || lastBlock?.number || 0)
   const boardMode: string =
     params.view_mode ||
     settings?.content_view?.board_default_view_mode ||
@@ -163,13 +158,11 @@ export const BoardPage = ({
       <div>
         <ContentHeader
           board={board}
-          dateTime={dateTime}
           baseUrl={
             board
               ? Router.board(board, boardMode)
               : location.pathname + location.hash
           }
-          block={isNaN(queriedBlock) ? undefined : `${queriedBlock}`}
           summary={
             catalogLoading ? (
               <span>...</span>
@@ -187,7 +180,7 @@ export const BoardPage = ({
           {board === null ? (
             <div className="center grid p-8">
               Board does not exist.
-              {!isNaN(queriedBlock) ? (
+              {!isNaN(block) ? (
                 <>
                   <br />
                   You may have time traveled to before it was created, or after
@@ -212,14 +205,12 @@ export const BoardPage = ({
                       <CatalogView
                         board={board}
                         threads={filteredThreads}
-                        block={queriedBlock}
                       />
                     ),
                     index: (
                       <IndexView
                         board={board}
                         threads={filteredThreads}
-                        block={queriedBlock}
                       />
                     ),
                   }[boardMode]
@@ -233,7 +224,7 @@ export const BoardPage = ({
           {board ? (
             <div>
               <hr />
-              <Paging url={location.pathname} page={page} maxPage={maxPage} block={queriedBlock} />
+              <Paging url={location.pathname} page={page} maxPage={maxPage} />
 
               <Anchor to="#board-header" label="Top" />
             </div>

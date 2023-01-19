@@ -11,6 +11,7 @@ import { usePubSub, useWeb3 } from "dchan/hooks";
 import { isEqual } from "lodash";
 import { Router } from "router";
 import { Link } from "react-router-dom";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 export const TextQuote = ({
   children,
@@ -282,16 +283,15 @@ function renderValue(
 export const PostBody = memo(({
   post,
   thread,
-  block,
   style = {},
   className = "",
 }: {
   style?: any;
   className?: string;
-  block?: string;
   thread?: Thread;
   post: Post;
 }) => {
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const parsedComment = useMemo(
     () => parseComment(post.comment),
     [post.comment]
@@ -305,7 +305,7 @@ export const PostBody = memo(({
       style={style}
       key={`${post.id}-${thread?.id}`}
     >
-      {parsedComment.map((v: any) => renderValue(v, post, thread, block))}
+      {parsedComment.map((v: any) => renderValue(v, post, thread, block?.toString()))}
     </div>
   );
 }, isEqual)

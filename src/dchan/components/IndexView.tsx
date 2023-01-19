@@ -1,3 +1,4 @@
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 import { Board, Thread } from "dchan/subgraph/types";
 import { Link } from "react-router-dom";
 import { Router } from "router";
@@ -6,14 +7,13 @@ import { BoardLink, Post } from ".";
 export const IndexView = ({
   threads,
   board,
-  block,
   showBoard = false,
 }: {
   threads: Thread[];
   board?: Board;
-  block?: number;
   showBoard?: boolean;
 }) => {
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   return (
     <div>
       {threads
@@ -28,7 +28,6 @@ export const IndexView = ({
             thread={thread}
             showNsfw={board?.isNsfw}
             key={thread.op.id}
-            block={block == null ? undefined : `${block}`}
             header={
               <span>
                 <span className="p-1">
@@ -46,7 +45,6 @@ export const IndexView = ({
                     <span className="mx-2">
                       <BoardLink
                         board={thread.board}
-                        block={block == null ? undefined : `${block}`}
                       />
                     </span>
                   ) : (
@@ -77,7 +75,6 @@ export const IndexView = ({
                 thread={thread}
                 key={post.id}
                 showNsfw={board?.isNsfw}
-                block={block == null ? undefined : `${block}`}
               />
             ))}
           </Post>

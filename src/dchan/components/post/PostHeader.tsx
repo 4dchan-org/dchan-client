@@ -1,5 +1,4 @@
 import { Menu, Status, UserLabel, Twemoji } from "dchan/components";
-import { useTraveledBlock } from "dchan/components/TimeTravelWidget";
 import { sendTip } from "dchan/services/web3";
 import { Post, Thread } from "dchan/subgraph";
 import { fromBigInt } from "dchan/services/datetime";
@@ -19,12 +18,13 @@ import { ReactElement, useCallback, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Router } from "router";
 import { parse as parseQueryString } from "query-string";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 export const DateDisplay = ({ post }: { post: Post }) => {
   const createdAt = fromBigInt(post.createdAtBlock.timestamp);
-  const traveledBlock = useTraveledBlock();
+  const {currentBlock} = useTimeTravel();
   const relativeTime = createdAt.toRelative();
-  const base = traveledBlock ? fromBigInt(traveledBlock.timestamp) : undefined;
+  const base = currentBlock ? fromBigInt(currentBlock.timestamp) : undefined;
   const traveledRelativeTime =
     base && createdAt.diff(base).milliseconds
       ? createdAt.toRelative({
@@ -56,7 +56,7 @@ export const DateDisplay = ({ post }: { post: Post }) => {
           title={`Time travel to ${formattedDate}`}
           to={timeTravelLink}
         >
-          {traveledBlock ? (
+          {currentBlock ? (
             <span>
               {traveledRelativeTime} ({relativeTime})
             </span>
@@ -74,22 +74,20 @@ export const PostHeader = ({
   post,
   thread,
   backlinks,
-  block,
   children,
 }: {
   post: Post;
   thread?: Thread;
   backlinks?: object;
-  block?: string;
   children?: ReactElement;
 }) => {
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const {
     id,
     n,
     name,
     from: { address },
   } = post;
-  console.log({post})
   const { provider, accounts } = useWeb3();
   const { publish } = usePubSub();
   const [settings] = useSettings();

@@ -1,18 +1,18 @@
-import { ApolloConsumer, ApolloClient, useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/react-hooks";
 import { Board, Thread, Block } from "dchan/subgraph/types";
 import { BOARDS_LIST_MOST_POPULAR } from "dchan/subgraph/graphql/queries";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { DateTime } from "luxon";
 import { Router } from "router";
 import {
   BoardLink,
   TimeTravelWidget,
   WatchedThreadsWidget,
   Twemoji,
-  SettingsWidget 
+  SettingsWidget,
+  Overlay,
 } from "dchan/components";
-import OverlayComponent from "dchan/components/OverlayComponent";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 interface BoardListData {
   boards: Board[];
@@ -34,27 +34,20 @@ const siteCreatedAtBlock: Block = {
 };
 
 type StartBlock = {
-  label: string,
-  block: Block,
+  label: string;
+  block: Block;
 };
 
-const SettingsWidgetOverlay = OverlayComponent(SettingsWidget);
-
 export const HeaderNavigation = ({
-  block,
-  dateTime,
   board,
   thread,
   baseUrl,
-  search,
 }: {
-  block?: string;
-  dateTime?: DateTime;
   board?: Board;
   thread?: Thread;
   baseUrl?: string;
-  search?: string;
 }) => {
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const [startBlock, setStartBlock] = useState<StartBlock>({
     label: "Site creation",
     block: siteCreatedAtBlock,
@@ -76,12 +69,10 @@ export const HeaderNavigation = ({
     }
     setStartBlock(
       thread
-        ? {label: "Thread creation", block: thread.createdAtBlock
-       }
-      : board
-        ? {label: "Board creation", block: board.createdAtBlock
-       }
-      : {label: "Site creation", block: siteCreatedAtBlock}
+        ? { label: "Thread creation", block: thread.createdAtBlock }
+        : board
+        ? { label: "Board creation", block: board.createdAtBlock }
+        : { label: "Site creation", block: siteCreatedAtBlock }
     );
   }, [thread, board, setStartBlock]);
 
@@ -96,7 +87,7 @@ export const HeaderNavigation = ({
 
   const widgetClass = [
     "absolute w-screen sm:w-max mt-1 md:mt-1 left-0 right-0 sm:left-auto sm:right-0",
-    showBoards ? "top-11 md:top-full" : "top-full md:top-5"
+    showBoards ? "top-11 md:top-full" : "top-full md:top-5",
   ].join(" ");
 
   const boards = data?.boards;
@@ -121,7 +112,7 @@ export const HeaderNavigation = ({
                 boards.map((board) => (
                   <span className="dchan-navigation-board" key={board.id}>
                     <wbr />
-                    <BoardLink board={board} block={block} />
+                    <BoardLink board={board} />
                   </span>
                 ))}
             </span>
@@ -144,29 +135,22 @@ export const HeaderNavigation = ({
           ]
         </span>
         <span className="float-right flex flex-row mx-1">
-          <ApolloConsumer>
-            {(client: ApolloClient<any>) => (
-              <TimeTravelWidget
-                client={client}
-                ref={timeTravelRef}
-                open={openedWidget === OpenedWidgetEnum.TIMETRAVEL}
-                widgetClassName={widgetClass}
-                onOpen={() => {
-                  setOpenedWidget(
-                    openedWidget === OpenedWidgetEnum.TIMETRAVEL
-                      ? null
-                      : OpenedWidgetEnum.TIMETRAVEL
-                  );
-                }}
-                onClose={() => setOpenedWidget(null)}
-                block={block}
-                baseUrl={baseUrl || ""}
-                startBlock={startBlock.block}
-                dateTime={dateTime}
-                startRangeLabel={startBlock.label}
-              />
-            )}
-          </ApolloConsumer>
+          <TimeTravelWidget
+            ref={timeTravelRef}
+            open={openedWidget === OpenedWidgetEnum.TIMETRAVEL}
+            widgetClassName={widgetClass}
+            onOpen={() => {
+              setOpenedWidget(
+                openedWidget === OpenedWidgetEnum.TIMETRAVEL
+                  ? null
+                  : OpenedWidgetEnum.TIMETRAVEL
+              );
+            }}
+            onClose={() => setOpenedWidget(null)}
+            baseUrl={baseUrl || ""}
+            startBlock={startBlock.block}
+            startRangeLabel={startBlock.label}
+          />
           <details
             className="mx-1"
             open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS}
@@ -186,7 +170,7 @@ export const HeaderNavigation = ({
               <Twemoji emoji={"⭐️"} />
             </summary>
             <div className={widgetClass}>
-              <WatchedThreadsWidget block={block} />
+              <WatchedThreadsWidget />
             </div>
           </details>
           <span
@@ -202,22 +186,29 @@ export const HeaderNavigation = ({
           >
             <Twemoji emoji={"⚙️"} />
             {openedWidget === OpenedWidgetEnum.SETTINGS ? (
-              <SettingsWidgetOverlay
+              <Overlay
                 onExit={() => setOpenedWidget(null)}
                 overlayClassName="w-full sm:w-4/6 h-5/6"
-              />
+              >
+                <SettingsWidget />
+              </Overlay>
             ) : (
               ""
             )}
           </span>
         </span>
-        <div className={"w-min top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto mx-auto " + (showBoards ? "block md:hidden" : "hidden")}>
+        <div
+          className={
+            "w-min top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto mx-auto " +
+            (showBoards ? "block md:hidden" : "hidden")
+          }
+        >
           <span className="dchan-brackets flex">
             {!!boards &&
               boards.map((board) => (
                 <span className="dchan-navigation-board" key={board.id}>
                   <wbr />
-                  <BoardLink board={board} block={block} />
+                  <BoardLink board={board} />
                 </span>
               ))}
           </span>
@@ -225,4 +216,4 @@ export const HeaderNavigation = ({
       </div>
     </div>
   );
-}
+};

@@ -5,7 +5,7 @@ import { SEARCH_BY_ID, SEARCH_BY_ID_BLOCK } from "dchan/subgraph/graphql/queries
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
-import { parse as parseQueryString } from "query-string";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 interface IdSearchData {
   boardRef: BoardRef;
@@ -25,20 +25,12 @@ export const IdReferencePage = ({ location, match: { params } }: any) => {
   const history = useHistory();
 
   const id = `0x${params.id}`;
-  const query = parseQueryString(location.search);
-  const block = `${query.block}`;
-  let queriedBlock: number | undefined;
-  if (block) {
-    queriedBlock = parseInt(block);
-    if (isNaN(queriedBlock)) {
-      queriedBlock = undefined;
-    }
-  }
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
 
-  const graphQuery = queriedBlock ? SEARCH_BY_ID_BLOCK : SEARCH_BY_ID;
+  const graphQuery = block ? SEARCH_BY_ID_BLOCK : SEARCH_BY_ID;
 
   const { data } = useQuery<IdSearchData, IdSearchVars>(graphQuery, {
-    variables: { id, block: queriedBlock },
+    variables: { id, block },
     pollInterval: 5_000,
   });
 
@@ -56,14 +48,14 @@ export const IdReferencePage = ({ location, match: { params } }: any) => {
         post = postRef.post;
       }
 
-      let queriedBlockUrl = queriedBlock ? `?block=${queriedBlock}` : "";
+      let blockUrl = block ? `?block=${block}` : "";
 
       if (board) {
-        location = `${Router.board(board)}${queriedBlockUrl}`;
+        location = `${Router.board(board)}${blockUrl}`;
       } else if (thread) {
-        location = `${Router.thread(thread)}${queriedBlockUrl}`;
+        location = `${Router.thread(thread)}${blockUrl}`;
       } else if (post) {
-        location = `${Router.post(post)}${queriedBlockUrl}`;
+        location = `${Router.post(post)}${blockUrl}`;
       }
 
       if ((board || thread || post) && !location) {
@@ -76,7 +68,7 @@ export const IdReferencePage = ({ location, match: { params } }: any) => {
         history.replace(location);
       }
     }
-  }, [history, data, queriedBlock]);
+  }, [history, data, block]);
 
   return (
     <div className="bg-primary center grid w-screen h-screen">

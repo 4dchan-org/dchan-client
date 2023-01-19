@@ -6,16 +6,15 @@ import { useHistory } from "react-router-dom";
 import { Router } from "router";
 import { DateTime } from "luxon";
 import { useState, useCallback } from "react";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 export const CatalogThread = ({
   thread,
   board,
-  block,
   showBoard = false,
 }: {
   thread: Thread;
   board?: Board;
-  block?: number;
   showBoard?: boolean;
 }) => {
   const {
@@ -37,6 +36,7 @@ export const CatalogThread = ({
 
   const imgClassName =
     "w-full pointer-events-none shadow-xl object-contain max-h-320px";
+    const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const history = useHistory();
   const [settings] = useSettings();
   const isLowScore = isLowScoreThread(
@@ -150,7 +150,6 @@ export const CatalogThread = ({
                 <div>
                   <BoardLink
                     board={thread.board}
-                    block={block == null ? undefined : `${block}`}
                   />
                 </div>
               ) : (

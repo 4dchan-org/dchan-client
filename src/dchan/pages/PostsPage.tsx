@@ -1,6 +1,5 @@
 import { parse as parseQueryString } from "query-string";
 import { isString } from "lodash";
-import { DateTime } from "luxon";
 import { useSettings } from "dchan/hooks";
 import { useQuery } from "@apollo/react-hooks";
 import { useEffect, useMemo } from "react";
@@ -19,12 +18,13 @@ import {
   Post as PostComponent,
   Paging
 } from "dchan/components";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 interface SearchData {
   postSearch: Post[];
 }
 interface SearchVars {
-  block: number;
+  block?: number;
   search: string;
 }
 
@@ -33,11 +33,7 @@ export const PostsPage = ({ location, match: { params } }: any) => {
   const s = query.s || query.search;
   const search = isString(s) ? s : "";
   const page = parseInt(`${query.page || "1"}`);
-  const block = parseInt(`${query.block}`);
-  const queriedBlock = isNaN(block) ? undefined : `${block}`;
-  const dateTime = query.date
-    ? DateTime.fromISO(query.date as string)
-    : undefined;
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const [settings] = useSettings();
 
   const variables = {
@@ -79,10 +75,8 @@ export const PostsPage = ({ location, match: { params } }: any) => {
       data-theme={"blueboard"}
     >
       <ContentHeader
-        dateTime={dateTime}
         search={search}
         baseUrl={`${Router.posts()}${search ? `?s=${search}` : ""}`}
-        block={queriedBlock}
         board={null}
         title="Posts"
         summary={
@@ -106,7 +100,7 @@ export const PostsPage = ({ location, match: { params } }: any) => {
         <div className="flex justify-center md:justify-start p-2">
           <SearchWidget
             baseUrl={`${Router.posts()}${
-              queriedBlock ? `?block=${queriedBlock}` : ""
+              block ? `?block=${block}` : ""
             }`}
             search={search}
             open={true}
@@ -132,7 +126,6 @@ export const PostsPage = ({ location, match: { params } }: any) => {
                   <PostComponent
                     key={post.id}
                     post={post}
-                    block={queriedBlock}
                     header={
                       <span>
                         <span className="p-1">

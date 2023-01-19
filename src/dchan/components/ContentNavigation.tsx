@@ -3,16 +3,16 @@ import { DateTime } from "luxon";
 import { Router } from "router";
 import { Anchor } from ".";
 import { Link } from "react-router-dom";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 export const ContentNavigation = ({
   board,
-  block,
   dateTime,
 }: {
   board: Board;
-  block?: string;
   dateTime?: DateTime;
 }) => {
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   let timeTravelParameters: {block?: string, date?: string} = {};
   if (block) {
     timeTravelParameters.block = `${block}`;

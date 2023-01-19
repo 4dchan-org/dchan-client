@@ -1,20 +1,19 @@
 import { useSettings } from "dchan/hooks";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { debounce } from "lodash";
 import { Settings } from "dchan/hooks/useSettings";
-import { Twemoji } from ".";
-// import DefaultSettings from "settings/default";
+import { Twemoji } from "dchan/components";
+import DefaultSettings from "dchan/settings";
 
-export const SettingsWidget = ({ onExit }: { onExit: () => void }) => {
+export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
   const [settings, setSettings] = useSettings();
 
-  /*
-  const [displaySubgraph, setDisplaySubgraph] = useState<
-    string | undefined
-  >(settings?.subgraph?.endpoint);
+  const [displaySubgraph, setDisplaySubgraph] = useState<string | undefined>(
+    settings?.subgraph?.endpoint
+  );
   const writeSubgraphEndpoint = useCallback(
     (settings: Settings, val: string) => {
-      let updatedSettings = {...settings};
+      let updatedSettings = { ...settings };
       settings.subgraph.endpoint = val;
       setSettings(updatedSettings);
     },
@@ -25,12 +24,12 @@ export const SettingsWidget = ({ onExit }: { onExit: () => void }) => {
     [writeSubgraphEndpoint]
   );
 
-  const [displayIPFS, setDisplayIPFS] = useState<
-    string | undefined
-  >(settings?.ipfs?.endpoint);
+  const [displayIPFS, setDisplayIPFS] = useState<string | undefined>(
+    settings?.ipfs?.endpoint
+  );
   const writeIPFSEndpoint = useCallback(
     (settings: Settings, val: string) => {
-      let updatedSettings = {...settings};
+      let updatedSettings = { ...settings };
       settings.ipfs.endpoint = val;
       setSettings(updatedSettings);
     },
@@ -40,7 +39,6 @@ export const SettingsWidget = ({ onExit }: { onExit: () => void }) => {
     () => debounce(writeIPFSEndpoint, 500),
     [writeIPFSEndpoint]
   );
-  */
 
   const [displayScoreThreshold, setDisplayScoreThreshold] = useState<
     number | undefined
@@ -55,7 +53,7 @@ export const SettingsWidget = ({ onExit }: { onExit: () => void }) => {
     [setSettings]
   );
 
-  return settings ? (
+  return (
     <div className="bg-secondary border-secondary-accent border-2 flex flex-col h-full">
       <div className="mb-2 mt-1 px-3" style={{ flex: "0 1 auto" }}>
         <div className="float-left">
@@ -71,16 +69,21 @@ export const SettingsWidget = ({ onExit }: { onExit: () => void }) => {
         className="h-full overflow-y-scroll overscroll-contain"
         style={{ flex: "1 1 auto" }}
       >
-        {/*
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">Subgraph Endpoint</legend>
           <div>Endpoint used to query the subgraph for data.</div>
-          <div>If you're having issues with boards/threads not loading, check if resetting to default fixes the issue first.</div>
+          <div>
+            If you're having issues with boards/threads not loading, check if
+            resetting to default fixes the issue first.
+          </div>
           <button
             className="border border-black px-1 mb-0.5 bg-primary"
             onClick={() => {
               setDisplaySubgraph(DefaultSettings.subgraph.endpoint);
-              writeSubgraphEndpoint(settings, DefaultSettings.subgraph.endpoint);
+              writeSubgraphEndpoint(
+                settings,
+                DefaultSettings.subgraph.endpoint
+              );
             }}
           >
             Reset to default
@@ -98,7 +101,10 @@ export const SettingsWidget = ({ onExit }: { onExit: () => void }) => {
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">IPFS Endpoint</legend>
           <div>Endpoint used to upload images to IPFS.</div>
-          <div>If you're having issues with image uploads failing, check if resetting to default fixes the issue first.</div>
+          <div>
+            If you're having issues with image uploads failing, check if
+            resetting to default fixes the issue first.
+          </div>
           <button
             className="border border-black px-1 mb-0.5 bg-primary"
             onClick={() => {
@@ -118,7 +124,6 @@ export const SettingsWidget = ({ onExit }: { onExit: () => void }) => {
             value={displayIPFS}
           />
         </fieldset>
-        */}
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">Filter Settings</legend>
           <div className="text-contrast">
@@ -181,5 +186,5 @@ export const SettingsWidget = ({ onExit }: { onExit: () => void }) => {
         </fieldset>
       </div>
     </div>
-  ) : <></>;
-}
+  );
+};

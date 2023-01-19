@@ -1,6 +1,4 @@
 import { HeaderNavigation, HeaderLogo, WatchedThreadsCard } from "dchan/components";
-import { parse as parseQueryString } from "query-string";
-import { DateTime } from "luxon";
 import { useEffect, useState, useCallback } from "react";
 import { useTitle } from "react-use";
 import { subscribe, unsubscribe } from "pubsub-js";
@@ -19,12 +17,6 @@ export const HomePage = ({ location }: any) => {
 
   const [board, setBoard] = useState<Board>();
   const [highlight, setHighlight] = useState<Board>();
-  const query = parseQueryString(location.search);
-  const block = parseInt(`${query.block}`);
-  const queriedBlock = isNaN(block) ? undefined : block;
-  const dateTime = query.date
-    ? DateTime.fromISO(query.date as string)
-    : undefined;
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -52,10 +44,8 @@ export const HomePage = ({ location }: any) => {
     <div className="h-screen bg-primary flex flex-col pb-2">
       <HeaderNavigation
         baseUrl="/"
-        block={queriedBlock?.toString()}
-        dateTime={dateTime}
       />
-      <HeaderLogo block={queriedBlock?.toString()} />
+      <HeaderLogo />
       <div className="flex flex-grow flex-col grid-cols-3 xl:grid px-4 text-sm">
         <div>
           <Card
@@ -78,13 +68,13 @@ export const HomePage = ({ location }: any) => {
             className="md:px-1 w-full pb-4"
             bodyClassName="p-none b-none"
           >
-            <PopularBoardsCard block={queriedBlock} highlight={highlight} />
+            <PopularBoardsCard highlight={highlight} />
           </Card>
           <Card
             title={<span>Watched Threads</span>}
             className="md:px-1 w-full pb-4"
           >
-            <WatchedThreadsCard block={queriedBlock} />
+            <WatchedThreadsCard />
           </Card>
         </div>
         <Card
@@ -96,7 +86,6 @@ export const HomePage = ({ location }: any) => {
                   on{" "}
                   <BoardLink
                     board={board}
-                    block={block == null ? undefined : `${block}`}
                   />
                 </span>
               ) : (
@@ -107,7 +96,7 @@ export const HomePage = ({ location }: any) => {
           className="md:px-1 w-full pb-4"
           bodyClassName="p-none b-none"
         >
-          <ThreadTabs block={block} limit={10} board={board} />
+          <ThreadTabs limit={10} board={board} />
         </Card>
         <Card
           title={
@@ -118,7 +107,6 @@ export const HomePage = ({ location }: any) => {
                   on{" "}
                   <BoardLink
                     board={board}
-                    block={block == null ? undefined : `${block}`}
                   />
                 </span>
               ) : (
@@ -128,7 +116,7 @@ export const HomePage = ({ location }: any) => {
           }
           className="md:px-1 w-full pb-4"
         >
-          <LatestPostsCard block={block} limit={10} board={board} />
+          <LatestPostsCard limit={10} board={board} />
         </Card>
       </div>
       <Footer />

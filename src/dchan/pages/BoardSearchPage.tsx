@@ -2,16 +2,13 @@ import { Footer, Card, BoardList, GenericHeader } from "dchan/components";
 import { BOARDS_SEARCH } from "dchan/subgraph/graphql/queries";
 import { useQuery } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
-import { parse as parseQueryString } from "query-string";
 import { Router } from "router";
 
 export const BoardSearchPage = ({
-  location,
   match: {
     params: { boardName: name },
   },
 }: any) => {
-  const query = parseQueryString(location.search);
   const { data } = useQuery(BOARDS_SEARCH, {
     variables: { name },
     pollInterval: 30_000,
@@ -21,7 +18,6 @@ export const BoardSearchPage = ({
     <div className="bg-primary min-h-100vh flex flex-col">
       <GenericHeader
         title="Boards"
-        block={query.block ? `${query.block}` : undefined}
       />
 
       <Link className="dchan-link py-1 px-4" to={Router.boards()}>

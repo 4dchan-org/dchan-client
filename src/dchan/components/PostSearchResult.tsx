@@ -1,9 +1,11 @@
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 import { Post } from "dchan/subgraph/types";
 import { useCallback } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { BoardLink, Post as PostComponent } from ".";
 
-export const PostSearchResult = ({ post, block }: { post: Post, block?: string }) => {
+export const PostSearchResult = ({ post }: { post: Post }) => {
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const history = useHistory();
   const postLink = `/${post.id}${block ? `?block=${block}` : ""}`;
   const openPost = useCallback(() => {
@@ -14,13 +16,12 @@ export const PostSearchResult = ({ post, block }: { post: Post, block?: string }
       <PostComponent
         key={post.id}
         post={post}
-        block={block}
         showPostMarker={false}
         header={
           <span>
             {post.board ? <span className="p-1 whitespace-nowrap">
               [
-                <BoardLink board={post.board} block={block} />
+                <BoardLink board={post.board} />
               ]
             </span> : ""}
             <span className="p-1 whitespace-nowrap">

@@ -1,9 +1,11 @@
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 import { Board } from "dchan/subgraph/types";
 import { Link } from "react-router-dom";
 import { Router } from "router";
 import { IdLabel } from ".";
 
-export const BoardLink = ({ board, block }: { board: Board, block?: string }) => {
+export const BoardLink = ({ board }: { board: Board }) => {
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   return (
     <Link
       title={board.title}

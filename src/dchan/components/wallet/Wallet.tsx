@@ -1,4 +1,4 @@
-import { GasPriceWidget, WalletAccount, WalletConnect, WalletSwitchChain } from ".";
+import { GasPriceWidget, WalletAccount, WalletConnect, WalletSwitchChain } from "dchan/components"
 
 export const Wallet = () => {
   return (

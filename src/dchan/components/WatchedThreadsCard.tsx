@@ -4,14 +4,15 @@ import { THREADS_LIST_FAVORITES, THREADS_LIST_FAVORITES_BLOCK } from "dchan/subg
 import { useFavorites } from "dchan/hooks";
 import { useMemo } from "react";
 import { CatalogView, Loading } from ".";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
-export const WatchedThreadsCard = ({block} : {block?: number}) => {
+export const WatchedThreadsCard = () => {
   const { favorites } = useFavorites();
   const ids = useMemo(
     () => (favorites ? Object.keys(favorites) : []),
     [favorites]
   );
-
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const { data, loading } = useQuery(
     block ? THREADS_LIST_FAVORITES_BLOCK : THREADS_LIST_FAVORITES,
     {
@@ -28,6 +29,6 @@ export const WatchedThreadsCard = ({block} : {block?: number}) => {
   return loading || (threads && threads.length > 0)
     ? loading
       ? <Loading />
-      : <CatalogView threads={threads || []} showBoard={true} block={block} />
+      : <CatalogView threads={threads || []} showBoard={true} />
     : <span>No threads are being watched. Use the <Twemoji emoji={"⭐️"} /> button on threads to keep track of them here.</span>;
 }

@@ -18,7 +18,7 @@ import {
   useFavorites,
   useSettings,
 } from "dchan/hooks";
-import { isString, uniqueId } from "lodash";
+import { isString, now } from "lodash";
 import { postMessage } from "dchan/actions";
 import { MaxLengthWatch } from ".";
 import useFormPersist from "dchan/hooks/useFormPersist";
@@ -48,7 +48,7 @@ export const FormPost = ({
   const formRef = useRef<HTMLFormElement>(null);
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const [isSending, setIsSending] = useState<boolean>(false);
-  const [nonce, setNonce] = useState<string>(uniqueId());
+  const [nonce, setNonce] = useState<number>(now());
   const [status, setStatus] = useState<string | object>();
   const [commentLength, setCommentLength] = useState<number>(0);
   const [nameLength, setNameLength] = useState<number>(0);
@@ -157,7 +157,7 @@ export const FormPost = ({
   }, [isSending, setFormDisabled]);
 
   const changeNonce = useCallback(() => {
-    setNonce(uniqueId());
+    setNonce(now());
   }, [setNonce]);
 
   const resetForm = useCallback(

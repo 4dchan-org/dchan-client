@@ -7,9 +7,9 @@ import { truncate } from "lodash";
 import { useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Router } from "router";
-import { BoardLink, Loading, Twemoji } from ".";
+import { BoardLink, Loading, Twemoji } from "dchan/components";
 
-export const WatchedThreadsWidget = ({ block }: { block?: string }) => {
+export const WatchedThreadsWidget = () => {
   const { favorites, removeFavorite } = useFavorites();
   const ids = useMemo(
     () => (favorites ? Object.keys(favorites) : []),
@@ -56,7 +56,7 @@ export const WatchedThreadsWidget = ({ block }: { block?: string }) => {
                   <button onClick={() => onRemove(thread)}><Twemoji emoji={"✖"} /></button>{" "}
                   {board ? (
                     <span>
-                      <BoardLink board={board} block={block} />
+                      <BoardLink board={board} />
                     </span>
                   ) : (
                     ""

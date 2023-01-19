@@ -3,6 +3,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { Board } from "dchan/subgraph/types";
 import { TabbedCard } from "dchan/components";
 import { BOARD_TABS, BOARD_TABS_AT_BLOCK }  from "dchan/subgraph/graphql/queries";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 interface BoardListData {
   mostPopular: Board[];
@@ -14,15 +15,14 @@ interface BoardListVars {}
 
 export const BoardTabs = ({
   className = "",
-  block,
   limit,
   highlight,
 }: {
   className?: string;
-  block?: number;
   limit?: number;
   highlight?: Board;
 }) => {
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const { data, loading } = useQuery<BoardListData, BoardListVars>(
     block ? BOARD_TABS_AT_BLOCK : BOARD_TABS,
     {
@@ -40,15 +40,15 @@ export const BoardTabs = ({
         new Map([
           [
             "Most popular",
-            <BoardList boards={data.mostPopular} block={block} highlight={highlight} />,
+            <BoardList boards={data.mostPopular} highlight={highlight} />,
           ],
           [
             "Last created",
-            <BoardList boards={data.lastCreated} block={block} highlight={highlight} />,
+            <BoardList boards={data.lastCreated} highlight={highlight} />,
           ],
           [
             "Last bumped",
-            <BoardList boards={data.lastBumped} block={block} highlight={highlight} />,
+            <BoardList boards={data.lastBumped} highlight={highlight} />,
           ],
         ])
       }

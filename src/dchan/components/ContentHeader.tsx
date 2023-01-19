@@ -1,9 +1,9 @@
 import { useThrottleCallback } from "@react-hook/throttle";
 import { Board, Thread } from "dchan/subgraph/types";
 import { useLastBlock } from "dchan/hooks";
-import { DateTime } from "luxon";
 import { ReactElement } from "react";
 import { BoardHeader, FormPost, RefreshWidget, BoardViewSettings, ContentNavigation } from ".";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 export const ContentHeader = ({
   board,
@@ -11,8 +11,6 @@ export const ContentHeader = ({
   title,
   search,
   baseUrl,
-  block,
-  dateTime,
   summary,
   onRefresh,
 }: {
@@ -21,20 +19,17 @@ export const ContentHeader = ({
   title?: string;
   search?: string;
   baseUrl?: string;
-  block?: string;
   summary?: ReactElement;
-  dateTime?: DateTime;
   onRefresh: () => void;
 }) => {
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const { lastBlock } = useLastBlock();
   const throttledRefresh = useThrottleCallback(onRefresh, 1, true);
 
   return (
     <div>
       <BoardHeader
-        block={block}
         title={title}
-        dateTime={dateTime}
         board={board}
         thread={thread}
         baseUrl={baseUrl}
@@ -57,9 +52,9 @@ export const ContentHeader = ({
 
       <div className="text-center sm:text-left grid xl:grid-cols-3 text-xs">
         <div className="mx-2 flex flex-wrap sm:flex-nowrap justify-center md:justify-start items-center">
-          {board ? <ContentNavigation board={board} block={block} /> : <span />}
+          {board ? <ContentNavigation board={board} /> : <span />}
 
-          {!block || (lastBlock && `${lastBlock.number}` === block) ? (
+          {!block || (lastBlock && lastBlock.number === block.toString()) ? (
             <RefreshWidget onRefresh={throttledRefresh} />
           ) : (
             ""

@@ -8,6 +8,7 @@ import { ReactElement, useEffect, useRef, useState, memo } from "react";
 import { PostBody, PostHeader } from ".";
 import { isEqual } from "lodash";
 import { Link } from "react-router-dom";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 export const Post = memo(
   ({
@@ -15,7 +16,6 @@ export const Post = memo(
     post,
     thread,
     header,
-    block,
     enableBacklinks = false,
     showNsfw = false,
     showPostMarker = true,
@@ -24,7 +24,6 @@ export const Post = memo(
     post: DchanPost;
     thread?: Thread;
     header?: ReactElement;
-    block?: string;
     enableBacklinks?: boolean;
     showNsfw?: boolean;
     showPostMarker?: boolean;
@@ -36,7 +35,7 @@ export const Post = memo(
       image,
       bans,
     } = post;
-
+    const { timeTraveledToBlockNumber: block } = useTimeTravel()
     const { data: selfUserData } = useUser();
     const [showAnyway, setShowAnyway] = useState<boolean>(false);
     const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -173,7 +172,7 @@ export const Post = memo(
             }`}
             title="Hide/Show"
           >
-            <PostHeader thread={thread} post={post} block={block}>
+            <PostHeader thread={thread} post={post} >
               {header}
             </PostHeader>
           </div>
@@ -190,7 +189,6 @@ export const Post = memo(
                   thread={thread}
                   post={post}
                   backlinks={backlinks}
-                  block={block}
                 >
                   {header}
                 </PostHeader>
@@ -344,7 +342,6 @@ export const Post = memo(
                           className="md:ml-10 ml-5 mr-5 py-2"
                           post={post}
                           thread={thread}
-                          block={block}
                         />
 
                         {bans.length > 0 ? (

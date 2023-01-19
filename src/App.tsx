@@ -1,7 +1,7 @@
 import "assets/styles/index.scss";
 
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { SingletonHooksContainer } from "react-singleton-hook";
 import {
   ApolloProvider,
@@ -19,7 +19,6 @@ import {
 } from "dchan/pages";
 import { LockBanner, EULA, FAQCardOverlay, RulesCardOverlay, AbuseCardOverlay } from "dchan/components";
 import DefaultSettings from "dchan/settings";
-import { useSettings } from "dchan/hooks";
 import { Settings, writeAppSetSettings } from "dchan/hooks/useSettings";
 import subgraphClient from "dchan/subgraph/client";
 
@@ -60,24 +59,6 @@ function useLocalSettings() {
   });
 }
 
-// @HACK keeps localstorage endpoints in sync with
-// DefaultSettings, remove when users are allowed
-// to change it themselves
-let endpointsWritten: boolean = false;
-function WriteEndpointsHack() {
-  let [settings, setSettings] = useSettings();
-  useEffect(() => {
-    if (!endpointsWritten && settings) {
-      endpointsWritten = true;
-      let newSettings = { ...settings };
-      newSettings.subgraph.endpoint = DefaultSettings.subgraph.endpoint;
-      newSettings.ipfs.endpoint = DefaultSettings.ipfs.endpoint;
-      setSettings(newSettings);
-    }
-  }, [setSettings, settings]);
-  return null;
-}
-
 function App() {
   const [settings, setSettings] = useLocalSettings();
   writeAppSetSettings(setSettings);
@@ -91,7 +72,6 @@ function App() {
   ) : (
     <ApolloProvider client={client}>
       <SingletonHooksContainer />
-      <WriteEndpointsHack />
       <Router basename="/">
         <LockBanner />
         <div className="App text-center">

@@ -1,7 +1,6 @@
-import { Card } from "dchan/components";
+import { Card, Overlay } from "dchan/components";
 import { useState } from "react";
 import { singletonHook } from "react-singleton-hook";
-import OverlayComponent from "./OverlayComponent";
 
 export const RulesCard = () => {
   return (
@@ -12,34 +11,35 @@ export const RulesCard = () => {
       collapsible={false}
     >
       <div className="p-8">
-      <ul className="list-disc text-wrap text-left m-auto">
-        <li>
-        Do not post anything that can get you in trouble with local or
-        global jurisdictions.
-        </li>
-        <li>Be decent.</li>
-      </ul>
+        <ul className="list-disc text-wrap text-left m-auto">
+          <li>
+            Do not post anything that can get you in trouble with local or
+            global jurisdictions.
+          </li>
+          <li>Be decent.</li>
+        </ul>
       </div>
     </Card>
   );
-}
+};
 
-const RulesCardOverlayInternal = OverlayComponent(RulesCard);
-
-export const useRules = singletonHook<[boolean, (open: boolean) => void]>([false, () => {}], () => {
-  return useState<boolean>(false);
-})
+export const useRules = singletonHook<[boolean, (open: boolean) => void]>(
+  [false, () => {}],
+  () => {
+    return useState<boolean>(false);
+  }
+);
 
 export const RulesCardOverlay = () => {
   const [openRules, setOpenRules] = useRules();
-  return openRules
-    ? <RulesCardOverlayInternal
-      onExit={() => setOpenRules(false)}
-    />
-    : null;
-}
+  return openRules ? (
+    <Overlay onExit={() => setOpenRules(false)}>
+      <RulesCard />
+    </Overlay>
+  ) : null;
+};
 
-export const RulesButton = ({className = ""}: {className?: string}) => {
+export const RulesButton = ({ className = "" }: { className?: string }) => {
   const [, setOpenRules] = useRules();
   return (
     <>
@@ -55,4 +55,4 @@ export const RulesButton = ({className = ""}: {className?: string}) => {
       </span>
     </>
   );
-}
+};

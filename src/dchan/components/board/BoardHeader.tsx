@@ -4,25 +4,22 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { lockBoard, removeBoard, unlockBoard } from "dchan/actions";
 import { useUser, useWeb3 } from "dchan/hooks";
-import { DateTime } from "luxon";
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 export const BoardHeader = ({
-  block,
   title,
-  dateTime,
   board,
   thread,
   baseUrl,
   search,
 }: {
-  block?: string;
   title?: string;
-  dateTime?: DateTime;
   board?: Board | null;
   thread?: Thread;
   baseUrl?: string;
   search?: string;
 }) => {
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const { accounts } = useWeb3();
   const { isJannyOf } = useUser();
   const isJanny = board ? isJannyOf(board.id) : false;
@@ -31,15 +28,12 @@ export const BoardHeader = ({
   return (
     <header id="board-header">
       <HeaderNavigation
-        block={block}
-        dateTime={dateTime}
         board={board || undefined}
         thread={thread}
         baseUrl={baseUrl}
-        search={search}
       />
 
-      <HeaderLogo block={block}></HeaderLogo>
+      <HeaderLogo/>
 
       <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative">
         <div className="text-xs pb-2">

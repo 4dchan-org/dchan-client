@@ -1,7 +1,9 @@
+import useTimeTravel from "dchan/hooks/useTimeTravel";
 import { Link, useHistory } from "react-router-dom";
 
-export const Paging = ({ url, page, maxPage, block }: any) => {
+export const Paging = ({ url, page, maxPage }: any) => {
   const history = useHistory();
+  const { timeTraveledToBlockNumber: block } = useTimeTravel()
   return (
     <div className="p-2">
       <span>
