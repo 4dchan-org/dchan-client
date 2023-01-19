@@ -153,7 +153,7 @@ export const Post = memo(
         ? "bg-secondary border-bottom-tertiary-accent border-right-tertiary-accent"
         : "",
       isYou ? "dchan-post-you" : "",
-      "w-full sm:w-full mb-2 inline-block relative",
+      "w-full sm:w-full my-2 inline-block relative",
     ].join(" ");
 
     return (
@@ -171,7 +171,7 @@ export const Post = memo(
           ref={postRef}
         >
           <details
-            className="absolute ml-2 z-10"
+            className="absolute ml-2 z-10 dchan-post-minimizer opacity-70 hover:opacity-100"
             ref={toggleRef}
             open={canShow}
             onToggle={(e: any) => {
@@ -181,7 +181,7 @@ export const Post = memo(
             <summary />
           </details>
           <div
-            className={`text-left opacity-50 whitespace-nowrap mb-1 overflow-hidden flex ml-5 ${
+            className={`text-left opacity-50 whitespace-nowrap mb-1 mt-2 overflow-hidden flex ml-5 ${
               showBody ? "hidden" : ""
             }`}
             title="Hide/Show"

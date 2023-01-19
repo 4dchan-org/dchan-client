@@ -162,7 +162,7 @@ export const TimeTravelWidget = forwardRef(
         </summary>
         <div className={widgetClassName}>
           {timeTravelRange ? (
-            <div className="bg-primary border border-secondary-accent p-1">
+            <div className="bg-secondary border border-tertiary-accent border-solid p-1">
               <div className="flex center text-xs my-1 ml-2">
                 <span>
                   [
@@ -208,7 +208,7 @@ export const TimeTravelWidget = forwardRef(
                   <div className="mb-4" />
                 )}
               </div>
-              <div className="text-xs bg-primary">
+              <div className="text-xs bg-secondary">
                 <div className="grid grid-cols-4 center text-center">
                   <span className="mx-1">{startRangeLabel}</span>
                   <input
@@ -244,7 +244,7 @@ export const TimeTravelWidget = forwardRef(
               </div>
             </div>
           ) : (
-            <div className="bg-primary border border-secondary-accent p-1">
+            <div className="bg-secondary border border-tertiary-accent border-solid p-1">
               Cannot time travel here.
             </div>
           )}

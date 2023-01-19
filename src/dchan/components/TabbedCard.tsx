@@ -25,7 +25,7 @@ export const TabbedCard = ({
             <button
               className={[
                 "bg-highlight py-1 px-4 w-full font-bold",
-                key === displayChild ? "opacity-100" : "opacity-60 hover:opacity-100"
+                key === displayChild ? "opacity-100" : "opacity-80 hover:opacity-100"
               ].join(" ")}
               onClick={() => {
                 setCurrentChild(key);

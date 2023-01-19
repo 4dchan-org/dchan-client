@@ -84,8 +84,8 @@ export const HeaderNavigation = ({
   }, [showBoards, setShowBoards]);
 
   const widgetClass = [
-    "absolute w-screen sm:w-max mt-1 md:mt-1 left-0 right-0 sm:left-auto sm:right-0",
-    showBoards ? "top-11 md:top-full" : "top-full md:top-5",
+    "absolute top-0 w-screen sm:w-max mt-1 md:mt-1 left-0 right-0 sm:left-auto sm:right-2",
+    showBoards ? "top-11 md:top-full" : "top-full md:top-6",
   ].join(" ");
 
   const boards = data?.boards;

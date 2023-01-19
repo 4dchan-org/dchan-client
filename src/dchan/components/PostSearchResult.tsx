@@ -12,7 +12,7 @@ export const PostSearchResult = ({ post }: { post: Post }) => {
     history.push(postLink);
   }, [history, postLink]);
   return (
-    <div className="my-2" data-theme={post?.board?.isNsfw ? "nsfw" : "blueboard"} onDoubleClick={openPost}>
+    <div data-theme={post?.board?.isNsfw ? "nsfw" : "blueboard"} onDoubleClick={openPost}>
       <PostComponent
         key={post.id}
         post={post}

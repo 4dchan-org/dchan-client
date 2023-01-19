@@ -1,7 +1,6 @@
 import {
   HeaderNavigation,
   HeaderLogo,
-  WatchedThreadsCard,
 } from "dchan/components";
 import { useEffect, useState, useCallback } from "react";
 import { useTitle } from "react-use";
@@ -76,12 +75,6 @@ export const HomePage = ({ location }: any) => {
           </Card>
         </div>
         <div>
-          <Card
-            title={<span>Watched Threads</span>}
-            className="md:px-1 w-full pb-4"
-          >
-            <WatchedThreadsCard />
-          </Card>
           <Card
             title={
               <span>

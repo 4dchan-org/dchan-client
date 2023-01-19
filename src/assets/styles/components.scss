@@ -114,3 +114,10 @@
 .dchan-brackets::after {
     content: "]";
 }
+
+.dchan-post-minimizer {
+    summary {
+        position: relative;
+        top: 8px;
+    }
+}

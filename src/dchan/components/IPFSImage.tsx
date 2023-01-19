@@ -4,6 +4,7 @@ import nsfwSrc from "assets/images/nsfw.png";
 import ipfsLoadingSrc from "assets/images/ipfs.png";
 import ipfsErrorSrc from "assets/images/ipfs_error.png";
 import useMouse from "@react-hook/mouse-position";
+import { useWindowSize } from "react-use";
 
 export const IPFSImage = ({
   hash,
@@ -45,9 +46,11 @@ export const IPFSImage = ({
     setImgError(undefined);
   }, [ipfsSrc, setImgLoading, setImgSrc, setImgError]);
 
+  const windowSize = useWindowSize()
   const [hoverPosition, setHoverPosition] = useState<{
     x: number;
     y: number;
+    flip: boolean;
   } | null>(null);
   const mouse = useMouse(mouseRef);
   useEffect(() => {
@@ -55,7 +58,7 @@ export const IPFSImage = ({
       clientWidth: 0,
       clientHeight: 0,
     };
-    if (mouse.clientX !== null && mouse.clientY !== null) {
+    if (windowSize.width > 768 && mouse.clientX !== null && mouse.clientY !== null) {
       const position = {
         x: Math.max(
           width / 2,
@@ -65,12 +68,13 @@ export const IPFSImage = ({
           height / 2,
           Math.min(window.outerHeight - height / 2, mouse.clientY)
         ),
+        flip: mouse.clientX > windowSize.width / 2
       };
       setHoverPosition(position);
     } else {
       setHoverPosition(null);
     }
-  }, [hash, imgRef, mouse, setHoverPosition]);
+  }, [windowSize, hash, imgRef, mouse, setHoverPosition]);
 
   return (
     <span ref={mouseRef} className="relative">
@@ -107,7 +111,7 @@ export const IPFSImage = ({
             style={{
               left: `${hoverPosition.x}px`,
               top: `${hoverPosition.y}px`,
-              transform: "translate(-50%, -50%)",
+              transform: `translate(${hoverPosition.flip ? "-100" : "0"}%, -50%)`,
               transition: "position 50ms ease-out"
             }}
             src={imgSrc}

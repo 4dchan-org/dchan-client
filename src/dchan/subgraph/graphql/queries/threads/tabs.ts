@@ -8,10 +8,10 @@ export const THREADS_TABS = gql`
     mostPopular: threads(orderBy: replyCount, orderDirection: desc, first: $limit, where: {lastBumpedAt_gt: $cutoff, score_gt: "900000000", board_starts_with: $board, board_ends_with: $board}) {
       ...Thread
     }
-    lastBumped: threads(orderBy: lastBumpedAt, orderDirection: desc, first: $limit, where: {lastBumpedAt_gt: $cutoff, score_gt: "900000000", board_starts_with: $board, board_ends_with: $board}) {
+    lastBumped: threads(orderBy: lastBumpedAt, orderDirection: desc, first: $limit, where: {score_gt: "900000000", board_starts_with: $board, board_ends_with: $board}) {
       ...Thread
     }
-    lastCreated: threads(orderBy: createdAt, orderDirection: desc, first: $limit, where: {lastBumpedAt_gt: $cutoff, score_gt: "900000000", board_starts_with: $board, board_ends_with: $board}) {
+    lastCreated: threads(orderBy: createdAt, orderDirection: desc, first: $limit, where: {score_gt: "900000000", board_starts_with: $board, board_ends_with: $board}) {
       ...Thread
     }
   }

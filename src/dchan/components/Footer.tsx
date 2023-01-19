@@ -11,7 +11,7 @@ export const Footer = ({
   className?: string;
 }) => {
   return (
-    <div className={`flex-grow relative pt-12 ${className}`}>
+    <div className={`flex-grow relative pt-24 ${className}`}>
       <div id="bottom" />
       <footer className="absolute bottom-0 mt-4">
         <div className="flex center flex-grow">
@@ -60,10 +60,10 @@ export const Footer = ({
                 />
               </a>
             </div>
-            <div className="flex text-right justify-end ml-2 md:flex-shrink">
+            <div className="flex text-right justify-end ml-2 flex-grow">
               <details>
                 <summary>{name} v{version}</summary>
-                <div className="bg-secondary border border-tertiary-accent border-solid p-2 absolute bottom-0 right-0 mr-2 mb-6">
+                <div className="bg-secondary border border-tertiary-accent border-solid p-2 absolute bottom-0 right-0 mr-4 mb-4">
                   <div>
                     <a
                       className="dchan-link"

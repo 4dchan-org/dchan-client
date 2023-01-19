@@ -30,7 +30,7 @@ export const WatchedThreadsWidget = () => {
   const onRemove = removeFavorite ? removeFavorite : () => { };
 
   return favorites ? (
-    <div className="bg-primary border border-secondary-accent p-1">
+    <div className="bg-secondary border border-tertiary-accent p-1">
       {loading ? (
         <Loading />
       ) : ids.length > 0 && threads && threads.length > 0 ? (
@@ -81,7 +81,7 @@ export const WatchedThreadsWidget = () => {
       ) : <span>No threads are being watched. Use the <Twemoji emoji={"⭐️"} /> button on threads to keep track of them here.</span>}
     </div>
   ) : (
-    <div className="bg-primary border border-secondary-accent p-1">
+    <div className="bg-secondary border border-tertiary-accent p-1">
       ...
     </div>
   );

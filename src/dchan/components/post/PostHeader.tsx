@@ -46,7 +46,7 @@ export const DateDisplay = ({ post }: { post: Post }) => {
 
   return (
     <span
-      className="px-0.5 whitespace-nowrap text-sm"
+      className="px-0.5 whitespace-nowrap text-sm flex center"
       title={relativeTime !== null ? relativeTime : undefined}
     >
       {formattedDate}
@@ -154,13 +154,13 @@ export const PostHeader = ({
         <button
           className={`inline-block ${
             favorite
-              ? "opacity-60 hover:opacity-80"
-              : "opacity-20 hover:opacity-40"
+              ? "opacity-70 hover:opacity-100"
+              : "opacity-40 hover:opacity-70"
           }`}
           title={favorite ? "Remove from watched" : "Add to watched"}
           onClick={onFavorite}
         >
-          <Twemoji emoji={"⭐️"} />
+          <Twemoji emoji={favorite ? "🌟" : "⭐️"} />
         </button>
       ) : (
         <span></span>
@@ -191,7 +191,7 @@ export const PostHeader = ({
         )
       </span>
       <DateDisplay post={post} />
-      <span className="whitespace-nowrap">
+      <span className="whitespace-nowrap flex center">
         <span className="px-0.5 on-parent-target-font-bold text-sm whitespace-nowrap">
           <Link
             className="dchan-link"
