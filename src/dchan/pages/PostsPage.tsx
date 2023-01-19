@@ -16,7 +16,7 @@ import {
   SearchWidget,
   LatestPostsCard,
   Post as PostComponent,
-  Paging
+  Paging,
 } from "dchan/components";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
 
@@ -33,7 +33,7 @@ export const PostsPage = ({ location, match: { params } }: any) => {
   const s = query.s || query.search;
   const search = isString(s) ? s : "";
   const page = parseInt(`${query.page || "1"}`);
-  const { timeTraveledToBlockNumber: block } = useTimeTravel()
+  const { timeTraveledToBlockNumber: block } = useTimeTravel();
   const [settings] = useSettings();
 
   const variables = {
@@ -97,15 +97,17 @@ export const PostsPage = ({ location, match: { params } }: any) => {
       <div className="relative">
         <div className="flex justify-center md:justify-start p-2">
           <SearchWidget
-            baseUrl={`${Router.posts()}${
-              block ? `?block=${block}` : ""
-            }`}
+            baseUrl={`${Router.posts()}${block ? `?block=${block}` : ""}`}
             search={search}
             open={true}
           />
-          <span className="grid center bg-secondary border border-secondary-accent mx-2">
-            {!loading ? <Paging page={page} url={Router.posts()} /> : <span/>}
-          </span>
+          {!loading ? (
+            <span className="grid center bg-secondary border border-secondary-accent mx-2">
+              <Paging page={page} url={Router.posts()} />
+            </span>
+          ) : (
+            <span />
+          )}
         </div>
 
         <div className="p-2">
@@ -169,4 +171,4 @@ export const PostsPage = ({ location, match: { params } }: any) => {
       <Footer showContentDisclaimer={true}></Footer>
     </div>
   );
-}
+};

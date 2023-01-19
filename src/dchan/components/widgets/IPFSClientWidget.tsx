@@ -25,7 +25,7 @@ export const IPFSClientWidget = () => {
     <details className="inline">
       <summary>IPFS clients</summary>
       {stable ? (
-        <div>
+        <div className="border-none">
           <span>{`Latest stable version, published @ ${fromBigInt(
             stable.publishedAtBlock.timestamp
           ).toLocaleString(DateTime.DATETIME_SHORT)}`}</span>
@@ -43,7 +43,7 @@ export const IPFSClientWidget = () => {
         <span />
       )}
       {dev ? (
-        <div>
+        <div className="border-none">
           <span>{`Latest dev version, published @ ${fromBigInt(
             dev.publishedAtBlock.timestamp
           ).toLocaleString(DateTime.DATETIME_SHORT)}`}</span>

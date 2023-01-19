@@ -69,6 +69,7 @@ export const BoardListPage = ({ location, match: { params } }: any) => {
       <GenericHeader
         title="Boards"
       />
+
       <div className="relative">
         <div className="flex center">
           <SearchWidget
