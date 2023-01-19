@@ -36,7 +36,7 @@
     "react-hook-form": "^7.42.1",
     "react-router-dom": "^5.2.0",
     "react-router-hash-link": "^2.4.3",
-    "react-singleton-hook": "^3.2.1",
+    "react-singleton-hook": "^4.0.1",
     "react-use": "^17.2.4",
     "sanitize-html": "^2.4.0",
     "twemoji": "^14.0.2",

@@ -1,8 +1,7 @@
-import { useLastBlock, useSettings } from "dchan/hooks";
+import { useSettings, useTimeTravel } from "dchan/hooks";
 import { parse as parseQueryString } from "query-string";
 import { Board, BoardRef, Thread } from "dchan/subgraph/types";
 import { useEffect, useMemo } from "react";
-import { Router } from "router";
 import { BOARD_GET, BOARD_CATALOG } from "dchan/subgraph/graphql/queries";
 import { useQuery } from "@apollo/react-hooks";
 import { isLowScore } from "dchan/subgraph/entities/thread";
@@ -17,7 +16,6 @@ import {
 } from "dchan/components";
 import { useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
-import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 interface BoardCatalogData {
   board: Board;
@@ -54,14 +52,13 @@ export const BoardPage = ({
   let { board_id, board_name } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 
-  const { timeTraveledToBlockNumber } = useTimeTravel()
+  const { timeTraveledToBlockNumber, lastBlock } = useTimeTravel()
   const query = parseQueryString(location.search);
   const page = parseInt(`${query.page || "1"}`);
 
   const history = useHistory();
   const [settings] = useSettings();
-  const {lastBlock} = useLastBlock();
-  const block = Number(timeTraveledToBlockNumber || lastBlock?.number || 0)
+  const block = Number(timeTraveledToBlockNumber || lastBlock?.number)
   const boardMode: string =
     params.view_mode ||
     settings?.content_view?.board_default_view_mode ||
@@ -158,11 +155,6 @@ export const BoardPage = ({
       <div>
         <ContentHeader
           board={board}
-          baseUrl={
-            board
-              ? Router.board(board, boardMode)
-              : location.pathname + location.hash
-          }
           summary={
             catalogLoading ? (
               <span>...</span>

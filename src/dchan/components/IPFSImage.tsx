@@ -101,7 +101,7 @@ export const IPFSImage = ({
         ref={imgRef}
       />
       {hoverPosition && !imgLoading && !imgError ? (
-        <div className="absolute top-0 left-0 overflow-hidden pointer-events-none opacity-95 z-50">
+        <div className="absolute top-0 left-0 overflow-hidden pointer-events-none opacity-98 z-50">
           <img
             className={`fixed max-w-75vw max-h-75vh z-50 overflow-hidden`}
             style={{

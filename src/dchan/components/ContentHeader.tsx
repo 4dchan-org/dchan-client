@@ -1,6 +1,5 @@
 import { useThrottleCallback } from "@react-hook/throttle";
 import { Board, Thread } from "dchan/subgraph/types";
-import { useLastBlock } from "dchan/hooks";
 import { ReactElement } from "react";
 import { BoardHeader, FormPost, RefreshWidget, BoardViewSettings, ContentNavigation } from ".";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
@@ -9,21 +8,16 @@ export const ContentHeader = ({
   board,
   thread,
   title,
-  search,
-  baseUrl,
   summary,
   onRefresh,
 }: {
   board?: Board | null;
   thread?: Thread;
   title?: string;
-  search?: string;
-  baseUrl?: string;
   summary?: ReactElement;
   onRefresh: () => void;
 }) => {
-  const { timeTraveledToBlockNumber: block } = useTimeTravel()
-  const { lastBlock } = useLastBlock();
+  const { timeTraveledToBlockNumber: block, lastBlock } = useTimeTravel()
   const throttledRefresh = useThrottleCallback(onRefresh, 1, true);
 
   return (
@@ -32,14 +26,12 @@ export const ContentHeader = ({
         title={title}
         board={board}
         thread={thread}
-        baseUrl={baseUrl}
-        search={search}
       />
 
       {board === null
        ? ""
        : (thread || board)
-       ? <FormPost baseUrl={baseUrl} thread={thread} board={board} />
+       ? <FormPost thread={thread} board={board} />
        : "..."}
 
       {board !== null ?

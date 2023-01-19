@@ -42,9 +42,7 @@ export const HomePage = ({ location }: any) => {
 
   return (
     <div className="h-screen bg-primary flex flex-col pb-2">
-      <HeaderNavigation
-        baseUrl="/"
-      />
+      <HeaderNavigation />
       <HeaderLogo />
       <div className="flex flex-grow flex-col grid-cols-3 xl:grid px-4 text-sm">
         <div>

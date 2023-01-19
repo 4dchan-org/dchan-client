@@ -41,11 +41,9 @@ type StartBlock = {
 export const HeaderNavigation = ({
   board,
   thread,
-  baseUrl,
 }: {
   board?: Board;
   thread?: Thread;
-  baseUrl?: string;
 }) => {
   const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const [startBlock, setStartBlock] = useState<StartBlock>({
@@ -147,7 +145,6 @@ export const HeaderNavigation = ({
               );
             }}
             onClose={() => setOpenedWidget(null)}
-            baseUrl={baseUrl || ""}
             startBlock={startBlock.block}
             startRangeLabel={startBlock.label}
           />

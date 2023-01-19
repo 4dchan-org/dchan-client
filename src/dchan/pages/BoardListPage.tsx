@@ -68,7 +68,6 @@ export const BoardListPage = ({ location, match: { params } }: any) => {
     <div className="bg-primary min-h-100vh flex flex-col">
       <GenericHeader
         title="Boards"
-        baseUrl={`${Router.boards()}${search ? `?s=${search}` : ""}`}
       />
       <div className="relative">
         <div className="flex center">

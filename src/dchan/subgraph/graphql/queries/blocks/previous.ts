@@ -1,7 +1,7 @@
 import { gql } from "apollo-boost";
 
-export const GET_PREV_BLOCK = gql`
-  query BlockByNumber($number: BigInt!) {
+export const BLOCK_PREVIOUS = gql`
+  query BlockPrevious($number: BigInt!) {
     blocks(first: 1, orderBy: timestamp, orderDirection: desc,
             where: {number_lt: $number}) {
         timestamp
@@ -10,4 +10,4 @@ export const GET_PREV_BLOCK = gql`
 }
 `;
 
-export default GET_PREV_BLOCK
+export default BLOCK_PREVIOUS

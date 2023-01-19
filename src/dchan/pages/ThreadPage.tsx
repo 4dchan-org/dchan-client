@@ -140,9 +140,6 @@ export const ThreadPage = ({
       <ContentHeader
         board={board}
         thread={thread}
-        baseUrl={
-          thread ? Router.thread(thread) : location.pathname + location.hash
-        }
         summary={
           loading ? <span>...</span> : <span>Posts: {posts.length}</span>
         }

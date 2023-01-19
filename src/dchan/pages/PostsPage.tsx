@@ -75,8 +75,6 @@ export const PostsPage = ({ location, match: { params } }: any) => {
       data-theme={"blueboard"}
     >
       <ContentHeader
-        search={search}
-        baseUrl={`${Router.posts()}${search ? `?s=${search}` : ""}`}
         board={null}
         title="Posts"
         summary={

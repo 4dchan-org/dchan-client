@@ -71,8 +71,8 @@ function App() {
     <EULA />
   ) : (
     <ApolloProvider client={client}>
-      <SingletonHooksContainer />
       <Router basename="/">
+        <SingletonHooksContainer />
         <LockBanner />
         <div className="App text-center">
           <Switch>

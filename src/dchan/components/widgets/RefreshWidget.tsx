@@ -57,7 +57,7 @@ export const RefreshWidget = ({ onRefresh }: { onRefresh: () => void }) => {
               ]
             </span>
           </summary>
-          <div className="bg-secondary p-2">
+          <div className="bg-secondary border border-tertiary-accent border-solid p-2">
             <div>
               <label htmlFor="dchan-input-refresh-toggle">
                 Enable autorefresh

@@ -1,17 +1,17 @@
 
 import { Block } from "dchan/subgraph";
 import { DateTime } from "luxon";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { singletonHook } from "react-singleton-hook";
-import useLastBlock from "./useLastBlock";
 import {
     BLOCK_BY_DATE,
     BLOCK_BY_NUMBER,
-    GET_NEXT_BLOCK,
-    GET_PREV_BLOCK,
+    BLOCK_RANGE,
+    BLOCK_NEXT,
+    BLOCK_PREVIOUS,
 } from "dchan/subgraph/graphql/queries";
-import { ApolloClient, ApolloQueryResult } from "@apollo/react-hooks";
-import { useHistory } from "react-router-dom";
+import { ApolloClient, ApolloQueryResult, useQuery } from "@apollo/react-hooks";
+import { useHistory, useLocation } from "react-router-dom";
 import SubgraphApolloClient from "dchan/subgraph/client";
 import { parse as parseQueryString } from "query-string";
 
@@ -25,6 +25,13 @@ interface BlockByDateVars {
 
 interface BlockByNumberVars {
     number: string;
+}
+
+interface BlockRangeData {
+    first: Block[];
+    last: Block[];
+}
+interface BlockRangeVars {
 }
 
 function queryBlockByDate(
@@ -57,7 +64,7 @@ function queryGetPrevBlock(
     block: string
 ): Promise<ApolloQueryResult<BlockData>> {
     return client.query<BlockData, BlockByNumberVars>({
-        query: GET_PREV_BLOCK,
+        query: BLOCK_PREVIOUS,
         variables: {
             number: block,
         },
@@ -69,45 +76,31 @@ function queryGetNextBlock(
     block: string
 ): Promise<ApolloQueryResult<BlockData>> {
     return client.query<BlockData, BlockByNumberVars>({
-        query: GET_NEXT_BLOCK,
+        query: BLOCK_NEXT,
         variables: {
             number: block,
         },
     });
 }
 
+export const useBlockRange = () => {
+    const query = useQuery<BlockRangeData, BlockRangeVars>(BLOCK_RANGE, {
+        pollInterval: 10_000
+    });
+    return {
+        firstBlock: query.data?.first[0],
+        lastBlock: query.data?.last[0]
+    };
+}
 
-const useTimeTravel = singletonHook<{
-    lastBlock?: Block,
-    currentBlock?: Block,
-    timeTraveledToBlockNumber?: number,
-    timeTraveledToDateTime?: DateTime,
-    travelToBlock: (block: Block) => void,
-    travelToDateTime: (dateTime: DateTime) => void,
-    travelToBlockNumber: (blockNumber: number) => void,
-    travelToPreviousBlock: () => void,
-    travelToNextBlock: () => void,
-    travelToPresent: () => void,
-}>({
-    travelToBlock: (_) => {},
-    travelToDateTime: (_) => {},
-    travelToBlockNumber: (_) => {},
-    travelToPreviousBlock: () => {},
-    travelToNextBlock: () => {},
-    travelToPresent: () => {},
-}, () => {
-    const client = SubgraphApolloClient
+const useTimeTravel = () => {
+    const subgraphClient = SubgraphApolloClient
     const history = useHistory()
-    const { lastBlock } = useLastBlock();
+    const location = useLocation()
+    const { firstBlock, lastBlock } = useBlockRange();
     let [currentBlock, setCurrentBlock] = useState<Block | undefined>();
     const timeTraveledToBlockNumber = Number(currentBlock?.number)
     const timeTraveledToDateTime = DateTime.fromSeconds(Number(currentBlock?.timestamp))
-    
-    const query = parseQueryString(history?.location.search);
-    let queriedBlock: number | undefined = parseInt(`${query.block}`);
-    if (isNaN(queriedBlock)) {
-        queriedBlock = undefined;
-    }
 
     const travelToPresent = useCallback(() => {
         setCurrentBlock(undefined);
@@ -115,19 +108,18 @@ const useTimeTravel = singletonHook<{
 
     const travelToDateTime = useCallback(
         (date: DateTime) => {
-            queryBlockByDate(client, date).then((result) => {
+            queryBlockByDate(subgraphClient, date).then(result => {
                 const b = result.data?.blocks?.[0];
                 if (b != null) {
                     setCurrentBlock(b);
                 }
             });
         },
-        [setCurrentBlock, client]
+        [setCurrentBlock, subgraphClient]
     );
 
     const travelToBlock = useCallback(
         (block: Block) => {
-            console.log("travelToBlock", block);
             setCurrentBlock(block);
             travelToDateTime(DateTime.fromSeconds(parseInt(block.timestamp)));
         },
@@ -136,55 +128,89 @@ const useTimeTravel = singletonHook<{
 
     const travelToBlockNumber = useCallback(
         (block: number) => {
-            if (block) {
-                queryBlockByNumber(client, block).then((result) => {
+            block ?
+                queryBlockByNumber(subgraphClient, block).then(result => {
                     const b = result.data?.blocks?.[0];
                     setCurrentBlock(b);
-                });
-            } else {
-                travelToPresent();
-            }
+                }) : travelToPresent();
         },
         [
             setCurrentBlock,
             travelToPresent,
-            client
+            subgraphClient
         ]
     );
 
     const travelToPreviousBlock = useCallback(() => {
-        if (
-            currentBlock &&
-            currentBlock.number
-        ) {
-            queryGetPrevBlock(client, currentBlock.number).then((result) => {
-                const b = result.data?.blocks?.[0];
-                setCurrentBlock(b);
-            });
-        }
+        if (!currentBlock?.number) return;
+
+        queryGetPrevBlock(subgraphClient, currentBlock.number).then(result => {
+            const b = result.data?.blocks?.[0];
+            setCurrentBlock(b);
+        });
     }, [
         setCurrentBlock,
         currentBlock,
-        client
+        subgraphClient
     ]);
 
     const travelToNextBlock = useCallback(() => {
-        if (
-            currentBlock &&
-            currentBlock.number
-        ) {
-            queryGetNextBlock(client, currentBlock.number).then((result) => {
-                const b = result.data?.blocks?.[0];
-                setCurrentBlock(b);
-            });
-        }
+        if (!currentBlock?.number) return;
+
+        queryGetNextBlock(subgraphClient, currentBlock.number).then(result => {
+            const b = result.data?.blocks?.[0];
+            setCurrentBlock(b);
+        });
     }, [
         setCurrentBlock,
         currentBlock,
-        client
+        subgraphClient
     ]);
 
-    return { lastBlock, currentBlock, travelToBlock, travelToDateTime, travelToBlockNumber, travelToPreviousBlock, travelToNextBlock, travelToPresent, timeTraveledToBlockNumber, timeTraveledToDateTime }
-});
+    useEffect(() => {
+        if (!currentBlock) return
 
-export default useTimeTravel;
+        const baseUrl = history.location.pathname
+        const url = !!baseUrl
+            ? baseUrl.includes("?")
+                ? `${baseUrl}&block=${currentBlock.number}`
+                : `${baseUrl}?block=${currentBlock.number}`
+            : undefined;
+
+        url && history.replace(url);
+    }, [history, currentBlock])
+
+    useEffect(() => {
+        const query = parseQueryString(location.search);
+        let queriedBlock: number | undefined = parseInt(`${query.block}`) || undefined;
+        queriedBlock && travelToBlockNumber(queriedBlock)
+    }, [location, travelToBlockNumber])
+
+    return {
+        firstBlock,
+        lastBlock,
+        currentBlock,
+        travelToBlock,
+        travelToDateTime,
+        travelToBlockNumber,
+        travelToPreviousBlock,
+        travelToNextBlock,
+        travelToPresent,
+        timeTraveledToBlockNumber,
+        timeTraveledToDateTime
+    }
+}
+
+export default singletonHook({
+    firstBlock: undefined,
+    lastBlock: undefined,
+    currentBlock: undefined,
+    travelToBlock: (_) => { },
+    travelToDateTime: (_) => { },
+    travelToBlockNumber: (_) => { },
+    travelToPreviousBlock: () => { },
+    travelToNextBlock: () => { },
+    travelToPresent: () => { },
+    timeTraveledToBlockNumber: 0,
+    timeTraveledToDateTime: DateTime.now()
+}, useTimeTravel);

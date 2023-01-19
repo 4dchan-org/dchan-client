@@ -25,18 +25,14 @@ export const TimeTravelWidget = forwardRef(
   (
     {
       startBlock,
-      dateTime,
       startRangeLabel,
-      baseUrl,
       widgetClassName,
       open,
       onOpen,
       onClose,
     }: {
       startBlock?: Block;
-      dateTime?: DateTime;
       startRangeLabel: string;
-      baseUrl: string;
       widgetClassName?: string;
       open: boolean;
       onOpen: () => void;
@@ -120,7 +116,7 @@ export const TimeTravelWidget = forwardRef(
             event.preventDefault();
           }}
         >
-          {timeTravelRange && baseUrl ? (
+          {timeTravelRange ? (
             <>
               <div className="mx-1 hidden sm:flex center">
                 <span onClick={onOpen}>

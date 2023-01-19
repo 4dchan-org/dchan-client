@@ -53,7 +53,7 @@ export const BoardViewSettings = () => {
         </span>
       </summary>
 
-      <div className="bg-secondary p-2">
+      <div className="bg-secondary border border-tertiary-accent border-solid p-2">
         <div>
           <label className="px-2" htmlFor="dchan-input-view-mode">
             Page size

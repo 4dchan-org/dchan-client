@@ -10,14 +10,10 @@ export const BoardHeader = ({
   title,
   board,
   thread,
-  baseUrl,
-  search,
 }: {
   title?: string;
   board?: Board | null;
   thread?: Thread;
-  baseUrl?: string;
-  search?: string;
 }) => {
   const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const { accounts } = useWeb3();
@@ -30,7 +26,6 @@ export const BoardHeader = ({
       <HeaderNavigation
         board={board || undefined}
         thread={thread}
-        baseUrl={baseUrl}
       />
 
       <HeaderLogo/>
@@ -57,7 +52,7 @@ export const BoardHeader = ({
               <Link
                 to={
                   board
-                    ? `/${board.name}/${board.id}${search || ""}${
+                    ? `/${board.name}/${board.id}${
                         block ? `?block=${block}` : ""
                       }`
                     : "#"

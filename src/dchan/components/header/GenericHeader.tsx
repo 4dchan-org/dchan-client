@@ -1,8 +1,8 @@
 import { HeaderNavigation, HeaderLogo } from "."
 
-export const GenericHeader = ({title, baseUrl}: {title: string, baseUrl?: string}) => (
+export const GenericHeader = ({title}: {title: string}) => (
     <header>
-        <HeaderNavigation baseUrl={baseUrl} />
+        <HeaderNavigation />
         <HeaderLogo />
 
         <div className="text-4xl text-contrast font-weight-800 font-family-tahoma">
