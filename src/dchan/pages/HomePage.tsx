@@ -1,4 +1,8 @@
-import { HeaderNavigation, HeaderLogo, WatchedThreadsCard } from "dchan/components";
+import {
+  HeaderNavigation,
+  HeaderLogo,
+  WatchedThreadsCard,
+} from "dchan/components";
 import { useEffect, useState, useCallback } from "react";
 import { useTitle } from "react-use";
 import { subscribe, unsubscribe } from "pubsub-js";
@@ -37,7 +41,9 @@ export const HomePage = ({ location }: any) => {
       setBoard(hoverBoard);
     });
 
-    return () => { unsubscribe(sub) };
+    return () => {
+      unsubscribe(sub);
+    };
   }, [setHighlight]);
 
   return (
@@ -68,56 +74,54 @@ export const HomePage = ({ location }: any) => {
           >
             <PopularBoardsCard highlight={highlight} />
           </Card>
+        </div>
+        <div>
           <Card
             title={<span>Watched Threads</span>}
             className="md:px-1 w-full pb-4"
           >
             <WatchedThreadsCard />
           </Card>
+          <Card
+            title={
+              <span>
+                Threads{" "}
+                {board ? (
+                  <span>
+                    on <BoardLink board={board} />
+                  </span>
+                ) : (
+                  ""
+                )}
+              </span>
+            }
+            className="md:px-1 w-full pb-4"
+            bodyClassName="p-none b-none"
+          >
+            <ThreadTabs limit={10} board={board} />
+          </Card>
         </div>
-        <Card
-          title={
-            <span>
-              Threads{" "}
-              {board ? (
-                <span>
-                  on{" "}
-                  <BoardLink
-                    board={board}
-                  />
-                </span>
-              ) : (
-                ""
-              )}
-            </span>
-          }
-          className="md:px-1 w-full pb-4"
-          bodyClassName="p-none b-none"
-        >
-          <ThreadTabs limit={10} board={board} />
-        </Card>
-        <Card
-          title={
-            <span>
-              Latest posts{" "}
-              {board ? (
-                <span>
-                  on{" "}
-                  <BoardLink
-                    board={board}
-                  />
-                </span>
-              ) : (
-                ""
-              )}
-            </span>
-          }
-          className="md:px-1 w-full pb-4"
-        >
-          <LatestPostsCard limit={10} board={board} />
-        </Card>
+        <div>
+          <Card
+            title={
+              <span>
+                Latest posts{" "}
+                {board ? (
+                  <span>
+                    on <BoardLink board={board} />
+                  </span>
+                ) : (
+                  ""
+                )}
+              </span>
+            }
+            className="md:px-1 w-full pb-4"
+          >
+            <LatestPostsCard limit={10} board={board} />
+          </Card>
+        </div>
       </div>
       <Footer />
     </div>
   );
-}
+};

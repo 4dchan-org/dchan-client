@@ -29,6 +29,7 @@
     "node-sass": "^8.0.0",
     "nprogress": "^0.2.0",
     "parjs": "^0.12.7",
+    "pretty-bytes": "^6.0.0",
     "pubsub-js": "^1.9.3",
     "query-string": "^7.0.1",
     "react": "^18.0.0",

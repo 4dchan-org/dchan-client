@@ -171,7 +171,7 @@ export const PostHeader = ({
           {isPostUserAdmin ? " ## Admin" : isPostUserJanny ? " ## Mod" : ""}
         </span>
       </span>
-      <span className="px-1 whitespace-nowrap text-sm">
+      <span className="px-1 whitespace-nowrap text-xs">
         (ID: <UserLabel user={post.from} />
         {provider && accounts && accounts[0] ? (
           <Menu>
@@ -327,7 +327,7 @@ export const PostHeader = ({
         </Menu>
       </span>
       {children}
-      <span className="dchan-backlinks text-left text-sm flex flex-wrap">
+      <span className="dchan-backlinks text-left text-xs flex flex-wrap">
         {postBacklinks?.map((post) => (
           <Link
             className="dchan-link px-1"

@@ -19,7 +19,7 @@ export const TabbedCard = ({
   }
   return (
     <article className={`${className}`}>
-      <header className="bg-white border border-black flex flex-row justify-evenly border-t-0" style={{flex: "0 1 auto"}}>
+      <header className="bg-white border border-black flex flex-row justify-evenly" style={{flex: "0 1 auto"}}>
         {Array.from(children.keys()).map((key, index) => (
           <React.Fragment key={key}>
             <button

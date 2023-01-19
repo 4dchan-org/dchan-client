@@ -1,14 +1,19 @@
+import { PostBody, PostHeader } from ".";
 import { IPFSImage, Menu, Twemoji } from "dchan/components";
 import { Post as DchanPost, Thread } from "dchan/subgraph/types";
 import { isLowScore } from "dchan/subgraph/entities/post";
-import { usePubSub, useSettings, useUser } from "dchan/hooks";
-import { truncate } from "lodash";
-import { useCallback } from "react";
-import { ReactElement, useEffect, useRef, useState, memo } from "react";
-import { PostBody, PostHeader } from ".";
-import { isEqual } from "lodash";
+import { usePubSub, useSettings, useUser, useTimeTravel } from "dchan/hooks";
+import { truncate, isEqual } from "lodash";
+import {
+  ReactElement,
+  useEffect,
+  useRef,
+  useState,
+  memo,
+  useCallback,
+} from "react";
 import { Link } from "react-router-dom";
-import useTimeTravel from "dchan/hooks/useTimeTravel";
+import prettyBytes from "pretty-bytes";
 
 export const Post = memo(
   ({
@@ -35,8 +40,11 @@ export const Post = memo(
       image,
       bans,
     } = post;
-    const { timeTraveledToBlockNumber: block } = useTimeTravel()
+    const { timeTraveledToBlockNumber: block } = useTimeTravel();
     const { data: selfUserData } = useUser();
+    const [imgContentLength, setImgContentLength] = useState<
+      number | undefined
+    >();
     const [showAnyway, setShowAnyway] = useState<boolean>(false);
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
@@ -111,8 +119,8 @@ export const Post = memo(
       }
     });
 
-    const ipfsUrl = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
-    const ipfsUrlURIComponent = encodeURIComponent(ipfsUrl);
+    const ipfsSrc = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
+    const ipfsSrcURIComponent = encodeURIComponent(ipfsSrc);
     const isOp = id === thread?.id;
     const isYou = selfUserData?.user?.id === post.from.id;
     const [settings] = useSettings();
@@ -132,9 +140,15 @@ export const Post = memo(
       }
     }, [toggleRef, setShowBody]);
 
+    useEffect(() => {
+      fetch(ipfsSrc, { method: "HEAD" }).then((response) =>
+        setImgContentLength(Number(response.headers.get("Content-Length")))
+      );
+    }, [ipfsSrc, setImgContentLength]);
+
     const bodyClass = [
       isHighlighted || isFocused
-        ? "bg-tertiary"
+        ? "bg-tertiary border-bottom-secondary-accent"
         : !isOp
         ? "bg-secondary border-bottom-tertiary-accent border-right-tertiary-accent"
         : "",
@@ -172,7 +186,7 @@ export const Post = memo(
             }`}
             title="Hide/Show"
           >
-            <PostHeader thread={thread} post={post} >
+            <PostHeader thread={thread} post={post}>
               {header}
             </PostHeader>
           </div>
@@ -185,11 +199,7 @@ export const Post = memo(
           >
             <div className={bodyClass}>
               <div className="flex sm:flex-wrap ml-5 align-center text-center sm:text-left sm:justify-start max-w-100vw">
-                <PostHeader
-                  thread={thread}
-                  post={post}
-                  backlinks={backlinks}
-                >
+                <PostHeader thread={thread} post={post} backlinks={backlinks}>
                   {header}
                 </PostHeader>
 
@@ -223,12 +233,12 @@ export const Post = memo(
                   {!!image ? (
                     <div className="text-center sm:text-left mx-5">
                       <span className="text-sm">
-                        <span className="flex flex-wrap">
+                        <span className="flex flex-wrap items-center">
                           <a
                             target="_blank"
                             rel="noreferrer"
                             className="dchan-link underline max-w-64"
-                            href={ipfsUrl}
+                            href={ipfsSrc}
                             title={image.name}
                           >
                             {truncate(image.name, {
@@ -236,63 +246,70 @@ export const Post = memo(
                               omission: "...",
                             })}
                           </a>
+                          {imgContentLength ? (
+                            <span className="mx-1 text-xs opacity-40 hover:opacity-100">
+                              ({prettyBytes(imgContentLength)})
+                            </span>
+                          ) : (
+                            <></>
+                          )}
+                          <Menu>
+                            <div>
+                              Reverse search:
+                              <div>
+                                <div>
+                                  <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="dchan-link pr-1"
+                                    href={`https://www.google.com/searchbyimage?image_url=${ipfsSrcURIComponent}&safe=off`}
+                                  >
+                                    google
+                                  </a>
+                                </div>
+                                <div>
+                                  <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="dchan-link pr-1"
+                                    href={`https://yandex.com/images/search?rpt=imageview&url=${ipfsSrcURIComponent}`}
+                                  >
+                                    yandex
+                                  </a>
+                                </div>
+                                <div>
+                                  <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="dchan-link pr-1"
+                                    href={`//iqdb.org/?url=${ipfsSrcURIComponent}`}
+                                  >
+                                    iqdb
+                                  </a>
+                                </div>
+                                <div>
+                                  <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="dchan-link pr-1"
+                                    href={`https://trace.moe/?auto&url=${ipfsSrcURIComponent}`}
+                                  >
+                                    wait
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </Menu>
                           <span className="whitespace-nowrap">
                             <a
                               target="_blank"
                               rel="noreferrer"
                               className="px-1 opacity-20 hover:opacity-100 hidden sm:inline-block"
-                              href={ipfsUrl}
+                              href={ipfsSrc}
                               title={image.name}
                             >
                               <small>{image.ipfsHash}</small>
                             </a>
-                            <Menu>
-                              <div>
-                                Reverse search:
-                                <div>
-                                  <div>
-                                    <a
-                                      target="_blank"
-                                      rel="noreferrer"
-                                      className="dchan-link pr-1"
-                                      href={`https://www.google.com/searchbyimage?image_url=${ipfsUrlURIComponent}amp;safe=off`}
-                                    >
-                                      google
-                                    </a>
-                                  </div>
-                                  <div>
-                                    <a
-                                      target="_blank"
-                                      rel="noreferrer"
-                                      className="dchan-link pr-1"
-                                      href={`https://yandex.com/images/search?rpt=imageview&amp;url=${ipfsUrlURIComponent}`}
-                                    >
-                                      yandex
-                                    </a>
-                                  </div>
-                                  <div>
-                                    <a
-                                      target="_blank"
-                                      rel="noreferrer"
-                                      className="dchan-link pr-1"
-                                      href={`//iqdb.org/?url=${ipfsUrlURIComponent}`}
-                                    >
-                                      iqdb
-                                    </a>
-                                  </div>
-                                  <div>
-                                    <a
-                                      target="_blank"
-                                      rel="noreferrer"
-                                      className="dchan-link pr-1"
-                                      href={`https://trace.moe/?auto&amp;url=${ipfsUrlURIComponent}`}
-                                    >
-                                      wait
-                                    </a>
-                                  </div>
-                                </div>
-                              </div>
-                            </Menu>
                           </span>
                         </span>
                       </span>

@@ -33,7 +33,7 @@ export const Footer = ({
               <FAQButton className="border border-tertiary-accent px-4 mx-1 bg-white" />
             </div>
             <div className="flex-grow" />
-            <div className="text-left flex justify-end items-center">
+            <div>
               Powered by
               <a
                 className="ml-1"

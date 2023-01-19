@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { Board, Thread } from "dchan/subgraph/types";
 import { TabbedCard } from "dchan/components";
 import { THREADS_TABS, THREADS_TABS_BLOCK } from "dchan/subgraph/graphql/queries";
-import { Loading, CatalogView } from "dchan/components";
+import { Loading, IndexView } from "dchan/components";
 import { useMemo } from "react";
 import { DateTime } from "luxon";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
@@ -49,15 +49,15 @@ export const ThreadTabs = ({
         new Map([
           [
             "Most popular",
-            data.mostPopular.length ? <CatalogView threads={data.mostPopular} showBoard={true} /> : <div className="p-4">No active threads.</div>,
+            data.mostPopular.length ? <IndexView threads={data.mostPopular} showBoard={true} /> : <div className="p-4">No active threads.</div>,
           ],
           [
             "Last created",
-            data.lastCreated.length ? <CatalogView threads={data.lastCreated} showBoard={true} /> : <div className="p-4">No active threads.</div>,
+            data.lastCreated.length ? <IndexView threads={data.lastCreated} showBoard={true} /> : <div className="p-4">No active threads.</div>,
           ],
           [
             "Last bumped",
-            data.lastBumped.length ? <CatalogView threads={data.lastBumped} showBoard={true} /> : <div className="p-4">No active threads.</div>,
+            data.lastBumped.length ? <IndexView threads={data.lastBumped} showBoard={true} /> : <div className="p-4">No active threads.</div>,
           ],
         ])
       }
