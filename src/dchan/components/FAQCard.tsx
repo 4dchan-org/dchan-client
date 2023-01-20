@@ -27,7 +27,7 @@ export const TheGraph = () => {
       </span>
     </span>
   );
-}
+};
 
 export const Polygon = () => {
   return (
@@ -40,7 +40,7 @@ export const Polygon = () => {
       Polygon
     </a>
   );
-}
+};
 
 export const DchanNetwork = () => {
   return (
@@ -53,7 +53,7 @@ export const DchanNetwork = () => {
       dchan.network
     </a>
   );
-}
+};
 
 export const IPFS = () => {
   return (
@@ -66,7 +66,7 @@ export const IPFS = () => {
       IPFS
     </a>
   );
-}
+};
 
 export const FAQCard = ({
   onExit,
@@ -127,7 +127,7 @@ export const FAQCard = ({
           <strong>Q: How does this work?</strong>
           <div>
             <DchanNetwork /> stores posts, threads, boards and everything needed
-            on the blockchain. Users interact with the website through{" "}
+            on the blockchain. Users post and interact with the website through{" "}
             <a
               className="dchan-link"
               target="_blank"
@@ -137,9 +137,9 @@ export const FAQCard = ({
               a one-line smart contract
             </a>
             , which acts as a public record of each and every action ever
-            performed by users, moderators and administrators, so that a
-            computer program running on <TheGraph />
-            's decentralized network (called{" "}
+            performed by users, moderators and administrators (write only).
+            <br />
+            Those actions are then processed by
             <a
               className="dchan-link"
               target="_blank"
@@ -148,14 +148,24 @@ export const FAQCard = ({
             >
               a subgraph
             </a>
-            ) which then organizes and makes sense of those actions and exposes
-            the resulting data into something easily usable by the website.
+            , a computer program running on <TheGraph />
+            's decentralized network, which makes sense of that sequence of
+            actions and exposes the resulting data via
+            <a
+              className="dchan-link"
+              target="_blank"
+              rel="noreferrer"
+              href="https://graphql.org/"
+            >
+              GraphQL
+            </a>
+            .
             <br />
             For example, if a user wanted to make a new post on the website,
-            they will write a message on the blockchain that essentially states
-            "I want to create a post on this board with the comment 'it's over'
-            and the picture called 'crying_pepe.jpg'" and the subgraph will put
-            this into a new post on the website.
+            they will write a JSON message on the blockchain that essentially
+            states "I want to create a thread on this board with the comment
+            'it's over' and this picture called 'crying_pepe.jpg'", and the
+            subgraph will put this into a new post on the website.
             <br />
             But, if the person who made the post were not allowed to post
             because they were banned, the post will not be created.
@@ -168,16 +178,16 @@ export const FAQCard = ({
         <div className="pb-2">
           <strong>Q: Is it free?</strong>
           <div>
-            Browsing <DchanNetwork /> is free, but in order to post you will
-            need a crypto wallet and some <Polygon /> to pay the transaction
-            fee.
+            Browsing <DchanNetwork /> is free, but you will need a crypto wallet
+            and some <Polygon /> to pay the transaction fee in order to post.
             <br />
             At the time of writing this FAQ (December 2022) the transaction fee
             for a post is around 0.001 MATIC, or around than ~$0.001 per post,
             so $10 worth of MATIC would allow you to post more than 10000 times!
             <br />
-            It is possible that fees will be higher during high on-chain
-            activity.
+            Please note that it is possible that fees will be higher during high
+            on-chain activity, or that MATIC's price may change wildly in the
+            future.
             <br />
             You can get some free <Polygon /> at the following faucets:
             <div>
@@ -224,7 +234,8 @@ export const FAQCard = ({
             <br />
             It would still be possible for anyone to deploy a client and
             subgraph that bypasses this censoring, as every action and content
-            posted is public and <b>undeletable</b>.
+            posted is public and <b>undeletable</b>. The <i>content</i> itself
+            cannot be censored.
           </div>
         </div>
 
@@ -249,8 +260,10 @@ export const FAQCard = ({
             >
               Trust Wallet
             </a>{" "}
-            (if you're on Mobile). Other wallets might not be supported. You'll
-            need to connect your crypto wallet to post on <DchanNetwork />.
+            (if you're on Mobile). Other wallets might not be supported.
+            <br />
+            You'll need to connect your crypto wallet to post on{" "}
+            <DchanNetwork />.
           </div>
         </div>
 
@@ -306,13 +319,13 @@ export const FAQCard = ({
 
         <div className="pb-2">
           <strong>
-            Q: I acted like a dipshit and got banned! What about muh free
-            speech?
+            Q: I acted like a dipshit and got banned! Muh free speech??
           </strong>
           <div>
             If you are not happy with the way <DchanNetwork /> is moderated, I
             encourage you to fork off the code and make your own instance, with
-            (or without) all the posts and boards from this website intact. (
+            (or without) all the posts and boards from this website. You have
+            all the tools at your disposal, see
             <a
               className="dchan-link"
               href="//github.com/dchan-network/"
@@ -321,7 +334,6 @@ export const FAQCard = ({
             >
               GitHub
             </a>
-            )
             <br />
           </div>
         </div>
@@ -353,7 +365,7 @@ export const FAQCard = ({
           <div>
             You can run the client locally... somewhat. If you're on desktop,
             you can save the page and open it with your browser, so that if
-            dchan.network ever goes down you can still use the client. <br />
+            <DchanNetwork /> ever goes down you can still use the client. <br />
             You may incur in some bugs like missing logos or being unable to
             post, but you should be able to view the content just fine as long
             as you are online.
@@ -384,7 +396,7 @@ export const FAQCard = ({
       </div>
     </Card>
   );
-}
+};
 
 export const useFAQ = singletonHook<[boolean, (open: boolean) => void]>(
   [false, () => {}],
@@ -399,9 +411,11 @@ export const FAQCardOverlay = () => {
     <Overlay
       onExit={() => setOpenFAQ(false)}
       overlayClassName="w-full sm:w-4/6 h-5/6"
-    ><FAQCard /></Overlay>
+    >
+      <FAQCard />
+    </Overlay>
   ) : null;
-}
+};
 
 export const FAQButton = ({ className = "" }: { className?: string }) => {
   const [, setOpenFAQ] = useFAQ();
@@ -419,4 +433,4 @@ export const FAQButton = ({ className = "" }: { className?: string }) => {
       </span>
     </>
   );
-}
+};

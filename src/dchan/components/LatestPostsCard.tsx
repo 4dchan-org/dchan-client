@@ -35,7 +35,7 @@ export const LatestPostsCard = ({
             post={post}
             key={post.id}
           />
-        ))
+        )) || <div>No post found</div>
       )}
     </div>
   );

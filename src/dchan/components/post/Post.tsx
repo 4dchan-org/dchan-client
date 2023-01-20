@@ -120,7 +120,6 @@ export const Post = memo(
     });
 
     const ipfsSrc = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
-    const ipfsSrcURIComponent = encodeURIComponent(ipfsSrc);
     const isOp = id === thread?.id;
     const isYou = selfUserData?.user?.id === post.from.id;
     const [settings] = useSettings();
@@ -262,17 +261,7 @@ export const Post = memo(
                                     target="_blank"
                                     rel="noreferrer"
                                     className="dchan-link pr-1"
-                                    href={`https://www.google.com/searchbyimage?image_url=${ipfsSrcURIComponent}&safe=off`}
-                                  >
-                                    google
-                                  </a>
-                                </div>
-                                <div>
-                                  <a
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="dchan-link pr-1"
-                                    href={`https://yandex.com/images/search?rpt=imageview&url=${ipfsSrcURIComponent}`}
+                                    href={`https://yandex.com/images/search?rpt=imageview&url=${ipfsSrc}`}
                                   >
                                     yandex
                                   </a>
@@ -282,7 +271,7 @@ export const Post = memo(
                                     target="_blank"
                                     rel="noreferrer"
                                     className="dchan-link pr-1"
-                                    href={`//iqdb.org/?url=${ipfsSrcURIComponent}`}
+                                    href={`//iqdb.org/?url=${ipfsSrc}`}
                                   >
                                     iqdb
                                   </a>
@@ -292,7 +281,7 @@ export const Post = memo(
                                     target="_blank"
                                     rel="noreferrer"
                                     className="dchan-link pr-1"
-                                    href={`https://trace.moe/?auto&url=${ipfsSrcURIComponent}`}
+                                    href={`https://trace.moe/?auto&url=${ipfsSrc}`}
                                   >
                                     wait
                                   </a>
