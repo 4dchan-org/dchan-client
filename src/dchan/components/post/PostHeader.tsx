@@ -12,7 +12,13 @@ import {
   unlockThread,
   unpinThread,
 } from "dchan/actions";
-import { usePubSub, useSettings, useUser, useWeb3, useFavorites } from "dchan/hooks";
+import {
+  usePubSub,
+  useSettings,
+  useUser,
+  useWeb3,
+  useFavorites,
+} from "dchan/hooks";
 import { DateTime } from "luxon";
 import { ReactElement, useCallback, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -22,7 +28,7 @@ import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 export const DateDisplay = ({ post }: { post: Post }) => {
   const createdAt = fromBigInt(post.createdAtBlock.timestamp);
-  const {currentBlock} = useTimeTravel();
+  const { currentBlock } = useTimeTravel();
   const relativeTime = createdAt.toRelative();
   const base = currentBlock ? fromBigInt(currentBlock.timestamp) : undefined;
   const traveledRelativeTime =
@@ -42,7 +48,9 @@ export const DateDisplay = ({ post }: { post: Post }) => {
   const location = useLocation();
   const locationParams = parseQueryString(location.search);
   locationParams.block = `${post.createdAtBlock.number}`;
-  const timeTravelLink = `${location.pathname}?${new URLSearchParams(locationParams as any).toString()}`;
+  const timeTravelLink = `${location.pathname}?${new URLSearchParams(
+    locationParams as any
+  ).toString()}`;
 
   return (
     <span
@@ -52,10 +60,7 @@ export const DateDisplay = ({ post }: { post: Post }) => {
       {formattedDate}
       <span className="text-xs px-1 opacity-20 hover:opacity-100 hidden sm:inline-block">
         [
-        <Link
-          title={`Time travel to ${formattedDate}`}
-          to={timeTravelLink}
-        >
+        <Link title={`Time travel to ${formattedDate}`} to={timeTravelLink}>
           {currentBlock ? (
             <span>
               {traveledRelativeTime} ({relativeTime})
@@ -68,7 +73,7 @@ export const DateDisplay = ({ post }: { post: Post }) => {
       </span>
     </span>
   );
-}
+};
 
 export const PostHeader = ({
   post,
@@ -81,7 +86,7 @@ export const PostHeader = ({
   backlinks?: object;
   children?: ReactElement;
 }) => {
-  const { timeTraveledToBlockNumber: block } = useTimeTravel()
+  const { timeTraveledToBlockNumber: block } = useTimeTravel();
   const {
     id,
     n,
@@ -97,14 +102,21 @@ export const PostHeader = ({
   const [status, setStatus] = useState<string | object>();
 
   const isSelfJanny = thread?.board?.id && selfUser.isJannyOf(thread.board.id);
-  const isPostUserAdmin = postUser.isAdmin()
-  const isPostUserJanny = thread?.board?.id && postUser.isJannyOf(thread?.board.id)
+  const isPostUserAdmin = postUser.isAdmin();
+  const isPostUserJanny =
+    thread?.board?.id && postUser.isJannyOf(thread?.board.id);
 
   const replyTo = useCallback(
     (from: string, n: number | string) => {
-      publish("FORM_QUOTE", { from, n });
+      console.log({from, n, thread})
+      publish("FORM_QUOTE", {
+        n,
+        ...(thread && ([...thread.replies || [], thread.op]).filter((post) => post.n === n).length > 1
+          ? { from }
+          : {}),
+      });
     },
-    [publish]
+    [thread, publish]
   );
 
   const onSendTip = useCallback(
@@ -166,7 +178,22 @@ export const PostHeader = ({
         <span></span>
       )}
       <span className="px-0.5 whitespace-nowrap">
-        <span className={`font-bold font-size-090rem ${isPostUserAdmin ? "text-red-600" : isPostUserJanny ? "text-purple-600" : "text-accent"}`} title={isPostUserAdmin ? "This user is an administrator." : isPostUserJanny ? "This user is a moderator for this board." : ""}>
+        <span
+          className={`font-bold font-size-090rem ${
+            isPostUserAdmin
+              ? "text-red-600"
+              : isPostUserJanny
+              ? "text-purple-600"
+              : "text-accent"
+          }`}
+          title={
+            isPostUserAdmin
+              ? "This user is an administrator."
+              : isPostUserJanny
+              ? "This user is a moderator for this board."
+              : ""
+          }
+        >
           {!name || "" === name ? "Anonymous" : name}
           {isPostUserAdmin ? " ## Admin" : isPostUserJanny ? " ## Mod" : ""}
         </span>
@@ -210,12 +237,16 @@ export const PostHeader = ({
         </span>
         <span>
           {isOp && isPinned ? (
-            <span title="Thread pinned. This might be important."><Twemoji emoji={"📌"} /></span>
+            <span title="Thread pinned. This might be important.">
+              <Twemoji emoji={"📌"} />
+            </span>
           ) : (
             <span></span>
           )}
           {isOp && isLocked ? (
-            <span title="Thread locked. You cannot reply anymore."><Twemoji emoji={"🔒"} /></span>
+            <span title="Thread locked. You cannot reply anymore.">
+              <Twemoji emoji={"🔒"} />
+            </span>
           ) : (
             <span></span>
           )}
@@ -343,4 +374,4 @@ export const PostHeader = ({
       <Status status={status}></Status>
     </span>
   );
-}
+};

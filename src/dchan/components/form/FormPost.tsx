@@ -102,7 +102,8 @@ export const FormPost = ({
   const onQuote = useCallback(
     function (_, { from, n }) {
       const { comment } = getValues();
-      const quote = `>>0x${shortenAddress(from).replace("-", "")}/${n}`;
+      const maybeAddressPrefix = from ? `0x${shortenAddress(from).replace("-", "")}/` : ""
+      const quote = `>>${maybeAddressPrefix}${n}`;
       const textarea = textAreaRef.current;
 
       let newComment = "";

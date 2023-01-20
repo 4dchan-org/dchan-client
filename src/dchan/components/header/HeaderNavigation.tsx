@@ -11,6 +11,7 @@ import {
   Twemoji,
   SettingsWidget,
   Overlay,
+  WalletConnect,
   UserLabel,
 } from "dchan/components";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
@@ -27,6 +28,7 @@ enum OpenedWidgetEnum {
   SEARCH = "SEARCH",
   WATCHEDTHREADS = "WATCHEDTHREADS",
   SETTINGS = "SETTINGS",
+  WALLET = "WALLET",
 }
 
 const siteCreatedAtBlock: Block = {
@@ -47,7 +49,7 @@ export const HeaderNavigation = ({
   board?: Board;
   thread?: Thread;
 }) => {
-  const { provider, loadWeb3Modal, logoutOfWeb3Modal } = useWeb3();
+  const { provider } = useWeb3();
   const { timeTraveledToBlockNumber: block } = useTimeTravel();
   const [startBlock, setStartBlock] = useState<StartBlock>({
     label: "Site creation",
@@ -60,6 +62,7 @@ export const HeaderNavigation = ({
   const timeTravelRef = useRef<HTMLDetailsElement>(null);
   const watchedThreadsRef = useRef<HTMLDetailsElement>(null);
   const settingsRef = useRef<HTMLDetailsElement>(null);
+  const walletRef = useRef<HTMLDetailsElement>(null);
 
   const user = useUser().data?.user;
 
@@ -198,25 +201,35 @@ export const HeaderNavigation = ({
               ""
             )}
           </span>
-          <span className="pl-2 ">
-            {provider ? (
-              <>
-                [
-                <span className="dchan-link" onClick={logoutOfWeb3Modal}>
-                  Disconnect
-                </span>{" "}
-                {user ? <UserLabel user={user} /> : "..."}]
-              </>
+          <details
+            className="mx-1"
+            open={openedWidget === OpenedWidgetEnum.WALLET}
+            ref={walletRef}
+          >
+            <summary
+              className="list-none cursor-pointer"
+              onClick={(event) => {
+                event.preventDefault();
+                setOpenedWidget(
+                  openedWidget === OpenedWidgetEnum.WALLET
+                    ? null
+                    : OpenedWidgetEnum.WALLET
+                );
+              }}
+            >
+            <span className={provider ? "" : "filter grayscale"}>
+              {user ? <UserLabel user={user} /> : ""}
+              <Twemoji emoji={"🦊"} />
+            </span>
+            </summary>
+            {openedWidget === OpenedWidgetEnum.WALLET ? (
+              <div className={widgetClass}>
+                <div className="bg-secondary border border-tertiary-accent border-solid p-1"><WalletConnect /></div>
+              </div>
             ) : (
-              <>
-                [
-                <span className="dchan-link" onClick={loadWeb3Modal}>
-                  Connect
-                </span>
-                ]
-              </>
+              ""
             )}
-          </span>
+          </details>
         </span>
         <div
           className={
