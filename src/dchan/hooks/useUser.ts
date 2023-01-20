@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { USER_GET } from "dchan/subgraph/graphql/queries";
 import { Admin, User } from "dchan/subgraph/types";
@@ -16,12 +16,14 @@ const useUser = (userAddress?: string) => {
   const { accounts } = useWeb3()
   const address = userAddress ?? (accounts.length > 0 ? accounts[0] : "")
 
+  // @TODO Avoid multiple calls if called from different components
   const query = useQuery<UserData, UserVars>(USER_GET, {
     variables: { address },
+    fetchPolicy: "cache-and-network",
     skip: !address
   })
 
-  const { refetch, loading, data } = query
+  const { loading, data } = query
 
   const isAdmin = useCallback(() => {
     if (loading) return
@@ -38,10 +40,6 @@ const useUser = (userAddress?: string) => {
 
     return isJanny
   }, [isAdmin, loading, data])
-
-  useEffect(() => {
-    refetch()
-  }, [refetch])
 
   return { ...query, isJannyOf, isAdmin }
 }

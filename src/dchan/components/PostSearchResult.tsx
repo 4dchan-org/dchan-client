@@ -19,11 +19,6 @@ export const PostSearchResult = ({ post }: { post: Post }) => {
         showPostMarker={false}
         header={
           <span>
-            {post.board ? <span className="p-1 whitespace-nowrap">
-              [
-                <BoardLink board={post.board} />
-              ]
-            </span> : ""}
             <span className="p-1 whitespace-nowrap">
               [
               <Link
@@ -35,6 +30,9 @@ export const PostSearchResult = ({ post }: { post: Post }) => {
               </Link>
               ]
             </span>
+            {post.board ? <span className="whitespace-nowrap">
+              <BoardLink board={post.board} />
+            </span> : ""}
           </span>
         }
       />

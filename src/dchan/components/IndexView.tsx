@@ -30,7 +30,7 @@ export const IndexView = ({
             key={thread.op.id}
             header={
               <span>
-                <span className="p-1">
+                <span className="p-1 whitespace-nowrap">
                   [
                   <Link
                     to={`${Router.thread(thread)}${
@@ -42,7 +42,7 @@ export const IndexView = ({
                   </Link>
                   ]
                   {showBoard && thread.board ? (
-                    <span className="mx-2">
+                    <span className="whitespace-nowrap">
                       <BoardLink
                         board={thread.board}
                       />
