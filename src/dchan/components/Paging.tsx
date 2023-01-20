@@ -1,7 +1,12 @@
 import useTimeTravel from "dchan/hooks/useTimeTravel";
 import { Link, useHistory } from "react-router-dom";
 
-export const Paging = ({ url, page, maxPage }: any) => {
+export const Paging = ({ url, page, maxPage, hasNextPage }: {
+  url: string,
+  page: number,
+  maxPage?: number,
+  hasNextPage?: boolean
+}) => {
   const history = useHistory();
   const { timeTraveledToBlockNumber: block } = useTimeTravel()
   return (
@@ -27,10 +32,10 @@ export const Paging = ({ url, page, maxPage }: any) => {
         <button
           className="dchan-link px-2"
           onClick={() => {
-            const input = prompt(`Page number: (range: 1-${maxPage})`);
+            const input = prompt(`Page number: ${maxPage ? `(range: 1-${maxPage})` : ``}`);
             if (input != null) {
               const newPage = parseInt(input || "");
-              if (isNaN(newPage) || newPage < 1 || newPage > maxPage) {
+              if (isNaN(newPage) || newPage < 1 || (maxPage && newPage > maxPage)) {
                 alert(`Invalid page number: ${input}`);
               } else {
                 history.push(
@@ -48,7 +53,7 @@ export const Paging = ({ url, page, maxPage }: any) => {
       <span>
         <Link
           className={`dchan-link px-2 ${
-            !maxPage || page < maxPage ? "" : "dchan-link-disabled"
+            hasNextPage === true || (maxPage && page < maxPage) ? "" : "dchan-link-disabled"
           }`}
           to={`${url}?page=${page + 1}${block ? `&block=${block}` : ""}`}
         >
@@ -58,7 +63,7 @@ export const Paging = ({ url, page, maxPage }: any) => {
       <span>
         <Link
           className={`dchan-link px-2 ${
-            maxPage && page < maxPage ? "" : "dchan-link-disabled"
+            hasNextPage === true && (maxPage && page < maxPage) ? "" : "dchan-link-disabled"
           }`}
           to={`${url}?page=${maxPage}${block ? `&block=${block}` : ""}`}
         >

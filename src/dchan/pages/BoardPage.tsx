@@ -16,6 +16,7 @@ import {
 } from "dchan/components";
 import { useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
+import { DateTime } from "luxon";
 
 interface BoardCatalogData {
   board: Board;
@@ -58,6 +59,13 @@ export const BoardPage = ({
 
   const history = useHistory();
   const [settings] = useSettings();
+  const { currentBlock } = useTimeTravel()
+  const cutoff = useMemo(
+    () => Math.floor(
+      (currentBlock ? parseInt(currentBlock.timestamp) : DateTime.now().toSeconds()) - (60 * 60 * 24 * 30)
+    ),
+    [currentBlock]
+  );
   const block = Number(timeTraveledToBlockNumber || lastBlock?.number)
   const boardMode: string =
     params.view_mode ||
@@ -74,6 +82,7 @@ export const BoardPage = ({
     orderDirection: settings?.content_view?.board_sort_direction || "desc",
     limit,
     skip: limit * (page - 1),
+    cutoff
   };
 
   const {
@@ -121,12 +130,6 @@ export const BoardPage = ({
       !isLowScore(thread, settings?.content_filter?.score_threshold)
     );
   });
-
-  // @TODO usePagination?
-  const maxPage = useMemo(() => {
-    const threadCount = parseInt(`${board?.threadCount || 0}`);
-    return Math.max(Math.ceil(board ? threadCount / limit : 0), 1);
-  }, [board, limit]);
 
   useTitle(
     !boardLoading
@@ -216,7 +219,7 @@ export const BoardPage = ({
           {board ? (
             <div>
               <hr />
-              <Paging url={location.pathname} page={page} maxPage={maxPage} />
+              <Paging url={location.pathname} page={page} hasNextPage={threads.length >= limit} />
 
               <Anchor to="#board-header" label="Top" />
             </div>

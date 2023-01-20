@@ -16,7 +16,7 @@ export const LatestPostsCard = ({
   const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const query = block ? POSTS_GET_LAST_BLOCK : POSTS_GET_LAST;
   const { loading, data } = useQuery<{ posts: Post[] }, any>(query, {
-    pollInterval: 5_000,
+    pollInterval: 10_000,
     variables: {
       block,
       limit,

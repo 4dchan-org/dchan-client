@@ -314,7 +314,7 @@ export const Post = memo(
                     >
                       <div className="w-full">
                         {!!image ? (
-                          <div className="overflow-auto float-left mx-5 mb-2">
+                          <div className="overflow-hidden float-left mx-5 mb-2">
                             <IPFSImage
                               hash={image.ipfsHash}
                               isSpoiler={image.isSpoiler}
