@@ -243,15 +243,20 @@ export const FormPost = ({
     }
   }, [getValues, setThumbnailB64]);
 
-  const onFileChange = useCallback(async () => {
-    refreshThumbnail();
-    const files: FileList = getValues().file;
+  const onFileChange = useCallback(async (e?: any) => {
+    let files: FileList | undefined = e?.target?.files
+    if(files) {
+      setValue("file", files)
+    } else {
+      files = getValues().file;
+    }
     if (!!files && files.length > 0) {
+      refreshThumbnail();
       setFileSize(files[0].size / 1024);
     } else {
       setFileSize(0);
     }
-  }, [refreshThumbnail, setFileSize, getValues]);
+  }, [refreshThumbnail, setFileSize, setValue, getValues]);
 
   const fileRemove = useCallback(() => {
     setValue("file", undefined);
@@ -274,6 +279,7 @@ export const FormPost = ({
         const list = new DataTransfer();
         list.items.add(new File([blob], name, { type: file.type }));
         setValue("file", list.files);
+        console.log({list, files})
       }
     }
   }, [getValues, setValue]);
