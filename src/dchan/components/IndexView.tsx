@@ -42,7 +42,7 @@ export const IndexView = ({
                   </Link>
                   ]
                   {showBoard && thread.board ? (
-                    <span className="whitespace-nowrap">
+                    <span className="ml-1 whitespace-nowrap">
                       <BoardLink
                         board={thread.board}
                       />

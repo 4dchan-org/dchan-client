@@ -11,8 +11,10 @@ import {
   Twemoji,
   SettingsWidget,
   Overlay,
+  UserLabel,
 } from "dchan/components";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
+import { useUser, useWeb3 } from "dchan/hooks";
 
 interface BoardListData {
   boards: Board[];
@@ -45,7 +47,8 @@ export const HeaderNavigation = ({
   board?: Board;
   thread?: Thread;
 }) => {
-  const { timeTraveledToBlockNumber: block } = useTimeTravel()
+  const { provider, loadWeb3Modal, logoutOfWeb3Modal } = useWeb3();
+  const { timeTraveledToBlockNumber: block } = useTimeTravel();
   const [startBlock, setStartBlock] = useState<StartBlock>({
     label: "Site creation",
     block: siteCreatedAtBlock,
@@ -57,6 +60,8 @@ export const HeaderNavigation = ({
   const timeTravelRef = useRef<HTMLDetailsElement>(null);
   const watchedThreadsRef = useRef<HTMLDetailsElement>(null);
   const settingsRef = useRef<HTMLDetailsElement>(null);
+
+  const user = useUser().data?.user;
 
   useEffect(() => {
     if (!thread && !board) {
@@ -191,6 +196,25 @@ export const HeaderNavigation = ({
               </Overlay>
             ) : (
               ""
+            )}
+          </span>
+          <span className="pl-2 ">
+            {provider ? (
+              <>
+                [
+                <span className="dchan-link" onClick={logoutOfWeb3Modal}>
+                  Disconnect
+                </span>{" "}
+                {user ? <UserLabel user={user} /> : "..."}]
+              </>
+            ) : (
+              <>
+                [
+                <span className="dchan-link" onClick={loadWeb3Modal}>
+                  Connect
+                </span>
+                ]
+              </>
             )}
           </span>
         </span>

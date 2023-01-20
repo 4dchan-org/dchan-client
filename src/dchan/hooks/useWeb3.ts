@@ -29,9 +29,7 @@ const useWeb3 = singletonHook({
   const [chainId, setChainId] = useState<string | number>();
   const [accounts, setAccounts] = useState<string[]>([]);
   const [balance, setBalance] = useState<number>();
-  const [autoloaded, setAutoloaded] = useState(false);
   const [gasPrice, setGasPrice] = useState<string>();
-  const autoload = true;
 
   // Web3Modal also supports many other wallets.
   // You can see other options at https://github.com/Web3Modal/web3modal
@@ -96,7 +94,7 @@ const useWeb3 = singletonHook({
       });
       return { success: true }
     } catch (error) {
-      return { success: false }
+      return { success: false, error }
     }
   }, [web3Modal]);
 
@@ -108,13 +106,15 @@ const useWeb3 = singletonHook({
     [web3Modal],
   );
 
-  // If autoload is enabled and the the wallet had been loaded before, load it automatically now.
-  useEffect(() => {
-    if (autoload && !autoloaded && web3Modal.cachedProvider) {
-      loadWeb3Modal();
-      setAutoloaded(true);
-    }
-  }, [autoload, autoloaded, loadWeb3Modal, setAutoloaded, web3Modal.cachedProvider]);
+  // const [autoloaded, setAutoloaded] = useState(false);
+  // const autoload = true;
+  // // If autoload is enabled and the the wallet had been loaded before, load it automatically now.
+  // useEffect(() => {
+  //   if (autoload && !autoloaded && web3Modal.cachedProvider) {
+  //     loadWeb3Modal();
+  //     setAutoloaded(true);
+  //   }
+  // }, [autoload, autoloaded, loadWeb3Modal, setAutoloaded, web3Modal.cachedProvider]);
 
   return {
     provider, chainId, accounts, balance, gasPrice, loadWeb3Modal, logoutOfWeb3Modal
