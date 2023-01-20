@@ -58,7 +58,7 @@ export const IPFSImage = ({
       clientWidth: 0,
       clientHeight: 0,
     };
-    if (windowSize.width > 768 && mouse.clientX !== null && mouse.clientY !== null) {
+    if (canShow && !expand && windowSize.width > 768 && mouse.clientX !== null && mouse.clientY !== null) {
       const position = {
         x: Math.max(
           width / 2,
@@ -74,7 +74,7 @@ export const IPFSImage = ({
     } else {
       setHoverPosition(null);
     }
-  }, [windowSize, hash, imgRef, mouse, setHoverPosition]);
+  }, [expand, canShow, windowSize, hash, imgRef, mouse, setHoverPosition]);
 
   return (
     <span ref={mouseRef} className="relative">
