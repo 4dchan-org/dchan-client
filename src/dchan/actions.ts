@@ -64,7 +64,11 @@ export async function postMessage(
         })
 
         file = await upload(input.file, setStatus, ipfsEndpoint);
-        if (!file) {
+        if (file) {
+            setStatus({
+                progress: `Uploaded to https://ipfs.io/ipfs/${file.ipfs.hash}`
+            })
+        } else {
             setStatus({
                 error: "Upload failed",
             })

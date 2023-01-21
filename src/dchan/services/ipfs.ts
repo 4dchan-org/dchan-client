@@ -28,7 +28,7 @@ export async function upload(
                 );
 
                 const ipfs = await ipfsResponse.json();
-                console.log({ ipfs });
+                console.log("ipfs.upload", { ipfs });
                 if (!!ipfs.Hash) {
                     setStatus({
                         success: "File uploaded",

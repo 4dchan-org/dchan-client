@@ -209,10 +209,10 @@ export const FormPost = ({
         resetForm(true);
       }
 
-      const evtMessage = result?.events?.Message;
-      if (evtMessage) {
-        const { transactionHash, logIndex } = evtMessage;
-        const url = `/${transactionHash}-${logIndex}`;
+      const events = result?.events;
+      if (events && events[0]) {
+        const { transactionHash } = events[0];
+        const url = `/${transactionHash}`;
         history.push(url);
       }
     },
