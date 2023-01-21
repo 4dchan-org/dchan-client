@@ -126,8 +126,9 @@ export const FAQCard = ({
         <div className="pb-2">
           <strong>Q: How does this work?</strong>
           <div>
-            <DchanNetwork /> stores posts, threads, boards and everything needed
-            on the blockchain. Users post and interact with the website through{" "}
+            <DchanNetwork /> stores posts, threads and boards on the blockchain.
+            <br />
+            Users post and interact with the website through{" "}
             <a
               className="dchan-link"
               target="_blank"
@@ -136,10 +137,10 @@ export const FAQCard = ({
             >
               a one-line smart contract
             </a>
-            , which acts as a public record of each and every action ever
-            performed by users, moderators and administrators (write only).
+            , which acts as a public record of every action ever performed by
+            users, moderators and administrators.
             <br />
-            Those actions are then processed by
+            Those actions are then processed by{" "}
             <a
               className="dchan-link"
               target="_blank"
@@ -149,26 +150,15 @@ export const FAQCard = ({
               a subgraph
             </a>
             , a computer program running on <TheGraph />
-            's decentralized network, which makes sense of that sequence of
-            actions and exposes the resulting data via
-            <a
-              className="dchan-link"
-              target="_blank"
-              rel="noreferrer"
-              href="https://graphql.org/"
-            >
-              GraphQL
-            </a>
-            .
+            's decentralized network, which translates that sequence of actions
+            into the final application state.
             <br />
-            For example, if a user wanted to make a new post on the website,
-            they will write a JSON message on the blockchain that essentially
-            states "I want to create a thread on this board with the comment
-            'it's over' and this picture called 'crying_pepe.jpg'", and the
-            subgraph will put this into a new post on the website.
-            <br />
-            But, if the person who made the post were not allowed to post
-            because they were banned, the post will not be created.
+            For example, if a user wants to make a new post on the website, they
+            will write a JSON message on the blockchain that essentially states
+            "I want to create a thread on this board with the comment 'it's
+            over' and this picture called 'crying_pepe.jpg'". The subgraph
+            receives that message and will thus create a new post on the
+            website.
             <br />
             Please note that this is experimental software and that this is a{" "}
             <i>very</i> simplified explanation!
@@ -227,15 +217,15 @@ export const FAQCard = ({
               interacting with the contract.
             </i>
             <br />
-            What I can do, at most, is hide what I consider malicious actions
-            content, meaning that even if I wanted to nuke absolutely everything
-            it would still mean that, at best, I would just not show content on{" "}
-            <DchanNetwork />.
+            What I can do, at most, is hide what I consider malicious
+            actions/content.
+            <br />
+            Even if I wanted to nuke absolutely everything it would still mean
+            that, at best, I would just not show content on <DchanNetwork />.
             <br />
             It would still be possible for anyone to deploy a client and
             subgraph that bypasses this censoring, as every action and content
-            posted is public and <b>undeletable</b>. The <i>content</i> itself
-            cannot be censored.
+            posted is public and <b>undeletable</b>.
           </div>
         </div>
 
@@ -261,6 +251,16 @@ export const FAQCard = ({
               Trust Wallet
             </a>{" "}
             (if you're on Mobile). Other wallets might not be supported.
+            <br />
+            <a
+              className="dchan-link"
+              target="_blank"
+              rel="noreferrer"
+              href="//brave.com"
+            >
+              Brave Browser
+            </a>{" "}
+            should also work.
             <br />
             You'll need to connect your crypto wallet to post on{" "}
             <DchanNetwork />.
@@ -325,7 +325,7 @@ export const FAQCard = ({
             If you are not happy with the way <DchanNetwork /> is moderated, I
             encourage you to fork off the code and make your own instance, with
             (or without) all the posts and boards from this website. You have
-            all the tools at your disposal, see
+            all the tools at your disposal, see{" "}
             <a
               className="dchan-link"
               href="//github.com/dchan-network/"
@@ -364,11 +364,30 @@ export const FAQCard = ({
           <strong>Q: Can I run this locally?</strong>
           <div>
             You can run the client locally... somewhat. If you're on desktop,
-            you can save the page and open it with your browser, so that if
+            you can save the page and open it with your browser, so that if{" "}
             <DchanNetwork /> ever goes down you can still use the client. <br />
             You may incur in some bugs like missing logos or being unable to
             post, but you should be able to view the content just fine as long
             as you are online.
+          </div>
+        </div>
+
+        <div className="pb-2">
+          <strong>
+            Q: Is there an official Twitter/Telegram/Discord/Mastodon...?
+          </strong>
+          <div>
+            <DchanNetwork /> does not have any official online presence outside
+            of <DchanNetwork />.
+            <br />
+            <u>
+              Do not trust any account or group who claims to be associated to{" "}
+              <DchanNetwork />
+            </u>
+            .
+            <br />
+            Any account or group that claims to be officially endorsed by{" "}
+            <DchanNetwork /> is either an impersonator, a scammer, or worse.
           </div>
         </div>
 

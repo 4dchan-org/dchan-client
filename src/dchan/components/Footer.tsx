@@ -1,7 +1,7 @@
 import polygonSrc from "assets/images/polygon.png";
 import thegraphSrc from "assets/images/thegraph.png";
 import { IPFSClientWidget, FAQButton, RulesButton, AbuseButton } from ".";
-import { name, version } from "../../../package.json"
+import { name, version } from "../../../package.json";
 
 export const Footer = ({
   showContentDisclaimer = false,
@@ -17,9 +17,9 @@ export const Footer = ({
         <div className="flex center flex-grow">
           {showContentDisclaimer ? (
             <div className="text-xs text-gray-400 hover:text-gray-600">
-              All trademarks and copyrights on this page are owned by
-              their respective parties. Posted content is responsibility
-              of the poster.
+              All trademarks and copyrights on this page are owned by their
+              respective parties. Posted content is responsibility of the
+              poster.
             </div>
           ) : (
             ""
@@ -33,37 +33,40 @@ export const Footer = ({
               <FAQButton className="border border-tertiary-accent px-4 mx-1 bg-white" />
             </div>
             <div className="flex-grow" />
-            <div>
-              Powered by
-              <a
-                className="ml-1"
-                href="//polygon.technology/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img
-                  className="inline w-4 h-4"
-                  src={polygonSrc}
-                  alt="Polygon"
-                />
-              </a>
-              <a
-                className="ml-1"
-                href="//thegraph.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img
-                  className="inline w-4 h-4"
-                  src={thegraphSrc}
-                  alt="The Graph"
-                />
-              </a>
-            </div>
+            <div></div>
             <div className="flex text-right justify-end ml-2 flex-grow">
               <details>
-                <summary>{name} v{version}</summary>
+                <summary>
+                  {name} v{version}
+                </summary>
                 <div className="bg-secondary border border-tertiary-accent border-solid p-2 absolute bottom-0 right-0 mr-4 mb-4">
+                  <div className="mb-2">
+                    Powered by
+                    <a
+                      className="ml-1"
+                      href="//polygon.technology/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <img
+                        className="inline w-4 h-4"
+                        src={polygonSrc}
+                        alt="Polygon"
+                      />
+                    </a>
+                    <a
+                      className="ml-1"
+                      href="//thegraph.com/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <img
+                        className="inline w-4 h-4"
+                        src={thegraphSrc}
+                        alt="The Graph"
+                      />
+                    </a>
+                  </div>
                   <div>
                     <a
                       className="dchan-link"
@@ -97,4 +100,4 @@ export const Footer = ({
       </footer>
     </div>
   );
-}
+};
