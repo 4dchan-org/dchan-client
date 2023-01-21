@@ -17,7 +17,7 @@ Required:
 - `cp docker-compose.dist.yml docker-compose.yml`
 
 ## Start development
-- `./bin/docker/dev/start.sh`
+- `./bin/docker/dev.sh`
 
 ## Build production release
 - `./bin/docker/build.sh`

@@ -1,6 +1,6 @@
 import polygonSrc from "assets/images/polygon.png";
 import thegraphSrc from "assets/images/thegraph.png";
-import { IPFSClientWidget, FAQButton, RulesButton, AbuseButton } from ".";
+import { IPFSClientWidget, FAQButton, RulesButton, AbuseButton, Twemoji } from ".";
 import { name, version } from "../../../package.json";
 
 export const Footer = ({
@@ -70,24 +70,35 @@ export const Footer = ({
                   <div>
                     <a
                       className="dchan-link"
-                      href="//github.com/dchan-network/dchan-client/issues/new"
+                      href="//github.com/dchan-network"
                       target="_blank"
                       rel="noreferrer"
-                      title="Report a bug"
+                      title="git"
                     >
-                      🪲 Report a bug
+                      <Twemoji emoji="🛠" /> git
                     </a>
                   </div>
                   <div>
                     <a
                       className="dchan-link"
-                      href="//github.com/dchan-network"
+                      href="//github.com/dchan-network/dchan-client/issues/new"
                       target="_blank"
                       rel="noreferrer"
                       title="Report a bug"
                     >
-                      🛠 git
+                      <Twemoji emoji="🪲" /> Report a bug
                     </a>
+                  </div>
+                  <div>
+                    <a
+                        className="dchan-link"
+                        href="//github.com/dchan-network/dchan-client/graphs/contributors"
+                        target="_blank"
+                        rel="noreferrer"
+                        title="Contributors"
+                      >
+                        <Twemoji emoji="🧑‍💻" /> Contributors
+                      </a>
                   </div>
                   <div>
                     <IPFSClientWidget />

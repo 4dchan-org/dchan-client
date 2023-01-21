@@ -152,7 +152,7 @@ export const Post = memo(
         ? "bg-secondary border-bottom-tertiary-accent border-right-tertiary-accent"
         : "",
       isYou ? "dchan-post-you" : "",
-      "w-full sm:w-full my-2 inline-block relative",
+      "w-full sm:w-full my-2 inline-block relative p-0.5",
     ].join(" ");
 
     return (
