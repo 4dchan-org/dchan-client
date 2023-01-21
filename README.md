@@ -9,14 +9,15 @@ Official client for the [dchan.network](https://dchan.network) decentralized ima
 
 # Docker
 Required:
+- `GNU+Linux`
 - [`docker`](https://docs.docker.com/engine/install/#server) 
 - [`docker-compose`](https://docs.docker.com/compose/install/)
 
 ## Setup
-- `cp docker-compose.dev.yml docker-compose.yml`
+- `cp docker-compose.dist.yml docker-compose.yml`
 
 ## Start development
-- `./bin/docker/start.sh`
+- `./bin/docker/dev/start.sh`
 
 ## Build production release
 - `./bin/docker/build.sh`
@@ -24,4 +25,4 @@ Required:
 # Links
 - Official website: https://dchan.network/
 - Source: https://github.com/dchan-network/dchan-client
-- More: https://github.com/dchan-network/
+- More Source: https://github.com/dchan-network/

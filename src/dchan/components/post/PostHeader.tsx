@@ -58,7 +58,7 @@ export const DateDisplay = ({ post }: { post: Post }) => {
       title={relativeTime !== null ? relativeTime : undefined}
     >
       {formattedDate}
-      <span className="text-xs px-1 opacity-20 hover:opacity-100 hidden sm:inline-block">
+      <span className="text-xs px-1 opacity-20 hover:opacity-100 inline-block">
         [
         <Link title={`Time travel to ${formattedDate}`} to={timeTravelLink}>
           {currentBlock ? (

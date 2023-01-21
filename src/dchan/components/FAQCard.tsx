@@ -309,11 +309,18 @@ export const FAQCard = ({
             Q: Does <DchanNetwork /> have a token? I need a useless shitcoin to
             lose my life savings on.
           </strong>
+          <div>Not right now. In the future, when the time is right.</div>
+        </div>
+
+        <div className="pb-2">
+          <strong>
+            Q: Will the <DchanNetwork /> token *insert anything here* ?
+          </strong>
           <div>
-            <DchanNetwork /> does not require any token to const except{" "}
-            <Polygon /> for actions such as posting or creating boards, so no.
+            Nothing has been decided.
             <br />
-            This will change in the future.
+            The only set rule is that <DchanNetwork /> will not require any
+            token to post except for the transaction fee.
           </div>
         </div>
 
@@ -378,7 +385,7 @@ export const FAQCard = ({
           </strong>
           <div>
             <DchanNetwork /> does not have any official online presence outside
-            of <DchanNetwork />.
+            of <DchanNetwork /> itself.
             <br />
             <u>
               Do not trust any account or group who claims to be associated to{" "}

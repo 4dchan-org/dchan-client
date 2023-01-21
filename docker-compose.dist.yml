@@ -1,0 +1,17 @@
+version: '3'
+services:
+  dev:
+    build: .
+    restart: "never"
+    volumes:
+      - .:/dapp
+    ports:
+      - 127.0.0.1:3000:3000
+
+  www:
+    image: httpd:2.4
+    restart: unless-stopped
+    volumes:
+      - "$PWD/build:/usr/local/apache2/htdocs/"
+    ports:
+      - 127.0.0.1:59332:80
