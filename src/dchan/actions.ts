@@ -66,7 +66,7 @@ export async function postMessage(
         file = await upload(input.file, setStatus, ipfsEndpoint);
         if (file) {
             setStatus({
-                progress: `Uploaded to https://ipfs.io/ipfs/${file.ipfs.hash}`
+                progress: `Uploaded to https://dweb.link/ipfs/${file.ipfs.hash}`
             })
         } else {
             setStatus({

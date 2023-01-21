@@ -119,7 +119,7 @@ export const Post = memo(
       }
     });
 
-    const ipfsSrc = !!image ? `https://ipfs.io/ipfs/${image.ipfsHash}` : "";
+    const ipfsSrc = !!image ? `https://dweb.link/ipfs/${image.ipfsHash}` : "";
     const isOp = id === thread?.id;
     const isYou = selfUserData?.user?.id === post.from.id;
     const [settings] = useSettings();

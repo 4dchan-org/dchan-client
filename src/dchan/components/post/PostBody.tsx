@@ -179,14 +179,14 @@ function IPFSImage({ hash }: { hash: string }) {
       <summary>
         <a
           className="dchan-link"
-          href={`//ipfs.io/ipfs/${hash}`}
+          href={`//dweb.link/ipfs/${hash}`}
           target="_blank"
           rel="noreferrer"
         >
           {hash}
         </a>
       </summary>
-      <img src={`//ipfs.io/ipfs/${hash}`} alt="" />
+      <img src={`//dweb.link/ipfs/${hash}`} alt="" />
     </details>
   );
 }

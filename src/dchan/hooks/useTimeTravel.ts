@@ -142,15 +142,18 @@ const useTimeTravel = () => {
     );
 
     const travelToPreviousBlock = useCallback(() => {
-        if (!currentBlock?.number) return;
+        const refBlock = currentBlock || lastBlock
+        console.log({ refBlock })
+        if (!refBlock) return;
 
-        queryGetPrevBlock(subgraphClient, currentBlock.number).then(result => {
+        queryGetPrevBlock(subgraphClient, refBlock.number).then(result => {
             const b = result.data?.blocks?.[0];
             setCurrentBlock(b);
         });
     }, [
         setCurrentBlock,
         currentBlock,
+        lastBlock,
         subgraphClient
     ]);
 

@@ -28,7 +28,7 @@ export const IPFSImage = ({
   thumbnailClass?: string;
 }) => {
   const mouseRef = useRef(null);
-  const ipfsSrc = `https://ipfs.io/ipfs/${hash}`;
+  const ipfsSrc = `https://dweb.link/ipfs/${hash}`;
   const [imgError, setImgError] = useState<any>(false);
   const [imgLoading, setImgLoading] = useState<boolean>(true);
   const [imgSrc, setImgSrc] = useState<string>(ipfsSrc);

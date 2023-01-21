@@ -1,7 +1,6 @@
 import {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -69,12 +68,6 @@ export const FormPost = ({
     setFocus,
     watch,
   } = form;
-
-  useLayoutEffect(() => {
-    return () => {
-      trigger();
-    };
-  }, [trigger]);
 
   const values = getValues();
   const files: FileList = values.file;
@@ -251,11 +244,11 @@ export const FormPost = ({
       files = getValues().file;
     }
     if (!!files && files.length > 0) {
-      refreshThumbnail();
       setFileSize(files[0].size / 1024);
     } else {
       setFileSize(0);
     }
+    refreshThumbnail();
   }, [refreshThumbnail, setFileSize, setValue, getValues]);
 
   const fileRemove = useCallback(() => {

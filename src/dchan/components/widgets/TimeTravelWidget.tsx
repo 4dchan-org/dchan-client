@@ -42,10 +42,19 @@ export const TimeTravelWidget = forwardRef(
   ) => {
     const [now, setNow] = useState(DateTime.now());
     const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
-    const { currentBlock, travelToDateTime, travelToBlockNumber, travelToPreviousBlock, travelToNextBlock, travelToPresent, lastBlock, timeTraveledToBlockNumber, timeTraveledToDateTime } =
-      useTimeTravel();
+    const {
+      currentBlock,
+      travelToDateTime,
+      travelToBlockNumber,
+      travelToPreviousBlock,
+      travelToNextBlock,
+      travelToPresent,
+      lastBlock,
+      timeTraveledToBlockNumber,
+      timeTraveledToDateTime,
+    } = useTimeTravel();
 
-    const isTimeTraveling = !!currentBlock
+    const isTimeTraveling = !!currentBlock;
 
     const onDateChange = useCallback(
       (date: string) => {
@@ -91,7 +100,7 @@ export const TimeTravelWidget = forwardRef(
       timeTravelRange,
       travelToBlockNumber,
       timeTraveledToBlockNumber,
-      lastBlock
+      lastBlock,
     ]);
 
     useEffect(() => {
@@ -185,11 +194,18 @@ export const TimeTravelWidget = forwardRef(
               </div>
               <div className="grid align-center text-xs w-full">
                 <span className="mx-auto">
-                  <span className="dchan-link mr-2" onClick={travelToPreviousBlock}>
+                  <span
+                    className="dchan-link mr-2"
+                    onClick={travelToPreviousBlock}
+                  >
                     &lt;
                   </span>
                   <button className="dchan-link" onClick={onInputBlockNumber}>
-                    {`Block #${timeTraveledToBlockNumber || lastBlock?.number || "????????"}`}
+                    {`Block #${
+                      timeTraveledToBlockNumber ||
+                      lastBlock?.number ||
+                      "????????"
+                    }`}
                   </button>
                   <span className="dchan-link ml-2" onClick={travelToNextBlock}>
                     &gt;
@@ -218,7 +234,11 @@ export const TimeTravelWidget = forwardRef(
                     min={parseInt(timeTravelRange.min.number)}
                     max={parseInt(timeTravelRange.max.number)}
                     onChange={(e) => onBlockNumberChange(e.target.value)}
-                    value={timeTraveledToBlockNumber ? timeTraveledToBlockNumber : lastBlock?.number}
+                    value={
+                      timeTraveledToBlockNumber
+                        ? timeTraveledToBlockNumber
+                        : lastBlock?.number
+                    }
                   />{" "}
                   <span className="mx-1">Now</span>
                 </div>

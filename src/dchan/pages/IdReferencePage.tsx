@@ -31,6 +31,7 @@ export const IdReferencePage = ({ location, match: { params } }: any) => {
 
   const { data } = useQuery<IdSearchData, IdSearchVars>(graphQuery, {
     variables: { id, block },
+    fetchPolicy: "cache-and-network",
     pollInterval: 5_000,
   });
 
@@ -83,7 +84,7 @@ export const IdReferencePage = ({ location, match: { params } }: any) => {
           <div>
             <StillStuck>
               <span>
-                {id.indexOf("-") !== -1
+                {id.indexOf("0x") === 0
                   ? "The content is being indexed, please wait..."
                   : "Are you sure it's a valid ID?"}
               </span>

@@ -7,7 +7,7 @@ const infura = { host: "ipfs.infura.io", port: "5001", protocol: "https" };
 // const localhost = { host: "localhost", port: "5001", protocol: "http" };
 
 const ipfs = create(infura);
-const ipfsGateway = "https://ipfs.io/ipfs/";
+const ipfsGateway = "https://dweb.link/ipfs/";
 
 const addOptions = {
   pin: true,
