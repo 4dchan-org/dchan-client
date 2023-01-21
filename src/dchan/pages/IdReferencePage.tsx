@@ -79,7 +79,7 @@ export const IdReferencePage = ({ location, match: { params } }: any) => {
       ) : (
         <div>
           <Loading />
-          <div className="text-xs">{id}</div>
+          <div className="text-xs dchan-link">{id}</div>
           <div>
             <StillStuck>
               <span>

@@ -12,7 +12,7 @@ import {
   Anchor,
   CatalogView,
   IndexView,
-  Paging
+  Paging,
 } from "dchan/components";
 import { useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
@@ -43,30 +43,34 @@ export const BoardPage = ({
   location,
   match: { params },
   pageTheme,
-  setPageTheme
+  setPageTheme,
 }: {
-  location: any,
-  match: {params: any},
-  pageTheme: string,
-  setPageTheme: (theme: string) => void,
+  location: any;
+  match: { params: any };
+  pageTheme: string;
+  setPageTheme: (theme: string) => void;
 }) => {
   let { board_id, board_name } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 
-  const { timeTraveledToBlockNumber, lastBlock } = useTimeTravel()
+  const { timeTraveledToBlockNumber, lastBlock } = useTimeTravel();
   const query = parseQueryString(location.search);
   const page = parseInt(`${query.page || "1"}`);
 
   const history = useHistory();
   const [settings] = useSettings();
-  const { currentBlock } = useTimeTravel()
+  const { currentBlock } = useTimeTravel();
   const cutoff = useMemo(
-    () => Math.floor(
-      (currentBlock ? parseInt(currentBlock.timestamp) : DateTime.now().toSeconds()) - (60 * 60 * 24 * 30)
-    ),
+    () =>
+      Math.floor(
+        (currentBlock
+          ? parseInt(currentBlock.timestamp)
+          : DateTime.now().toSeconds()) -
+          60 * 60 * 24 * 30
+      ),
     [currentBlock]
   );
-  const block = Number(timeTraveledToBlockNumber || lastBlock?.number)
+  const block = Number(timeTraveledToBlockNumber || lastBlock?.number);
   const boardMode: string =
     params.view_mode ||
     settings?.content_view?.board_default_view_mode ||
@@ -82,7 +86,7 @@ export const BoardPage = ({
     orderDirection: settings?.content_view?.board_sort_direction || "desc",
     limit,
     skip: limit * (page - 1),
-    cutoff
+    cutoff,
   };
 
   const {
@@ -115,7 +119,7 @@ export const BoardPage = ({
   }, [board?.id]);
 
   useEffect(() => {
-    if(board && board.name !== board_name) {
+    if (board && board.name !== board_name) {
       history.replace(`/${board.id}`);
     }
   }, [board, board_name, history]);
@@ -174,6 +178,8 @@ export const BoardPage = ({
         <div>
           {board === null ? (
             <div className="center grid p-8">
+              <div className="text-xs p-2">{board_id}</div>
+              <br />
               Board does not exist.
               {!isNaN(block) ? (
                 <>
@@ -197,16 +203,10 @@ export const BoardPage = ({
                 {
                   {
                     catalog: (
-                      <CatalogView
-                        board={board}
-                        threads={filteredThreads}
-                      />
+                      <CatalogView board={board} threads={filteredThreads} />
                     ),
                     index: (
-                      <IndexView
-                        board={board}
-                        threads={filteredThreads}
-                      />
+                      <IndexView board={board} threads={filteredThreads} />
                     ),
                   }[boardMode]
                 }
@@ -219,7 +219,11 @@ export const BoardPage = ({
           {board ? (
             <div>
               <hr />
-              <Paging url={location.pathname} page={page} hasNextPage={threads.length >= limit} />
+              <Paging
+                url={location.pathname}
+                page={page}
+                hasNextPage={threads.length >= limit}
+              />
 
               <Anchor to="#board-header" label="Top" />
             </div>
@@ -232,4 +236,4 @@ export const BoardPage = ({
       <Footer showContentDisclaimer={true}></Footer>
     </div>
   );
-}
+};
