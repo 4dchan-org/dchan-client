@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from "@apollo/client";
 import POST_FRAGMENT from "dchan/subgraph/graphql/fragments/post";
 import THREAD_FRAGMENT from "dchan/subgraph/graphql/fragments/thread";
 

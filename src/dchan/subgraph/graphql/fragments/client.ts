@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from "@apollo/client";
 
 const CLIENT_FRAGMENT = gql`
   fragment Client on Client {

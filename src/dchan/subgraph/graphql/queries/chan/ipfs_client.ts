@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from "@apollo/client";
 import CLIENT_FRAGMENT from "dchan/subgraph/graphql/fragments/client";
 
 export const IPFS_CLIENT = gql`

@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from "@apollo/client";
 import THREAD_FRAGMENT from "dchan/subgraph/graphql/fragments/thread";
 
 export const THREADS_LIST_FAVORITES = gql`

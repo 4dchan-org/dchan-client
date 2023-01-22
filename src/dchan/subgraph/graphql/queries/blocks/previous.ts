@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from "@apollo/client";
 
 export const BLOCK_PREVIOUS = gql`
   query BlockPrevious($number: BigInt!) {

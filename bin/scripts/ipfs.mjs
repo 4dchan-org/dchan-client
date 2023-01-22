@@ -1,52 +1,49 @@
-const chalk = require("chalk");
-const { create, globSource } = require("ipfs-http-client");
-const { clearLine } = require("readline");
+import { create, globSource } from 'ipfs-http-client'
+import chalk from "chalk"
+import { clearLine } from "readline";
 
-const infura = { host: "ipfs.infura.io", port: "5001", protocol: "https" };
-// Run your own ipfs daemon: https://docs.ipfs.io/how-to/command-line-quick-start/#install-ipfs
-// const localhost = { host: "localhost", port: "5001", protocol: "http" };
-
-const ipfs = create(infura);
-const ipfsGateway = "https://dweb.link/ipfs/";
-
-const addOptions = {
-  pin: true,
-};
-
-async function pushDirectoryToIpfs(path) {
-  try {
-    const response = await ipfs.add(globSource(path, { recursive: true }), addOptions);
-    return response;
-  } catch (e) {
-    return {};
-  }
-}
-
-async function publishHashToIpns(ipfsHash) {
-  try {
-    const response = await ipfs.name.publish(`/ipfs/${ipfsHash}`);
-    return response;
-  } catch (e) {
-    return {};
-  }
-}
-
-function nodeMayAllowPublish(ipfsClient) {
-  // You must have your own IPFS node in order to publish an IPNS name
-  // This contains a blacklist of known nodes which do not allow users to publish IPNS names.
-  const nonPublishingNodes = ["ipfs.infura.io"];
-  const { host } = ipfsClient.getEndpointConfig();
-
-  return !nonPublishingNodes.some(nodeUrl => {
-    return host.includes(nodeUrl);
-  });
-}
+const infura = { host: 'api.thegraph.com', 'api-path': '/ipfs/api/v0/', protocol: 'https', port: '443' };
 
 (async function () {
+  const ipfs = await create(infura);
+  const ipfsGateway = "https://dweb.link/ipfs/";
+
+  async function pushDirectoryToIpfs(path) {
+    try {
+      for await (const file of ipfs.addAll(globSource(path, '**/*'))) {
+        console.log(file)
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  async function publishHashToIpns(ipfsHash) {
+    try {
+      const response = await ipfs.name.publish(`/ipfs/${ipfsHash}`);
+      return response;
+    } catch (e) {
+      return e;
+    }
+  }
+
+  function nodeMayAllowPublish(ipfsClient) {
+    // You must have your own IPFS node in order to publish an IPNS name
+    // This contains a blacklist of known nodes which do not allow users to publish IPNS names.
+    const nonPublishingNodes = ["ipfs.infura.io"];
+    const { host } = ipfsClient.getEndpointConfig();
+
+    return !nonPublishingNodes.some(nodeUrl => {
+      return host.includes(nodeUrl);
+    });
+  }
+
   console.log("🛰  Sending to IPFS...");
   console.log();
 
-  const { cid } = await pushDirectoryToIpfs("./build");
+  const result = await pushDirectoryToIpfs("./build");
+  console.log(result)
+  const { cid } = result
   if (!cid) {
     console.log(`📡 App deployment failed`);
     return false;

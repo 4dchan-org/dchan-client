@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from "@apollo/client";
 
 export const BLOCK_BY_DATE = gql`
   query BlockByDate($timestampMin: String!, $timestampMax: String!) {

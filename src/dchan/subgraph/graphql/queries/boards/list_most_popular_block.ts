@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from "@apollo/client";
 
 export const BOARDS_LIST_MOST_POPULAR_BLOCK = gql`
   fragment MostPopularByBlockBoard on Board {

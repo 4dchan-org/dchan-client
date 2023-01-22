@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from "@apollo/client";
 import BOARD_FRAGMENT from "dchan/subgraph/graphql/fragments/board";
 
 export const BOARD_TABS_AT_BLOCK = gql`

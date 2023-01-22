@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from "@apollo/client";
 import POST_FRAGMENT from "dchan/subgraph/graphql/fragments/post";
 
 export const POSTS_GET_LAST_BLOCK = gql`

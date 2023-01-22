@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from "@apollo/client";
 import POST_FRAGMENT from "./post";
 import USER_FRAGMENT from "./user";
 
