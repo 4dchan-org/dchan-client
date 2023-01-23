@@ -25,20 +25,15 @@ export type Settings = {
         score_threshold: number // from 0 to 1
         show_below_threshold: boolean
     },
-    eula: {
-        agreed: boolean
-    },
     favorites: {
         [key: string]: boolean
     }
 }
 
 const useSettings = () => {
-    const [settings, setSettings] = useLocalStorageState('dchan.network.settings', {
+    return useLocalStorageState('dchan.network.settings', {
         defaultValue: DefaultSettings
     })
-
-    return [settings, setSettings]
 }
 
 export default useSettings

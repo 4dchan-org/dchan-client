@@ -18,17 +18,17 @@ import {
   ThreadPage,
 } from "dchan/pages";
 import { LockBanner, EULA, FAQCardOverlay, RulesCardOverlay, AbuseCardOverlay } from "dchan/components";
-import useSettings from "dchan/hooks/useSettings";
+import { useEula } from "dchan/hooks";
 import subgraphClient from "dchan/subgraph/client";
 
 function App() {
-  const [settings] = useSettings()
+  const [eula] = useEula()
 
   const [pageTheme, setPageTheme] = useState<string>("blueboard");
 
   const client = useMemo(() => subgraphClient, []);
 
-  return settings?.eula?.agreed === false ? (
+  return eula === false ? (
     <EULA />
   ) : (
     <ApolloProvider client={client}>

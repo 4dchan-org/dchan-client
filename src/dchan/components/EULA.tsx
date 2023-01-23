@@ -1,10 +1,10 @@
-import { useSettings } from "dchan/hooks";
-import { useCallback, useState } from "react";
+import { useEula } from "dchan/hooks";
 import { Card } from ".";
 import logo from "assets/images/dchan.png";
+import { useCallback, useState } from "react";
 
 export const EULA = () => {
-  const [settings, setSettings] = useSettings();
+  const [, setEula] = useEula();
   const [agreed, setAgreed] = useState<boolean>(false);
 
   const onAgreeChange = useCallback((e: any) => {
@@ -12,11 +12,8 @@ export const EULA = () => {
   }, [setAgreed])
 
   const onProceed = useCallback(() => {
-    settings && setSettings({
-      ...settings,
-      eula: { agreed }
-    });
-  }, [settings, agreed, setSettings]);
+    setEula(agreed)
+  }, [agreed, setEula]);
 
   return (
     <div className="center-grid w-full min-h-screen bg-primary p-2">
