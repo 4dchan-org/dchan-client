@@ -1,6 +1,6 @@
 import polygonSrc from "assets/images/polygon.png";
 import thegraphSrc from "assets/images/thegraph.png";
-import { IPFSClientWidget, FAQButton, RulesButton, AbuseButton, Twemoji } from ".";
+import { FAQButton, RulesButton, AbuseButton, Twemoji } from ".";
 import { name, version } from "../../../package.json";
 
 export const Footer = ({
