@@ -1,11 +1,11 @@
-import { useSettings } from "dchan/hooks";
+import { useLocalSettings } from "dchan/hooks";
 import { DateTime } from "luxon";
 import { useCallback, useState } from "react";
 import { useEffect } from "react";
 import { useInterval } from "react-use";
 
 export const RefreshWidget = ({ onRefresh }: { onRefresh: () => void }) => {
-  const [settings, setSettings] = useSettings();
+  const [settings, setSettings] = useLocalSettings();
 
   const [lastRefreshedRelative, setLastRefreshedAtRelative] =
     useState<string>("");

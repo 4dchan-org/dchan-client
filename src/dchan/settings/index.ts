@@ -21,8 +21,7 @@ const DefaultSettings = {
     autorefresh: {
         enabled: true,
         seconds: 10
-    },
-    favorites: {}
+    }
 }
 
 export default DefaultSettings

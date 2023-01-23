@@ -14,10 +14,10 @@ import {
 } from "dchan/actions";
 import {
   usePubSub,
-  useSettings,
+  useLocalSettings,
   useUser,
   useWeb3,
-  useFavorites,
+  useLocalFavorites,
 } from "dchan/hooks";
 import { DateTime } from "luxon";
 import { ReactElement, useCallback, useState } from "react";
@@ -95,7 +95,7 @@ export const PostHeader = ({
   } = post;
   const { provider, accounts } = useWeb3();
   const { publish } = usePubSub();
-  const [settings] = useSettings();
+  const [settings] = useLocalSettings();
   const selfUser = useUser();
   const postUser = useUser(address);
   const isOwner = accounts.length > 0 && accounts[0] === address;
@@ -147,7 +147,7 @@ export const PostHeader = ({
   const canLock = isOp && (isOwner || isSelfJanny);
   const postBacklinks: Post[] = backlinks ? Object.values(backlinks) : [];
 
-  const { isFavorite, addFavorite, removeFavorite } = useFavorites();
+  const { isFavorite, addFavorite, removeFavorite } = useLocalFavorites();
   const favorite = thread && isFavorite ? isFavorite(thread) : false;
 
   const onFavorite = useCallback(() => {

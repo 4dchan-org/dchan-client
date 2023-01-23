@@ -1,4 +1,4 @@
-import { useSettings, useTimeTravel } from "dchan/hooks";
+import { useLocalSettings, useTimeTravel } from "dchan/hooks";
 import { parse as parseQueryString } from "query-string";
 import { Board, BoardRef, Thread } from "dchan/subgraph/types";
 import { useEffect, useMemo } from "react";
@@ -58,7 +58,7 @@ export const BoardPage = ({
   const page = parseInt(`${query.page || "1"}`);
 
   const history = useHistory();
-  const [settings] = useSettings();
+  const [settings] = useLocalSettings();
   const { currentBlock } = useTimeTravel();
   const cutoff = useMemo(
     () =>

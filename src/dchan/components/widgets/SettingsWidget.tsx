@@ -1,12 +1,12 @@
-import { useSettings } from "dchan/hooks";
+import { useLocalSettings } from "dchan/hooks";
 import { useMemo, useState } from "react";
 import { debounce } from "lodash";
-import { Settings } from "dchan/hooks/useSettings";
+import { Settings } from "dchan/hooks";
 import { Twemoji } from "dchan/components";
 // import DefaultSettings from "dchan/settings";
 
 export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
-  const [settings, setSettings] = useSettings();
+  const [settings, setSettings] = useLocalSettings();
 
   // const [displaySubgraph, setDisplaySubgraph] = useState<string | undefined>(
   //   settings?.subgraph?.endpoint

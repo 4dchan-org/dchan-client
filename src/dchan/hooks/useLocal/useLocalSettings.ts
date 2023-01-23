@@ -24,16 +24,13 @@ export type Settings = {
     content_filter: {
         score_threshold: number // from 0 to 1
         show_below_threshold: boolean
-    },
-    favorites: {
-        [key: string]: boolean
     }
 }
 
-const useSettings = () => {
+export const useLocalSettings = () => {
     return useLocalStorageState('dchan.network.settings', {
         defaultValue: DefaultSettings
     })
 }
 
-export default useSettings
+export default useLocalSettings

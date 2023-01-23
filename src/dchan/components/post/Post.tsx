@@ -2,7 +2,7 @@ import { PostBody, PostHeader } from ".";
 import { IPFSImage, Menu, Twemoji } from "dchan/components";
 import { Post as DchanPost, Thread } from "dchan/subgraph/types";
 import { isLowScore } from "dchan/subgraph/entities/post";
-import { usePubSub, useSettings, useUser, useTimeTravel } from "dchan/hooks";
+import { usePubSub, useLocalSettings, useUser, useTimeTravel } from "dchan/hooks";
 import { truncate, isEqual } from "lodash";
 import {
   ReactElement,
@@ -122,7 +122,7 @@ export const Post = memo(
     const ipfsSrc = !!image ? `https://dweb.link/ipfs/${image.ipfsHash}` : "";
     const isOp = id === thread?.id;
     const isYou = selfUserData?.user?.id === post.from.id;
-    const [settings] = useSettings();
+    const [settings] = useLocalSettings();
     const bIsLowScore = isLowScore(
       post,
       settings?.content_filter?.score_threshold

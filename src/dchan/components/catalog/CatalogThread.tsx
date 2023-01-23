@@ -1,7 +1,7 @@
 import { Board, Thread } from "dchan/subgraph/types";
 import { IPFSImage, BoardLink, Twemoji, PostBody } from "dchan/components";
 import { isLowScore as isLowScoreThread } from "dchan/subgraph/entities/thread";
-import { useSettings } from "dchan/hooks";
+import { useLocalSettings } from "dchan/hooks";
 import { useHistory } from "react-router-dom";
 import { Router } from "router";
 import { DateTime } from "luxon";
@@ -38,7 +38,7 @@ export const CatalogThread = ({
     "w-full pointer-events-none shadow-xl object-contain max-h-320px";
     const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const history = useHistory();
-  const [settings] = useSettings();
+  const [settings] = useLocalSettings();
   const isLowScore = isLowScoreThread(
     thread,
     settings?.content_filter?.score_threshold

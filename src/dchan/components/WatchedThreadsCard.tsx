@@ -1,13 +1,13 @@
 import { useQuery } from "@apollo/react-hooks";
 import { Twemoji } from "dchan/components";
 import { THREADS_LIST_FAVORITES, THREADS_LIST_FAVORITES_BLOCK } from "dchan/subgraph/graphql/queries"
-import { useFavorites } from "dchan/hooks";
+import { useLocalFavorites } from "dchan/hooks";
 import { useMemo } from "react";
 import { CatalogView, Loading } from ".";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 export const WatchedThreadsCard = () => {
-  const { favorites } = useFavorites();
+  const { favorites } = useLocalFavorites();
   const ids = useMemo(
     () => (favorites ? Object.keys(favorites) : []),
     [favorites]

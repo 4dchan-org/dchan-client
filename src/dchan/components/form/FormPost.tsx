@@ -14,8 +14,8 @@ import {
   useEventListener,
   usePubSub,
   useUser,
-  useFavorites,
-  useSettings,
+  useLocalFavorites,
+  useLocalSettings,
 } from "dchan/hooks";
 import { isString, now } from "lodash";
 import { postMessage } from "dchan/actions";
@@ -42,7 +42,7 @@ export const FormPost = ({
   board?: Board;
 }) => {
   const { provider, chainId, accounts } = useWeb3();
-  const [settings] = useSettings();
+  const [settings] = useLocalSettings();
   const history = useHistory();
   const formRef = useRef<HTMLFormElement>(null);
   const [isDirty, setIsDirty] = useState<boolean>(false);
@@ -55,7 +55,7 @@ export const FormPost = ({
   const [subjectLength, setSubjectLength] = useState<number>(0);
   const [thumbnailB64, setThumbnailB64] = useState<string>();
   const { subscribe, unsubscribe } = usePubSub();
-  const { addFavorite } = useFavorites();
+  const { addFavorite } = useLocalFavorites();
   const form = useForm();
   const {
     register,

@@ -1,6 +1,6 @@
 import { parse as parseQueryString } from "query-string";
 import { isString } from "lodash";
-import { useSettings } from "dchan/hooks";
+import { useLocalSettings } from "dchan/hooks";
 import { useQuery } from "@apollo/react-hooks";
 import { useEffect, useMemo } from "react";
 import { isLowScore, sortByCreatedAt } from "dchan/subgraph/entities/post";
@@ -34,7 +34,7 @@ export const PostsPage = ({ location, match: { params } }: any) => {
   const search = isString(s) ? s : "";
   const page = parseInt(`${query.page || "1"}`);
   const { timeTraveledToBlockNumber: block } = useTimeTravel();
-  const [settings] = useSettings();
+  const [settings] = useLocalSettings();
 
   const variables = {
     block,

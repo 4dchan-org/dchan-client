@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { useThrottleCallback } from "@react-hook/throttle";
 import { Thread } from "dchan/subgraph/types";
 import { THREADS_LIST_FAVORITES } from "dchan/subgraph/graphql/queries";
-import { useFavorites } from "dchan/hooks";
+import { useLocalFavorites } from "dchan/hooks";
 import { truncate } from "lodash";
 import { useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
@@ -10,7 +10,7 @@ import { Router } from "router";
 import { BoardLink, Loading, Twemoji } from "dchan/components";
 
 export const WatchedThreadsWidget = () => {
-  const { favorites, removeFavorite } = useFavorites();
+  const { favorites, removeFavorite } = useLocalFavorites();
   const ids = useMemo(
     () => (favorites ? Object.keys(favorites) : []),
     [favorites]

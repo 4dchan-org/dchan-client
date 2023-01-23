@@ -1,7 +1,7 @@
-import { useSettings } from "dchan/hooks";
+import { useLocalSettings } from "dchan/hooks";
 
 export const BoardViewSettings = () => {
-  const [settings, setSettings] = useSettings();
+  const [settings, setSettings] = useLocalSettings();
 
   return (
     <details>
