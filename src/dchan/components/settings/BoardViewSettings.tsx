@@ -14,10 +14,10 @@ export const BoardViewSettings = () => {
             <select
               id="dchan-input-view-mode"
               onChange={(e) => {
-                setSettings({
+                settings && setSettings({
                   ...settings,
                   content_view: {
-                    ...settings?.content_view,
+                    ...settings.content_view,
                     board_sort_threads_by: e.target.value,
                   },
                 });
@@ -36,10 +36,10 @@ export const BoardViewSettings = () => {
             <select
               id="dchan-input-view-mode"
               onChange={(e) => {
-                setSettings({
+                settings && setSettings({
                   ...settings,
                   content_view: {
-                    ...settings?.content_view,
+                    ...settings.content_view,
                     board_sort_direction: e.target.value,
                   },
                 });
@@ -64,11 +64,11 @@ export const BoardViewSettings = () => {
             min={1}
             value={settings?.content_view?.page_size}
             onChange={(e) => {
-              setSettings({
+              settings && setSettings({
                 ...settings,
                 content_view: {
-                  ...settings?.content_view,
-                  page_size: e.target.value,
+                  ...settings.content_view,
+                  page_size: Number(e.target.value),
                 },
               });
             }}
@@ -81,10 +81,10 @@ export const BoardViewSettings = () => {
           <select
             id="dchan-input-view-mode"
             onChange={(e) => {
-              setSettings({
+              settings && setSettings({
                 ...settings,
                 content_view: {
-                  ...settings?.content_view,
+                  ...settings.content_view,
                   board_default_view_mode: e.target.value,
                 },
               });

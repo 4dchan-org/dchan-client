@@ -12,14 +12,11 @@ export const EULA = () => {
   }, [setAgreed])
 
   const onProceed = useCallback(() => {
-    setSettings({
+    settings && setSettings({
       ...settings,
-      eula: {
-        ...settings?.eula,
-        agreed,
-      },
+      eula: { agreed }
     });
-  }, [agreed, settings, setSettings]);
+  }, [settings, agreed, setSettings]);
 
   return (
     <div className="center-grid w-full min-h-screen bg-primary p-2">

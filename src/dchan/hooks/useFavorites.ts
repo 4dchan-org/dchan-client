@@ -17,17 +17,17 @@ const useFavorites = singletonHook<{
     const favorites = useMemo(() => settings?.favorites || {}, [settings])
 
     const removeFavorite = useCallback((thread: Thread) => {
-        setSettings({
+        settings && setSettings({
             ...settings,
-            favorites: omit(settings?.favorites || {}, thread.id),
+            favorites: omit(settings.favorites || {}, thread.id),
         });
     }, [settings, setSettings])
 
     const addFavorite = useCallback((thread: Thread) => {
-        setSettings({
+        settings && setSettings({
             ...settings,
             favorites: {
-                ...settings?.favorites,
+                ...settings.favorites,
                 [thread.id]: true
             },
         });

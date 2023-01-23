@@ -136,8 +136,9 @@ export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
             id="dchan-input-show-below-threshold"
             className="mx-1 text-xs whitespace-nowrap opacity-80 hover:opacity-100"
             type="checkbox"
-            checked={settings.content_filter.show_below_threshold}
+            checked={settings?.content_filter.show_below_threshold}
             onChange={(e) => {
+              if(!settings) return
               let updatedSettings = { ...settings };
               settings.content_filter.show_below_threshold = e.target.checked;
               setSettings(updatedSettings);
@@ -160,6 +161,7 @@ export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
               step={0.1}
               value={displayScoreThreshold}
               onChange={(e) => {
+                if(!settings) return
                 const val = parseFloat(e.target.value);
                 setDisplayScoreThreshold(val);
                 writeScoreThresholdDebounced(settings, val);

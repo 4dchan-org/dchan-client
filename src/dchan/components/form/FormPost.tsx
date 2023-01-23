@@ -169,6 +169,8 @@ export const FormPost = ({
 
   const onSubmit = useCallback(
     async (data: any) => {
+      if(!settings) return
+      
       !!thread && !!addFavorite && addFavorite(thread);
       setIsSending(true);
 

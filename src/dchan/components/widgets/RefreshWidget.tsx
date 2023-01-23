@@ -68,10 +68,10 @@ export const RefreshWidget = ({ onRefresh }: { onRefresh: () => void }) => {
                 type="checkbox"
                 checked={settings?.autorefresh?.enabled}
                 onChange={(e) => {
-                  setSettings({
+                  settings && setSettings({
                     ...settings,
                     autorefresh: {
-                      ...settings?.autorefresh,
+                      ...settings.autorefresh,
                       enabled: e.target.checked,
                     },
                   });
@@ -89,11 +89,11 @@ export const RefreshWidget = ({ onRefresh }: { onRefresh: () => void }) => {
                 min="10"
                 value={settings?.autorefresh?.seconds}
                 onChange={(e) => {
-                  setSettings({
+                  settings && setSettings({
                     ...settings,
                     autorefresh: {
-                      ...settings?.autorefresh,
-                      seconds: e.target.value,
+                      ...settings.autorefresh,
+                      seconds: Number(e.target.value),
                     },
                   });
                 }}

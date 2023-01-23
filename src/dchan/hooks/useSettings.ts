@@ -1,7 +1,5 @@
-import { useCallback } from "react";
-import { singletonHook } from "react-singleton-hook";
 import DefaultSettings from "dchan/settings";
-import { useLocalStorage } from ".";
+import useLocalStorageState from 'use-local-storage-state'
 
 export type Settings = {
     contract: {
@@ -35,25 +33,12 @@ export type Settings = {
     }
 }
 
-// see App.tsx on why this awful hack exists
-let appSetSettings: (s: Settings) => void;
+const useSettings = () => {
+    const [settings, setSettings] = useLocalStorageState('dchan.network.settings', {
+        defaultValue: DefaultSettings
+    })
 
-export function writeAppSetSettings(func: (s: Settings) => void) {
-    appSetSettings = func;
+    return [settings, setSettings]
 }
-
-const useSettings = singletonHook<[Settings, any | undefined]>([DefaultSettings, () => {}], () => {
-    let [settings, setSettings] = useLocalStorage("dchan.config", DefaultSettings)
-
-    const setSettingsCallback = useCallback(
-        (e: Settings) => {
-            setSettings(e);
-            appSetSettings(e);
-        },
-        [setSettings]
-    );
-
-    return [{...DefaultSettings, ...settings}, setSettingsCallback]
-})
 
 export default useSettings

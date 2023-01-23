@@ -1,7 +1,6 @@
 import useEventListener from "./useEventListener";
 import useFavorites from "./useFavorites";
 import useFormPersist from "./useFormPersist";
-import useLocalStorage from "./useLocalStorage";
 import usePubSub from "./usePubSub";
 import useSettings from "./useSettings";
 import useTimeTravel from "./useTimeTravel";
@@ -12,7 +11,6 @@ export {
     useEventListener,
     useFavorites,
     useFormPersist,
-    useLocalStorage,
     usePubSub,
     useSettings,
     useTimeTravel,
