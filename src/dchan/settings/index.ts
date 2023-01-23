@@ -22,9 +22,6 @@ const DefaultSettings = {
         enabled: true,
         seconds: 10
     },
-    eula: {
-        agreed: false
-    },
     favorites: {}
 }
 
