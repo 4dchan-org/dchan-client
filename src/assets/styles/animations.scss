@@ -77,3 +77,20 @@
         opacity: 1
     }
 }
+
+.animation-pulse {
+    animation: pulse-keyframes 1s linear infinite;
+}
+
+@keyframes pulse-keyframes {
+    0% {
+        opacity: 1;
+        transform: translate(0%, 0%) scale(1);
+    }
+
+
+    100% {
+        opacity: 0;
+        transform: translate(0%, 0%) scale(1.25);
+    }
+}

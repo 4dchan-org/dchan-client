@@ -98,9 +98,22 @@ const useTimeTravel = () => {
     const history = useHistory()
     const location = useLocation()
     const { firstBlock, lastBlock } = useBlockRange();
-    let [currentBlock, setCurrentBlock] = useState<Block | undefined>();
-    const timeTraveledToBlockNumber = Number(currentBlock?.number)
-    const timeTraveledToDateTime = DateTime.fromSeconds(Number(currentBlock?.timestamp))
+    const [currentBlock, setCurrentBlock] = useState<Block | undefined>();
+    const [timeTraveledToBlockNumber, setTimeTraveledToBlockNumber] = useState<number | undefined>()
+    const [timeTraveledToDateTime, setTimeTraveledToDateTime] = useState<DateTime | undefined>()
+    const [isTimeTraveling, setIsTimeTraveling] = useState(false)
+
+    useEffect(() => {
+        if(currentBlock) {
+            setTimeTraveledToBlockNumber(Number(currentBlock?.number))
+            setTimeTraveledToDateTime(DateTime.fromSeconds(Number(currentBlock?.timestamp)))
+            setIsTimeTraveling(true)
+        } else {
+            setTimeTraveledToBlockNumber(undefined)
+            setTimeTraveledToDateTime(undefined)
+            setIsTimeTraveling(false)
+        }
+    }, [currentBlock, lastBlock, setTimeTraveledToBlockNumber, setTimeTraveledToDateTime, setIsTimeTraveling])
 
     const travelToPresent = useCallback(() => {
         setCurrentBlock(undefined);
@@ -143,7 +156,6 @@ const useTimeTravel = () => {
 
     const travelToPreviousBlock = useCallback(() => {
         const refBlock = currentBlock || lastBlock
-        console.log({ refBlock })
         if (!refBlock) return;
 
         queryGetPrevBlock(subgraphClient, refBlock.number).then(result => {
@@ -171,16 +183,20 @@ const useTimeTravel = () => {
     ]);
 
     useEffect(() => {
-        if (!currentBlock) return
-
-        const baseUrl = history.location.pathname
-        const url = !!baseUrl
-            ? baseUrl.includes("?")
-                ? `${baseUrl}&block=${currentBlock.number}`
-                : `${baseUrl}?block=${currentBlock.number}`
-            : undefined;
-
-        url && history.replace(url);
+        let { location } = history
+        let { search, pathname } = location
+        const oldUrl = pathname + search
+        if (currentBlock) {
+            search = search.match(/[?&]block=/) ?
+                search.replace(/([?&]block=)(\d)+/, `$1${currentBlock.number}`)
+                : search.includes("?")
+                    ? `${search}&block=${currentBlock.number}`
+                    : `?block=${currentBlock.number}`
+        } else {
+            search = search.replace(/[?&]block=(\d)+/, "")
+        }
+        const newUrl = pathname + search
+        newUrl !== oldUrl && history.replace(newUrl);
     }, [history, currentBlock])
 
     useEffect(() => {
@@ -199,6 +215,7 @@ const useTimeTravel = () => {
         travelToPreviousBlock,
         travelToNextBlock,
         travelToPresent,
+        isTimeTraveling,
         timeTraveledToBlockNumber,
         timeTraveledToDateTime
     }
@@ -214,6 +231,7 @@ export default singletonHook({
     travelToPreviousBlock: () => { },
     travelToNextBlock: () => { },
     travelToPresent: () => { },
+    isTimeTraveling: false,
     timeTraveledToBlockNumber: 0,
     timeTraveledToDateTime: DateTime.now()
 }, useTimeTravel);

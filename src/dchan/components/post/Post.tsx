@@ -156,7 +156,7 @@ export const Post = memo(
     ].join(" ");
 
     return (
-      <div className="flex relative ">
+      <div className="flex relative overflow-x-scroll">
         {!isOp && showPostMarker ? (
           <span className="hidden md:block pl-2 text-secondary">&gt;&gt;</span>
         ) : (
@@ -191,7 +191,7 @@ export const Post = memo(
           </div>
           <div
             id={`${n}`}
-            className={`dchan-post text-left w-full ${
+            className={`dchan-post bg-primary text-left w-full ${
               !showBody ? "hidden" : ""
             }`}
             dchan-post-from-address={address}

@@ -20,7 +20,7 @@ export const IndexView = ({
         .filter(thread => !!thread.op)
         .map(thread => (
         <div
-          className="border-solid border-black border-b border-secondary"
+          className="border-solid border-black border-b border-secondary bg-primary"
           key={thread.id}
         >
           <Post

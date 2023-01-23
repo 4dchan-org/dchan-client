@@ -19,13 +19,13 @@ export const BoardItem = ({
 
   const [isHovering, setIsHovering] = useState(false);
 
-  const handleMouseOver = () => {
+  const handleMouseOver = useCallback(() => {
     setIsHovering(true);
-  };
+  }, [setIsHovering]);
 
-  const handleMouseOut = () => {
+  const handleMouseOut = useCallback(() => {
     setIsHovering(false);
-  };
+  }, [setIsHovering]);
 
   const onClick = useCallback(() => {
     publish("BOARD_ITEM_SELECT", board);

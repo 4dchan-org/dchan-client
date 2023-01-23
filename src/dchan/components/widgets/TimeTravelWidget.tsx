@@ -127,29 +127,35 @@ export const TimeTravelWidget = forwardRef(
         >
           {timeTravelRange ? (
             <>
-              <div className="mx-1 hidden sm:flex center">
-                <span onClick={onOpen}>
+              <div className="mx-1">
+                <span className="hidden sm:flex center" onClick={onOpen}>
                   <span>
                     {isTimeTraveling ? (
                       <span>
-                        <div className="inline-block animation-spin spin-faster animation-direction-reverse">
-                          <Twemoji emoji={"⌛"} />
+                        <div
+                          className="inline-block relative"
+                          title={`Time traveled to ${timeTraveledToDateTime}!`}
+                        >
+                          <span className="animation-pulse absolute">
+                            <Twemoji emoji={"⏪"} />
+                          </span>
+                          <Twemoji emoji={"⏪"} />
                         </div>{" "}
                         Time traveled to
                       </span>
                     ) : (
-                      <span>
-                        <Twemoji emoji={"⌛"} />
+                      <span
+                        className="filter grayscale opacity-30 hover:opacity-100"
+                        title="Currently at present time"
+                      >
+                        <Twemoji emoji={"⏪"} />
                       </span>
                     )}
                   </span>
                   <span className="ml-1 text-xs">
                     [
                     <span className="inline-block min-w-3rem">
-                      {(isTimeTraveling && timeTraveledToDateTime
-                        ? timeTraveledToDateTime
-                        : now
-                      ).toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)}
+                      {(timeTraveledToDateTime || now).toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)}
                     </span>
                     ]
                   </span>
@@ -158,11 +164,14 @@ export const TimeTravelWidget = forwardRef(
               <div className="mx-1 sm:hidden" onClick={onOpen}>
                 {isTimeTraveling ? (
                   <abbr title={timeTravelingNote}>
-                    <Twemoji emoji={"⌛"} />
+                    <span className="animation-pulse absolute">
+                      <Twemoji emoji={"⏪"} />
+                    </span>
+                    <Twemoji emoji={"⏪"} />
                   </abbr>
                 ) : (
-                  <span>
-                    <Twemoji emoji={"⌛"} />
+                  <span className="filter grayscale opacity-30">
+                    <Twemoji emoji={"⏪"} />
                   </span>
                 )}
               </div>
@@ -179,10 +188,7 @@ export const TimeTravelWidget = forwardRef(
                     required
                     type="datetime-local"
                     id="dchan-timetravel-date-input"
-                    value={(isTimeTraveling && timeTraveledToDateTime
-                      ? timeTraveledToDateTime
-                      : now
-                    )
+                    value={(timeTraveledToDateTime || now)
                       .toISO()
                       .slice(0, 16)}
                     onChange={(e) => onDateChange(e.target.value)}
@@ -211,18 +217,6 @@ export const TimeTravelWidget = forwardRef(
                     &gt;
                   </span>
                 </span>
-
-                {isTimeTraveling ? (
-                  <div className="text-xs text-center">
-                    [
-                    <button className="dchan-link" onClick={travelToPresent}>
-                      Return to present
-                    </button>
-                    ]
-                  </div>
-                ) : (
-                  <div className="mb-4" />
-                )}
               </div>
               <div className="text-xs bg-secondary">
                 <div className="grid grid-cols-4 center text-center">
@@ -260,6 +254,19 @@ export const TimeTravelWidget = forwardRef(
                     </div>
                     <div>#{timeTravelRange.max.number}</div>
                   </span>
+                </div>
+                <div className="flex center">
+                  {isTimeTraveling ? (
+                    <div className="text-xs text-center">
+                      [
+                      <button className="dchan-link" onClick={travelToPresent}>
+                        Return to present
+                      </button>
+                      ]
+                    </div>
+                  ) : (
+                    <div className="mb-4" />
+                  )}
                 </div>
               </div>
             </div>

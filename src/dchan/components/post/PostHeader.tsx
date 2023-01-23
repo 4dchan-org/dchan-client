@@ -108,7 +108,6 @@ export const PostHeader = ({
 
   const replyTo = useCallback(
     (from: string, n: number | string) => {
-      console.log({from, n, thread})
       publish("FORM_QUOTE", {
         n,
         ...(thread && ([...thread.replies || [], thread.op]).filter((post) => post.n === n).length > 1

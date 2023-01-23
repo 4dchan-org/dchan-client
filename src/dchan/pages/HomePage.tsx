@@ -12,7 +12,6 @@ import {
   BoardLink,
   PopularBoardsCard,
   ThreadTabs,
-  LatestPostsCard,
 } from "dchan/components";
 
 export const HomePage = ({ location }: any) => {
@@ -49,7 +48,7 @@ export const HomePage = ({ location }: any) => {
     <div className="h-screen bg-primary flex flex-col pb-2">
       <HeaderNavigation />
       <HeaderLogo />
-      <div className="flex flex-grow flex-col grid-cols-3 xl:grid px-4 text-sm">
+      <div className="flex flex-grow flex-col grid-cols-2 xl:grid px-4 text-sm">
         <div>
           <Card
             title="Boards"
@@ -92,25 +91,6 @@ export const HomePage = ({ location }: any) => {
             bodyClassName="p-none b-none"
           >
             <ThreadTabs limit={10} board={board} />
-          </Card>
-        </div>
-        <div>
-          <Card
-            title={
-              <span>
-                Latest posts{" "}
-                {board ? (
-                  <span>
-                    on <BoardLink board={board} />
-                  </span>
-                ) : (
-                  ""
-                )}
-              </span>
-            }
-            className="md:px-1 w-full pb-4"
-          >
-            <LatestPostsCard limit={10} board={board} />
           </Card>
         </div>
       </div>

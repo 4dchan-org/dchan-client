@@ -92,7 +92,7 @@ export const HeaderNavigation = ({
   }, [showBoards, setShowBoards]);
 
   const widgetClass = [
-    "absolute top-0 w-screen sm:w-max mt-1 md:mt-1 left-0 right-0 sm:left-auto sm:right-2",
+    "absolute top-0 w-screen sm:w-max mt-1 md:mt-1 left-0 right-0 sm:left-auto sm:right-2 sm:opacity-60 hover:opacity-100",
     showBoards ? "top-11 md:top-full" : "top-full md:top-6",
   ].join(" ");
 
@@ -158,11 +158,12 @@ export const HeaderNavigation = ({
           />
           <details
             className="mx-1"
+            title="Watched Threads"
             open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS}
             ref={watchedThreadsRef}
           >
             <summary
-              className="list-none cursor-pointer"
+              className="list-none cursor-pointer opacity-60 hover:opacity-100"
               onClick={(event) => {
                 event.preventDefault();
                 setOpenedWidget(
@@ -180,7 +181,8 @@ export const HeaderNavigation = ({
           </details>
           <span
             ref={settingsRef}
-            className="cursor-pointer mx-1"
+            title={"Settings"}
+            className="cursor-pointer opacity-60 hover:opacity-100 mx-1"
             onClick={() => {
               setOpenedWidget(
                 openedWidget === OpenedWidgetEnum.SETTINGS
@@ -207,7 +209,8 @@ export const HeaderNavigation = ({
             ref={walletRef}
           >
             <summary
-              className="list-none cursor-pointer"
+              title="Wallet"
+              className="list-none cursor-pointer opacity-60 hover:opacity-100"
               onClick={(event) => {
                 event.preventDefault();
                 setOpenedWidget(

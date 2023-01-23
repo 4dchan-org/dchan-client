@@ -274,7 +274,6 @@ export const FormPost = ({
         const list = new DataTransfer();
         list.items.add(new File([blob], name, { type: file.type }));
         setValue("file", list.files);
-        console.log({list, files})
       }
     }
   }, [getValues, setValue]);
