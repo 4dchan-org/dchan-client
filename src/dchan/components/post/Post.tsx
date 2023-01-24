@@ -230,7 +230,7 @@ export const Post = memo(
               ) : (
                 <div>
                   {!!image ? (
-                    <div className="text-center sm:text-left mx-5">
+                    <div className="text-center sm:text-left ml-5">
                       <span className="text-sm">
                         <span className="flex flex-wrap items-center">
                           <a
@@ -308,13 +308,11 @@ export const Post = memo(
                   )}
                   <div className="y-1">
                     <div
-                      className={`h-full max-w-max flex flex-wrap text-left sm:items-start pb-1 ${
-                        isOp ? `max-w-100vw` : "max-w-90vw"
-                      }`}
+                      className={`h-full max-w-max flex flex-wrap text-left sm:items-start pb-1 max-w-100vw`}
                     >
                       <div className="w-full table">
                         {!!image ? (
-                          <div className="overflow-hidden mx-5 mb-2 float-left">
+                          <div className="overflow-hidden mx-5 my-1 float-left">
                             <IPFSImage
                               hash={image.ipfsHash}
                               isSpoiler={image.isSpoiler}
@@ -346,7 +344,7 @@ export const Post = memo(
                             )}
                           </div>
                           <PostBody
-                            className="md:ml-10 ml-5 mr-5 py-2"
+                            className="md:ml-10 ml-4 mr-4 pb-2"
                             post={post}
                             thread={thread}
                           />
