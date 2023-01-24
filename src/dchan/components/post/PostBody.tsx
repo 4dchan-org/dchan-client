@@ -1,17 +1,24 @@
-
 import { shortenAddress } from "dchan/services";
 import { Post, Thread } from "dchan/subgraph/types";
 import {
   ParserResult,
   PostReferenceValue,
-  parseComment
+  parseComment,
 } from "dchan/services/postparser";
-import { ReactElement, useCallback, useEffect, useMemo, memo, useState } from "react";
+import {
+  ReactElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  memo,
+  useState,
+} from "react";
 import { usePubSub, useWeb3 } from "dchan/hooks";
 import { isEqual } from "lodash";
 import { Router } from "router";
 import { Link } from "react-router-dom";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
+import ReactPlayer from 'react-player'
 
 export const TextQuote = ({
   children,
@@ -29,7 +36,7 @@ export const TextQuote = ({
       &gt;{children.map((v) => renderValue(v, post, thread, block))}
     </span>
   );
-}
+};
 
 function Reference({
   link,
@@ -78,12 +85,12 @@ function PostReference({
   const refPost = useMemo(
     () =>
       thread &&
-      [thread.op, ...(thread.replies || [])].find(
-        (p) =>
-          value.id ? (`${p.from.id}/${p.n}` === postLink ||
-          `0x${shortenAddress(p.from.id).replace("-", "")}/${p.n}` === postLink) : (
-            p.n === value.n
-          )
+      [thread.op, ...(thread.replies || [])].find((p) =>
+        value.id
+          ? `${p.from.id}/${p.n}` === postLink ||
+            `0x${shortenAddress(p.from.id).replace("-", "")}/${p.n}` ===
+              postLink
+          : p.n === value.n
       ),
     [thread, value, postLink]
   );
@@ -191,22 +198,20 @@ function IPFSImage({ hash }: { hash: string }) {
   );
 }
 
-function YoutubeLink({url, id}: {url: string, id: string}) {
-  const [isEnabled, setIsEnabled] = useState(false)
+function Embeddable({ url, id }: { url: string; id: string }) {
+  const [isEnabled, setIsEnabled] = useState(false);
   const onClick = useCallback(() => {
-    setIsEnabled(!isEnabled)
-  }, [isEnabled, setIsEnabled])
+    setIsEnabled(!isEnabled);
+  }, [isEnabled, setIsEnabled]);
 
   return (
-    <span>
-        <ExternalLink link={url} /> <button className="dchan-link" onClick={onClick} >({isEnabled ? "unembed" : "embed"})</button>
-        {isEnabled ? <iframe
-          title={`Youtube video ${id}`}
-          itemType="text/html"
-          src={`//www.youtube.com/embed/${id}`}
-          allowFullScreen={true}
-          frameBorder="0"
-          ></iframe> : ""}
+    <span id={id}>
+      <ExternalLink link={url} />{" "}
+      <button className="dchan-link" onClick={onClick}>
+        ({isEnabled ? "unembed" : "embed"})
+      </button>
+      {/* @TODO Embed all links supported by https://cookpete.com/react-player/ */}
+      {isEnabled ? <ReactPlayer url={url} controls={true} className="grid" /> : ""}
     </span>
   );
 }
@@ -274,38 +279,42 @@ function renderValue(
         </Spoiler>
       );
     case "youtubelink":
-      return (
-        <YoutubeLink key={val.key} url={val.url} id={val.id} />
-      );
+    case "soundcloudlink":
+      return <Embeddable key={val.key} url={val.url} id={val.id} />;
   }
 }
 
-export const PostBody = memo(({
-  post,
-  thread,
-  style = {},
-  className = "",
-}: {
-  style?: any;
-  className?: string;
-  thread?: Thread;
-  post: Post;
-}) => {
-  const { timeTraveledToBlockNumber: block } = useTimeTravel()
-  const parsedComment = useMemo(
-    () => parseComment(post.comment),
-    [post.comment]
-  );
-  return (
-    <div
-      className={
-        className +
-        " block text-left break-words font-sans text-sm max-w-100vw dchan-post-body"
-      }
-      style={style}
-      key={`${post.id}-${thread?.id}`}
-    >
-      {parsedComment.map((v: any) => renderValue(v, post, thread, block?.toString()))}
-    </div>
-  );
-}, isEqual)
+export const PostBody = memo(
+  ({
+    post,
+    thread,
+    style = {},
+    className = "",
+  }: {
+    style?: any;
+    className?: string;
+    thread?: Thread;
+    post: Post;
+  }) => {
+    const { timeTraveledToBlockNumber: block } = useTimeTravel();
+    const parsedComment = useMemo(
+      () => parseComment(post.comment),
+      [post.comment]
+    );
+    return (
+      <div
+        className={
+          className +
+          " block text-left break-words font-sans text-sm max-w-100vw dchan-post-body"
+        }
+        style={style}
+        key={`${post.id}-${thread?.id}`}
+      >
+        {parsedComment.map((v: any) =>
+          renderValue(v, post, thread, block?.toString())
+        )}
+      </div>
+    );
+  },
+  isEqual
+);

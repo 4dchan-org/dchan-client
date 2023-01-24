@@ -48,7 +48,7 @@ export const HomePage = ({ location }: any) => {
     <div className="h-screen bg-primary flex flex-col pb-2">
       <HeaderNavigation />
       <HeaderLogo />
-      <div className="flex flex-grow flex-col grid-cols-2 xl:grid px-4 text-sm">
+      <div className="flex flex-grow flex-col grid-cols-2 md:grid px-4 text-sm">
         <div>
           <Card
             title="Boards"

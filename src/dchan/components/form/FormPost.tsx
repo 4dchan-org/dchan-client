@@ -93,7 +93,7 @@ export const FormPost = ({
   );
 
   const onQuote = useCallback(
-    function (_, { from, n }) {
+    function (_: any, { from, n }: any) {
       const { comment } = getValues();
       const maybeAddressPrefix = from ? `0x${shortenAddress(from).replace("-", "")}/` : ""
       const quote = `>>${maybeAddressPrefix}${n}`;
@@ -155,7 +155,7 @@ export const FormPost = ({
   }, [setNonce]);
 
   const resetForm = useCallback(
-    (forceReset) => {
+    (_event: any, forceReset?: boolean) => {
       if (!forceReset && !window.confirm("Reset form?")) return;
 
       reset();
@@ -279,7 +279,7 @@ export const FormPost = ({
   }, [getValues, setValue]);
 
   const pasteHandler = useCallback(
-    (event) => {
+    (event: any) => {
       const clipboardData =
         event.clipboardData || event.originalEvent.clipboardData;
       const { files, items } = clipboardData;

@@ -163,7 +163,7 @@ export const Post = memo(
           ""
         )}
         <div
-          className={`mx-auto md:mr-3 md:ml-2 text-left inline w-screen md:w-auto ${
+          className={`mx-auto md:mr-3 md:ml-2 text-left inline ${
             isOp ? "w-full" : ""
           }`}
           key={id}
@@ -191,7 +191,7 @@ export const Post = memo(
           </div>
           <div
             id={`${n}`}
-            className={`dchan-post bg-primary text-left w-full ${
+            className={`dchan-post bg-primary text-left ${
               !showBody ? "hidden" : ""
             }`}
             dchan-post-from-address={address}
@@ -312,9 +312,9 @@ export const Post = memo(
                         isOp ? `max-w-100vw` : "max-w-90vw"
                       }`}
                     >
-                      <div className="w-full">
+                      <div className="w-full table">
                         {!!image ? (
-                          <div className="overflow-hidden float-left mx-5 mb-2">
+                          <div className="overflow-hidden mx-5 mb-2 float-left">
                             <IPFSImage
                               hash={image.ipfsHash}
                               isSpoiler={image.isSpoiler}
@@ -336,27 +336,29 @@ export const Post = memo(
                           ""
                         )}
                         <div>
-                          {isOp && thread ? (
-                            <div className="font-semibold md:ml-10 ml-5 ">
-                              {thread.subject}
+                          <div>
+                            {isOp && thread ? (
+                              <div className="font-semibold md:ml-10 ml-5 ">
+                                {thread.subject}
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                          <PostBody
+                            className="md:ml-10 ml-5 mr-5 py-2"
+                            post={post}
+                            thread={thread}
+                          />
+
+                          {bans.length > 0 ? (
+                            <div className="text-xl font-bold text-contrast whitespace-nowrap">
+                              ( USER WAS BANNED FOR THIS POST )
                             </div>
                           ) : (
                             ""
                           )}
                         </div>
-                        <PostBody
-                          className="md:ml-10 ml-5 mr-5 py-2"
-                          post={post}
-                          thread={thread}
-                        />
-
-                        {bans.length > 0 ? (
-                          <div className="text-xl font-bold text-contrast whitespace-nowrap">
-                            ( USER WAS BANNED FOR THIS POST )
-                          </div>
-                        ) : (
-                          ""
-                        )}
                       </div>
                     </div>
                     {children}

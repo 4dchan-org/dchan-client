@@ -82,6 +82,13 @@ export type YoutubeLinkValue = {
   url: string;
 };
 
+export type SoundcloudLinkValue = {
+  type: "soundcloudlink";
+  key: string;
+  id: string;
+  url: string;
+};
+
 export type ParserResult =
   | TextValue
   | LinkValue
@@ -93,7 +100,8 @@ export type ParserResult =
   | BoardReferenceValue
   | SpoilerValue
   | TextQuoteValue
-  | YoutubeLinkValue;
+  | YoutubeLinkValue
+  | SoundcloudLinkValue;
 
 function alt<T>(p1: Parjser<T>, ...ps: Parjser<T>[]): Parjser<T> {
   // @ts-ignore
@@ -229,12 +237,20 @@ const youtubeLink: Parjser<YoutubeLinkValue> = regexp(/((?:https?:)?\/\/)?((?:ww
     url: vals[0]
   }))
 );
-
-spoilerBody.init(
-  alt(altReference, spoiler, link, ipfsHash, newline, spoilerText, youtubeLink)
+const soundcloudLink: Parjser<SoundcloudLinkValue> = regexp(/https?:\/\/(www\.)?soundcloud\.com\/.+\w/g).pipe(
+  map((vals) => ({
+    type: "soundcloudlink",
+    key: vals[6],
+    id: vals[6],
+    url: vals[0]
+  }))
 );
 
-const commonBase = alt<ParserResult>(spoiler, youtubeLink, link, ipfsHash, text);
+spoilerBody.init(
+  alt(altReference, spoiler, link, ipfsHash, newline, spoilerText, youtubeLink, soundcloudLink)
+);
+
+const commonBase = alt<ParserResult>(spoiler, youtubeLink, soundcloudLink, link, ipfsHash, text);
 
 const textQuote: Parjser<TextQuoteValue> = regexp(/^>/m).pipe(
   qthen(alt(altReference, commonBase).pipe(many())),

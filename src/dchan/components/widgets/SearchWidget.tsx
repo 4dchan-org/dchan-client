@@ -40,7 +40,7 @@ export const SearchWidget = ({
   );
 
   const onChange = useCallback(
-    (e) => {
+    (e: any) => {
       const search = e.target.value
       setDisplayInput(search);
       setSearchDebounce(search);
