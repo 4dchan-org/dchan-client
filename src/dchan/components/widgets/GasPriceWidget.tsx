@@ -6,7 +6,8 @@ import { Twemoji } from "dchan/components";
 
 export const GasPriceWidget = () => {
   const { balance, gasPrice } = useWeb3();
-  const [gweiPrice, setGweiPrice] = useState(NaN);
+  let [gweiPrice, setGweiPrice] = useState(NaN);
+  gweiPrice = 101
   const [txPrice, setTxPrice] = useState(NaN);
 
   useEffect(() => {
@@ -24,12 +25,19 @@ export const GasPriceWidget = () => {
     <div className="text-xs pt-1 text-gray-400 hover:text-gray-600">
       <small>
         <a href="//polygonscan.com/gastracker" target="_blank" rel="noreferrer">
-          <div>
-            Posting costs gas.
-          </div>
+          <div>Posting costs gas.</div>
           <div>
             <Twemoji emoji={"⛽️"} /> Current est. tx price: {txPrice || `?`}{" "}
             MATIC @ {gweiPrice || `?`} gwei.{" "}
+            {gweiPrice >= 100 ? (
+              <span title={gweiPrice > 1000 ? "VERY high fees!" : "High fees!"}>
+                {[...Math.floor(gweiPrice / 100).toString()].map((_) => (
+                  <Twemoji emoji="🔥" />
+                ))}
+              </span>
+            ) : (
+              <></>
+            )}
             {txPrice !== 0 && balance ? (
               <span>(~{Math.floor(balance / txPrice) || `?`} posts left)</span>
             ) : (
@@ -40,4 +48,4 @@ export const GasPriceWidget = () => {
       </small>
     </div>
   );
-}
+};

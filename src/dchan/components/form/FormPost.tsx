@@ -155,7 +155,7 @@ export const FormPost = ({
   }, [setNonce]);
 
   const resetForm = useCallback(
-    (_event: any, forceReset?: boolean) => {
+    (forceReset?: boolean) => {
       if (!forceReset && !window.confirm("Reset form?")) return;
 
       reset();
@@ -359,7 +359,7 @@ export const FormPost = ({
   const formPostOptions = () => (
     <span>
       <span className="text-xs">
-        <button onClick={resetForm}><Twemoji emoji={"❌"} /></button>
+        <button onClick={() => resetForm(true)}><Twemoji emoji={"❌"} /></button>
       </span>
       <Menu>
         <div>Options:</div>

@@ -310,7 +310,7 @@ export const Post = memo(
                     <div
                       className={`h-full max-w-max flex flex-wrap text-left sm:items-start pb-1 max-w-100vw`}
                     >
-                      <div className="w-full table">
+                      <div className="w-full table pt-1">
                         {!!image ? (
                           <div className="overflow-hidden mx-5 my-1 float-left">
                             <IPFSImage
