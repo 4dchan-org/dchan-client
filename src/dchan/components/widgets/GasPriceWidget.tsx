@@ -6,8 +6,7 @@ import { Twemoji } from "dchan/components";
 
 export const GasPriceWidget = () => {
   const { balance, gasPrice } = useWeb3();
-  let [gweiPrice, setGweiPrice] = useState(NaN);
-  gweiPrice = 101
+  const [gweiPrice, setGweiPrice] = useState(NaN);
   const [txPrice, setTxPrice] = useState(NaN);
 
   useEffect(() => {
