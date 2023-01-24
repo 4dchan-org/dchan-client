@@ -16,6 +16,7 @@ import {
 } from "dchan/components";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
 import { useUser, useWeb3 } from "dchan/hooks";
+import { IPFSWidget } from "../widgets/IpfsWidget";
 
 interface BoardListData {
   boards: Board[];
@@ -139,6 +140,9 @@ export const HeaderNavigation = ({
             <Twemoji emoji={"🔍"} />
           </Link>
           ]
+        </span>
+        <span>
+          <IPFSWidget />
         </span>
         <span className="float-right flex flex-row mx-1">
           <TimeTravelWidget
