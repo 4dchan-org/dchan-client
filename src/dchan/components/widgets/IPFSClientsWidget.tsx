@@ -6,17 +6,17 @@ import { DateTime } from "luxon";
 
 type Channel = Client[];
 
-interface IPFSClientData {
+interface IPFSClientsData {
   stable: Channel;
   dev: Channel;
 }
 
-interface IPFSClientVars {
+interface IPFSClientsVars {
   id: string;
 }
 
-export const IPFSClientWidget = () => {
-  const { data } = useQuery<IPFSClientData, IPFSClientVars>(IPFS_CLIENT, {});
+export const IPFSClientsWidget = () => {
+  const { data } = useQuery<IPFSClientsData, IPFSClientsVars>(IPFS_CLIENT, {});
 
   const stable = data?.stable?.[0];
   const dev = data?.dev?.[0];

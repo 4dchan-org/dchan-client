@@ -4,7 +4,7 @@ import CLIENT_FRAGMENT from "dchan/subgraph/graphql/fragments/client";
 export const IPFS_CLIENT = gql`
   ${CLIENT_FRAGMENT}
 
-  query IPFSClient {
+  query IPFSClients {
     dev: clients(first: 1, orderBy: publishedAt, orderDirection: desc, where: {channel: ""}) {
       ...Client
     }

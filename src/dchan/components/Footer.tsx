@@ -101,7 +101,7 @@ export const Footer = ({
                       </a>
                   </div>
                   <div>
-                    {/* <IPFSClientWidget /> */}
+                    {/* <IPFSClientsWidget /> */}
                   </div>
                 </div>
               </details>

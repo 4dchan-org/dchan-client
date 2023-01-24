@@ -1,5 +1,5 @@
 export * from "./GasPriceWidget";
-export * from "./IPFSClientWidget";
+export * from "./IPFSClientsWidget";
 export * from "./RefreshWidget";
 export * from "./SearchWidget";
 export * from "./SettingsWidget";
