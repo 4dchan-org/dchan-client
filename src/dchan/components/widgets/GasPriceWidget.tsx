@@ -30,8 +30,8 @@ export const GasPriceWidget = () => {
             MATIC @ {gweiPrice || `?`} gwei.{" "}
             {gweiPrice >= 100 ? (
               <span className="px-1" title={gweiPrice > 1000 ? "VERY high fees!" : "High fees!"}>
-                {[...Math.floor(gweiPrice / 100).toString()].map((_) => (
-                  <Twemoji emoji="🔥" />
+                {[...Math.floor(gweiPrice / 100).toString()].map((_, i) => (
+                  <Twemoji key={"highfees-"+i} emoji="🔥" />
                 ))}
               </span>
             ) : (

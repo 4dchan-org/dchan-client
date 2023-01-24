@@ -1,9 +1,9 @@
 import { useLocalSettings } from "dchan/hooks";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { debounce } from "lodash";
 import { Settings } from "dchan/hooks";
 import { Twemoji } from "dchan/components";
-// import DefaultSettings from "dchan/settings";
+import DefaultSettings from "dchan/settings";
 
 export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
   const [settings, setSettings] = useLocalSettings();
@@ -53,6 +53,13 @@ export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
     [setSettings]
   );
 
+  const onReset = useCallback(() => {
+    if(!window.confirm("All settings will be reset to their default value. Are you sure?"))
+    setSettings(DefaultSettings)
+    window.alert("Reset successful")
+    window.location.reload()
+  }, [setSettings])
+
   return (
     <div className="bg-secondary border-secondary-accent border-2 flex flex-col h-full">
       <div className="mb-2 mt-1 px-3" style={{ flex: "0 1 auto" }}>
@@ -60,6 +67,10 @@ export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
           <span className="font-bold">dchan.network Settings</span>
         </div>
         <div className="float-right">
+          <button className="dchan-link" onClick={onReset}>
+            Reset settings
+          </button>
+          <span className="px-2">|</span>
           <button onClick={onExit}>
             <Twemoji emoji={"❌"} />
           </button>

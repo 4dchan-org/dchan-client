@@ -197,7 +197,7 @@ export const HeaderNavigation = ({
                 onExit={() => setOpenedWidget(null)}
                 overlayClassName="w-full sm:w-4/6 h-5/6"
               >
-                <SettingsWidget />
+                <SettingsWidget onExit={() => setOpenedWidget(null)} />
               </Overlay>
             ) : (
               ""
@@ -220,14 +220,16 @@ export const HeaderNavigation = ({
                 );
               }}
             >
-            <span className={provider ? "" : "filter grayscale"}>
-              {user ? <UserLabel user={user} /> : ""}
-              <Twemoji emoji={"🦊"} />
-            </span>
+              <span className={provider ? "" : "filter grayscale"}>
+                {user ? <UserLabel user={user} /> : ""}
+                <Twemoji emoji={"🦊"} />
+              </span>
             </summary>
             {openedWidget === OpenedWidgetEnum.WALLET ? (
               <div className={widgetClass}>
-                <div className="bg-secondary border border-tertiary-accent border-solid p-1"><WalletConnect /></div>
+                <div className="bg-secondary border border-tertiary-accent border-solid p-1">
+                  <WalletConnect />
+                </div>
               </div>
             ) : (
               ""
