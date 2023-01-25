@@ -104,7 +104,7 @@ const useTimeTravel = () => {
     const [isTimeTraveling, setIsTimeTraveling] = useState(false)
 
     useEffect(() => {
-        if(currentBlock) {
+        if (currentBlock) {
             setTimeTraveledToBlockNumber(Number(currentBlock?.number))
             setTimeTraveledToDateTime(DateTime.fromSeconds(Number(currentBlock?.timestamp)))
             setIsTimeTraveling(true)
@@ -115,20 +115,22 @@ const useTimeTravel = () => {
         }
     }, [currentBlock, lastBlock, setTimeTraveledToBlockNumber, setTimeTraveledToDateTime, setIsTimeTraveling])
 
+    const onBlockQueryResult = useCallback((result: ApolloQueryResult<BlockData>) => {
+        const b = result.data?.blocks?.[0];
+        b && setCurrentBlock(b);
+    }, [
+        setCurrentBlock
+    ])
+
     const travelToPresent = useCallback(() => {
         setCurrentBlock(undefined);
     }, [setCurrentBlock]);
 
     const travelToDateTime = useCallback(
         (date: DateTime) => {
-            queryBlockByDate(subgraphClient, date).then(result => {
-                const b = result.data?.blocks?.[0];
-                if (b != null) {
-                    setCurrentBlock(b);
-                }
-            });
+            queryBlockByDate(subgraphClient, date).then(onBlockQueryResult);
         },
-        [setCurrentBlock, subgraphClient]
+        [onBlockQueryResult, subgraphClient]
     );
 
     const travelToBlock = useCallback(
@@ -142,13 +144,10 @@ const useTimeTravel = () => {
     const travelToBlockNumber = useCallback(
         (block: number) => {
             block ?
-                queryBlockByNumber(subgraphClient, block).then(result => {
-                    const b = result.data?.blocks?.[0];
-                    setCurrentBlock(b);
-                }) : travelToPresent();
+                queryBlockByNumber(subgraphClient, block).then(onBlockQueryResult) : travelToPresent();
         },
         [
-            setCurrentBlock,
+            onBlockQueryResult,
             travelToPresent,
             subgraphClient
         ]
@@ -158,12 +157,9 @@ const useTimeTravel = () => {
         const refBlock = currentBlock || lastBlock
         if (!refBlock) return;
 
-        queryGetPrevBlock(subgraphClient, refBlock.number).then(result => {
-            const b = result.data?.blocks?.[0];
-            setCurrentBlock(b);
-        });
+        queryGetPrevBlock(subgraphClient, refBlock.number).then(onBlockQueryResult);
     }, [
-        setCurrentBlock,
+        onBlockQueryResult,
         currentBlock,
         lastBlock,
         subgraphClient
@@ -172,12 +168,9 @@ const useTimeTravel = () => {
     const travelToNextBlock = useCallback(() => {
         if (!currentBlock?.number) return;
 
-        queryGetNextBlock(subgraphClient, currentBlock.number).then(result => {
-            const b = result.data?.blocks?.[0];
-            setCurrentBlock(b);
-        });
+        queryGetNextBlock(subgraphClient, currentBlock.number).then(onBlockQueryResult);
     }, [
-        setCurrentBlock,
+        onBlockQueryResult,
         currentBlock,
         subgraphClient
     ]);

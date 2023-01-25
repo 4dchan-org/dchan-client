@@ -113,10 +113,7 @@ export const BoardList = ({
             ""
           ) : boards.length > 0 ? (
             boards.map((board) =>
-              BoardItem({
-                board,
-                highlight,
-              })
+              <BoardItem key={"board-"+board.id} board={board} highlight={highlight} />
             )
           ) : (
             "No boards"
