@@ -85,7 +85,7 @@ function PostReference({
   const refPost = useMemo(
     () =>
       thread &&
-      [thread.op, ...(thread.replies || [])].find((p) =>
+      [thread.op, ...(thread.lastReplies || [])].find((p) =>
         value.id
           ? `${p.from.id}/${p.n}` === postLink ||
             `0x${shortenAddress(p.from.id).replace("-", "")}/${p.n}` ===

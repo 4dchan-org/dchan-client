@@ -110,7 +110,7 @@ export const PostHeader = ({
     (from: string, n: number | string) => {
       publish("FORM_QUOTE", {
         n,
-        ...(thread && ([...thread.replies || [], thread.op]).filter((post) => post.n === n).length > 1
+        ...(thread && ([...thread.lastReplies || [], thread.op]).filter((post) => post.n === n).length > 1
           ? { from }
           : {}),
       });

@@ -30,6 +30,9 @@ const THREAD_FRAGMENT = gql`
     createdAtBlock {
       timestamp
       number
+    },
+    lastReplies: replies(first: 3, orderBy: n, orderDirection: desc) {
+      ...Post
     }
   }
 `;

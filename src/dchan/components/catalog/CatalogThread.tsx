@@ -25,7 +25,7 @@ export const CatalogThread = ({
     op,
     replyCount,
     imageCount,
-    replies,
+    lastReplies,
   } = thread;
   const { image } = op;
   const { ipfsHash, isNsfw, isSpoiler } = image || {
@@ -171,8 +171,8 @@ export const CatalogThread = ({
                   post={op}
                 />
                 {isFocused &&
-                  replies &&
-                  [...replies].reverse().map((post) => (
+                  lastReplies &&
+                  [...lastReplies].reverse().map((post) => (
                     <div
                       className="mt-1 p-1 border-0 border-t border-black border-solid text-xs text-left"
                       key={post.id}
