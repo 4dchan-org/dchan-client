@@ -31,6 +31,7 @@ const THREAD_FRAGMENT = gql`
       timestamp
       number
     },
+    replies,
     lastReplies: replies(first: 3, orderBy: n, orderDirection: desc) {
       ...Post
     }

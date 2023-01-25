@@ -1,7 +1,7 @@
 import { useWeb3 } from "dchan/hooks";
 import { useCallback, useState } from "react";
 import { StillStuck } from "../StillStuck";
-import { Twemoji } from "../Twemoji";
+import { Emoji } from "../Emoji";
 
 export const WalletConnectButton = ({
   className = ""
@@ -43,7 +43,7 @@ export const WalletConnectButton = ({
       <span className="text-sm">
         {hasError ? (
           <span>
-            <Twemoji emoji={"⚠️"} /> Something went wrong. <br />
+            <Emoji emoji={"⚠️"} /> Something went wrong. <br />
             Check that your wallet is unlocked and doesn't have any pending
             modals, then try again.
           </span>

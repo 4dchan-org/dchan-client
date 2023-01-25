@@ -2,7 +2,7 @@ import { useLocalSettings } from "dchan/hooks";
 import { useCallback, useMemo, useState } from "react";
 import { debounce } from "lodash";
 import { Settings } from "dchan/hooks";
-import { Twemoji } from "dchan/components";
+import { Emoji } from "dchan/components";
 import DefaultSettings from "dchan/settings";
 
 export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
@@ -72,7 +72,7 @@ export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
           </button>
           <span className="px-2">|</span>
           <button onClick={onExit}>
-            <Twemoji emoji={"❌"} />
+            <Emoji emoji={"❌"} />
           </button>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Board } from "dchan/subgraph/types";
-import { IdLabel, Loading, Twemoji } from "dchan/components";
+import { IdLabel, Loading, Emoji } from "dchan/components";
 import { usePubSub } from "dchan/hooks";
 import { useCallback, useState } from "react";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
@@ -75,14 +75,14 @@ export const BoardItem = ({
       <td className="left-full top-0 px-1 whitespace-nowrap center block">
         {isLocked ? (
           <span title="Board locked. You cannot post.">
-            <Twemoji emoji={"🔒"} />
+            <Emoji emoji={"🔒"} />
           </span>
         ) : (
           ""
         )}
         {isNsfw ? (
           <span title="NSFW Board">
-            <Twemoji emoji={"🔞"} />
+            <Emoji emoji={"🔞"} />
           </span>
         ) : (
           ""

@@ -29,7 +29,7 @@ import {
   IdLabel,
   FAQButton,
   RulesButton,
-  Twemoji
+  Emoji
 } from "dchan/components";
 
 export const FormPost = ({
@@ -359,7 +359,7 @@ export const FormPost = ({
   const formPostOptions = () => (
     <span>
       <span className="text-xs">
-        <button onClick={() => resetForm(true)}><Twemoji emoji={"❌"} /></button>
+        <button onClick={() => resetForm(true)}><Emoji emoji={"❌"} /></button>
       </span>
       <Menu>
         <div>Options:</div>
@@ -638,7 +638,7 @@ export const FormPost = ({
                                     type="button"
                                     onClick={fileRename}
                                   >
-                                    <Twemoji emoji={"✎"} />
+                                    <Emoji emoji={"✎"} />
                                   </button>
                                   <button
                                     className="dchan-input-file-remove mx-0.5"
@@ -646,12 +646,12 @@ export const FormPost = ({
                                     type="button"
                                     onClick={fileRemove}
                                   >
-                                    <Twemoji emoji={"❌"} />
+                                    <Emoji emoji={"❌"} />
                                   </button>
                                 </span>
                                 <details className="mx-0.5">
                                   <summary className="marker-closed-hide">
-                                    <Twemoji emoji={"⚙️"} />
+                                    <Emoji emoji={"⚙️"} />
                                   </summary>
                                   <div>
                                     <input

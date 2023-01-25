@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/react-hooks";
-import { Twemoji } from "dchan/components";
+import { Emoji } from "dchan/components";
 import { THREADS_LIST_FAVORITES, THREADS_LIST_FAVORITES_BLOCK } from "dchan/subgraph/graphql/queries"
 import { useLocalFavorites } from "dchan/hooks";
 import { useMemo } from "react";
@@ -30,5 +30,5 @@ export const WatchedThreadsCard = () => {
     ? loading
       ? <Loading />
       : <CatalogView threads={threads || []} showBoard={true} />
-    : <span>No threads are being watched. Use the <Twemoji emoji={"⭐️"} /> button on threads to keep track of them here.</span>;
+    : <span>No threads are being watched. Use the <Emoji emoji={"⭐️"} /> button on threads to keep track of them here.</span>;
 }

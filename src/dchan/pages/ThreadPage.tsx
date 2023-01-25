@@ -21,7 +21,6 @@ interface ThreadContentVars {
 }
 
 export const ThreadPage = ({
-  location,
   match: { params },
   pageTheme,
   setPageTheme,
@@ -58,7 +57,7 @@ export const ThreadPage = ({
   const thread = data?.threads?.[0];
   const board = data?.board;
   const posts = useMemo(
-    () => (thread ? [thread.op, ...thread.lastReplies] : []),
+    () => (thread ? [thread.op, ...thread.replies] : []),
     [thread]
   );
 

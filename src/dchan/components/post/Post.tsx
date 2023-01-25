@@ -1,8 +1,13 @@
 import { PostBody, PostHeader } from ".";
-import { IPFSImage, Menu, Twemoji } from "dchan/components";
+import { IPFSImage, Menu, Emoji } from "dchan/components";
 import { Post as DchanPost, Thread } from "dchan/subgraph/types";
 import { isLowScore } from "dchan/subgraph/entities/post";
-import { usePubSub, useLocalSettings, useUser, useTimeTravel } from "dchan/hooks";
+import {
+  usePubSub,
+  useLocalSettings,
+  useUser,
+  useTimeTravel,
+} from "dchan/hooks";
 import { truncate, isEqual } from "lodash";
 import {
   ReactElement,
@@ -53,7 +58,10 @@ export const Post = memo(
     const { subscribe, unsubscribe } = usePubSub();
 
     const onFocus = useCallback(() => {
-      postRef.current?.scrollIntoView();
+      postRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
     }, [postRef]);
 
     useEffect(() => {
@@ -156,7 +164,7 @@ export const Post = memo(
     ].join(" ");
 
     return (
-      <div className="flex relative overflow-x-scroll">
+      <div className="flex relative overflow-x-scroll" id={`${n}`}>
         {!isOp && showPostMarker ? (
           <span className="hidden md:block pl-2 text-secondary">&gt;&gt;</span>
         ) : (
@@ -190,7 +198,6 @@ export const Post = memo(
             </PostHeader>
           </div>
           <div
-            id={`${n}`}
             className={`dchan-post bg-primary text-left ${
               !showBody ? "hidden" : ""
             }`}
@@ -220,7 +227,7 @@ export const Post = memo(
                   className="text-2xl text-gray-800"
                 >
                   <div>
-                    <Twemoji emoji={"⚠️"} />
+                    <Emoji emoji={"⚠️"} />
                   </div>
                   <div>Post hidden due to reports.</div>
                   <div className="text-sm text-gray-600">

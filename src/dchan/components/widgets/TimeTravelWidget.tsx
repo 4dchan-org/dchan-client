@@ -1,6 +1,6 @@
 import { Block } from "dchan/subgraph/types";
 import { fromBigInt } from "dchan/services/datetime";
-import { Twemoji } from "dchan/components";
+import { Emoji } from "dchan/components";
 import { DateTime } from "luxon";
 import {
   useCallback,
@@ -137,9 +137,9 @@ export const TimeTravelWidget = forwardRef(
                           title={`Time traveled to ${timeTraveledToDateTime}!`}
                         >
                           <span className="animation-pulse absolute">
-                            <Twemoji emoji={"⏪"} />
+                            <Emoji emoji={"⏪"} />
                           </span>
-                          <Twemoji emoji={"⏪"} />
+                          <Emoji emoji={"⏪"} />
                         </div>{" "}
                         Time traveled to
                       </span>
@@ -148,7 +148,7 @@ export const TimeTravelWidget = forwardRef(
                         className="filter grayscale opacity-30 hover:opacity-100"
                         title="Currently at present time"
                       >
-                        <Twemoji emoji={"⏪"} />
+                        <Emoji emoji={"⏪"} />
                       </span>
                     )}
                   </span>
@@ -165,13 +165,13 @@ export const TimeTravelWidget = forwardRef(
                 {isTimeTraveling ? (
                   <abbr title={timeTravelingNote}>
                     <span className="animation-pulse absolute">
-                      <Twemoji emoji={"⏪"} />
+                      <Emoji emoji={"⏪"} />
                     </span>
-                    <Twemoji emoji={"⏪"} />
+                    <Emoji emoji={"⏪"} />
                   </abbr>
                 ) : (
                   <span className="filter grayscale opacity-30">
-                    <Twemoji emoji={"⏪"} />
+                    <Emoji emoji={"⏪"} />
                   </span>
                 )}
               </div>

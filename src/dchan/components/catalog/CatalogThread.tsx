@@ -1,5 +1,5 @@
 import { Board, Thread } from "dchan/subgraph/types";
-import { IPFSImage, BoardLink, Twemoji, PostBody } from "dchan/components";
+import { IPFSImage, BoardLink, Emoji, PostBody } from "dchan/components";
 import { isLowScore as isLowScoreThread } from "dchan/subgraph/entities/thread";
 import { useLocalSettings } from "dchan/hooks";
 import { useHistory } from "react-router-dom";
@@ -92,7 +92,7 @@ export const CatalogThread = ({
             className="absolute text-2xl text-gray-800 top-0 left-0 right-0 bottom-0"
           >
             <div>
-              <Twemoji emoji={"⚠️"} />
+              <Emoji emoji={"⚠️"} />
             </div>
             <div>Post hidden due to reports.</div>
             <div className="text-sm text-gray-600">Click to show anyway.</div>
@@ -113,14 +113,14 @@ export const CatalogThread = ({
             <div className="absolute top-0 right-0 z-10">
               {isPinned ? (
                 <span title="Thread pinned. This might be important.">
-                  <Twemoji emoji={"📌"} />
+                  <Emoji emoji={"📌"} />
                 </span>
               ) : (
                 ""
               )}
               {isLocked ? (
                 <span title="Thread locked. You cannot post.">
-                  <Twemoji emoji={"🔒"} />
+                  <Emoji emoji={"🔒"} />
                 </span>
               ) : (
                 ""

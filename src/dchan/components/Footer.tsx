@@ -1,6 +1,6 @@
 import polygonSrc from "assets/images/polygon.png";
 import thegraphSrc from "assets/images/thegraph.png";
-import { FAQButton, RulesButton, AbuseButton, Twemoji } from ".";
+import { FAQButton, RulesButton, AbuseButton, Emoji } from ".";
 import { name, version } from "../../../package.json";
 
 export const Footer = ({
@@ -75,7 +75,7 @@ export const Footer = ({
                       rel="noreferrer"
                       title="git"
                     >
-                      <Twemoji emoji="🛠" /> git
+                      <Emoji emoji="🛠" /> git
                     </a>
                   </div>
                   <div>
@@ -86,7 +86,7 @@ export const Footer = ({
                       rel="noreferrer"
                       title="Report a bug"
                     >
-                      <Twemoji emoji="🪲" /> Report a bug
+                      <Emoji emoji="🪲" /> Report a bug
                     </a>
                   </div>
                   <div>
@@ -97,7 +97,7 @@ export const Footer = ({
                         rel="noreferrer"
                         title="Contributors"
                       >
-                        <Twemoji emoji="🧑‍💻" /> Contributors
+                        <Emoji emoji="🧑‍💻" /> Contributors
                       </a>
                   </div>
                   <div>

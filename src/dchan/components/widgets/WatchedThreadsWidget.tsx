@@ -7,7 +7,7 @@ import { truncate } from "lodash";
 import { useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Router } from "router";
-import { BoardLink, Loading, Twemoji } from "dchan/components";
+import { BoardLink, Loading, Emoji } from "dchan/components";
 
 export const WatchedThreadsWidget = () => {
   const { favorites, removeFavorite } = useLocalFavorites();
@@ -53,7 +53,7 @@ export const WatchedThreadsWidget = () => {
 
               return (
                 <div key={thread.id}>
-                  <button onClick={() => onRemove(thread)}><Twemoji emoji={"✖"} /></button>{" "}
+                  <button onClick={() => onRemove(thread)}><Emoji emoji={"✖"} /></button>{" "}
                   {board ? (
                     <span>
                       <BoardLink board={board} />
@@ -70,15 +70,15 @@ export const WatchedThreadsWidget = () => {
                     {truncate(thread.subject || thread.op.comment, {
                       length: 32,
                     })}{" "}
-                    {thread.isLocked ? <Twemoji emoji={"🔒"} /> : ""}{" "}
-                    {thread.isPinned ? <Twemoji emoji={"📌"} /> : ""}
+                    {thread.isLocked ? <Emoji emoji={"🔒"} /> : ""}{" "}
+                    {thread.isPinned ? <Emoji emoji={"📌"} /> : ""}
                   </Link>
                 </div>
               );
             })}
           </div>
         </div>
-      ) : <span>No threads are being watched. Use the <Twemoji emoji={"⭐️"} /> button on threads to keep track of them here.</span>}
+      ) : <span>No threads are being watched. Use the <Emoji emoji={"⭐️"} /> button on threads to keep track of them here.</span>}
     </div>
   ) : (
     <div className="bg-secondary border border-tertiary-accent p-1">

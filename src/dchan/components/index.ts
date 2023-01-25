@@ -40,7 +40,7 @@ export * from "./Status";
 export * from "./StillStuck";
 export * from "./TabbedCard";
 export * from "./ThreadTabs";
-export * from "./Twemoji";
+export * from "./Emoji";
 export * from "./UserLabel";
 export * from "./wallet"
 export * from "./widgets"

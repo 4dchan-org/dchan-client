@@ -1,4 +1,4 @@
-import { Card, Faucets, Overlay } from ".";
+import { Card, Faucets, Overlay, Emoji } from ".";
 import { useState } from "react";
 import { singletonHook } from "react-singleton-hook";
 
@@ -88,7 +88,15 @@ export const FAQCard = ({
         <div className="pb-2">
           <strong>Q: ...Decentralized?</strong>
           <div>
-            <DchanNetwork /> is a Web3 imageboard whose posts are stored on{" "}
+            <DchanNetwork /> is a{" "}
+            <a
+              className="dchan-link"
+              target="_blank"
+              rel="noreferrer"
+              href="https://ethereum.org/en/web3/"
+            >
+              web3
+            </a> imageboard whose posts are stored on{" "}
             <Polygon />
             's blockchain and whose images are stored on <IPFS />, using{" "}
             <TheGraph /> to index and serve the content in a decentralized
@@ -109,8 +117,8 @@ export const FAQCard = ({
             's content exactly as it was whenever in the past.
             <br />
             This also means that there is no need for an archive, as it is
-            already built in the protocol. Use the ⏳ button in the header to
-            try it out!
+            already built in the protocol. Use the
+            <Emoji emoji={"⏪"} /> button in the header to try it out!
           </div>
         </div>
 

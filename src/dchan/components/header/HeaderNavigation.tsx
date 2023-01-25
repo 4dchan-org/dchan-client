@@ -8,7 +8,7 @@ import {
   BoardLink,
   TimeTravelWidget,
   WatchedThreadsWidget,
-  Twemoji,
+  Emoji,
   SettingsWidget,
   Overlay,
   WalletConnect,
@@ -136,7 +136,7 @@ export const HeaderNavigation = ({
             className="dchan-link"
             to={`${Router.posts()}${block ? `?block=${block}` : ""}`}
           >
-            <Twemoji emoji={"🔍"} />
+            <Emoji emoji={"🔍"} />
           </Link>
           ]
         </span>
@@ -173,7 +173,7 @@ export const HeaderNavigation = ({
                 );
               }}
             >
-              <Twemoji emoji={"⭐️"} />
+              <Emoji emoji={"⭐️"} />
             </summary>
             <div className={widgetClass}>
               <WatchedThreadsWidget />
@@ -191,7 +191,7 @@ export const HeaderNavigation = ({
               );
             }}
           >
-            <Twemoji emoji={"⚙️"} />
+            <Emoji emoji={"⚙️"} />
             {openedWidget === OpenedWidgetEnum.SETTINGS ? (
               <Overlay
                 onExit={() => setOpenedWidget(null)}
@@ -222,7 +222,7 @@ export const HeaderNavigation = ({
             >
               <span className={provider ? "" : "filter grayscale"}>
                 {user ? <UserLabel user={user} /> : ""}
-                <Twemoji emoji={"🦊"} />
+                <Emoji emoji={"🦊"} />
               </span>
             </summary>
             {openedWidget === OpenedWidgetEnum.WALLET ? (

@@ -35,6 +35,7 @@ export type Thread = {
     isPinned: boolean,
     isLocked: boolean,
     op: Post,
+    replies: Post[],
     lastReplies: Post[],
     replyCount: string,
     imageCount: string,

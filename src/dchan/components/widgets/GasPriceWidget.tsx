@@ -2,7 +2,7 @@ import { getWeb3 } from "dchan/services/web3";
 import { useEffect, useState } from "react";
 import { round } from "lodash";
 import { useWeb3 } from "dchan/hooks";
-import { Twemoji } from "dchan/components";
+import { Emoji } from "dchan/components";
 
 export const GasPriceWidget = () => {
   const { balance, gasPrice } = useWeb3();
@@ -26,12 +26,12 @@ export const GasPriceWidget = () => {
         <a href="//polygonscan.com/gastracker" target="_blank" rel="noreferrer">
           <div>Posting costs gas.</div>
           <div>
-            <Twemoji emoji={"⛽️"} /> Current est. tx price: {txPrice || `?`}{" "}
+            <Emoji emoji={"⛽️"} /> Current est. tx price: {txPrice || `?`}{" "}
             MATIC @ {gweiPrice || `?`} gwei.{" "}
             {gweiPrice >= 100 ? (
               <span className="px-1" title={gweiPrice > 1000 ? "VERY high fees!" : "High fees!"}>
                 {[...Math.floor(gweiPrice / 100).toString()].map((_, i) => (
-                  <Twemoji key={"highfees-"+i} emoji="🔥" />
+                  <Emoji key={"highfees-"+i} emoji="🔥" />
                 ))}
               </span>
             ) : (
