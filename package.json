@@ -72,7 +72,7 @@
     "extends": "react-app"
   },
   "scripts": {
-    "build": "NODE_ENV=production GENERATE_SOURCEMAP=false react-scripts --openssl-legacy-provider build",
+    "build": "NODE_ENV=production GENERATE_SOURCEMAP=false REACT_APP_GIT_SHA=`git rev-parse --short HEAD` react-scripts --openssl-legacy-provider build",
     "eject": "react-scripts --openssl-legacy-provider eject",
     "start": "react-scripts --openssl-legacy-provider start",
     "test": "react-scripts --openssl-legacy-provider test",
