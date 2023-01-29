@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 import USER_FRAGMENT from "./user";
 
-const POST_FRAGMENT = gql`
+export const POST_FRAGMENT = gql`
   ${USER_FRAGMENT}
 
   fragment Post on Post{

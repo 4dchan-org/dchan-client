@@ -28,7 +28,7 @@ export const WalletConnectButton = ({
   }, [provider, loadWeb3Modal, logoutOfWeb3Modal, setIsConnecting, setHasError]);
 
   return (
-    <span className={`text-center ${className}`}>
+    <span className={`text-center select-none ${className}`}>
       <div>
         [
         <button className="dchan-link" onClick={onClick}>

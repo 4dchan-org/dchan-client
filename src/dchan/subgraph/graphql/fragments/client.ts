@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-const CLIENT_FRAGMENT = gql`
+export const CLIENT_FRAGMENT = gql`
   fragment Client on Client {
     id
     ipfsHash

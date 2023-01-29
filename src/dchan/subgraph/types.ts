@@ -36,7 +36,6 @@ export type Thread = {
     isLocked: boolean,
     op: Post,
     replies: Post[],
-    lastReplies: Post[],
     replyCount: string,
     imageCount: string,
     createdAtBlock: Block,

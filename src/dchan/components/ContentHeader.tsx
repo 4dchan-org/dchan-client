@@ -33,7 +33,7 @@ export const ContentHeader = ({
   const throttledRefresh = useThrottleCallback(onRefresh, 1, true);
 
   return (
-    <div>
+    <>
       <BoardHeader title={title} board={board} thread={thread} />
 
       {board === null ? (
@@ -56,8 +56,8 @@ export const ContentHeader = ({
         ""
       )}
 
-      <div className="text-center sm:text-left grid xl:grid-cols-3 text-xs">
-        <div className="mx-2 flex flex-wrap sm:flex-nowrap justify-center md:justify-start items-center">
+      <div className="text-center sm:text-left grid xl:grid-cols-3 text-xs sticky top-0 pt-6 z-30 bg-primary">
+        <div className="mx-2 flex flex-wrap sm:flex-nowrap justify-center md:justify-start items-center select-none">
           {board ? <ContentNavigation board={board} /> : <span />}
 
           {!block || (lastBlock && lastBlock.number === block.toString()) ? (
@@ -76,11 +76,11 @@ export const ContentHeader = ({
         <div className="flex flex-wrap justify-center md:justify-end items-center pr-2">
           {!thread && !!board ? <BoardViewSettings /> : ""}
         </div>
-      </div>
 
-      <div className="p-2">
-        <hr></hr>
+        <div className="w-screen">
+          <hr></hr>
+        </div>
       </div>
-    </div>
+    </>
   );
 };

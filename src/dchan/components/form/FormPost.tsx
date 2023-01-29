@@ -408,7 +408,7 @@ export const FormPost = ({
               <form
                 ref={formRef}
                 id="dchan-post-form"
-                className="grid center bg-primary p-2 pointer-events-auto bg-primary"
+                className="grid center bg-primary p-2 pointer-events-auto bg-primary select-none"
                 onSubmit={handleSubmit(onSubmit)}
                 onBlur={onBlur}
                 onChange={onChange}

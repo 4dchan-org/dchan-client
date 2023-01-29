@@ -3,6 +3,7 @@ import { DateTime } from "luxon";
 import { useCallback, useState } from "react";
 import { useEffect } from "react";
 import { useInterval } from "react-use";
+import { Menu } from "../Menu";
 
 export const RefreshWidget = ({ onRefresh }: { onRefresh: () => void }) => {
   const [settings, setSettings] = useLocalSettings();
@@ -42,22 +43,20 @@ export const RefreshWidget = ({ onRefresh }: { onRefresh: () => void }) => {
   }, 1_000);
 
   return (
-    <span className="mx-4 flex items-start relative whitespace-nowrap">
+    <span className="mx-4 flex items-start relative whitespace-nowrap select-none">
       <div>
-        <details>
-          <summary>
-            <span>
-              [
-              <button
-                className="dchan-link"
-                onClick={refresh}
-              >
-                {lastRefreshedRelative || "Refreshing..."}
-              </button>
-              ]
-            </span>
-          </summary>
-          <div className="bg-secondary border border-tertiary-accent border-solid p-2">
+        <span>
+          [
+          <button
+            className="dchan-link"
+            onClick={refresh}
+          >
+            {lastRefreshedRelative || "Refreshing..."}
+          </button>
+          ]
+        </span>
+        <Menu>
+          <div>
             <div>
               <label htmlFor="dchan-input-refresh-toggle">
                 Enable autorefresh
@@ -100,7 +99,7 @@ export const RefreshWidget = ({ onRefresh }: { onRefresh: () => void }) => {
               ></input>
             </div>
           </div>
-        </details>
+        </Menu>
       </div>
     </span>
   );

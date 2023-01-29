@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 import POST_FRAGMENT from "./post";
 import USER_FRAGMENT from "./user";
 
-const THREAD_FRAGMENT = gql`
+export const THREAD_FRAGMENT = gql`
   ${POST_FRAGMENT}
   ${USER_FRAGMENT}
 
@@ -30,10 +30,6 @@ const THREAD_FRAGMENT = gql`
     createdAtBlock {
       timestamp
       number
-    },
-    replies,
-    lastReplies: replies(first: 3, orderBy: n, orderDirection: desc) {
-      ...Post
     }
   }
 `;

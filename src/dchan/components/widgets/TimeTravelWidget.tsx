@@ -129,7 +129,7 @@ export const TimeTravelWidget = forwardRef(
             <>
               <div className="mx-1">
                 <span className="hidden sm:flex center" onClick={onOpen}>
-                  <span>
+                  <span className="select-none">
                     {isTimeTraveling ? (
                       <span>
                         <div

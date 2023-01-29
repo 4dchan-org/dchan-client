@@ -110,7 +110,7 @@ export const PostHeader = ({
     (from: string, n: number | string) => {
       publish("FORM_QUOTE", {
         n,
-        ...(thread && ([...thread.lastReplies || [], thread.op]).filter((post) => post.n === n).length > 1
+        ...(thread && ([...thread.replies || [], thread.op]).filter((post) => post.n === n).length > 1
           ? { from }
           : {}),
       });
@@ -198,7 +198,7 @@ export const PostHeader = ({
         </span>
       </span>
       <span className="px-1 whitespace-nowrap text-xs">
-        (ID: <UserLabel user={post.from} />
+        (ID: <UserLabel user={post.from} /> )
         {provider && accounts && accounts[0] ? (
           <Menu>
             <div>
@@ -214,7 +214,6 @@ export const PostHeader = ({
         ) : (
           ""
         )}
-        )
       </span>
       <DateDisplay post={post} />
       <span className="whitespace-nowrap flex center">

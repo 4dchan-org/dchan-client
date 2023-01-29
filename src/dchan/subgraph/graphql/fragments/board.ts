@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 import USER_FRAGMENT from "./user";
 
-const BOARD_FRAGMENT = gql`
+export const BOARD_FRAGMENT = gql`
   ${USER_FRAGMENT}
 
   fragment Board on Board{

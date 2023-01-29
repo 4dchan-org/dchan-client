@@ -100,15 +100,16 @@ export const HeaderNavigation = ({
   return (
     <div className="mb-8 dchan-header-navigation">
       <div className="text-sm p-01 border-solid border-bottom-tertiary-accent bg-secondary border-0 border-b-2 text-left fixed top-0 left-0 right-0 shadow-md z-50">
-        <span className="text-black text-opacity-50 hover:text-opacity-100 pr-1 dchan-brackets">
+        <span className="text-black text-opacity-50 hover:text-opacity-100 dchan-brackets">
           <Link
-            className="dchan-link"
+            className="dchan-link font-bold"
             to={`/${block ? `?block=${block}` : ""}`}
           >
             dchan.network
           </Link>
         </span>
-        <span className="text-black text-opacity-50 hover:text-opacity-100 pr-1">
+        {board ? <BoardLink board={board} /> : <></>}
+        <span className="text-black text-opacity-50 hover:text-opacity-100 select-none px-1">
           <span className="inline dchan-brackets" onClick={toggleShowBoards}>
             <span className="dchan-link">+</span>
           </span>
@@ -130,7 +131,7 @@ export const HeaderNavigation = ({
             <span className="dchan-link">...</span>
           </Link>
         </span>
-        <span className="text-black text-opacity-50 hover:text-opacity-100 pr-1">
+        <span className="text-black text-opacity-50 hover:text-opacity-100 select-none pr-1">
           [
           <Link
             className="dchan-link"
@@ -163,7 +164,7 @@ export const HeaderNavigation = ({
             ref={watchedThreadsRef}
           >
             <summary
-              className="list-none cursor-pointer opacity-60 hover:opacity-100"
+              className="list-none cursor-pointer opacity-60 hover:opacity-100 select-none"
               onClick={(event) => {
                 event.preventDefault();
                 setOpenedWidget(
@@ -182,7 +183,7 @@ export const HeaderNavigation = ({
           <span
             ref={settingsRef}
             title={"Settings"}
-            className="cursor-pointer opacity-60 hover:opacity-100 mx-1"
+            className="cursor-pointer opacity-60 hover:opacity-100 mx-1 select-none"
             onClick={() => {
               setOpenedWidget(
                 openedWidget === OpenedWidgetEnum.SETTINGS
@@ -204,7 +205,7 @@ export const HeaderNavigation = ({
             )}
           </span>
           <details
-            className="mx-1"
+            className="mx-1 select-none"
             open={openedWidget === OpenedWidgetEnum.WALLET}
             ref={walletRef}
           >

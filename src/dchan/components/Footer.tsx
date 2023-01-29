@@ -27,7 +27,7 @@ export const Footer = ({
         </div>
         <div className="bg-primary flex mt-1 border-t border-top-tertiary-accent text-xs relative w-100vw overflow-visible">
           <div className="flex flex-wrap px-6 text-xs text-gray-600 w-screen">
-            <div className="pb-2 lg:pb-0 flex justify-center align-start items-start dchan-footer-buttons">
+            <div className="pb-2 lg:pb-0 flex justify-center align-start items-start dchan-footer-buttons select-none">
               <RulesButton className="border border-tertiary-accent px-4 mx-1 bg-white" />
               <AbuseButton className="border border-tertiary-accent px-4 mx-1 bg-white whitespace-nowrap" />
               <FAQButton className="border border-tertiary-accent px-4 mx-1 bg-white" />

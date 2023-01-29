@@ -165,7 +165,7 @@ export const ThreadPage = ({
             </div>
 
             <div className="flex text-xs pr-1 sticky bottom-0 z-40">
-              <span className="flex bg-primary pl-2 rounded ">
+              <span className="flex bg-primary pl-2 rounded select-none">
                 <span className="pr-1">
                   <Anchor to="#board-header" label="Top" />
                 </span>
