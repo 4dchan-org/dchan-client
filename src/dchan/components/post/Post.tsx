@@ -164,14 +164,14 @@ export const Post = memo(
     ].join(" ");
 
     return (
-      <div className="flex relative overflow-x-scroll" id={`${n}`}>
+      <div className="flex relative" id={`${n}`}>
         {!isOp && showPostMarker ? (
           <span className="hidden md:block pl-2 text-secondary">&gt;&gt;</span>
         ) : (
           ""
         )}
         <div
-          className={`mx-auto md:mr-3 md:ml-2 text-left inline ${
+          className={`mx-auto sm:mr-3 sm:ml-2 text-left inline ${
             isOp ? "w-full" : ""
           }`}
           key={id}
