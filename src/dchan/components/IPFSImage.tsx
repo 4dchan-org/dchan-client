@@ -28,10 +28,13 @@ export const IPFSImage = ({
   thumbnailClass?: string;
 }) => {
   const mouseRef = useRef(null);
-  const ipfsSrc = `https://dweb.link/ipfs/${hash}`;
+  const [imgSrcs, setImgSrcs] = useState<string[]>([
+    `https://dweb.link/ipfs/${hash}`,
+    // `https://ipfs.io/ipfs/${hash}`,
+  ]);
   const [imgError, setImgError] = useState<any>(false);
   const [imgLoading, setImgLoading] = useState<boolean>(true);
-  const [imgSrc, setImgSrc] = useState<string>(ipfsSrc);
+  const [imgSrc, setImgSrc] = useState<string>(imgSrcs[0]);
   const [showSpoiler, setShowSpoiler] = useState<boolean>(false);
   const [showNsfw, setShowNsfw] = useState<boolean>(false);
   const [expand, setExpand] = useState<boolean>(!thumbnail);
@@ -40,13 +43,26 @@ export const IPFSImage = ({
   thumbnailClass = thumbnail ? thumbnailClass : "";
   const canShow = (!isNsfw || showNsfw) && (!isSpoiler || showSpoiler);
 
+  // useEffect(() => {
+  //   imgSrcs.length > 0 && setImgSrc(imgSrcs[0]);
+  // }, [imgSrcs, setImgSrc]);
+
   const retry = useCallback(() => {
     setImgLoading(true);
-    setImgSrc(`${ipfsSrc}?t=${new Date().getTime()}`);
+    setImgSrc(`${imgSrc}?t=${new Date().getTime()}`);
     setImgError(undefined);
-  }, [ipfsSrc, setImgLoading, setImgSrc, setImgError]);
+  }, [imgSrc, setImgLoading, setImgSrc, setImgError]);
 
-  const windowSize = useWindowSize()
+  const onError = useCallback(
+    (e: any) => {
+      console.error({e})
+      setImgLoading(false);
+      setImgError(`${e.target.src}: failed to load.`);
+    },
+    [setImgError, setImgLoading]
+  );
+
+  const windowSize = useWindowSize();
   const [hoverPosition, setHoverPosition] = useState<{
     x: number;
     y: number;
@@ -58,7 +74,13 @@ export const IPFSImage = ({
       clientWidth: 0,
       clientHeight: 0,
     };
-    if (canShow && !expand && windowSize.width > 768 && mouse.clientX !== null && mouse.clientY !== null) {
+    if (
+      canShow &&
+      !expand &&
+      windowSize.width > 768 &&
+      mouse.clientX !== null &&
+      mouse.clientY !== null
+    ) {
       const position = {
         x: Math.max(
           width / 2,
@@ -68,7 +90,7 @@ export const IPFSImage = ({
           height / 2,
           Math.min(window.outerHeight - height / 2, mouse.clientY)
         ),
-        flip: mouse.clientX > windowSize.width / 2
+        flip: mouse.clientX > windowSize.width / 2,
       };
       setHoverPosition(position);
     } else {
@@ -97,10 +119,7 @@ export const IPFSImage = ({
             setExpand(!expand);
           }
         }}
-        onError={(e) => {
-          setImgLoading(false);
-          setImgError(e);
-        }}
+        onError={onError}
         alt=""
         ref={imgRef}
       />
@@ -111,8 +130,10 @@ export const IPFSImage = ({
             style={{
               left: `${hoverPosition.x}px`,
               top: `${hoverPosition.y}px`,
-              transform: `translate(${hoverPosition.flip ? "-100" : "0"}%, -50%)`,
-              transition: "position 50ms ease-out"
+              transform: `translate(${
+                hoverPosition.flip ? "-100" : "0"
+              }%, -50%)`,
+              transition: "position 50ms ease-out",
             }}
             src={imgSrc}
             alt=""
@@ -147,7 +168,12 @@ export const IPFSImage = ({
                     onClick={retry}
                     alt={``}
                   />
-                  <div className="p-2">IPFS image load error</div>
+                  <div className="p-2">
+                    <details>
+                      <summary>IPFS image load error</summary>
+                      {imgError}
+                    </details>
+                  </div>
                 </div>
               ) : (
                 ""

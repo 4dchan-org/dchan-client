@@ -148,9 +148,9 @@ export const Post = memo(
     }, [toggleRef, setShowBody]);
 
     useEffect(() => {
-      fetch(ipfsSrc, { method: "HEAD" }).then((response) =>
-        setImgContentLength(Number(response.headers.get("Content-Length")))
-      );
+      fetch(ipfsSrc, { method: "HEAD" }).then((response) => {
+        response.status === 200 ? setImgContentLength(Number(response.headers.get("Content-Length"))) : console.error("HEAD", ipfsSrc, { response })
+      });
     }, [ipfsSrc, setImgContentLength]);
 
     const bodyClass = [

@@ -43,7 +43,7 @@ export const RefreshWidget = ({ onRefresh }: { onRefresh: () => void }) => {
   }, 1_000);
 
   return (
-    <span className="mx-4 flex items-start relative whitespace-nowrap select-none">
+    <span className="mx-4 flex center relative whitespace-nowrap select-none">
       <div>
         <span>
           [

@@ -10,6 +10,8 @@ export const Footer = ({
   showContentDisclaimer?: boolean;
   className?: string;
 }) => {
+  const build = document.querySelector("meta[name='ui-version']")?.attributes.getNamedItem("content")?.value;
+
   return (
     <div className={`flex-grow relative pt-24 ${className}`}>
       <div id="bottom" />
@@ -37,7 +39,20 @@ export const Footer = ({
             <div className="flex text-right justify-end ml-2 flex-grow">
               <details>
                 <summary>
-                  {name} v{version}
+                  {name} v{version} [
+                  {build && build.match(/^[0-9a-f]+$/) ? (
+                    <a
+                      className="dchan-link"
+                      target="_blank"
+                      rel="noreferrer"
+                      href={`https://github.com/dchan-network/dchan-client/commit/${build}`}
+                    >
+                      {build}
+                    </a>
+                  ) : (
+                    "dev"
+                  )}
+                  ]
                 </summary>
                 <div className="bg-secondary border border-tertiary-accent border-solid p-2 absolute bottom-0 right-0 mr-4 mb-4">
                   <div className="mb-2">
@@ -91,18 +106,16 @@ export const Footer = ({
                   </div>
                   <div>
                     <a
-                        className="dchan-link"
-                        href="//github.com/dchan-network/dchan-client/graphs/contributors"
-                        target="_blank"
-                        rel="noreferrer"
-                        title="Contributors"
-                      >
-                        <Emoji emoji="🧑‍💻" /> Contributors
-                      </a>
+                      className="dchan-link"
+                      href="//github.com/dchan-network/dchan-client/graphs/contributors"
+                      target="_blank"
+                      rel="noreferrer"
+                      title="Contributors"
+                    >
+                      <Emoji emoji="🧑‍💻" /> Contributors
+                    </a>
                   </div>
-                  <div>
-                    {/* <IPFSClientsWidget /> */}
-                  </div>
+                  <div>{/* <IPFSClientsWidget /> */}</div>
                 </div>
               </details>
             </div>

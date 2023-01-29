@@ -75,12 +75,7 @@
 }
 
 .dchan-menu {
-    position: relative;
-
-    & > div {
-        top: -0rem;
-        left: 1rem;
-    }
+    margin-top: -0.2rem;
 
     .dchan-menu-content > div {
         white-space: nowrap;
