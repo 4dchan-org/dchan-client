@@ -9,7 +9,6 @@ import { useWindowSize } from "react-use";
 export const IPFSImage = ({
   hash,
   style,
-  htmlLoading = "lazy",
   className = "",
   isSpoiler = false,
   isNsfw = false,
@@ -20,7 +19,6 @@ export const IPFSImage = ({
   hash: string;
   className?: string;
   style?: React.CSSProperties;
-  htmlLoading?: "eager" | "lazy";
   isSpoiler?: boolean;
   isNsfw?: boolean;
   expandable?: boolean;
@@ -53,7 +51,6 @@ export const IPFSImage = ({
   }, [imgSrcs, setImgSrc, setImgSrcs]);
 
   useEffect(() => {
-    console.log({ imgSrc });
     !imgSrc && next();
   }, [next, imgSrc]);
 
@@ -65,7 +62,7 @@ export const IPFSImage = ({
 
   const onError = useCallback(
     (e: any) => {
-      console.log("ipfs load error");
+      console.log("ipfs load error", e.target.src);
       setImgLoading(false);
       setImgError(`${e.target.src}: failed to load.`);
       next();
@@ -109,6 +106,18 @@ export const IPFSImage = ({
     }
   }, [expand, canShow, windowSize, hash, imgRef, mouse, setHoverPosition]);
 
+  const onLoad = useCallback(() => setImgLoading(false), [setImgLoading])
+
+  const onClick = useCallback(() => {
+    if (expandable) {
+      setExpand(!expand);
+    }
+  }, [expandable, expand, setExpand])
+
+  const onShowNsfw = useCallback(() => setShowNsfw(true), [setShowNsfw])
+
+  const onShowSpoiler = useCallback(() => setShowSpoiler(true), [setShowSpoiler])
+
   return (
     <span ref={mouseRef} className="relative">
       <img
@@ -127,13 +136,9 @@ export const IPFSImage = ({
             : style
         }
         src={imgSrc}
-        onLoad={() => setImgLoading(false)}
-        loading={htmlLoading}
-        onClick={() => {
-          if (expandable) {
-            setExpand(!expand);
-          }
-        }}
+        onLoad={onLoad}
+        loading={"eager"}
+        onClick={onClick}
         onError={onError}
         alt=""
         ref={imgRef}
@@ -197,7 +202,7 @@ export const IPFSImage = ({
                   className={thumbnailClass}
                   src={spoilerSrc}
                   alt="SPOILER"
-                  onClick={() => setShowSpoiler(true)}
+                  onClick={onShowSpoiler}
                 />
               ) : (
                 ""
@@ -211,7 +216,7 @@ export const IPFSImage = ({
                   className={thumbnailClass}
                   src={nsfwSrc}
                   alt="NSFW"
-                  onClick={() => setShowNsfw(true)}
+                  onClick={onShowNsfw}
                 />
               ) : (
                 ""

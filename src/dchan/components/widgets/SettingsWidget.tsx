@@ -8,37 +8,37 @@ import DefaultSettings from "dchan/settings";
 export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
   const [settings, setSettings] = useLocalSettings();
 
-  // const [displaySubgraph, setDisplaySubgraph] = useState<string | undefined>(
-  //   settings?.subgraph?.endpoint
-  // );
-  // const writeSubgraphEndpoint = useCallback(
-  //   (settings: Settings, val: string) => {
-  //     let updatedSettings = { ...settings };
-  //     settings.subgraph.endpoint = val;
-  //     setSettings(updatedSettings);
-  //   },
-  //   [setSettings]
-  // );
-  // const writeSubgraphEndpointDebounced = useMemo(
-  //   () => debounce(writeSubgraphEndpoint, 500),
-  //   [writeSubgraphEndpoint]
-  // );
+  const [displaySubgraph, setDisplaySubgraph] = useState<string | undefined>(
+    settings?.subgraph?.endpoint
+  );
+  const writeSubgraphEndpoint = useCallback(
+    (settings: Settings, val: string) => {
+      let updatedSettings = { ...settings };
+      settings.subgraph.endpoint = val;
+      setSettings(updatedSettings);
+    },
+    [setSettings]
+  );
+  const writeSubgraphEndpointDebounced = useMemo(
+    () => debounce(writeSubgraphEndpoint, 500),
+    [writeSubgraphEndpoint]
+  );
 
-  // const [displayIPFS, setDisplayIPFS] = useState<string | undefined>(
-  //   settings?.ipfs?.endpoint
-  // );
-  // const writeIPFSEndpoint = useCallback(
-  //   (settings: Settings, val: string) => {
-  //     let updatedSettings = { ...settings };
-  //     settings.ipfs.endpoint = val;
-  //     setSettings(updatedSettings);
-  //   },
-  //   [setSettings]
-  // );
-  // const writeIPFSEndpointDebounced = useMemo(
-  //   () => debounce(writeIPFSEndpoint, 500),
-  //   [writeIPFSEndpoint]
-  // );
+  const [displayIPFS, setDisplayIPFS] = useState<string | undefined>(
+    settings?.ipfs?.endpoint
+  );
+  const writeIPFSEndpoint = useCallback(
+    (settings: Settings, val: string) => {
+      let updatedSettings = { ...settings };
+      settings.ipfs.endpoint = val;
+      setSettings(updatedSettings);
+    },
+    [setSettings]
+  );
+  const writeIPFSEndpointDebounced = useMemo(
+    () => debounce(writeIPFSEndpoint, 500),
+    [writeIPFSEndpoint]
+  );
 
   const [displayScoreThreshold, setDisplayScoreThreshold] = useState<
     number | undefined
@@ -80,7 +80,7 @@ export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
         className="h-full overflow-y-scroll overscroll-contain"
         style={{ flex: "1 1 auto" }}
       >
-        {/* <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
+        <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">Subgraph Endpoint</legend>
           <div>Endpoint used to query the subgraph for data.</div>
           <div>
@@ -134,7 +134,7 @@ export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
             }}
             value={displayIPFS}
           />
-        </fieldset> */}
+        </fieldset>
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">Filter Settings</legend>
           <div className="text-contrast">
