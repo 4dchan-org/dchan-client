@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { debounce } from "lodash";
+import { Router } from "router";
 
 export const SearchWidget = ({
-  baseUrl,
   search = "",
   open = true
 }: {
@@ -15,14 +15,10 @@ export const SearchWidget = ({
   const [displayInput, setDisplayInput] = useState<string>(search || "");
   const setSearch = useCallback(
     (search: string) => {
-      const newUrl = search
-        ? baseUrl.includes("?")
-          ? `${baseUrl}&s=${search}`
-          : `${baseUrl}?s=${search}`
-        : baseUrl;
-      history.push(newUrl);
+      history.push(Router.posts({search}));
+      setDisplayInput(search)
     },
-    [history, baseUrl]
+    [history, setDisplayInput]
   );
 
   const inputRef = useRef(null)

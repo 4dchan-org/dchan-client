@@ -29,12 +29,13 @@ export const IPFSImage = ({
 }) => {
   const mouseRef = useRef(null);
   const [imgSrcs, setImgSrcs] = useState<string[]>([
+    `https://ipfs.dchan.network/ipfs/${hash}`,
     `https://dweb.link/ipfs/${hash}`,
-    // `https://ipfs.io/ipfs/${hash}`,
+    `https://ipfs.io/ipfs/${hash}`,
   ]);
   const [imgError, setImgError] = useState<any>(false);
   const [imgLoading, setImgLoading] = useState<boolean>(true);
-  const [imgSrc, setImgSrc] = useState<string>(imgSrcs[0]);
+  const [imgSrc, setImgSrc] = useState<string>();
   const [showSpoiler, setShowSpoiler] = useState<boolean>(false);
   const [showNsfw, setShowNsfw] = useState<boolean>(false);
   const [expand, setExpand] = useState<boolean>(!thumbnail);
@@ -43,23 +44,33 @@ export const IPFSImage = ({
   thumbnailClass = thumbnail ? thumbnailClass : "";
   const canShow = (!isNsfw || showNsfw) && (!isSpoiler || showSpoiler);
 
-  // useEffect(() => {
-  //   imgSrcs.length > 0 && setImgSrc(imgSrcs[0]);
-  // }, [imgSrcs, setImgSrc]);
+  const next = useCallback(() => {
+    const _imgSrcs = [...imgSrcs];
+    const imgSrc = _imgSrcs.shift();
+    if (!imgSrc) return;
+    setImgSrc(imgSrc);
+    setImgSrcs([..._imgSrcs]);
+  }, [imgSrcs, setImgSrc, setImgSrcs]);
+
+  useEffect(() => {
+    console.log({ imgSrc });
+    !imgSrc && next();
+  }, [next, imgSrc]);
 
   const retry = useCallback(() => {
     setImgLoading(true);
-    setImgSrc(`${imgSrc}?t=${new Date().getTime()}`);
+    setImgSrc(`${imgSrc?.replace(/[&?]t=\d+/, "")}?t=${new Date().getTime()}`);
     setImgError(undefined);
   }, [imgSrc, setImgLoading, setImgSrc, setImgError]);
 
   const onError = useCallback(
     (e: any) => {
-      console.error({e})
+      console.log("ipfs load error");
       setImgLoading(false);
       setImgError(`${e.target.src}: failed to load.`);
+      next();
     },
-    [setImgError, setImgLoading]
+    [next, setImgError, setImgLoading]
   );
 
   const windowSize = useWindowSize();
@@ -106,7 +117,11 @@ export const IPFSImage = ({
         } animation-fade-in`}
         style={
           imgLoading
-            ? { ...style, visibility: "hidden", position: "absolute" }
+            ? {
+                ...style,
+                position: "absolute",
+                ...(canShow ? {} : { visibility: "hidden" }),
+              }
             : !!imgError || !canShow
             ? { display: "none" }
             : style
@@ -145,41 +160,38 @@ export const IPFSImage = ({
       <div className={`${className} relative`}>
         <span>
           <div>
-            <div className="opacity-50">
-              {imgLoading ? (
+            <div>
+              {imgLoading && imgSrc ? (
                 <div className="relative center grid">
                   <img
-                    className={"h-150px w-150px animation-download"}
+                    className={thumbnailClass+ " animation-download"}
                     style={style}
                     src={ipfsLoadingSrc}
                     onClick={retry}
                     alt={``}
                   />
-                  <div className="p-2" title={`Retrieving image from IPFS.`}>
-                    Loading...
+                  <div
+                    className="p-2 text-xs absolute top-0 left-0 opacity-50"
+                    title={`Retrieving image from IPFS.`}
+                  >
+                    IPFS is loading...
+                    <div>Attempting {new URL(imgSrc).hostname}</div>
                   </div>
                 </div>
               ) : imgError ? (
                 <div className="relative center grid">
                   <img
-                    className={"h-150px w-150px animation-fade-in"}
+                    className={thumbnailClass+ " animation-fade-in"}
                     style={style}
                     src={ipfsErrorSrc}
                     onClick={retry}
                     alt={``}
                   />
-                  <div className="p-2">
-                    <details>
-                      <summary>IPFS image load error</summary>
-                      {imgError}
-                    </details>
-                  </div>
+                  <div className="p-2">IPFS Image Load Error</div>
                 </div>
               ) : (
                 ""
               )}
-            </div>
-            <div>
               {!imgLoading && !imgError && !showSpoiler && isSpoiler ? (
                 <img
                   className={thumbnailClass}

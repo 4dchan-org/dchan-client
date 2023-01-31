@@ -35,10 +35,13 @@ export const PostsPage = ({ location, match: { params } }: any) => {
   const page = parseInt(`${query.page || "1"}`);
   const { timeTraveledToBlockNumber: block } = useTimeTravel();
   const [settings] = useLocalSettings();
+  const limit = 100;
 
   const variables = {
     block,
     search: search.length > 1 ? `${search}:*` : "*:*",
+    limit,
+    skip: (page - 1) * limit
   };
 
   const { refetch, data, loading } = useQuery<SearchData, SearchVars>(
@@ -49,17 +52,12 @@ export const PostsPage = ({ location, match: { params } }: any) => {
     }
   );
 
-  const postSearch = data?.postSearch;
-
   const results = useMemo(() => {
-    return sortByCreatedAt(
-      postSearch
-        ? postSearch.filter((post) => {
-            return post && post.thread && post.board;
-          })
-        : []
-    );
-  }, [postSearch]);
+    const { postSearch } = data || {};
+    return sortByCreatedAt((postSearch || []).filter((post) => {
+      return post && post.thread && post.board;
+    }));
+  }, [data]);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -68,6 +66,9 @@ export const PostsPage = ({ location, match: { params } }: any) => {
   useEffect(() => {
     refetch();
   }, [search, block, refetch]);
+
+  // @TODO >= limit
+  const hasNextPage = useMemo(() => data && data.postSearch.length >= 0, [data])
 
   return (
     <div
@@ -97,13 +98,13 @@ export const PostsPage = ({ location, match: { params } }: any) => {
       <div className="relative">
         <div className="flex justify-center md:justify-start p-2">
           <SearchWidget
-            baseUrl={`${Router.posts()}${block ? `?block=${block}` : ""}`}
+            baseUrl={`${Router.posts({search})}${block ? `?block=${block}` : ""}`}
             search={search}
             open={true}
           />
           {!loading ? (
             <span className="grid center bg-secondary border border-secondary-accent mx-2">
-              <Paging page={page} url={Router.posts()} />
+              <Paging page={page} url={Router.posts({search})} hasNextPage={hasNextPage} />
             </span>
           ) : (
             <span />
@@ -156,14 +157,14 @@ export const PostsPage = ({ location, match: { params } }: any) => {
                 </div>
               ))}
             </div>
-            <Paging page={page} url={Router.posts()} />
+            <Paging page={page} url={Router.posts({search})} hasNextPage={hasNextPage} />
           </div>
         ) : !!search ? (
           <div className="py-4">No results</div>
         ) : (
           <div>
             <LatestPostsCard limit={25} skip={page > 1 ? page * 25 : 0} />
-            <Paging page={page} url={Router.posts()} />
+            <Paging page={page} url={Router.posts({search})} hasNextPage={hasNextPage} />
           </div>
         )}
       </div>

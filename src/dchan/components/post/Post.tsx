@@ -127,7 +127,7 @@ export const Post = memo(
       }
     });
 
-    const ipfsSrc = !!image ? `https://dweb.link/ipfs/${image.ipfsHash}` : "";
+    const ipfsSrc = !!image ? `https://ipfs.dchan.network/ipfs/${image.ipfsHash}` : "";
     const isOp = id === thread?.id;
     const isYou = selfUserData?.user?.id === post.from.id;
     const [settings] = useLocalSettings();
@@ -319,7 +319,7 @@ export const Post = memo(
                     >
                       <div className="w-full table pt-1">
                         {!!image ? (
-                          <div className="overflow-hidden mx-5 my-1 float-left">
+                          <div className="mx-5 my-1 float-left">
                             <IPFSImage
                               hash={image.ipfsHash}
                               isSpoiler={image.isSpoiler}

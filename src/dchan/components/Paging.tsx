@@ -14,7 +14,7 @@ export const Paging = ({ url, page, maxPage, hasNextPage }: {
       <span>
         <Link
           className={`dchan-link px-2 ${page > 1 ?  "" : "dchan-link-disabled"}`}
-          to={`${url}?page=1${block ? `&block=${block}` : ""}`}
+          to={`${url}${url.indexOf("?") === -1 ? "?" : "&"}page=1${block ? `&block=${block}` : ""}`}
         >
           &lt;&lt;
         </Link>
@@ -22,7 +22,7 @@ export const Paging = ({ url, page, maxPage, hasNextPage }: {
       <span>
         <Link
           className={`dchan-link px-2 ${page > 1 ?  "" : "dchan-link-disabled"}`}
-          to={`${url}?page=${page - 1}${block ? `&block=${block}` : ""}`}
+          to={`${url}${url.indexOf("?") === -1 ? "?" : "&"}page=${page - 1}${block ? `&block=${block}` : ""}`}
         >
           &lt;
         </Link>
@@ -39,7 +39,7 @@ export const Paging = ({ url, page, maxPage, hasNextPage }: {
                 alert(`Invalid page number: ${input}`);
               } else {
                 history.push(
-                  `${url}?page=${newPage}${block ? `&block=${block}` : ""}`
+                  `${url}${url.indexOf("?") === -1 ? "?" : "&"}page=${newPage}${block ? `&block=${block}` : ""}`
                 );
               }
             }
@@ -55,7 +55,7 @@ export const Paging = ({ url, page, maxPage, hasNextPage }: {
           className={`dchan-link px-2 ${
             hasNextPage === true || (maxPage && page < maxPage) ? "" : "dchan-link-disabled"
           }`}
-          to={`${url}?page=${page + 1}${block ? `&block=${block}` : ""}`}
+          to={`${url}${url.indexOf("?") === -1 ? "?" : "&"}page=${page + 1}${block ? `&block=${block}` : ""}`}
         >
           &gt;
         </Link>
@@ -65,7 +65,7 @@ export const Paging = ({ url, page, maxPage, hasNextPage }: {
           className={`dchan-link px-2 ${
             hasNextPage === true && (maxPage && page < maxPage) ? "" : "dchan-link-disabled"
           }`}
-          to={`${url}?page=${maxPage}${block ? `&block=${block}` : ""}`}
+          to={`${url}${url.indexOf("?") === -1 ? "?" : "&"}page=${maxPage}${block ? `&block=${block}` : ""}`}
         >
           &gt;&gt;
         </Link>

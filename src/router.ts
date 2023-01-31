@@ -34,8 +34,8 @@ export abstract class Router {
         return !!name && !!id ? `/${name}/${id}${urlViewMode}` : undefined
     }
 
-    public static posts() {
-        return `/_/posts`
+    public static posts({search}: {search?: string} = {}) {
+        return `/_/posts${search ? `?search=${search}`: ``}`
     }
 
     public static boards() {

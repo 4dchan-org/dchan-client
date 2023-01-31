@@ -186,14 +186,14 @@ function IPFSImage({ hash }: { hash: string }) {
       <summary>
         <a
           className="dchan-link"
-          href={`//dweb.link/ipfs/${hash}`}
+          href={`//ipfs.dchan.network/ipfs/${hash}`}
           target="_blank"
           rel="noreferrer"
         >
           {hash}
         </a>
       </summary>
-      <img src={`//dweb.link/ipfs/${hash}`} alt="" />
+      <img src={`//ipfs.dchan.network/ipfs/${hash}`} alt="" />
     </details>
   );
 }

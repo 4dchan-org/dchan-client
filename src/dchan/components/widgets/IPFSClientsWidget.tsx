@@ -31,7 +31,7 @@ export const IPFSClientsWidget = () => {
           ).toLocaleString(DateTime.DATETIME_SHORT)}`}</span>
           <a
             className="dchan-link border border-black px-2 mx-1 bg-white"
-            href={`//dweb.link/ipfs/${stable.ipfsHash}`}
+            href={`//ipfs.dchan.network/ipfs/${stable.ipfsHash}`}
             target="_blank"
             rel="noreferrer"
           >
@@ -49,7 +49,7 @@ export const IPFSClientsWidget = () => {
           ).toLocaleString(DateTime.DATETIME_SHORT)}`}</span>
           <a
             className="dchan-link border border-black px-2 mx-1 bg-white"
-            href={`//dweb.link/ipfs/${dev.ipfsHash}`}
+            href={`//ipfs.dchan.network/ipfs/${dev.ipfsHash}`}
             target="_blank"
             rel="noreferrer"
           >
