@@ -18,11 +18,15 @@ export async function upload(
             });
 
             try {
-                let formData = new FormData();
-                formData.append("file", file);
                 const ipfsResponse = await fetch(
                     "https://ipfs.dchan.network/ipfs/",
-                    { method: "POST", body: formData }
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/octet-stream",
+                        },
+                        body: new Uint8Array(await file.arrayBuffer())
+                    }
                 );
 
                 console.log("ipfs.upload", { ipfsResponse });
