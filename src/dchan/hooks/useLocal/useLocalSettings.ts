@@ -28,7 +28,7 @@ export type Settings = {
 }
 
 export const useLocalSettings = () => {
-    return useLocalStorageState('dchan.network.settings.v230201', {
+    return useLocalStorageState('dchan.network.settings', {
         defaultValue: DefaultSettings
     })
 }

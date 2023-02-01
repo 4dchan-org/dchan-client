@@ -84,8 +84,10 @@ export async function postMessage(
     };
 
     if (!!file) {
+        const fileName = input.file[0].name
         data.file = {
             ...file,
+            name: fileName,
             is_nsfw: input.is_nsfw,
             is_spoiler: input.is_spoiler,
         };

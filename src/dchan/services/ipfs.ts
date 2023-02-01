@@ -4,7 +4,6 @@ export type IpfsUploadResult = {
     ipfs: {
         hash: string;
     };
-    name: string
 };
 
 export async function upload(
@@ -23,32 +22,26 @@ export async function upload(
                 let formData = new FormData();
                 formData.append("file", file);
                 const ipfsResponse = await fetch(
-                    `${ipfsEndpoint}/add`,
+                    ipfsEndpoint,
                     { method: "POST", body: formData, referrer: "" }
                 );
 
-                const ipfs = await ipfsResponse.json();
-                console.log("ipfs.upload", { ipfs });
-                if (!!ipfs.Hash) {
+                console.log("ipfs.upload", { ipfsResponse });
+
+                const hash = ipfsResponse.headers.get('ipfs-hash');
+                if (!!hash) {
                     setStatus({
                         success: "File uploaded",
                     });
                     return {
                         ipfs: {
-                            hash: ipfs.Hash,
-                        },
-                        name: ipfs.Name
+                            hash,
+                        }
                     };
                 } else {
-                    if (ipfs.error) {
-                        setStatus({
-                            error: ipfs.error,
-                        });
-                    } else {
-                        setStatus({
-                            error: "File upload failed!",
-                        });
-                    }
+                    setStatus({
+                        error: "File upload failed!",
+                    });
                 }
             } catch (error) {
                 console.error({ ipfsUpload: error })

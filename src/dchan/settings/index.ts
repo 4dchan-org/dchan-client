@@ -6,7 +6,7 @@ const DefaultSettings = {
         endpoint: "https://api.thegraph.com/subgraphs/name/dchan-network/dchan-alpha-0"
     },
     ipfs: {
-        endpoint: "https://api.thegraph.com/ipfs/api/v0"
+        endpoint: "https://ipfs.dchan.network/ipfs/"
     },
     content_view: {
         page_size: 25,
