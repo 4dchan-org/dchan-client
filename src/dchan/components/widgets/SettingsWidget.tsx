@@ -24,21 +24,21 @@ export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
     [writeSubgraphEndpoint]
   );
 
-  const [displayIPFS, setDisplayIPFS] = useState<string | undefined>(
-    settings?.ipfs?.endpoint
-  );
-  const writeIPFSEndpoint = useCallback(
-    (settings: Settings, val: string) => {
-      let updatedSettings = { ...settings };
-      settings.ipfs.endpoint = val;
-      setSettings(updatedSettings);
-    },
-    [setSettings]
-  );
-  const writeIPFSEndpointDebounced = useMemo(
-    () => debounce(writeIPFSEndpoint, 500),
-    [writeIPFSEndpoint]
-  );
+  // const [displayIPFS, setDisplayIPFS] = useState<string | undefined>(
+  //   settings?.ipfs?.endpoint
+  // );
+  // const writeIPFSEndpoint = useCallback(
+  //   (settings: Settings, val: string) => {
+  //     let updatedSettings = { ...settings };
+  //     settings.ipfs.endpoint = val;
+  //     setSettings(updatedSettings);
+  //   },
+  //   [setSettings]
+  // );
+  // const writeIPFSEndpointDebounced = useMemo(
+  //   () => debounce(writeIPFSEndpoint, 500),
+  //   [writeIPFSEndpoint]
+  // );
 
   const [displayScoreThreshold, setDisplayScoreThreshold] = useState<
     number | undefined
@@ -109,7 +109,7 @@ export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
             value={displaySubgraph}
           />
         </fieldset>
-        <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
+        {/* <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">IPFS Endpoint</legend>
           <div>Endpoint used to upload images to IPFS.</div>
           <div>
@@ -134,7 +134,7 @@ export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
             }}
             value={displayIPFS}
           />
-        </fieldset>
+        </fieldset> */}
         <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">Filter Settings</legend>
           <div className="text-contrast">

@@ -179,8 +179,7 @@ export const FormPost = ({
         result = await postMessage(
           data,
           accounts,
-          setStatus,
-          settings.ipfs.endpoint
+          setStatus
         );
       } catch (error) {
         result = { error };

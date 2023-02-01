@@ -8,8 +8,7 @@ export type IpfsUploadResult = {
 
 export async function upload(
     files: FileList,
-    setStatus: SetStatus,
-    ipfsEndpoint: string,
+    setStatus: SetStatus
 ): Promise<IpfsUploadResult | undefined> {
     if (!!files) {
         const file = files[0];
@@ -22,8 +21,8 @@ export async function upload(
                 let formData = new FormData();
                 formData.append("file", file);
                 const ipfsResponse = await fetch(
-                    ipfsEndpoint,
-                    { method: "POST", body: formData, referrer: "" }
+                    "https://ipfs.dchan.network/ipfs",
+                    { method: "POST", body: formData }
                 );
 
                 console.log("ipfs.upload", { ipfsResponse });
