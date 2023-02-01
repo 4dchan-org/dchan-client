@@ -21,7 +21,7 @@ export async function upload(
                 let formData = new FormData();
                 formData.append("file", file);
                 const ipfsResponse = await fetch(
-                    "https://ipfs.dchan.network/ipfs",
+                    "https://ipfs.dchan.network/ipfs/",
                     { method: "POST", body: formData }
                 );
 
