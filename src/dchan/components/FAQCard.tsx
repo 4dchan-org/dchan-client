@@ -101,9 +101,6 @@ export const FAQCard = ({
             's blockchain and whose images are stored on <IPFS />, using{" "}
             <TheGraph /> to index and serve the content in a decentralized
             manner.
-            <br />
-            None of the content you see is hosted on <DchanNetwork />
-            's servers.
           </div>
         </div>
 
@@ -117,7 +114,7 @@ export const FAQCard = ({
             's content exactly as it was whenever in the past.
             <br />
             This also means that there is no need for an archive, as it is
-            already built in the protocol. Use the
+            already built in the protocol. Use the{" "}
             <Emoji emoji={"⏪"} /> button in the header to try it out!
           </div>
         </div>
