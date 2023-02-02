@@ -33,6 +33,7 @@ export const IPFSImage = ({
   ]);
   const [imgError, setImgError] = useState<any>(false);
   const [imgLoading, setImgLoading] = useState<boolean>(true);
+  //const imgLoading = true;
   const [imgSrc, setImgSrc] = useState<string>();
   const [showSpoiler, setShowSpoiler] = useState<boolean>(false);
   const [showNsfw, setShowNsfw] = useState<boolean>(false);
@@ -166,7 +167,7 @@ export const IPFSImage = ({
         <span>
           <div>
             <div>
-              {imgLoading && imgSrc ? (
+              {imgLoading ? (
                 <div className="relative center grid">
                   <img
                     className={thumbnailClass+ " animation-download"}
@@ -176,11 +177,11 @@ export const IPFSImage = ({
                     alt={``}
                   />
                   <div
-                    className="p-2 text-xs absolute top-0 left-0 opacity-50"
+                    className="p-2 text-xs opacity-80 absolute top-0 left-0 bg-primary"
                     title={`Retrieving image from IPFS.`}
                   >
-                    IPFS is loading...
-                    <div>Attempting {new URL(imgSrc).hostname}</div>
+                    Loading from IPFS...
+                    {imgSrc ? <div>Attempting {new URL(imgSrc).hostname}</div> : <></>}
                   </div>
                 </div>
               ) : imgError ? (
