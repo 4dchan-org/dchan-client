@@ -47,6 +47,16 @@ export const ContentNavigation = ({
           </Link>
           ]
         </span>
+        <span className="pr-1">
+          [
+          <Link
+            className="dchan-link"
+            to={`${Router.board(board, "archive")}${timeTravelURL}`}
+          >
+            Archive
+          </Link>
+          ]
+        </span>
       </span>
 
       <Anchor to="#bottom" label="Bottom" />

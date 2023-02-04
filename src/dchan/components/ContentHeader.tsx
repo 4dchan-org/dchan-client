@@ -12,12 +12,14 @@ import useTimeTravel from "dchan/hooks/useTimeTravel";
 import { DateTime } from "luxon";
 
 export const ContentHeader = ({
+  archive,
   board,
   thread,
   title,
   summary,
   onRefresh,
 }: {
+  archive?: boolean;
   board?: Board | null;
   thread?: Thread;
   title?: string;
@@ -74,7 +76,7 @@ export const ContentHeader = ({
           )}
         </div>
         <div className="flex flex-wrap justify-center md:justify-end items-center pr-2">
-          {!thread && !!board ? <BoardViewSettings /> : ""}
+          {!archive && !thread && !!board ? <BoardViewSettings /> : ""}
         </div>
 
         <div className="w-screen">

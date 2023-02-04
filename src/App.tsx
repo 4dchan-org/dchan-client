@@ -9,6 +9,7 @@ import {
 
 import {
   AdminPage,
+  ArchivePage,
   BoardPage,
   BoardListPage,
   HomePage,
@@ -43,6 +44,17 @@ function App() {
             <Route path="/_/posts" component={PostsPage} />
             <Route path="/0x:id/:post_n" component={ReferencePage} />
             <Route path="/0x:id" component={IdReferencePage} />
+            <Route
+              path="/:board_name/0x:board_id/archive"
+              render={(props) => (
+                <ArchivePage
+                  location={props.location}
+                  match={props.match}
+                  pageTheme={pageTheme}
+                  setPageTheme={setPageTheme}
+                />
+              )}
+            />
             <Route
               path="/:board_name/0x:board_id/:view_mode(index|catalog)"
               render={(props) => (

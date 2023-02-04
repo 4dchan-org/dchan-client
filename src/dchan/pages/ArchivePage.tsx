@@ -2,7 +2,7 @@ import { useLocalSettings, useTimeTravel } from "dchan/hooks";
 import { parse as parseQueryString } from "query-string";
 import { Board, BoardRef, Thread } from "dchan/subgraph/types";
 import { useEffect, useMemo } from "react";
-import { BOARD_GET, BOARD_CATALOG } from "dchan/subgraph/graphql/queries";
+import { BOARD_GET, BOARD_ARCHIVE } from "dchan/subgraph/graphql/queries";
 import { useQuery } from "@apollo/react-hooks";
 import { isLowScore } from "dchan/subgraph/entities/thread";
 import {
@@ -10,20 +10,19 @@ import {
   ContentHeader,
   Loading,
   Anchor,
-  CatalogView,
-  IndexView,
   Paging,
 } from "dchan/components";
+import { Router } from "router";
 import { useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
 import { DateTime } from "luxon";
 
-interface BoardCatalogData {
+interface ArchiveData {
   board: Board;
   pinned: Thread[];
   threads: Thread[];
 }
-interface BoardCatalogVars {
+interface ArchiveVars {
   board: string;
   block: number;
   limit: number;
@@ -39,7 +38,7 @@ interface BoardVars {
   block: number;
 }
 
-export const BoardPage = ({
+export const ArchivePage = ({
   location,
   match: { params },
   pageTheme,
@@ -53,13 +52,16 @@ export const BoardPage = ({
   let { board_id, board_name } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 
-  const { timeTraveledToBlockNumber, lastBlock } = useTimeTravel();
+  const { timeTraveledToBlockNumber, lastBlock, currentBlock } = useTimeTravel();
   const query = parseQueryString(location.search);
   const page = parseInt(`${query.page || "1"}`);
 
   const history = useHistory();
   const [settings] = useLocalSettings();
-  const { currentBlock } = useTimeTravel();
+  const block = Number(timeTraveledToBlockNumber || lastBlock?.number);
+
+  const limit = 100
+
   const cutoff = useMemo(
     () =>
       Math.floor(
@@ -70,30 +72,21 @@ export const BoardPage = ({
       ),
     [currentBlock]
   );
-  const block = Number(timeTraveledToBlockNumber || lastBlock?.number);
-  const boardMode: string =
-    params.view_mode ||
-    settings?.content_view?.board_default_view_mode ||
-    "catalog";
-  const orderBy =
-    settings?.content_view?.board_sort_threads_by || "lastBumpedAt";
-  const limit = parseInt(`${settings?.content_view?.page_size || "100"}`);
 
   const variables = {
     board: board_id,
     block,
-    orderBy,
     orderDirection: settings?.content_view?.board_sort_direction || "desc",
     limit,
-    skip: limit * (page - 1),
     cutoff,
+    skip: limit * (page - 1),
   };
 
   const {
     refetch,
     data: catalogData,
     loading: catalogLoading,
-  } = useQuery<BoardCatalogData, BoardCatalogVars>(BOARD_CATALOG, {
+  } = useQuery<ArchiveData, ArchiveVars>(BOARD_ARCHIVE, {
     variables,
   });
 
@@ -126,7 +119,7 @@ export const BoardPage = ({
 
   useEffect(() => {
     refetch();
-  }, [block, orderBy, refetch]);
+  }, [block, refetch]);
 
   const filteredThreads = (threads || []).filter((thread: Thread) => {
     return (
@@ -166,14 +159,13 @@ export const BoardPage = ({
             catalogLoading ? (
               <span>...</span>
             ) : (
-              <span>
-                Threads: {threads.length} (Hidden:{" "}
-                {threads.length - filteredThreads.length}
-                ), Posts: {board?.postCount}
+              <span className="font-bold">
+                Displaying threads without replies after 30 days
               </span>
             )
           }
           onRefresh={refetch}
+          archive={true}
         />
         <div>
           {board === null ? (
@@ -199,17 +191,37 @@ export const BoardPage = ({
             threads.length === 0 ? (
               <div className="center grid p-8">No threads.</div>
             ) : (
-              <div>
-                {
-                  ({
-                    catalog: () => (
-                      <CatalogView board={board} threads={filteredThreads} />
-                    ),
-                    index: () => (
-                      <IndexView board={board} threads={filteredThreads} />
-                    ),
-                  }[boardMode] || (() => <></>))()
-                }
+              <div className="center flex">
+                <table className="w-full md:w-4/5 xl:w-3/5 border-separate mt-4 text-xs">
+                  <thead>
+                    <tr>
+                      <td className="p-1 bg-highlight border border-solid border-black font-bold w-2">No.</td>
+                      <td className="p-1 bg-highlight border border-solid border-black font-bold w-full max-w-75vw">Excerpt</td>
+                      <td className="p-1 bg-highlight border border-solid border-black font-bold w-2"></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {threads.map((thread, i) => (
+                    <tr className={i % 2 === 1 ? "bg-primary" : "bg-secondary"}>
+                      <td>{thread.n}</td>
+                      <td className="text-left whitespace-nowrap truncate max-w-75vw">
+                        {thread.subject ? <b>{thread.subject}:</b> : ""}{" "}{thread.op.comment}
+                      </td>
+                      <td>
+                        [
+                        <a
+                          className="dchan-link"
+                          href={Router.thread(thread)}
+                        >
+                          View
+                        </a>
+                        ]
+                      </td>
+                    </tr>
+
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )
           ) : (

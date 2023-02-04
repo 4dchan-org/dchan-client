@@ -2,11 +2,11 @@ import { parse as parseQueryString } from "query-string";
 import { isString } from "lodash";
 import { useLocalSettings } from "dchan/hooks";
 import { useQuery } from "@apollo/react-hooks";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { isLowScore, sortByCreatedAt } from "dchan/subgraph/entities/post";
 import { POST_SEARCH, POST_SEARCH_BLOCK } from "dchan/subgraph/graphql/queries";
 import { Post } from "dchan/subgraph/types";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Router } from "router";
 import {
   Footer,
@@ -35,6 +35,7 @@ export const PostsPage = ({ location, match: { params } }: any) => {
   const page = parseInt(`${query.page || "1"}`);
   const { timeTraveledToBlockNumber: block } = useTimeTravel();
   const [settings] = useLocalSettings();
+  const history = useHistory()
   const limit = 100;
 
   const variables = {
@@ -66,6 +67,10 @@ export const PostsPage = ({ location, match: { params } }: any) => {
   useEffect(() => {
     refetch();
   }, [search, block, refetch]);
+
+  const onSearch = useCallback((search: string) => {
+    history.push(Router.posts({search}));
+  }, [history])
 
   // @TODO >= limit
   const hasNextPage = useMemo(() => data && data.postSearch.length >= 0, [data])
@@ -101,6 +106,7 @@ export const PostsPage = ({ location, match: { params } }: any) => {
             baseUrl={`${Router.posts({search})}${block ? `?block=${block}` : ""}`}
             search={search}
             open={true}
+            onSearch={onSearch}
           />
           {!loading ? (
             <span className="grid center bg-secondary border border-secondary-accent mx-2">

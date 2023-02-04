@@ -1,24 +1,22 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { debounce } from "lodash";
-import { Router } from "router";
 
 export const SearchWidget = ({
   search = "",
-  open = true
+  open = true,
+  onSearch = () => {}
 }: {
   baseUrl: string;
   search?: string;
-  open?: boolean
+  open?: boolean;
+  onSearch?: (search: string) => void
 }) => {
-  const history = useHistory();
   const [displayInput, setDisplayInput] = useState<string>(search || "");
   const setSearch = useCallback(
     (search: string) => {
-      history.push(Router.posts({search}));
       setDisplayInput(search)
     },
-    [history, setDisplayInput]
+    [setDisplayInput]
   );
 
   const inputRef = useRef(null)
@@ -30,18 +28,18 @@ export const SearchWidget = ({
     }
   }, [setSearch]);
 
-  const setSearchDebounce = useMemo(
-    () => debounce(setSearch, 500),
-    [setSearch]
+  const onSearchDebounce = useMemo(
+    () => debounce(onSearch, 500),
+    [onSearch]
   );
 
   const onChange = useCallback(
     (e: any) => {
       const search = e.target.value
       setDisplayInput(search);
-      setSearchDebounce(search);
+      onSearchDebounce(search);
     },
-    [setSearchDebounce]
+    [onSearchDebounce]
   );
 
   return (

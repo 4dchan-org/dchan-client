@@ -1,4 +1,5 @@
 export * from "./AdminPage";
+export * from "./ArchivePage";
 export * from "./BoardPage";
 export * from "./BoardListPage";
 export * from "./BoardSearchPage";

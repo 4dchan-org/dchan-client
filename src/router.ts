@@ -30,7 +30,7 @@ export abstract class Router {
         name,
         id
     }: Board, viewMode?: string) {
-        const urlViewMode = viewMode && ["catalog", "index"].includes(viewMode) ? `/${viewMode}` : "";
+        const urlViewMode = viewMode && ["catalog", "index", "archive"].includes(viewMode) ? `/${viewMode}` : "";
         return !!name && !!id ? `/${name}/${id}${urlViewMode}` : undefined
     }
 
