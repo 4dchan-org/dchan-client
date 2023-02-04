@@ -13,7 +13,7 @@ import {
   Paging,
 } from "dchan/components";
 import { Router } from "router";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
 import { DateTime } from "luxon";
 
@@ -209,12 +209,12 @@ export const ArchivePage = ({
                       </td>
                       <td>
                         [
-                        <a
+                        <Link
                           className="dchan-link"
-                          href={Router.thread(thread)}
+                          to={Router.thread(thread) || "#"}
                         >
                           View
-                        </a>
+                        </Link>
                         ]
                       </td>
                     </tr>

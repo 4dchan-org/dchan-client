@@ -25,6 +25,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Router } from "router";
 import { parse as parseQueryString } from "query-string";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
+import { isExpired } from "dchan/subgraph/entities/thread";
 
 export const DateDisplay = ({ post }: { post: Post }) => {
   const createdAt = fromBigInt(post.createdAtBlock.timestamp);
@@ -233,7 +234,7 @@ export const PostHeader = ({
             {n}
           </span>
         </span>
-        <span>
+        <span className="px-2">
           {isOp && isPinned ? (
             <span title="Thread pinned. This might be important.">
               <Emoji emoji={"📌"} />
@@ -244,6 +245,13 @@ export const PostHeader = ({
           {isOp && isLocked ? (
             <span title="Thread locked. You cannot reply anymore.">
               <Emoji emoji={"🔒"} />
+            </span>
+          ) : (
+            <span></span>
+          )}
+          {isOp && isExpired(thread) ? (
+            <span title="Thread archived. You can still reply.">
+              <Emoji emoji={"📁"} />
             </span>
           ) : (
             <span></span>
