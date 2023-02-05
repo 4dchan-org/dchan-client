@@ -161,7 +161,7 @@ export const PostHeader = ({
   }, [addFavorite, removeFavorite, thread, favorite]);
 
   return (
-    <span className="max-w-95vw inline-flex flex-wrap items-center relative">
+    <span className="max-w-95vw inline-flex flex-wrap items-center">
       {isOp && thread ? (
         <button
           className={`inline-block ${
@@ -233,36 +233,6 @@ export const PostHeader = ({
           >
             {n}
           </span>
-        </span>
-        <span className="px-2">
-          {isOp && isPinned ? (
-            <span title="Thread pinned. This might be important.">
-              <Emoji emoji={"📌"} />
-            </span>
-          ) : (
-            <span></span>
-          )}
-          {isOp && isLocked ? (
-            <span title="Thread locked. You cannot reply anymore.">
-              <Emoji emoji={"🔒"} />
-            </span>
-          ) : (
-            <span></span>
-          )}
-          {isOp && isExpired(thread) ? (
-            <span title="Thread archived. You can still reply.">
-              <Emoji emoji={"📁"} />
-            </span>
-          ) : (
-            <span></span>
-          )}
-          {isLowScore(post, settings?.content_filter?.score_threshold) ? (
-            <span title="Post hidden due to reports. Click to show anyway.">
-              <Emoji emoji={"⚠️"} />
-            </span>
-          ) : (
-            <span></span>
-          )}
         </span>
         <Menu>
           <div>
@@ -362,6 +332,36 @@ export const PostHeader = ({
             ""
           )}
         </Menu>
+        <span className="px-2">
+          {isOp && isPinned ? (
+            <span title="Thread pinned. This might be important.">
+              <Emoji emoji={"📌"} />
+            </span>
+          ) : (
+            <span></span>
+          )}
+          {isOp && isLocked ? (
+            <span title="Thread locked. You cannot reply anymore.">
+              <Emoji emoji={"🔒"} />
+            </span>
+          ) : (
+            <span></span>
+          )}
+          {isOp && isExpired(thread) ? (
+            <span title="Thread archived. You can still reply.">
+              <Emoji emoji={"📁"} />
+            </span>
+          ) : (
+            <span></span>
+          )}
+          {isLowScore(post, settings?.content_filter?.score_threshold) ? (
+            <span title="Post hidden due to reports. Click to show anyway.">
+              <Emoji emoji={"⚠️"} />
+            </span>
+          ) : (
+            <span></span>
+          )}
+        </span>
       </span>
       {children}
       <span className="dchan-backlinks text-left text-xs flex flex-wrap">

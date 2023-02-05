@@ -403,11 +403,11 @@ export const FormPost = ({
       ) : !!thread || !!board ? (
         <div>
           {showForm ? (
-            <div className="grid center w-full text-left sticky top-0 min-h-200px">
+            <div className="sm:grid center w-full text-left sticky top-0 min-h-200px">
               <form
                 ref={formRef}
                 id="dchan-post-form"
-                className="grid center bg-primary p-2 pointer-events-auto bg-primary select-none"
+                className="sm:grid center bg-primary p-2 pointer-events-auto bg-primary select-none overflow-scroll"
                 onSubmit={handleSubmit(onSubmit)}
                 onBlur={onBlur}
                 onChange={onChange}
