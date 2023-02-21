@@ -4,7 +4,6 @@ import { Board, BoardRef, Thread } from "dchan/subgraph/types";
 import { useEffect, useMemo } from "react";
 import { BOARD_GET, BOARD_ARCHIVE } from "dchan/subgraph/graphql/queries";
 import { useQuery } from "@apollo/react-hooks";
-import { isLowScore } from "dchan/subgraph/entities/thread";
 import {
   Footer,
   ContentHeader,
@@ -121,19 +120,12 @@ export const ArchivePage = ({
     refetch();
   }, [block, refetch]);
 
-  const filteredThreads = (threads || []).filter((thread: Thread) => {
-    return (
-      settings?.content_filter?.show_below_threshold ||
-      !isLowScore(thread, settings?.content_filter?.score_threshold)
-    );
-  });
-
   useTitle(
     !boardLoading
       ? board
-        ? `/${board.name}/ - dchan.network - [${board.id}]`
-        : `??? - dchan.network - [${board_id}]`
-      : `Loading... - dchan.network - [${board_id}]`
+        ? `/${board.name}/ - 4dchan.org - [${board.id}]`
+        : `??? - 4dchan.org - [${board_id}]`
+      : `Loading... - 4dchan.org - [${board_id}]`
   );
 
   useEffect(() => {

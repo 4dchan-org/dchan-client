@@ -42,15 +42,15 @@ export const Polygon = () => {
   );
 };
 
-export const DchanNetwork = () => {
+export const Dchan = () => {
   return (
     <a
       className="dchan-link"
-      href="//dchan.network/"
+      href="//4dchan.org/"
       target="_blank"
       rel="noreferrer"
     >
-      dchan.network
+      4dchan.org
     </a>
   );
 };
@@ -81,14 +81,14 @@ export const FAQCard = ({
         <div className="pb-2">
           <strong>Q: What is this?</strong>
           <div>
-            This is <DchanNetwork />, a decentralized time-traveling imageboard.
+            This is <Dchan />, a decentralized time-traveling imageboard.
           </div>
         </div>
 
         <div className="pb-2">
           <strong>Q: ...Decentralized?</strong>
           <div>
-            <DchanNetwork /> is a{" "}
+            <Dchan /> is a{" "}
             <a
               className="dchan-link"
               target="_blank"
@@ -107,10 +107,10 @@ export const FAQCard = ({
         <div className="pb-2">
           <strong>Q: ...Time-Traveling?</strong>
           <div>
-            <DchanNetwork />
+            <Dchan />
             's backend is powered by <TheGraph />, which is capable of obtaining
             data as it was at any point in time, allowing you to browse{" "}
-            <DchanNetwork />
+            <Dchan />
             's content exactly as it was whenever in the past.
             <br />
             This also means that there is no need for an archive, as it is
@@ -122,7 +122,7 @@ export const FAQCard = ({
         <div className="pb-2">
           <strong>Q: ...Imageboard?</strong>
           <div>
-            <DchanNetwork /> is a simple image-based bulletin board where anyone
+            <Dchan /> is a simple image-based bulletin board where anyone
             can post comments, share images and create boards. It is heavily
             inspired by 4chan.
           </div>
@@ -162,14 +162,14 @@ export const FAQCard = ({
             should also work.
             <br />
             You'll need to connect your crypto wallet to post on{" "}
-            <DchanNetwork />.
+            <Dchan />.
           </div>
         </div>
 
         <div className="pb-2">
           <strong>Q: Is it free?</strong>
           <div>
-            Browsing <DchanNetwork /> is free, but you will need a crypto wallet
+            Browsing <Dchan /> is free, but you will need a crypto wallet
             and some <Polygon /> to pay the transaction fee in order to post.
             <br />
             At the time of writing this FAQ (December 2022) the transaction fee
@@ -192,17 +192,17 @@ export const FAQCard = ({
           <strong>Q: Is it uncensorable?</strong>
           <div>
             Kind of. While the content and actions cannot be deleted from{" "}
-            <Polygon /> and <IPFS />, <DchanNetwork /> can still refuse to show
+            <Polygon /> and <IPFS />, <Dchan /> can still refuse to show
             that content.
             <br />
             All the infrastructure required to display content on{" "}
-            <DchanNetwork /> is controlled by <DchanNetwork />.
+            <Dchan /> is controlled by <Dchan />.
             <br />
-            That means that <DchanNetwork /> can choose what <DchanNetwork />
+            That means that <Dchan /> can choose what <Dchan />
             's users can and cannot see, censor content, change rules, ban
             whoever for whatever reason, shut down the website, and anything
-            else considered necessary to protect <DchanNetwork />
-            's users and <DchanNetwork /> itself from malicious actors.
+            else considered necessary to protect <Dchan />
+            's users and <Dchan /> itself from malicious actors.
             <br />
             <i>
               <u>HOWEVER</u>.
@@ -217,9 +217,9 @@ export const FAQCard = ({
             What what can be done is, at most, hide actions/content which is
             considered malicious.
             <br />
-            Even if <DchanNetwork /> wanted to nuke absolutely everything and
+            Even if <Dchan /> wanted to nuke absolutely everything and
             shut down its servers, it would still mean that, at best, content
-            would not be shown on <DchanNetwork />.
+            would not be shown on <Dchan />.
             <br />
             It would still be possible for anyone to deploy a client and a
             subgraph that bypasses this censoring, as{" "}
@@ -256,7 +256,7 @@ export const FAQCard = ({
         <div className="pb-2">
           <strong>Q: How does this work?</strong>
           <div>
-            <DchanNetwork /> stores posts, threads and boards on the blockchain.
+            <Dchan /> stores posts, threads and boards on the blockchain.
             <br />
             Users post and interact with the website through{" "}
             <a
@@ -305,7 +305,7 @@ export const FAQCard = ({
 
         <div className="pb-2">
           <strong>
-            Q: Does <DchanNetwork /> use cookies?
+            Q: Does <Dchan /> use cookies?
           </strong>
           <div>
             No. Web3 dapps don't use centralized servers, and thus
@@ -316,7 +316,7 @@ export const FAQCard = ({
 
         <div className="pb-2">
           <strong>
-            Q: Does <DchanNetwork /> have a token? I need a useless shitcoin to
+            Q: Does <Dchan /> have a token? I need a useless shitcoin to
             lose my life savings on.
           </strong>
           <div>Not right now. In the future, when the time is right.</div>
@@ -324,12 +324,12 @@ export const FAQCard = ({
 
         <div className="pb-2">
           <strong>
-            Q: Will the <DchanNetwork /> token *insert anything here* ?
+            Q: Will the <Dchan /> token *insert anything here* ?
           </strong>
           <div>
             Nothing has been decided.
             <br />
-            The only set rule is that <DchanNetwork /> will not require any
+            The only set rule is that <Dchan /> will not require any
             token to post except for the transaction fee.
           </div>
         </div>
@@ -339,9 +339,9 @@ export const FAQCard = ({
             Q: I acted like a dipshit and got banned! Muh free speech??
           </strong>
           <div>
-            If you are not happy with the way <DchanNetwork /> is moderated, I
-            encourage you to fork off the code and make your own <DchanNetwork />, with
-            (or without) all the posts and boards from <DchanNetwork />. <br />
+            If you are not happy with the way <Dchan /> is moderated, I
+            encourage you to fork off the code and make your own <Dchan />, with
+            (or without) all the posts and boards from <Dchan />. <br />
             All the tools are at your disposal, see{" "}
             <a
               className="dchan-link"
@@ -382,7 +382,7 @@ export const FAQCard = ({
           <div>
             You can run the client locally... somewhat. If you're on desktop,
             you can save the page and open it with your browser, so that if{" "}
-            <DchanNetwork /> ever goes down you can still use the client. <br />
+            <Dchan /> ever goes down you can still use the client. <br />
             You may incur in some bugs like missing logos or being unable to
             post, but you should be able to view the content just fine as long
             as you are online.
@@ -394,17 +394,17 @@ export const FAQCard = ({
             Q: Is there an official Twitter/Telegram/Discord/Mastodon...?
           </strong>
           <div>
-            <DchanNetwork /> does not have any official online presence outside
-            of <DchanNetwork /> itself.
+            <Dchan /> does not have any official online presence outside
+            of <Dchan /> itself.
             <br />
             <b>
               Do not trust any account or group who claims to be associated to{" "}
-              <DchanNetwork />
+              <Dchan />
             </b>
             .
             <br />
             Any account or group that claims to be officially endorsed by{" "}
-            <DchanNetwork /> is either an impersonator, a scammer, or worse.
+            <Dchan /> is either an impersonator, a scammer, or worse.
           </div>
         </div>
 

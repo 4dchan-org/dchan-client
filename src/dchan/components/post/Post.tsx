@@ -8,6 +8,7 @@ import {
   useUser,
   useTimeTravel,
 } from "dchan/hooks";
+import { getIPFSImgSrcs } from "dchan/services/ipfs";
 import { truncate, isEqual } from "lodash";
 import {
   ReactElement,
@@ -127,7 +128,7 @@ export const Post = memo(
       }
     });
 
-    const ipfsSrc = !!image ? `https://ipfs.dchan.network/ipfs/${image.ipfsHash}` : "";
+    const ipfsSrc = !!image ? getIPFSImgSrcs(image.ipfsHash)[0] : "";
     const isOp = id === thread?.id;
     const isYou = selfUserData?.user?.id === post.from.id;
     const [settings] = useLocalSettings();
@@ -150,7 +151,7 @@ export const Post = memo(
     useEffect(() => {
       fetch(ipfsSrc, { method: "HEAD" }).then((response) => {
         response.status === 200 ? setImgContentLength(Number(response.headers.get("Content-Length"))) : console.error("HEAD", ipfsSrc, { response })
-      });
+      }).catch(err => console.error({err}));
     }, [ipfsSrc, setImgContentLength]);
 
     const bodyClass = [

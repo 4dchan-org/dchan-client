@@ -3,9 +3,9 @@ import { HeaderNavigation, HeaderLogo } from "."
 export const GenericHeader = ({title}: {title: string}) => (
     <header>
         <HeaderNavigation />
-        <HeaderLogo />
-
-        <div className="text-4xl text-contrast font-weight-800 font-family-tahoma">
+        <div className="left-0 absolute"><HeaderLogo /></div>
+        
+        <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative flex center h-20 z-20 pointer-events-none">
             {title}
         </div>
         <div className="p-2">

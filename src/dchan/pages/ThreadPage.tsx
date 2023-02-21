@@ -83,7 +83,7 @@ export const ThreadPage = ({
             return idCheck && numCheck;
           })
         : [];
-    // @NOTE It is possible multiple posts will be found, as per https://dchan.network/#/0x19110a8734d710406836a2b4a7f5f61ddf3743181029b8e2ff3826c6c916f1d5
+    // @NOTE It is possible multiple posts will be found, as per https://4dchan.org/#/0x19110a8734d710406836a2b4a7f5f61ddf3743181029b8e2ff3826c6c916f1d5
     if (filtered.length > 0) {
       const post = filtered[0];
       // redirect to standard URL no matter what
@@ -130,8 +130,8 @@ export const ThreadPage = ({
     board && thread
       ? `/${board.name}/ - ${
           thread.subject || thread.op.comment
-        } - dchan.network - [${thread.id}]`
-      : `/${board_id}/ - Loading... - dchan.network`
+        } - 4dchan.org - [${thread.id}]`
+      : `/${board_id}/ - Loading... - 4dchan.org`
   );
 
   return (

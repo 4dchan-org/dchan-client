@@ -141,7 +141,7 @@ export const TimeTravelWidget = forwardRef(
                           </span>
                           <Emoji emoji={"⏪"} />
                         </div>{" "}
-                        Time traveled to
+                        <strong>Time traveled</strong> to
                       </span>
                     ) : (
                       <span

@@ -15,7 +15,7 @@ import {
 } from "dchan/components";
 
 export const HomePage = () => {
-  useTitle("dchan.network");
+  useTitle("4dchan.org");
 
   const [board, setBoard] = useState<Board>();
   const [highlight, setHighlight] = useState<Board>();
@@ -47,8 +47,13 @@ export const HomePage = () => {
   return (
     <div className="h-screen bg-primary flex flex-col pb-2">
       <HeaderNavigation />
-      <HeaderLogo />
-      <div className="flex flex-grow flex-col grid-cols-2 lg:grid px-4 text-sm">
+      <div className="relative z-20">
+        <div className="h-20 flex items-center bg-primary">
+          <div className="left-0 absolute"><HeaderLogo /></div>
+        </div>
+        <hr />
+      </div>
+      <div className="mt-2 flex flex-grow flex-col grid-cols-2 lg:grid px-4 text-sm">
         <div>
           <Card
             title="Boards"

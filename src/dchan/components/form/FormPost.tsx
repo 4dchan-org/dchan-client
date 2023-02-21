@@ -387,7 +387,7 @@ export const FormPost = ({
   );
 
   return (
-    <div className="z-30">
+    <div className="z-30 pt-2">
       <Wallet />
       <div className="pb-2" />
       {!isJanny && thread?.isLocked ? (

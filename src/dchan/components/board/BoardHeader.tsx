@@ -1,4 +1,4 @@
-import { HeaderNavigation, HeaderLogo, Status, IdLabel, Menu, Emoji } from "dchan/components";
+import { HeaderNavigation, HeaderLogo, Status, Menu, Emoji } from "dchan/components";
 import { Board, Thread } from "dchan/subgraph/types";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -27,17 +27,11 @@ export const BoardHeader = ({
         board={board || undefined}
         thread={thread}
       />
+      
+      <div className="left-0 absolute"><HeaderLogo /></div>
 
-      <HeaderLogo/>
-
-      <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative">
-        <div className="text-xs pb-2">
-          <IdLabel
-            className={board?.id ? "" : "invisible"}
-            id={board?.id || "0x0000000000000000000000000000000000000000"}
-          ></IdLabel>
-        </div>
-        <div>
+      <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative flex center h-20 z-20 pointer-events-none">
+        <div className="dchan-bg-primary-fade-x px-2 h-20 center flex rounded-lg">
           <span>
             {board?.isLocked ? (
               <span title="Board locked. You cannot reply anymore."><Emoji emoji={"🔒"} /></span>
@@ -45,7 +39,7 @@ export const BoardHeader = ({
               <span></span>
             )}
           </span>{" "}
-          <span className={`font-semibold ${!!board?.name || !!title ? "" : "invisible"}`}>
+          <span className={`mt-2 font-semibold ${!!board?.name || !!title ? "" : "invisible"}`}>
             {board === null ? (
               <div>{title ? title : "/?/ - ?????"}</div>
             ) : (
@@ -117,9 +111,7 @@ export const BoardHeader = ({
           )}
         </div>
       </div>
-      <div className="p-2">
-        <hr></hr>
-      </div>
+      <hr />
     </header>
   );
 }

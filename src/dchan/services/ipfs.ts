@@ -19,7 +19,7 @@ export async function upload(
 
             try {
                 const ipfsResponse = await fetch(
-                    "https://ipfs.dchan.network/ipfs/",
+                    "https://ipfs.4dchan.org/ipfs/",
                     {
                         method: "POST",
                         headers: {
@@ -56,3 +56,12 @@ export async function upload(
         }
     }
 };
+
+export function getIPFSImgSrcs(hash: string) {
+    return [
+        `https://ipfs.4dchan.org/ipfs/${hash}`,
+        `https://dweb.link/ipfs/${hash}`,
+        `https://ipfs.io/ipfs/${hash}`,
+        `ipfs://${hash}`
+    ]
+}

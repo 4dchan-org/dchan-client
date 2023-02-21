@@ -58,7 +58,7 @@ export const ContentHeader = ({
         ""
       )}
 
-      <div className="text-center sm:text-left grid xl:grid-cols-3 text-xs xl:sticky top-0 pt-6 z-30 bg-primary">
+      <div className="text-center sm:text-left grid lg:grid-cols-3 text-xs lg:sticky top-0 z-30 bg-primary">
         <div className="mx-2 flex flex-wrap sm:flex-nowrap justify-center md:justify-start items-center select-none">
           {board ? <ContentNavigation board={board} /> : <span />}
 

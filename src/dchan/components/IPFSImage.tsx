@@ -5,6 +5,7 @@ import ipfsLoadingSrc from "assets/images/ipfs.png";
 import ipfsErrorSrc from "assets/images/ipfs_error.png";
 import useMouse from "@react-hook/mouse-position";
 import { useWindowSize } from "react-use";
+import { getIPFSImgSrcs } from "dchan/services/ipfs"
 
 export const IPFSImage = ({
   hash,
@@ -26,11 +27,7 @@ export const IPFSImage = ({
   thumbnailClass?: string;
 }) => {
   const mouseRef = useRef(null);
-  const [imgSrcs, setImgSrcs] = useState<string[]>([
-    `https://ipfs.dchan.network/ipfs/${hash}`,
-    `https://dweb.link/ipfs/${hash}`,
-    `https://ipfs.io/ipfs/${hash}`,
-  ]);
+  const [imgSrcs, setImgSrcs] = useState<string[]>(getIPFSImgSrcs(hash));
   const [imgError, setImgError] = useState<any>(false);
   const [imgLoading, setImgLoading] = useState<boolean>(true);
   //const imgLoading = true;
@@ -181,7 +178,7 @@ export const IPFSImage = ({
                     title={`Retrieving image from IPFS.`}
                   >
                     Loading from IPFS...
-                    {imgSrc ? <div>Attempting {new URL(imgSrc).hostname}</div> : <></>}
+                    {imgSrc ? <div>Attempting <i>{new URL(imgSrc).hostname}</i></div> : <></>}
                   </div>
                 </div>
               ) : imgError ? (

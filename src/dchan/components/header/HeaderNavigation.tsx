@@ -98,20 +98,20 @@ export const HeaderNavigation = ({
 
   const boards = data?.boards;
   return (
-    <div className="mb-8 dchan-header-navigation">
+    <div className="mb-6 dchan-header-navigation">
       <div className="text-sm p-01 border-solid border-bottom-tertiary-accent bg-secondary border-0 border-b-2 text-left fixed top-0 left-0 right-0 shadow-md z-50">
         <span className="text-black text-opacity-50 hover:text-opacity-100 dchan-brackets">
           <Link
             className="dchan-link font-bold"
             to={`/${block ? `?block=${block}` : ""}`}
           >
-            dchan.network
+            4dchan.org
           </Link>
         </span>
         {board ? <BoardLink board={board} /> : <></>}
         <span className="text-black text-opacity-50 hover:text-opacity-100 select-none px-1">
           <span className="inline dchan-brackets" onClick={toggleShowBoards}>
-            <span className="dchan-link">+</span>
+            <span className="dchan-link w-2 inline-block text-center">{showBoards ? "-" : "+"}</span>
           </span>
           <span className={showBoards ? "hidden md:inline" : "hidden"}>
             <span className="hidden sm:inline-block dchan-brackets">

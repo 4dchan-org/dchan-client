@@ -1,6 +1,6 @@
 dchan-client
 -----
-Official client for the [dchan.network](https://dchan.network) decentralized imageboard.
+Official client for the [4dchan.org](https://4dchan.org) decentralized imageboard.
 
 * Lightweight
 * IPFS hostable
@@ -23,6 +23,6 @@ Required:
 - `./bin/docker/build.sh`
 
 # Links
-- Official website: https://dchan.network/
+- Official website: https://4dchan.org/
 - Source: https://github.com/dchan-network/dchan-client
 - More Source: https://github.com/dchan-network/

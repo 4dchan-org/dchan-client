@@ -40,7 +40,7 @@ export const PostsPage = ({ location, match: { params } }: any) => {
 
   const variables = {
     block,
-    search: search.length > 1 ? `${search}:*` : "*:*",
+    search: search.length > 1 ? `${search.trim().split(" ").join(" & ")}` : "*:*",
     limit,
     skip: (page - 1) * limit
   };

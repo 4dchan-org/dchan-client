@@ -13,7 +13,7 @@ export function AbuseCard() {
           retrieved via IPFS directly by the users.
           <br />
           It is important to understand that due to the nature of IPFS, it may
-          not be possible to fully delete media once it has been uploaded.
+          not be possible to fully delete uploaded media.
           <br />
           When a file is uploaded to IPFS, it is distributed across the network
           and stored on multiple nodes, meaning that once a file has been added
@@ -22,23 +22,18 @@ export function AbuseCard() {
           and not within the capabilities of this dapp's owners.
           <br />
           Therefore, users are advised to be cautious when uploading sensitive
-          or personal information to IPFS.
-          <br />
-          No one can guarantee that media will be fully deleted or inaccessible
-          even if it has been removed from this dapp.
+          or personal information, or content which may be deemed illegal 
+          by any jurisdiction: use IPFS responsibly and
+          always consider the potential long-term consequences of the media you
+          are uploading.
           <br />
           By using IPFS, you understand and agree that you are solely
           responsible for the persistence and/or availability of the media
-          uploaded to the network.
-          <br />
-          Users are strongly encouraged to use the dapp responsibly and to
-          always consider the potential long-term consequences of the media they
-          are uploading.
+          uploaded to the network. 
           <br />
         </div>
         <hr />
         <div className="p-2">
-          <strong>Abuse Policy</strong>
           <br />
           The policy regarding the handling of copyright infringement claims
           (DMCA) and of child sexual abuse material (CSAM) on this
@@ -58,9 +53,9 @@ export function AbuseCard() {
             className="dchan-link"
             target="_blank"
             rel="noreferrer"
-            href="mailto:dmca@dchan.network"
+            href="mailto:dmca@4dchan.org"
           >
-            dmca@dchan.network
+            dmca@4dchan.org
           </a>
           <br />
           <ul className="list-disc p-4">
@@ -101,9 +96,9 @@ export function AbuseCard() {
             className="dchan-link"
             target="_blank"
             rel="noreferrer"
-            href="mailto:csam@dchan.network"
+            href="mailto:csam@4dchan.org"
           >
-            csam@dchan.network
+            csam@4dchan.org
           </a>
           .
           <br />
@@ -122,9 +117,9 @@ export function AbuseCard() {
             className="dchan-link"
             target="_blank"
             rel="noreferrer"
-            href="mailto:abuse@dchan.network"
+            href="mailto:abuse@4dchan.org"
           >
-            abuse@dchan.network
+            abuse@4dchan.org
           </a>
           .
         </div>

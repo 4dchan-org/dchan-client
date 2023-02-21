@@ -28,7 +28,7 @@ export type Settings = {
 }
 
 export const useLocalSettings = () => {
-    return useLocalStorageState('dchan.network.settings', {
+    return useLocalStorageState('4dchan.org.settings', {
         defaultValue: DefaultSettings
     })
 }

@@ -138,9 +138,9 @@ export const BoardPage = ({
   useTitle(
     !boardLoading
       ? board
-        ? `/${board.name}/ - dchan.network - [${board.id}]`
-        : `??? - dchan.network - [${board_id}]`
-      : `Loading... - dchan.network - [${board_id}]`
+        ? `/${board.name}/ - 4dchan.org - [${board.id}]`
+        : `??? - 4dchan.org - [${board_id}]`
+      : `Loading... - 4dchan.org - [${board_id}]`
   );
 
   useEffect(() => {

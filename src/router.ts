@@ -38,7 +38,7 @@ export abstract class Router {
         return `/_/posts${search ? `?search=${search}`: ``}`
     }
 
-    public static boards() {
-        return `/_/boards`
+    public static boards({search}: {search?: string} | undefined = {}) {
+        return `/${search || "_/boards"}`
     }
 }

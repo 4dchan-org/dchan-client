@@ -1,7 +1,7 @@
 import useLocalStorageState from 'use-local-storage-state'
 
 const useEula = () => {
-    return useLocalStorageState('dchan.network.eula.accepted', {
+    return useLocalStorageState('4dchan.org.eula.accepted', {
         defaultValue: false
     })
 }

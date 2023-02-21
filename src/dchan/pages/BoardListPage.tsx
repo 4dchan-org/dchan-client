@@ -13,9 +13,10 @@ import { Board } from "dchan/subgraph/types";
 import { parse as parseQueryString } from "query-string";
 import { isString, uniqBy } from "lodash";
 import { Router } from "router";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { BOARDS_SEARCH, BOARDS_SEARCH_BLOCK } from "dchan/subgraph/graphql/queries";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
+import { useHistory } from "react-router-dom";
 
 interface BoardSearchData {
   searchByName: Board[];
@@ -29,6 +30,7 @@ interface BoardSearchVars {
 }
 
 export const BoardListPage = ({ location, match: { params } }: any) => {
+  const history = useHistory()
   const query = parseQueryString(location.search);
   const search =
     `${params?.board_name || ""}` || (isString(query.s) ? query.s : "");
@@ -50,6 +52,10 @@ export const BoardListPage = ({ location, match: { params } }: any) => {
       skip: !search,
     }
   );
+
+  const onSearch = useCallback((search: string) => {
+    history.push(Router.boards({search}));
+  }, [history])
 
   useEffect(() => {
     searchRefetch();
@@ -77,6 +83,7 @@ export const BoardListPage = ({ location, match: { params } }: any) => {
               block ? `?block=${block}` : ""
             }`}
             search={search}
+            onSearch={onSearch}
           />
         </div>
         <div className="">

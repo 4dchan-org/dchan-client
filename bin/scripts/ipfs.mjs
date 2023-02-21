@@ -2,7 +2,7 @@ import { create, globSource } from 'ipfs-http-client'
 import chalk from "chalk"
 import { clearLine } from "readline";
 
-const infura = { host: 'ipfs.dchan.network', 'api-path': '/api/v0/', protocol: 'https', port: '443' };
+const infura = { host: 'ipfs.4dchan.org', 'api-path': '/api/v0/', protocol: 'https', port: '443' };
 
 (async function () {
   const ipfs = await create(infura);

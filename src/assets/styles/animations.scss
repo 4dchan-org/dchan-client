@@ -2,6 +2,18 @@
     animation: spin-keyframes 60s infinite linear;
 }
 
+.animation-spin.spin-second {
+    animation: spin-keyframes 1s infinite linear;
+}
+
+.animation-spin.spin-minute {
+    animation: spin-keyframes 60s infinite linear;
+}
+
+.animation-spin.spin-hour {
+    animation: spin-keyframes 3600s infinite linear;
+}
+
 .animation-spin.spin-fast {
     animation: spin-keyframes 30s infinite linear;
 }
@@ -78,8 +90,26 @@
     }
 }
 
+.animation-fade-out {
+    animation: fade-out-keyframes 1s cubic-bezier(0,.69,.69,1)
+}
+
+@keyframes fade-out-keyframes {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
 .animation-pulse {
     animation: pulse-keyframes 1s linear infinite;
+}
+
+.animation-pulse-once {
+    animation: pulse-keyframes 1s linear;
 }
 
 @keyframes pulse-keyframes {
@@ -91,6 +121,6 @@
 
     100% {
         opacity: 0;
-        transform: translate(0%, 0%) scale(1.25);
+        transform: translate(0%, 0%) scale(2);
     }
 }

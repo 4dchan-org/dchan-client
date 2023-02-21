@@ -15,7 +15,7 @@ export const useLocalFavorites = singletonHook<{
     addFavorite?: (thread: Thread) => void,
     favorites?: Favorites
 }>({}, () => {
-    const [favorites, setFavorites] = useLocalStorageState('dchan.network.favorites', {
+    const [favorites, setFavorites] = useLocalStorageState('4dchan.org.favorites', {
         defaultValue: {} as Favorites
     })
 
