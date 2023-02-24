@@ -124,3 +124,7 @@
 .dchan-bg-primary-fade-x {
     background: linear-gradient(to right, transparent, var(--primary), var(--primary), var(--primary), var(--primary), var(--primary), var(--primary), var(--primary), var(--primary), var(--primary), var(--primary), var(--primary), var(--primary), var(--primary), var(--primary));
 }
+
+.dchan-navigation-sticky {
+    margin-top: -1.5rem;
+}

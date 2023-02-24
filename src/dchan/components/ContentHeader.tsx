@@ -42,7 +42,7 @@ export const ContentHeader = ({
         ""
       ) : thread || board ? (
         isTimeTraveling ? (
-          <span className="opacity-60">Time traveled to {timeTraveledToDateTime?.toLocaleString(DateTime.DATETIME_SHORT)}</span>
+          <span className="opacity-60 mt-2">Time traveled to {timeTraveledToDateTime?.toLocaleString(DateTime.DATETIME_SHORT)}</span>
         ) : (
           <FormPost thread={thread} board={board} />
         )
@@ -51,36 +51,38 @@ export const ContentHeader = ({
       )}
 
       {board !== null ? (
-        <div className="p-2">
+        <div className="p-2 pb-0">
           <hr></hr>
         </div>
       ) : (
         ""
       )}
 
-      <div className="text-center sm:text-left grid lg:grid-cols-3 text-xs lg:sticky top-0 z-30 bg-primary">
-        <div className="mx-2 flex flex-wrap sm:flex-nowrap justify-center md:justify-start items-center select-none">
-          {board ? <ContentNavigation board={board} /> : <span />}
+      <div className="lg:sticky top-0 z-30 pt-6 dchan-navigation-sticky">
+        <div className="text-center sm:text-left grid lg:grid-cols-3 text-xs bg-primary pt-2 lg:pt-0">
+          <div className="mx-2 flex flex-wrap sm:flex-nowrap justify-center md:justify-start items-center select-none">
+            {board ? <ContentNavigation board={board} /> : <span />}
 
-          {!block || (lastBlock && lastBlock.number === block.toString()) ? (
-            <RefreshWidget onRefresh={throttledRefresh} />
-          ) : (
-            ""
-          )}
-        </div>
-        <div className="center grid">
-          {summary ? (
-            <span className="py-2 text-xs text-gray-600">{summary}</span>
-          ) : (
-            <span />
-          )}
-        </div>
-        <div className="flex flex-wrap justify-center md:justify-end items-center pr-2">
-          {!archive && !thread && !!board ? <BoardViewSettings /> : ""}
-        </div>
+            {!block || (lastBlock && lastBlock.number === block.toString()) ? (
+              <RefreshWidget onRefresh={throttledRefresh} />
+            ) : (
+              ""
+            )}
+          </div>
+          <div className="center grid">
+            {summary ? (
+              <span className="py-2 text-xs text-gray-600">{summary}</span>
+            ) : (
+              <span />
+            )}
+          </div>
+          <div className="flex flex-wrap justify-center md:justify-end items-center pr-2">
+            {!archive && !thread && !!board ? <BoardViewSettings /> : ""}
+          </div>
 
-        <div className="w-screen">
-          <hr></hr>
+          <div className="w-screen">
+            <hr></hr>
+          </div>
         </div>
       </div>
     </>

@@ -20,6 +20,8 @@ export const GasPriceWidget = () => {
     }
   }, [gasPrice]);
 
+  const postsLeft = txPrice !== 0 && balance ? Math.floor(balance / txPrice) : null
+
   return (
     <div className="text-xs pt-1 text-gray-400 hover:text-gray-600">
       <small>
@@ -37,8 +39,8 @@ export const GasPriceWidget = () => {
             ) : (
               <></>
             )}
-            {txPrice !== 0 && balance ? (
-              <span>(~{Math.floor(balance / txPrice) || `?`} posts left)</span>
+            {postsLeft ? (
+              <div className="text-gray-700">est. ~{postsLeft} posts left</div>
             ) : (
               ""
             )}

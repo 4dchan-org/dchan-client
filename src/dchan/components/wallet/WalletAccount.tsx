@@ -19,13 +19,14 @@ export const WalletAccount = () => {
       <div>
         {balance !== undefined ? (
           <span>
-            ( {balance.toFixed(4)}
-            <img
-              className="inline h-4 w-4 mx-1"
-              alt="MATIC"
-              src={polygonLogo}
-            />
-            )
+            <span className="flex center text-gray-600">
+              {balance.toFixed(4)}
+              <img
+                className="inline h-4 w-4 mx-1"
+                alt="MATIC"
+                src={polygonLogo}
+              />
+            </span>
             {balance !== undefined && balance < 0.01 ? (
               <div className="p-4">
                 <details>

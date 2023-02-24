@@ -174,7 +174,7 @@ export const IPFSImage = ({
                     alt={``}
                   />
                   <div
-                    className="p-2 text-xs opacity-80 absolute top-0 left-0 bg-primary"
+                    className="p-2 text-xs opacity-80 absolute top-0 left-0 bg-primary animation-fade-in"
                     title={`Retrieving image from IPFS.`}
                   >
                     Loading from IPFS...

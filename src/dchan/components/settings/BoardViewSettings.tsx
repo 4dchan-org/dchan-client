@@ -6,7 +6,7 @@ export const BoardViewSettings = () => {
   return (
     <details>
       <summary>
-        <span>
+        <span className="inline-flex flex-wrap center">
           <span className="whitespace-nowrap">
             <label className="pl-2" htmlFor="dchan-input-view-mode">
               Sort by
