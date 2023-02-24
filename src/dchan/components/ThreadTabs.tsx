@@ -44,7 +44,7 @@ export const ThreadTabs = ({
   return loading ? (
     <div className="border border-solid border-black flex-grow p-2"><Loading /></div>
   ) : data ? (
-    <TabbedCard className={`${className} w-auto`}>
+    <TabbedCard className={`${className} w-auto`} firstTab="Last bumped">
       {
         new Map([
           [

@@ -31,6 +31,11 @@ export const THREAD_FRAGMENT = gql`
       timestamp
       number
     }
+    lastBumpedAt
+    lastBumpedAtBlock {
+      timestamp
+      number
+    }
   }
 `;
 

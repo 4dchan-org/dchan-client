@@ -8,9 +8,9 @@ export function isLowScore({
 }
 
 export function isExpired({
-    createdAtBlock
+    lastBumpedAtBlock
 }: Thread, now?: DateTime) {
-    return (now || DateTime.now()) > DateTime.fromSeconds(Number(createdAtBlock.timestamp)).plus({seconds: THREAD_EXPIRY_SECONDS})
+    return (now || DateTime.now()) > DateTime.fromSeconds(Number(lastBumpedAtBlock.timestamp)).plus({seconds: THREAD_EXPIRY_SECONDS})
 }
 
 export const THREAD_EXPIRY_SECONDS = 60 * 60 * 24 * 30

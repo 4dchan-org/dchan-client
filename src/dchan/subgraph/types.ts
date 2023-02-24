@@ -41,6 +41,8 @@ export type Thread = {
     createdAtBlock: Block,
     subject: string,
     score: string
+    lastBumpedAt: string;
+    lastBumpedAtBlock: Block;
 }
 
 export type ThreadRef = {

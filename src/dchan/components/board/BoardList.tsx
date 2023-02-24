@@ -19,11 +19,11 @@ export const BoardItem = ({
 
   const [isHovering, setIsHovering] = useState(false);
 
-  const handleMouseOver = useCallback(() => {
+  const onMouseOver = useCallback(() => {
     setIsHovering(true);
   }, [setIsHovering]);
 
-  const handleMouseOut = useCallback(() => {
+  const onMouseOut = useCallback(() => {
     setIsHovering(false);
   }, [setIsHovering]);
 
@@ -42,8 +42,8 @@ export const BoardItem = ({
       }`}
       key={id}
       title="Click to view threads on homepage"
-      onMouseOver={handleMouseOver}
-      onMouseOut={handleMouseOut}
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}
       onClick={onClick}
     >
       <td>

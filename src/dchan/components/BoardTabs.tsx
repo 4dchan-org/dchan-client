@@ -35,7 +35,7 @@ export const BoardTabs = ({
   return loading ? (
     <div className=""><Loading /></div>
   ) : data ? (
-    <TabbedCard className={`${className} w-auto`}>
+    <TabbedCard className={`${className} w-auto`} firstTab="Last bumped">
       {
         new Map([
           [
