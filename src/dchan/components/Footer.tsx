@@ -1,7 +1,9 @@
 import polygonSrc from "assets/images/polygon.png";
 import thegraphSrc from "assets/images/thegraph.png";
 import { FAQButton, RulesButton, AbuseButton, Emoji } from ".";
-import { name, version } from "../../../package.json";
+import pkgInfo from "../../../package.json";
+
+const { name, version } = pkgInfo
 
 export const Footer = ({
   showContentDisclaimer = false,

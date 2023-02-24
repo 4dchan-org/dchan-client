@@ -16,7 +16,11 @@ export const Spinner = ({
 }) => (
   <span className={`center flex ${className}`}>
     <img
-      className={`spin-${speed} h-${size} w-${size} ${
+      className={`spin-${speed} ${{
+        16: "h-16 w-16",
+        8: "h-8 w-8",
+        4: "h-4 w-4",
+      }[size]} ${
         reverse ? "animation-direction-reverse" : ""
       } animation-spin pointer-events-none`}
       src={logo}
