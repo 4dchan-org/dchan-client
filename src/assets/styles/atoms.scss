@@ -60,8 +60,16 @@
     background: var(--secondary);
 }
 
+.bg-secondary-accent {
+    background: var(--secondary-accent);
+}
+
 .bg-tertiary {
     background: var(--tertiary);
+}
+
+.bg-tertiary-accent {
+    background: var(--tertiary-accent);
 }
 
 .bg-highlight {

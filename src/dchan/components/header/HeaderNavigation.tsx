@@ -99,7 +99,7 @@ export const HeaderNavigation = ({
   const boards = data?.boards;
   return (
     <div className="mb-6 dchan-header-navigation">
-      <div className="text-sm p-01 border-solid border-bottom-tertiary-accent bg-secondary border-0 border-b-2 text-left fixed top-0 left-0 right-0 shadow-md z-50">
+      <div className="text-sm p-01 border-solid border-bottom-tertiary-accent bg-secondary border-0 border-b-2 text-left fixed top-0 left-0 right-0 shadow-md z-50 flex flex-wrap">
         <span className="text-black text-opacity-50 hover:text-opacity-100 dchan-brackets">
           <Link
             className="dchan-link font-bold"
@@ -141,7 +141,10 @@ export const HeaderNavigation = ({
           </Link>
           ]
         </span>
-        <span className="float-right flex flex-row mx-1">
+        <span className="inline-flex center flex-grow">
+          <span className="bg-tertiary-accent rounded px-2">lol</span>
+        </span>
+        <span className="float-right flex flex-row mr-1">
           <TimeTravelWidget
             ref={timeTravelRef}
             open={openedWidget === OpenedWidgetEnum.TIMETRAVEL}
