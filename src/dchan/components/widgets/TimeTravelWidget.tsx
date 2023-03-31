@@ -132,25 +132,19 @@ export const TimeTravelWidget = forwardRef(
                   <span className="select-none">
                     {isTimeTraveling ? (
                       <span>
-                        <div
-                          className="inline-block relative"
-                          title={`Time traveled to ${timeTraveledToDateTime}!`}
-                        >
-                          <span className="animation-pulse absolute">
-                            <Emoji emoji={"⏪"} />
-                          </span>
-                          <Emoji emoji={"⏪"} />
-                        </div>{" "}
-                        <strong>Time traveled</strong> to
+                        <strong>
+                          <div
+                            className="inline-block relative"
+                            title={`Time traveled to ${timeTraveledToDateTime}!`}
+                          >
+                            <span className="animation-pulse absolute">
+                              Time Traveled
+                            </span>
+                            Time Traveled
+                          </div>
+                        </strong> to
                       </span>
-                    ) : (
-                      <span
-                        className="filter grayscale opacity-30 hover:opacity-100"
-                        title="Currently at present time"
-                      >
-                        <Emoji emoji={"⏪"} />
-                      </span>
-                    )}
+                    ) : (<></>)}
                   </span>
                   <span className="ml-1 text-xs">
                     [
@@ -159,6 +153,22 @@ export const TimeTravelWidget = forwardRef(
                     </span>
                     ]
                   </span>
+                    {isTimeTraveling ? (
+                      <span
+                        className="filter opacity-80 hover:opacity-100 pl-2"
+                        title="Return to present time"
+                        onClick={travelToPresent}
+                      >
+                        <Emoji emoji={"⏩"} />
+                      </span>
+                    ) : (
+                      <span
+                        className="filter grayscale opacity-30 hover:opacity-100 pl-2"
+                        title="Currently at present time"
+                      >
+                        <Emoji emoji={"⏩"} />
+                      </span>
+                    )}
                 </span>
               </div>
               <div className="mx-1 sm:hidden" onClick={onOpen}>

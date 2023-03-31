@@ -31,6 +31,7 @@ export const ContentHeader = ({
     timeTraveledToDateTime,
     lastBlock,
     isTimeTraveling,
+    travelToPresent
   } = useTimeTravel();
   const throttledRefresh = useThrottleCallback(onRefresh, 1, true);
 
@@ -42,7 +43,16 @@ export const ContentHeader = ({
         ""
       ) : thread || board ? (
         isTimeTraveling ? (
-          <span className="opacity-60 mt-2">Time traveled to {timeTraveledToDateTime?.toLocaleString(DateTime.DATETIME_SHORT)}</span>
+          <div className="pt-2">
+            <span className="opacity-60">Time traveled to {timeTraveledToDateTime?.toLocaleString(DateTime.DATETIME_SHORT)}</span>
+            <div className="text-xs text-center">
+              [
+              <button className="dchan-link" onClick={travelToPresent}>
+                Return to present
+              </button>
+              ]
+            </div>
+          </div>
         ) : (
           <FormPost thread={thread} board={board} />
         )
@@ -51,7 +61,7 @@ export const ContentHeader = ({
       )}
 
       {board !== null ? (
-        <div className="p-2 pb-0">
+        <div className="p-4 pb-0">
           <hr></hr>
         </div>
       ) : (

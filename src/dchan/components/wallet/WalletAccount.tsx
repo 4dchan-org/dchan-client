@@ -2,18 +2,19 @@ import { isMaticChainId } from "dchan/services/web3";
 import { UserLabel, Faucets } from "dchan/components";
 import polygonLogo from "assets/images/polygon.png";
 import { useWeb3, useUser } from "dchan/hooks";
+import { User } from "dchan/subgraph";
 
 export const WalletAccount = () => {
   const { provider, accounts, balance, chainId } = useWeb3();
   const user = useUser().data?.user;
   const account = accounts[0];
 
-  return provider && account && user && isMaticChainId(chainId) ? (
+  return provider && account && isMaticChainId(chainId) ? (
     <div className="text-xs center grid">
       <div>
         <span className="px-1">Connected as</span>
         <span key={account}>
-          [<UserLabel user={user} />]
+          [<UserLabel user={user ? user : {address: account} as User} />]
         </span>
       </div>
       <div>

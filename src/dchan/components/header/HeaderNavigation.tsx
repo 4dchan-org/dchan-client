@@ -142,7 +142,6 @@ export const HeaderNavigation = ({
           ]
         </span>
         <span className="inline-flex center flex-grow">
-          <span className="bg-tertiary-accent rounded px-2">lol</span>
         </span>
         <span className="float-right flex flex-row mr-1">
           <TimeTravelWidget
