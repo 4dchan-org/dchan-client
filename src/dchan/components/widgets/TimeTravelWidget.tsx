@@ -44,6 +44,7 @@ export const TimeTravelWidget = forwardRef(
     const [timeTravelRange, setTimeTravelRange] = useState<TimeTravelRange>();
     const {
       currentBlock,
+      nextBlock,
       travelToDateTime,
       travelToBlockNumber,
       travelToPreviousBlock,
@@ -52,6 +53,9 @@ export const TimeTravelWidget = forwardRef(
       lastBlock,
       timeTraveledToBlockNumber,
       timeTraveledToDateTime,
+      isPlayback,
+      setIsPlayback,
+      nextBlockPlaybackAt
     } = useTimeTravel();
 
     const isTimeTraveling = !!currentBlock;
@@ -74,6 +78,14 @@ export const TimeTravelWidget = forwardRef(
       },
       [debouncedNumberChange]
     );
+
+    const onPause = useCallback(() => {
+      setIsPlayback(false)
+    }, [setIsPlayback])
+
+    const onStart = useCallback(() => {
+      setIsPlayback(true)
+    }, [setIsPlayback])
 
     const onInputBlockNumber = useCallback(() => {
       if (timeTravelRange == null) {
@@ -142,33 +154,38 @@ export const TimeTravelWidget = forwardRef(
                             </span>
                             Time Traveled
                           </div>
-                        </strong> to
+                        </strong>{" "}
+                        to
                       </span>
-                    ) : (<></>)}
+                    ) : (
+                      <></>
+                    )}
                   </span>
                   <span className="ml-1 text-xs">
                     [
                     <span className="inline-block min-w-3rem">
-                      {(timeTraveledToDateTime || now).toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)}
+                      {(timeTraveledToDateTime || now).toLocaleString(
+                        DateTime.DATETIME_SHORT_WITH_SECONDS
+                      )}
                     </span>
                     ]
                   </span>
-                    {isTimeTraveling ? (
-                      <span
-                        className="filter opacity-80 hover:opacity-100 pl-2"
-                        title="Return to present time"
-                        onClick={travelToPresent}
-                      >
-                        <Emoji emoji={"⏩"} />
-                      </span>
-                    ) : (
-                      <span
-                        className="filter grayscale opacity-30 hover:opacity-100 pl-2"
-                        title="Currently at present time"
-                      >
-                        <Emoji emoji={"⏩"} />
-                      </span>
-                    )}
+                  {isTimeTraveling ? (
+                    <span
+                      className="filter opacity-80 hover:opacity-100 pl-2"
+                      title="Return to present time"
+                      onClick={travelToPresent}
+                    >
+                      <Emoji emoji={"⏩"} />
+                    </span>
+                  ) : (
+                    <span
+                      className="filter grayscale opacity-30 hover:opacity-100 pl-2"
+                      title="Currently at present time"
+                    >
+                      <Emoji emoji={"⏩"} />
+                    </span>
+                  )}
                 </span>
               </div>
               <div className="mx-1 sm:hidden" onClick={onOpen}>
@@ -198,9 +215,7 @@ export const TimeTravelWidget = forwardRef(
                     required
                     type="datetime-local"
                     id="dchan-timetravel-date-input"
-                    value={(timeTraveledToDateTime || now)
-                      .toISO()
-                      .slice(0, 16)}
+                    value={(timeTraveledToDateTime || now).toISO().slice(0, 16)}
                     onChange={(e) => onDateChange(e.target.value)}
                     min={fromBigInt(timeTravelRange.min.timestamp).toISODate()}
                     max={fromBigInt(timeTravelRange.max.timestamp).toISODate()}
@@ -210,12 +225,6 @@ export const TimeTravelWidget = forwardRef(
               </div>
               <div className="grid align-center text-xs w-full">
                 <span className="mx-auto">
-                  <span
-                    className="dchan-link mr-2"
-                    onClick={travelToPreviousBlock}
-                  >
-                    &lt;
-                  </span>
                   <button className="dchan-link" onClick={onInputBlockNumber}>
                     {`Block #${
                       timeTraveledToBlockNumber ||
@@ -223,9 +232,6 @@ export const TimeTravelWidget = forwardRef(
                       "????????"
                     }`}
                   </button>
-                  <span className="dchan-link ml-2" onClick={travelToNextBlock}>
-                    &gt;
-                  </span>
                 </span>
               </div>
               <div className="text-xs bg-secondary">
@@ -265,14 +271,65 @@ export const TimeTravelWidget = forwardRef(
                     <div>#{timeTravelRange.max.number}</div>
                   </span>
                 </div>
-                <div className="flex center">
+                <div>
                   {isTimeTraveling ? (
-                    <div className="text-xs text-center">
-                      [
-                      <button className="dchan-link" onClick={travelToPresent}>
-                        Return to present
-                      </button>
-                      ]
+                    <div>
+                      <div className="flex center">
+                        <div className="text-xs text-center px-2">
+                          <button
+                            className="dchan-link"
+                            onClick={travelToPresent}
+                            title="Travel To Present"
+                          >
+                            <Emoji emoji={"⏪"} />
+                          </button>
+                        </div>
+                        <div className="text-xs text-center px-2">
+                          <button
+                            className="dchan-link"
+                            onClick={travelToPreviousBlock}
+                            title="Travel To Previous Block"
+                          >
+                            <Emoji emoji={"⬅️"} />
+                          </button>
+                        </div>
+                        <div className="text-xs text-center px-2">
+                          {isPlayback ? <button
+                            className="dchan-link"
+                            onClick={onPause}
+                            title="Pause"
+                          >
+                            <Emoji emoji={"⏸"} />
+                          </button> : <button
+                            className="dchan-link"
+                            onClick={onStart}
+                            title="Start"
+                          >
+                            <Emoji emoji={"▶️"} />
+                          </button>}
+                        </div>
+                        <div className="text-xs text-center px-2">
+                          <button
+                            className="dchan-link"
+                            onClick={travelToNextBlock}
+                            title="Travel To Next Block"
+                          >
+                            <Emoji emoji={"➡️"} />
+                          </button>
+                        </div>
+                        <div className="text-xs text-center px-2">
+                          <button
+                            className="dchan-link"
+                            onClick={travelToPresent}
+                            title="Travel To Present"
+                          >
+                            <Emoji emoji={"⏩"} />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex center mt-1">
+                        {isPlayback && nextBlock && nextBlockPlaybackAt ? `Playing back next block in ${((nextBlockPlaybackAt - new Date().getTime()) / 1000)}s` : ""}
+                      </div>
                     </div>
                   ) : (
                     <div className="mb-4" />

@@ -47,7 +47,6 @@
     "react-singleton-hook": "^4.0.1",
     "react-use": "^17.2.4",
     "sanitize-html": "^2.4.0",
-    "stream": "npm:stream-browserify@3.0.0",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "twemoji": "^14.0.2",

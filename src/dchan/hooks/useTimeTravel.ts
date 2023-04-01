@@ -99,9 +99,12 @@ const useTimeTravel = () => {
     const location = useLocation()
     const { firstBlock, lastBlock } = useBlockRange();
     const [currentBlock, setCurrentBlock] = useState<Block | undefined>();
+    const [nextBlock, setNextBlock] = useState<Block | undefined>();
     const [timeTraveledToBlockNumber, setTimeTraveledToBlockNumber] = useState<number | undefined>()
     const [timeTraveledToDateTime, setTimeTraveledToDateTime] = useState<DateTime | undefined>()
     const [isTimeTraveling, setIsTimeTraveling] = useState(false)
+    const [isPlayback, setIsPlayback] = useState(false)
+    const [nextBlockPlaybackAt, setNextBlockPlaybackAt] = useState<number>()
 
     useEffect(() => {
         if (currentBlock) {
@@ -198,10 +201,27 @@ const useTimeTravel = () => {
         queriedBlock && travelToBlockNumber(queriedBlock)
     }, [location, travelToBlockNumber])
 
+    useEffect(() => {
+        isPlayback && currentBlock && queryGetNextBlock(subgraphClient, currentBlock.number).then(result => {
+            const b = result.data?.blocks?.[0];
+            setNextBlock(b)
+        })
+    }, [isPlayback, currentBlock, subgraphClient])
+
+    useEffect(() => {
+        if(isPlayback && isTimeTraveling && currentBlock && nextBlock) {
+            const timeDiff = Math.min(10, Number(nextBlock.timestamp) - Number(currentBlock.timestamp)) * 1000;
+            console.log({ nextBlock, currentBlock, timeDiff })
+            setNextBlockPlaybackAt(new Date().getTime() + timeDiff)
+            timeDiff && setTimeout(travelToNextBlock, timeDiff);
+        }
+    }, [isTimeTraveling, isPlayback, currentBlock, nextBlock, travelToNextBlock])
+
     return {
         firstBlock,
         lastBlock,
         currentBlock,
+        nextBlock,
         travelToBlock,
         travelToDateTime,
         travelToBlockNumber,
@@ -210,7 +230,10 @@ const useTimeTravel = () => {
         travelToPresent,
         isTimeTraveling,
         timeTraveledToBlockNumber,
-        timeTraveledToDateTime
+        timeTraveledToDateTime,
+        isPlayback,
+        setIsPlayback,
+        nextBlockPlaybackAt
     }
 }
 
@@ -218,6 +241,7 @@ export default singletonHook({
     firstBlock: undefined,
     lastBlock: undefined,
     currentBlock: undefined,
+    nextBlock: undefined,
     travelToBlock: (_) => { },
     travelToDateTime: (_) => { },
     travelToBlockNumber: (_) => { },
@@ -226,5 +250,8 @@ export default singletonHook({
     travelToPresent: () => { },
     isTimeTraveling: false,
     timeTraveledToBlockNumber: 0,
-    timeTraveledToDateTime: DateTime.now()
+    timeTraveledToDateTime: DateTime.now(),
+    isPlayback: false,
+    setIsPlayback: () => { },
+    nextBlockPlaybackAt: undefined
 }, useTimeTravel);
