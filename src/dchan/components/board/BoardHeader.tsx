@@ -31,7 +31,7 @@ export const BoardHeader = ({
       <div className="left-0 absolute"><HeaderLogo /></div>
 
       <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative flex center h-20 z-20 pointer-events-none">
-        <div className="dchan-bg-primary-fade-x px-2 h-20 center flex rounded-lg">
+        <div className="dchan-bg-primary-fade-x px-2 h-20 center flex rounded-lg pointer-events-auto">
           <span>
             {board?.isLocked ? (
               <span title="Board locked. You cannot reply anymore."><Emoji emoji={"🔒"} /></span>

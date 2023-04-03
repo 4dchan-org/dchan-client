@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Board } from "dchan/subgraph/types";
 import { IdLabel, Loading, Emoji } from "dchan/components";
 import { usePubSub } from "dchan/hooks";
@@ -14,8 +14,10 @@ export const BoardItem = ({
 }) => {
   const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const { id, title, postCount, name, isLocked, isNsfw } = board;
+  const url = `/${name}/${id}${block ? `?block=${block}` : ""}`
 
   const { publish } = usePubSub();
+  const history = useHistory();
 
   const [isHovering, setIsHovering] = useState(false);
 
@@ -31,6 +33,10 @@ export const BoardItem = ({
     publish("BOARD_ITEM_SELECT", board);
   }, [board, publish]);
 
+  const onDoubleClick = useCallback(() => {
+    history.push(url)
+  }, [history, url]);
+
   return (
     <tr
       className={`relative ${
@@ -45,6 +51,7 @@ export const BoardItem = ({
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
       onClick={onClick}
+      onDoubleClick={onDoubleClick}
     >
       <td>
         <IdLabel id={id}></IdLabel>
@@ -53,7 +60,7 @@ export const BoardItem = ({
         <span>
           <Link
             className="dchan-link"
-            to={`/${name}/${id}${block ? `?block=${block}` : ""}`}
+            to={url}
           >
             {title}
           </Link>
@@ -63,7 +70,7 @@ export const BoardItem = ({
         <span>
           <Link
             className="dchan-link mx-4"
-            to={`/${name}/${id}${block ? `?block=${block}` : ""}`}
+            to={url}
           >
             /{name}/
           </Link>

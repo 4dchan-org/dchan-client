@@ -125,6 +125,10 @@ const useTimeTravel = () => {
         setCurrentBlock
     ])
 
+    const travelToBeginning = useCallback(() => {
+        firstBlock && setCurrentBlock(firstBlock);
+    }, [firstBlock, setCurrentBlock]);
+
     const travelToPresent = useCallback(() => {
         setCurrentBlock(undefined);
     }, [setCurrentBlock]);
@@ -209,12 +213,17 @@ const useTimeTravel = () => {
     }, [isPlayback, currentBlock, subgraphClient])
 
     useEffect(() => {
+        let timeout: NodeJS.Timeout | undefined = undefined;
         if(isPlayback && isTimeTraveling && currentBlock && nextBlock) {
             const timeDiff = Math.min(10, Number(nextBlock.timestamp) - Number(currentBlock.timestamp)) * 1000;
             console.log({ nextBlock, currentBlock, timeDiff })
             setNextBlockPlaybackAt(new Date().getTime() + timeDiff)
-            timeDiff && setTimeout(travelToNextBlock, timeDiff);
+            if(timeDiff) {
+                timeout = setTimeout(travelToNextBlock, timeDiff);
+            }
         }
+
+        return () => timeout && clearTimeout(timeout)
     }, [isTimeTraveling, isPlayback, currentBlock, nextBlock, travelToNextBlock])
 
     return {
@@ -228,6 +237,7 @@ const useTimeTravel = () => {
         travelToPreviousBlock,
         travelToNextBlock,
         travelToPresent,
+        travelToBeginning,
         isTimeTraveling,
         timeTraveledToBlockNumber,
         timeTraveledToDateTime,
@@ -248,6 +258,7 @@ export default singletonHook({
     travelToPreviousBlock: () => { },
     travelToNextBlock: () => { },
     travelToPresent: () => { },
+    travelToBeginning: () => { },
     isTimeTraveling: false,
     timeTraveledToBlockNumber: 0,
     timeTraveledToDateTime: DateTime.now(),

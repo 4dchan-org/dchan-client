@@ -4,7 +4,7 @@ import React from "react";
 
 export const HeaderLogo = React.memo(({ block }: { block?: string }) => {
   return (
-    <span className="h-20 font-mono center flex select-none">
+    <span className="h-20 font-mono center flex select-none opacity-60 hover:opacity-100">
       <Link className="z-20" to={`/${block ? `?block=${block}` : ""}`}>
         <span className="relative">
           <span>

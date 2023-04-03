@@ -5,7 +5,7 @@ export const GenericHeader = ({title}: {title: string}) => (
         <HeaderNavigation />
         <div className="left-0 absolute"><HeaderLogo /></div>
         
-        <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative flex center h-20 z-20 pointer-events-none">
+        <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative flex center h-20 z-20">
             {title}
         </div>
         <div className="p-2">

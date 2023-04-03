@@ -16,6 +16,7 @@ import {
 } from "dchan/components";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
 import { useUser, useWeb3 } from "dchan/hooks";
+import { subscribe, unsubscribe } from "pubsub-js";
 
 interface BoardListData {
   boards: Board[];
@@ -23,7 +24,7 @@ interface BoardListData {
 
 interface BoardListVars {}
 
-enum OpenedWidgetEnum {
+export enum OpenedWidgetEnum {
   TIMETRAVEL = "TIMETRAVEL",
   SEARCH = "SEARCH",
   WATCHEDTHREADS = "WATCHEDTHREADS",
@@ -66,6 +67,18 @@ export const HeaderNavigation = ({
 
   const user = useUser().data?.user;
 
+  const onWidgetOpen = useCallback((a: string, widget: string) => {
+    widget in OpenedWidgetEnum && setOpenedWidget(widget as OpenedWidgetEnum);
+  }, [setOpenedWidget])
+
+  useEffect(() => {
+    const sub = subscribe("WIDGET_OPEN", onWidgetOpen);
+
+    return () => {
+      unsubscribe(sub);
+    };
+  });
+
   useEffect(() => {
     if (!thread && !board) {
       // persist the current start block until we know it's actually changed
@@ -92,7 +105,7 @@ export const HeaderNavigation = ({
   }, [showBoards, setShowBoards]);
 
   const widgetClass = [
-    "absolute top-0 w-screen sm:w-max mt-1 md:mt-1 left-0 right-0 sm:left-auto sm:right-2 sm:opacity-60 hover:opacity-100",
+    "absolute top-0 w-screen sm:w-max mt-1 md:mt-1 left-0 right-0 sm:left-auto sm:right-2 sm:opacity-90 hover:opacity-100",
     showBoards ? "top-11 md:top-full" : "top-full md:top-6",
   ].join(" ");
 

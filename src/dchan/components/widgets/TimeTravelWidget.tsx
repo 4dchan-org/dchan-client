@@ -55,7 +55,8 @@ export const TimeTravelWidget = forwardRef(
       timeTraveledToDateTime,
       isPlayback,
       setIsPlayback,
-      nextBlockPlaybackAt
+      nextBlockPlaybackAt,
+      travelToBeginning
     } = useTimeTravel();
 
     const isTimeTraveling = !!currentBlock;
@@ -278,8 +279,8 @@ export const TimeTravelWidget = forwardRef(
                         <div className="text-xs text-center px-2">
                           <button
                             className="dchan-link"
-                            onClick={travelToPresent}
-                            title="Travel To Present"
+                            onClick={travelToBeginning}
+                            title="Travel To Beginning"
                           >
                             <Emoji emoji={"⏪"} />
                           </button>
@@ -328,7 +329,7 @@ export const TimeTravelWidget = forwardRef(
                         </div>
                       </div>
                       <div className="flex center mt-1">
-                        {isPlayback && nextBlock && nextBlockPlaybackAt ? `Playing back next block in ${((nextBlockPlaybackAt - new Date().getTime()) / 1000)}s` : ""}
+                        {isPlayback && nextBlock && nextBlockPlaybackAt ? `Next block in ${Math.round((nextBlockPlaybackAt - new Date().getTime()) / 1000)}s` : ""}
                       </div>
                     </div>
                   ) : (

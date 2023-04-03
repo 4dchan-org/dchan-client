@@ -1,7 +1,7 @@
 import { useLocalSettings, useTimeTravel } from "dchan/hooks";
 import { parse as parseQueryString } from "query-string";
 import { Board, BoardRef, Thread } from "dchan/subgraph/types";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { BOARD_GET, BOARD_CATALOG } from "dchan/subgraph/graphql/queries";
 import { useQuery } from "@apollo/react-hooks";
 import { isLowScore } from "dchan/subgraph/entities/thread";
@@ -13,10 +13,12 @@ import {
   CatalogView,
   IndexView,
   Paging,
+  OpenedWidgetEnum,
 } from "dchan/components";
 import { useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
 import { DateTime } from "luxon";
+import { publish } from "pubsub-js";
 
 interface BoardCatalogData {
   board: Board;
@@ -53,7 +55,8 @@ export const BoardPage = ({
   let { board_id, board_name } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 
-  const { timeTraveledToBlockNumber, lastBlock } = useTimeTravel();
+  const { timeTraveledToBlockNumber, lastBlock } =
+    useTimeTravel();
   const query = parseQueryString(location.search);
   const page = parseInt(`${query.page || "1"}`);
 
@@ -154,6 +157,10 @@ export const BoardPage = ({
     setPageTheme(board?.isNsfw ? "nsfw" : "blueboard");
   }, [board, setPageTheme]);
 
+  const onTimeTravel = useCallback(() => {
+    publish("WIDGET_OPEN", OpenedWidgetEnum.TIMETRAVEL);
+  }, [])
+
   return (
     <div
       className="bg-primary min-h-100vh flex flex-col"
@@ -197,19 +204,29 @@ export const BoardPage = ({
             </div>
           ) : board && threads ? (
             threads.length === 0 ? (
-              <div className="center grid p-8">No threads.</div>
+              <>
+                <div className="center grid p-8">No threads.</div>
+                <div className="center grid p-8">
+                    <button
+                      className="dchan-link dchan-brackets"
+                      onClick={onTimeTravel}
+                    >
+                      Time travel!
+                    </button>
+                  </div>
+              </>
             ) : (
               <div>
-                {
-                  ({
+                {(
+                  {
                     catalog: () => (
                       <CatalogView board={board} threads={filteredThreads} />
                     ),
                     index: () => (
                       <IndexView board={board} threads={filteredThreads} />
                     ),
-                  }[boardMode] || (() => <></>))()
-                }
+                  }[boardMode] || (() => <></>)
+                )()}
               </div>
             )
           ) : (
