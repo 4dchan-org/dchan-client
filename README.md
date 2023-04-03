@@ -24,5 +24,5 @@ Required:
 
 # Links
 - Official website: https://4dchan.org/
-- Source: https://github.com/dchan-network/dchan-client
-- More Source: https://github.com/dchan-network/
+- Source: https://github.com/4dchan-org/dchan-client
+- More Source: https://github.com/4dchan-org/

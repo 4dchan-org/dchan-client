@@ -47,7 +47,7 @@ export const Footer = ({
                       className="dchan-link"
                       target="_blank"
                       rel="noreferrer"
-                      href={`https://github.com/dchan-network/dchan-client/commit/${build}`}
+                      href={`https://github.com/4dchan-org/dchan-client/commit/${build}`}
                     >
                       {build}
                     </a>
@@ -87,7 +87,7 @@ export const Footer = ({
                   <div>
                     <a
                       className="dchan-link"
-                      href="//github.com/dchan-network"
+                      href="//github.com/4dchan-org"
                       target="_blank"
                       rel="noreferrer"
                       title="git"
@@ -98,7 +98,7 @@ export const Footer = ({
                   <div>
                     <a
                       className="dchan-link"
-                      href="//github.com/dchan-network/dchan-client/issues/new"
+                      href="//github.com/4dchan-org/dchan-client/issues/new"
                       target="_blank"
                       rel="noreferrer"
                       title="Report a bug"
@@ -109,7 +109,7 @@ export const Footer = ({
                   <div>
                     <a
                       className="dchan-link"
-                      href="//github.com/dchan-network/dchan-client/graphs/contributors"
+                      href="//github.com/4dchan-org/dchan-client/graphs/contributors"
                       target="_blank"
                       rel="noreferrer"
                       title="Contributors"

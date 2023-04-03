@@ -289,7 +289,7 @@ export const FAQCard = ({
               className="dchan-link"
               target="_blank"
               rel="noreferrer"
-              href="https://github.com/dchan-network/dchan-subgraph"
+              href="https://github.com/4dchan-org/dchan-subgraph"
             >
               a subgraph
             </a>
@@ -345,7 +345,7 @@ export const FAQCard = ({
             All the tools are at your disposal, see{" "}
             <a
               className="dchan-link"
-              href="//github.com/dchan-network/"
+              href="//github.com/4dchan-org/"
               target="_blank"
               rel="noreferrer"
             >
@@ -415,7 +415,7 @@ export const FAQCard = ({
             <br />
             <a
               className="dchan-link"
-              href="//github.com/dchan-network/"
+              href="//github.com/4dchan-org/"
               target="_blank"
               rel="noreferrer"
             >
