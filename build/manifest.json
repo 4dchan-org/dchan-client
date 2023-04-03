@@ -1,8 +1,8 @@
 {
 
-    "short_name": "dchan",
-    "name": "dchan.network",
-    "description": "Decentralized Imageboard",
+    "short_name": "4dchan.org",
+    "name": "4dchan.org",
+    "description": "Time-traveling Decentralized Imageboard",
     "icons": [
         {
             "src": "favicons/favicon.ico",
