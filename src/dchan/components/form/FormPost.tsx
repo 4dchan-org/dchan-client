@@ -1,14 +1,8 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { shortenAddress } from "dchan/services";
 import { Board, Thread } from "dchan/subgraph/types";
 import { useHistory } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   useWeb3,
   useEventListener,
@@ -29,7 +23,7 @@ import {
   IdLabel,
   FAQButton,
   RulesButton,
-  Emoji
+  Emoji,
 } from "dchan/components";
 
 export const FormPost = ({
@@ -45,6 +39,7 @@ export const FormPost = ({
   const [settings] = useLocalSettings();
   const history = useHistory();
   const formRef = useRef<HTMLFormElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const [isSending, setIsSending] = useState<boolean>(false);
   const [nonce, setNonce] = useState<number>(now());
@@ -60,13 +55,14 @@ export const FormPost = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     setValue,
     getValues,
     reset,
     trigger,
     setFocus,
     watch,
+    control,
   } = form;
 
   const values = getValues();
@@ -95,7 +91,9 @@ export const FormPost = ({
   const onQuote = useCallback(
     function (_: any, { from, n }: any) {
       const { comment } = getValues();
-      const maybeAddressPrefix = from ? `0x${shortenAddress(from).replace("-", "")}/` : ""
+      const maybeAddressPrefix = from
+        ? `0x${shortenAddress(from).replace("-", "")}/`
+        : "";
       const quote = `>>${maybeAddressPrefix}${n}`;
       const textarea = textAreaRef.current;
 
@@ -169,18 +167,14 @@ export const FormPost = ({
 
   const onSubmit = useCallback(
     async (data: any) => {
-      if(!settings) return
-      
+      if (!settings) return;
+
       !!thread && !!addFavorite && addFavorite(thread);
       setIsSending(true);
 
       let result: { error?: any; success?: any; events?: any } | null = null;
       try {
-        result = await postMessage(
-          data,
-          accounts,
-          setStatus
-        );
+        result = await postMessage(data, accounts, setStatus);
       } catch (error) {
         result = { error };
 
@@ -237,20 +231,23 @@ export const FormPost = ({
     }
   }, [getValues, setThumbnailB64]);
 
-  const onFileChange = useCallback(async (e?: any) => {
-    let files: FileList | undefined = e?.target?.files
-    if(files) {
-      setValue("file", files)
-    } else {
-      files = getValues().file;
-    }
-    if (!!files && files.length > 0) {
-      setFileSize(files[0].size / 1024);
-    } else {
-      setFileSize(0);
-    }
-    refreshThumbnail();
-  }, [refreshThumbnail, setFileSize, setValue, getValues]);
+  const onFileChange = useCallback(
+    async (e?: any) => {
+      let files: FileList | undefined = e?.target?.files;
+      if (!files) {
+        files = getValues().file;
+      }
+
+      if (files && files.length > 0) {
+        setFileSize(files[0].size / 1024);
+        setValue("file", files);
+      } else {
+        setFileSize(0);
+      }
+      refreshThumbnail();
+    },
+    [refreshThumbnail, setFileSize, setValue, getValues]
+  );
 
   const fileRemove = useCallback(() => {
     setValue("file", undefined);
@@ -273,26 +270,27 @@ export const FormPost = ({
         const list = new DataTransfer();
         list.items.add(new File([blob], name, { type: file.type }));
         setValue("file", list.files);
+        onFileChange();
       }
     }
-  }, [getValues, setValue]);
+  }, [getValues, setValue, onFileChange]);
 
   const pasteHandler = useCallback(
     (event: any) => {
       const clipboardData =
         event.clipboardData || event.originalEvent.clipboardData;
       const { files, items } = clipboardData;
-      
-      let file
+
+      let file;
       if (!!items && items.length) {
-        let i = 0
-        while(i < items.length) {
+        let i = 0;
+        while (i < items.length) {
           const item = items[i];
           if (item.kind === "file") {
             file = item.getAsFile();
-            break
+            break;
           }
-          i++
+          i++;
         }
       }
 
@@ -358,7 +356,9 @@ export const FormPost = ({
   const formPostOptions = () => (
     <span>
       <span className="text-xs">
-        <button onClick={() => resetForm(true)}><Emoji emoji={"❌"} /></button>
+        <button onClick={() => resetForm(true)}>
+          <Emoji emoji={"❌"} />
+        </button>
       </span>
       <Menu>
         <div>Options:</div>
@@ -766,4 +766,4 @@ export const FormPost = ({
       )}
     </div>
   );
-}
+};
