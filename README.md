@@ -6,8 +6,9 @@ Official client for the [4dchan.org](https://4dchan.org) decentralized imageboar
 * IPFS hostable
 * Built with [React](https://reactjs.org/)
 * Powered by [The Graph](https://thegraph.com)
+  * No server required
 
-# Docker
+# Development
 Required:
 - `GNU+Linux`
 - [`docker`](https://docs.docker.com/engine/install/#server) 

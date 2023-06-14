@@ -6,14 +6,14 @@ export const TabbedCard = ({
   sectionClassName = "",
   containerClassName = "",
   firstTab = "",
-  tabInterval = 10_000
+  slideshowInterval = 0
 }: {
   children: Map<string, any>;
   className?: string;
   sectionClassName?: string;
   containerClassName?: string;
   firstTab?: string;
-  tabInterval?: number;
+  slideshowInterval?: number;
 }) => {
   const keys = Array.from(children.keys());
   const [currentChild, setCurrentChild] = useState<string>(firstTab || keys[0]);
@@ -33,14 +33,15 @@ export const TabbedCard = ({
   }, [setIsHovering]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = slideshowInterval > 0 ? setInterval(() => {
       !isHovering &&
         setCurrentChild(
           keys[(keys.findIndex((k) => k === currentChild) + 1) % keys.length]
         );
-    }, tabInterval);
-    return () => clearInterval(interval);
-  }, [tabInterval, currentChild, setCurrentChild, isHovering, keys]);
+    }, slideshowInterval) : null;
+  
+    return () => { interval && clearInterval(interval) };
+  }, [slideshowInterval, currentChild, setCurrentChild, isHovering, keys]);
 
   return (
     <article

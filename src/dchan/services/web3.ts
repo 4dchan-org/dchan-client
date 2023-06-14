@@ -59,7 +59,7 @@ async function addChain() {
 
 function createJsonMessage(op: string, data: object) {
     return JSON.stringify({
-        ns: "dchan",
+        ns: "4dchan.org",
         v: 0,
         op,
         data

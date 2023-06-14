@@ -329,7 +329,9 @@ export const TimeTravelWidget = forwardRef(
                         </div>
                       </div>
                       <div className="flex center mt-1">
-                        {isPlayback && nextBlock && nextBlockPlaybackAt ? `Next block in ${Math.round((nextBlockPlaybackAt - new Date().getTime()) / 1000)}s` : ""}
+                        {isPlayback && nextBlock && nextBlockPlaybackAt ? <>
+                        <div>Next block in {Math.max(0, Math.round((nextBlockPlaybackAt - new Date().getTime()) / 1000))}s</div>
+                        </> : ""}
                       </div>
                     </div>
                   ) : (

@@ -3,6 +3,7 @@ import { Board, Post } from "dchan/subgraph/types";
 import { POSTS_GET_LAST, POSTS_GET_LAST_BLOCK } from "dchan/subgraph/graphql/queries";
 import { Loading, PostSearchResult } from ".";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
+import { useEffect, useState } from "react";
 
 export const LatestPostsCard = ({
   limit,
@@ -15,7 +16,7 @@ export const LatestPostsCard = ({
 }) => {
   const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const query = block ? POSTS_GET_LAST_BLOCK : POSTS_GET_LAST;
-  const { loading, data } = useQuery<{ posts: Post[] }, any>(query, {
+  const { loading, data: newData } = useQuery<{ posts: Post[] }, any>(query, {
     pollInterval: 10_000,
     variables: {
       block,
@@ -24,6 +25,8 @@ export const LatestPostsCard = ({
       board: board?.id || "",
     },
   });
+  const [data, setData] = useState(newData)
+  useEffect(() => newData && setData(newData), [newData, setData])
 
   return (
     <div>

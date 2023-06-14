@@ -3,7 +3,7 @@ import { Board, Thread } from "dchan/subgraph/types";
 import { TabbedCard } from "dchan/components";
 import { THREADS_TABS, THREADS_TABS_BLOCK } from "dchan/subgraph/graphql/queries";
 import { Loading, IndexView } from "dchan/components";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DateTime } from "luxon";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
 
@@ -32,7 +32,7 @@ export const ThreadTabs = ({
     ),
     [currentBlock]
   );
-  const { data, loading } = useQuery<ThreadListData, ThreadListVars>(
+  const { data: newData, loading } = useQuery<ThreadListData, ThreadListVars>(
     block ? THREADS_TABS_BLOCK : THREADS_TABS,
     {
       pollInterval: 30_000,
@@ -41,9 +41,10 @@ export const ThreadTabs = ({
     }
   );
 
-  return loading ? (
-    <div className="border border-solid border-black flex-grow p-2"><Loading /></div>
-  ) : data ? (
+  const [data, setData] = useState(newData)
+  useEffect(() => newData && setData(newData), [newData, setData])
+
+  return data ? (
     <TabbedCard className={`${className} w-auto`} firstTab="Last bumped">
       {
         new Map([
@@ -62,6 +63,8 @@ export const ThreadTabs = ({
         ])
       }
     </TabbedCard>
+  ) : loading ? (
+    <div className="border border-solid border-black flex-grow p-2"><Loading /></div>
   ) : (
     <span />
   );

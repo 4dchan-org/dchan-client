@@ -30,7 +30,7 @@ export const EULA = () => {
         >
           <div>
       <div className="center grid">
-        <img className="p-2 w-16 pointer-events-none" src={logo} alt="dchan" />
+        <img className="p-2 w-16 pointer-events-none" src={logo} alt="4dchan.org" />
       </div>
             <div className="p-1 text-left">
               <div className="p-2">

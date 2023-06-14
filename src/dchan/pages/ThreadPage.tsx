@@ -1,13 +1,22 @@
 import { useQuery } from "@apollo/react-hooks";
 import { shortenAddress } from "dchan/services";
 import { Board, Post, Thread } from "dchan/subgraph/types";
-import { THREAD_GET, THREAD_GET_LAST_BLOCK } from "dchan/subgraph/graphql/queries";
-import { useEffect, useMemo } from "react";
+import {
+  THREAD_GET,
+  THREAD_GET_LAST_BLOCK,
+} from "dchan/subgraph/graphql/queries";
+import { useEffect, useMemo, useState } from "react";
 import { Router } from "router";
 import { usePubSub } from "dchan/hooks";
 import { useHistory } from "react-router-dom";
 import { useTitle } from "react-use";
-import { ContentHeader, Footer, Loading, Anchor, Post as PostComponent } from "dchan/components";
+import {
+  ContentHeader,
+  Footer,
+  Loading,
+  Anchor,
+  Post as PostComponent,
+} from "dchan/components";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
 interface ThreadContentData {
   board: Board;
@@ -25,17 +34,17 @@ export const ThreadPage = ({
   pageTheme,
   setPageTheme,
 }: {
-  location: any,
-  match: {params: any},
-  pageTheme: string,
-  setPageTheme: (theme: string) => void,
+  location: any;
+  match: { params: any };
+  pageTheme: string;
+  setPageTheme: (theme: string) => void;
 }) => {
   let { board_name, board_id, user_id, thread_n } = params;
   board_id = board_id ? `0x${board_id}` : undefined;
 
   const history = useHistory();
   const { publish } = usePubSub();
-  const { timeTraveledToBlockNumber: block } = useTimeTravel()
+  const { timeTraveledToBlockNumber: block } = useTimeTravel();
 
   const focus_user_id = params.focus_user_id ? `0x${params.focus_user_id}` : "";
   const focus_post_n = params.focus_post_n || "";
@@ -46,16 +55,18 @@ export const ThreadPage = ({
     block,
   };
 
-  const { refetch, data, loading } = useQuery<
+  const { refetch, data: newData, loading } = useQuery<
     ThreadContentData,
     ThreadContentVars
   >(!!block ? THREAD_GET : THREAD_GET_LAST_BLOCK, {
     variables,
   });
+  const [data, setData] = useState(newData)
+  useEffect(() => newData && setData(newData), [newData, setData])
 
   const post = data?.posts?.[0];
-  const thread = data?.threads?.[0];
   const board = data?.board;
+  const thread = data?.threads?.[0]
   const posts = useMemo(
     () => (thread ? [thread.op, ...thread.replies] : []),
     [thread]
@@ -135,7 +146,10 @@ export const ThreadPage = ({
   );
 
   return (
-    <div className="bg-primary min-h-100vh flex flex-col" data-theme={pageTheme}>
+    <div
+      className="bg-primary min-h-100vh flex flex-col"
+      data-theme={pageTheme}
+    >
       <ContentHeader
         board={board}
         thread={thread}
@@ -146,11 +160,7 @@ export const ThreadPage = ({
       />
 
       <div className="flex-grow">
-        {loading && !data ? (
-          <div className="center grid">
-            <Loading />
-          </div>
-        ) : posts && thread ? (
+        {posts && thread ? (
           <div>
             <div>
               {posts.map((post) => (
@@ -191,6 +201,10 @@ export const ThreadPage = ({
               </span>
             </div>
           </div>
+        ) : loading ? (
+          <div className="center grid">
+            <Loading />
+          </div>
         ) : (
           "Post not found."
         )}
@@ -199,4 +213,4 @@ export const ThreadPage = ({
       <Footer showContentDisclaimer={!!posts && !!thread}></Footer>
     </div>
   );
-}
+};

@@ -4,7 +4,7 @@ import { Thread } from "dchan/subgraph/types";
 import { THREADS_LIST_FAVORITES } from "dchan/subgraph/graphql/queries";
 import { useLocalFavorites } from "dchan/hooks";
 import { truncate } from "lodash";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Router } from "router";
 import { BoardLink, Loading, Emoji } from "dchan/components";
@@ -16,13 +16,16 @@ export const WatchedThreadsWidget = () => {
     [favorites]
   );
 
-  const { data, loading, refetch } = useQuery(THREADS_LIST_FAVORITES, {
+  const { data: newData, loading, refetch } = useQuery(THREADS_LIST_FAVORITES, {
     pollInterval: 30_000,
     variables: {
       ids,
     },
     skip: !favorites,
   });
+
+  const [data, setData] = useState(newData)
+  useEffect(() => newData && setData(newData), [newData, setData])
 
   const threads = data?.threads;
   const doRefetch = useCallback(() => refetch({ ids }), [refetch, ids]);

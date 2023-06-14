@@ -3,7 +3,7 @@ import { Board, Thread } from "dchan/subgraph/types";
 import { THREADS_LIST_MOST_POPULAR, THREADS_LIST_MOST_POPULAR_BLOCK } from "dchan/subgraph/graphql/queries";
 import { IndexView, Loading } from ".";
 import { DateTime } from "luxon";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useTimeTravel from "dchan/hooks/useTimeTravel";
 
 export const PopularThreadsCard = ({board} : {board?: Board}) => {
@@ -16,7 +16,7 @@ export const PopularThreadsCard = ({board} : {board?: Board}) => {
   );
   const { timeTraveledToBlockNumber: block } = useTimeTravel()
   const query = block ? THREADS_LIST_MOST_POPULAR_BLOCK : THREADS_LIST_MOST_POPULAR;
-  const { loading, data } = useQuery<{ threads: Thread[] }, any>(query, {
+  const { loading, data: newData } = useQuery<{ threads: Thread[] }, any>(query, {
     pollInterval: 30_000,
     fetchPolicy: block ? "cache-first" : "network-only",
     variables: {
@@ -25,6 +25,9 @@ export const PopularThreadsCard = ({board} : {board?: Board}) => {
       board: board?.id || ""
     },
   });
+
+  const [data, setData] = useState(newData)
+  useEffect(() => newData && setData(newData), [newData, setData])
 
   return loading
     ? <Loading />

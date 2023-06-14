@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { shortenAddress } from "dchan/services";
 import { Board, Thread } from "dchan/subgraph/types";
 import { useHistory } from "react-router-dom";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   useWeb3,
   useEventListener,
@@ -39,7 +39,6 @@ export const FormPost = ({
   const [settings] = useLocalSettings();
   const history = useHistory();
   const formRef = useRef<HTMLFormElement>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const [isSending, setIsSending] = useState<boolean>(false);
   const [nonce, setNonce] = useState<number>(now());
@@ -55,14 +54,13 @@ export const FormPost = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     setValue,
     getValues,
     reset,
     trigger,
     setFocus,
     watch,
-    control,
   } = form;
 
   const values = getValues();

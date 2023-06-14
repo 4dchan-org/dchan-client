@@ -1,7 +1,7 @@
 import { useLocalSettings, useTimeTravel } from "dchan/hooks";
 import { parse as parseQueryString } from "query-string";
 import { Board, BoardRef, Thread } from "dchan/subgraph/types";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { BOARD_GET, BOARD_CATALOG } from "dchan/subgraph/graphql/queries";
 import { useQuery } from "@apollo/react-hooks";
 import { isLowScore } from "dchan/subgraph/entities/thread";
@@ -100,7 +100,7 @@ export const BoardPage = ({
     variables,
   });
 
-  const { loading: boardLoading, data: boardData } = useQuery<
+  const { loading: boardLoading, data: newBoardData } = useQuery<
     BoardData,
     BoardVars
   >(BOARD_GET, {
@@ -110,6 +110,9 @@ export const BoardPage = ({
       block,
     },
   });
+
+  const [boardData, setBoardData] = useState(newBoardData)
+  useEffect(() => newBoardData && setBoardData(newBoardData), [newBoardData, setBoardData])
 
   const board: Board | undefined | null = boardData?.board;
   const threads = useMemo(
