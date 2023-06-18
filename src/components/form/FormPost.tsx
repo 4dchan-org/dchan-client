@@ -155,6 +155,7 @@ export const FormPost = ({
     (forceReset?: boolean) => {
       if (!forceReset && !window.confirm("Reset form?")) return;
 
+      fileRemove();
       reset();
       trigger();
       changeNonce();
