@@ -160,6 +160,8 @@ export const FormPost = ({
       clear();
       changeNonce();
       setIsDirty(false);
+      board && setValue("board", board.id)
+      thread && setValue("thread", thread.id)
     },
     [reset, trigger, changeNonce, clear, setIsDirty]
   );
@@ -318,7 +320,9 @@ export const FormPost = ({
 
   useEffect(() => {
     changeNonce()
-  }, [])
+    board && setValue("board", board.id)
+    thread && setValue("thread", thread.id)
+  }, [board, thread])
 
   const formPostOptions = () => (
     <span>
@@ -394,7 +398,6 @@ export const FormPost = ({
                     type="hidden"
                     {...register("board")}
                     disabled={formDisabled}
-                    value={board.id}
                   />
                 ) : (
                   ""
@@ -404,7 +407,6 @@ export const FormPost = ({
                     type="hidden"
                     {...register("thread")}
                     disabled={formDisabled}
-                    value={thread.id}
                   />
                 ) : (
                   ""
