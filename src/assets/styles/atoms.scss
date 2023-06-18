@@ -76,6 +76,22 @@
     background: var(--highlight);
 }
 
+.border-primary {
+    border: 1px solid var(--primary);
+}
+
+.border-secondary {
+    border: 1px solid var(--secondary);
+}
+
+.border-tertiary {
+    border: 1px solid var(--tertiary);
+}
+
+.border-highlight {
+    border: 1px solid var(--highlight);
+}
+
 .border-bottom-invisible {
     border-bottom: 1px solid rgba($color: #000000, $alpha: 0);
 }
@@ -273,6 +289,10 @@
 }
 
 .max-w-16rem {
+    max-width: 16rem;
+}
+
+.max-w-32rem {
     max-width: 16rem;
 }
 

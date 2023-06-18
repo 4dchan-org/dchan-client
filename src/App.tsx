@@ -1,11 +1,10 @@
-import "assets/styles/index.scss";
-
-import { HashRouter as Router, Switch, Route } from "react-router-dom";
-import { useState, useMemo } from "react";
-import { SingletonHooksContainer } from "react-singleton-hook";
 import {
-  ApolloProvider,
-} from "@apollo/react-hooks";
+  HashRouter as Router,
+  Routes,
+  Route,
+  useParams,
+} from "react-router-dom";
+import { SingletonHooksContainer } from "react-singleton-hook";
 
 import {
   AdminPage,
@@ -17,129 +16,78 @@ import {
   PostsPage,
   ReferencePage,
   ThreadPage,
-} from "dchan/pages";
-import { LockBanner, EULA, FAQCardOverlay, RulesCardOverlay, AbuseCardOverlay } from "dchan/components";
-import { useEula } from "dchan/hooks";
-import subgraphClient from "dchan/subgraph/client";
+} from "src/pages";
+import {
+  LockBanner,
+  EULA,
+  ModalOverlay,
+  ScrollToHashElement,
+} from "src/components";
+import { useEula } from "src/hooks";
+import { AppContext } from "./contexts/AppContext";
 
 function App() {
-  const [eula] = useEula()
+  const [eula] = useEula();
 
-  const [pageTheme, setPageTheme] = useState<string>("blueboard");
+  const IdRefRouter = () => {
+    const { id } = useParams();
+    return id?.indexOf("0x") === 0 ? <IdReferencePage /> : <BoardListPage />;
+  };
 
-  const client = useMemo(() => subgraphClient, []);
+  const RefRouter = () => {
+    const { board_name } = useParams();
+    return board_name?.indexOf("0x") === 0 ? <ReferencePage /> : <BoardPage />;
+  };
 
   return eula === false ? (
     <EULA />
   ) : (
-    <ApolloProvider client={client}>
+    <AppContext>
       <Router basename="/">
+        <ScrollToHashElement />
         <SingletonHooksContainer />
         <LockBanner />
         <div className="App text-center">
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/_/boards" component={BoardListPage} />
-            <Route path="/_/admin" component={AdminPage} />
-            <Route path="/_/posts" component={PostsPage} />
-            <Route path="/0x:id/:post_n" component={ReferencePage} />
-            <Route path="/0x:id" component={IdReferencePage} />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="_/boards" element={<BoardListPage />} />
+            <Route path="_/admin" element={<AdminPage />} />
+            <Route path="_/posts" element={<PostsPage />} />
+            <Route path=":id" element={<IdRefRouter />} />
+            <Route path=":board_name/:board_id" element={<RefRouter />} />
             <Route
-              path="/:board_name/0x:board_id/archive"
-              render={(props) => (
-                <ArchivePage
-                  location={props.location}
-                  match={props.match}
-                  pageTheme={pageTheme}
-                  setPageTheme={setPageTheme}
-                />
-              )}
+              path=":board_name/:board_id/archive"
+              element={<ArchivePage />}
             />
             <Route
-              path="/:board_name/0x:board_id/:view_mode(index|catalog)"
-              render={(props) => (
-                <BoardPage
-                  location={props.location}
-                  match={props.match}
-                  pageTheme={pageTheme}
-                  setPageTheme={setPageTheme}
-                />
-              )}
+              path=":board_name/:board_id/:view_mode"
+              element={<BoardPage />}
             />
             <Route
-              path="/:board_name/0x:board_id/0x:user_id/:thread_n/0x:focus_user_id/:focus_post_n"
-              render={(props) => (
-                <ThreadPage
-                  location={props.location}
-                  match={props.match}
-                  pageTheme={pageTheme}
-                  setPageTheme={setPageTheme}
-                />
-              )}
+              path=":board_name/:board_id/:user_id/:thread_n/:focus_user_id/:focus_post_n"
+              element={<ThreadPage />}
             />
             <Route
-              path="/:board_name/0x:board_id/0x:user_id/:thread_n/0x:focus_user_id"
-              render={(props) => (
-                <ThreadPage
-                  location={props.location}
-                  match={props.match}
-                  pageTheme={pageTheme}
-                  setPageTheme={setPageTheme}
-                />
-              )}
+              path=":board_name/:board_id/:user_id/:thread_n/:focus_user_id"
+              element={<ThreadPage />}
             />
             <Route
-              path="/:board_name/0x:board_id/0x:user_id/:thread_n/:focus_post_n"
-              render={(props) => (
-                <ThreadPage
-                  location={props.location}
-                  match={props.match}
-                  pageTheme={pageTheme}
-                  setPageTheme={setPageTheme}
-                />
-              )}
+              path=":board_name/:board_id/:user_id/:thread_n/:focus_post_n"
+              element={<ThreadPage />}
             />
             <Route
-              path="/:board_name/0x:board_id/0x:user_id/:thread_n/:post_n"
-              render={(props) => (
-                <ThreadPage
-                  location={props.location}
-                  match={props.match}
-                  pageTheme={pageTheme}
-                  setPageTheme={setPageTheme}
-                />
-              )}
+              path=":board_name/:board_id/:user_id/:thread_n/:post_n"
+              element={<ThreadPage />}
             />
             <Route
-              path="/:board_name/0x:board_id/0x:user_id/:thread_n"
-              render={(props) => (
-                <ThreadPage
-                  location={props.location}
-                  match={props.match}
-                  pageTheme={pageTheme}
-                  setPageTheme={setPageTheme}
-                />
-              )}
+              path=":board_name/:board_id/:user_id/:thread_n"
+              element={<ThreadPage />}
             />
-            <Route
-              path="/:board_name/0x:board_id" 
-              render={(props) => (
-                <BoardPage
-                  location={props.location}
-                  match={props.match}
-                  pageTheme={pageTheme}
-                  setPageTheme={setPageTheme}
-                />
-              )}
-            />
-            <Route exact path="/:board_name" component={BoardListPage} />
-          </Switch>
-          <FAQCardOverlay />
-          <RulesCardOverlay />
-          <AbuseCardOverlay />
+          </Routes>
+          <ModalOverlay />
         </div>
       </Router>
-    </ApolloProvider>
+    </AppContext>
   );
 }
 

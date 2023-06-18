@@ -6,7 +6,7 @@ services:
     volumes:
       - .:/dapp
     ports:
-      - 127.0.0.1:3000:3000
+      - 127.0.0.1:4444:4444
 
   www:
     image: httpd:2.4

@@ -2,25 +2,29 @@ dchan-client
 -----
 Official client for the [4dchan.org](https://4dchan.org) decentralized imageboard.
 
-* Lightweight
+* Lightweight (~350kb gzipped)
 * IPFS hostable
 * Built with [React](https://reactjs.org/)
 * Powered by [The Graph](https://thegraph.com)
-  * No server required
+  * No server required, uncensorable, always online
 
-# Development
+## Development
+* `npm run dev`
+
+### Docker
+
 Required:
 - `GNU+Linux`
 - [`docker`](https://docs.docker.com/engine/install/#server) 
 - [`docker-compose`](https://docs.docker.com/compose/install/)
 
-## Setup
+#### Setup
 - `cp docker-compose.dist.yml docker-compose.yml`
 
-## Start development
+#### Start development
 - `./bin/docker/dev.sh`
 
-## Build production release
+#### Build production release
 - `./bin/docker/build.sh`
 
 # Links
