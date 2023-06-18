@@ -368,7 +368,7 @@ export const Post = memo(
                         </div>
                       </div>
                     </div>
-                    <div className="pb-2">
+                    <div className={isOp ? "pb-2" : ""}>
                       {children}
                     </div>
                     <Link
