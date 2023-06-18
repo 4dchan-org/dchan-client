@@ -42,7 +42,6 @@ export const FormPost = ({
   const formRef = useRef<HTMLFormElement>(null);
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const [isSending, setIsSending] = useState<boolean>(false);
-  const [nonce, setNonce] = useState<number>(now());
   const [status, setStatus] = useState<string | object>();
   const [commentLength, setCommentLength] = useState<number>(0);
   const [nameLength, setNameLength] = useState<number>(0);
@@ -148,8 +147,8 @@ export const FormPost = ({
   }, [isSending, setFormDisabled]);
 
   const changeNonce = useCallback(() => {
-    setNonce(now());
-  }, [setNonce]);
+    setValue("nonce", now());
+  }, [setValue]);
 
   const resetForm = useCallback(
     (forceReset?: boolean) => {
@@ -158,8 +157,8 @@ export const FormPost = ({
       fileRemove();
       reset();
       trigger();
-      changeNonce();
       clear();
+      changeNonce();
       setIsDirty(false);
     },
     [reset, trigger, changeNonce, clear, setIsDirty]
@@ -317,6 +316,10 @@ export const FormPost = ({
     setIsDirty(true);
   }, [setIsDirty]);
 
+  useEffect(() => {
+    changeNonce()
+  }, [])
+
   const formPostOptions = () => (
     <span>
       <span className="text-xs">
@@ -385,7 +388,6 @@ export const FormPost = ({
                   type="hidden"
                   {...register("nonce")}
                   disabled={formDisabled}
-                  value={nonce}
                 />
                 {board ? (
                   <input
