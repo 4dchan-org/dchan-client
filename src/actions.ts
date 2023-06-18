@@ -57,7 +57,7 @@ export async function postMessage(
     const { board, thread, comment, name, subject, sage, nonce } = input;
 
     let file: IpfsUploadResult | undefined;
-    if (input.file.length > 0) {
+    if (input.file?.length > 0) {
         setStatus({
             progress: "Uploading file...",
         })

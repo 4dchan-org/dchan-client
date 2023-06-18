@@ -43,22 +43,7 @@ export async function sendMessage(operation: string, data: object, from: string)
   const signer = await provider.getSigner(from)
   const relayContract = new Contract(DefaultSettings.contract.address, abi, signer)
 
-  const [msg, nonce, gasPrice] = await Promise.all([
-    relayContract.message(createJsonMessage(operation, data)),
-    getNextNonce(from),
-    getGasPrice()
-  ])
-
-  console.log("web3.sendMessage", { msg, nonce, gasPrice })
-
-  const result = await relayContract.sendTransaction({
-    nonce,
-    gasPrice
-  })
-
-  console.log("web3.sendMessage", { result })
-
-  return result
+  return relayContract.message(createJsonMessage(operation, data))
 }
 
 export async function sendTip(from: string, to: string, amount: number) {
