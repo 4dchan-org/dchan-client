@@ -45,11 +45,11 @@ export const Web3ContextProvider = ({
       try {
         const newProvider = getProvider();
         const newNetwork = await newProvider.getNetwork();
-        const newAccounts = await newProvider.listAccounts();
+        const newAccounts = await newProvider.listAccounts().then(accounts => accounts.map(signer => signer.address.toLowerCase()));
 
         setProvider(newProvider);
         setChainId(newNetwork.chainId.toString());
-        setAccounts(newAccounts.map((signer) => signer.address));
+        setAccounts(newAccounts);
         setNetwork(newNetwork);
         
         if (newAccounts[0]) {
