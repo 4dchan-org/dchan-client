@@ -84,7 +84,7 @@ function PostReference({
   const refPost = useMemo(
     () =>
       thread &&
-      [thread.op, ...(thread.replies || [])].find((p) =>
+      [thread.op, ...(thread.replies || thread.lastReplies || [])].find((p) =>
         value.id
           ? `${p.from.id}/${p.n}` === postLink ||
             `0x${shortenAddress(p.from.id).replace("-", "")}/${p.n}` ===
@@ -304,7 +304,7 @@ export const PostBody = memo(
       <div
         className={
           className +
-          " block text-left break-words font-sans text-sm max-w-100vw dchan-post-body"
+          " block text-left break-words font-sans text-sm max-w-90vw dchan-post-body"
         }
         style={style}
         key={`${post.id}-${thread?.id}`}

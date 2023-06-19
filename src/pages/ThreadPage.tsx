@@ -56,7 +56,7 @@ export const ThreadPage = () => {
   const board = data?.board;
   const thread = data?.threads?.[0]
   const posts = useMemo(
-    () => (thread ? [thread.op, ...thread.replies] : []),
+    () => (thread ? [thread.op, ...(thread.replies || thread.lastReplies)] : []),
     [thread]
   );
 

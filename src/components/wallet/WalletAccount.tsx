@@ -16,6 +16,7 @@ export const WalletAccount = () => {
         <span key={account}>
           [<UserLabel user={user ? user : {address: account} as User} />]
         </span>
+        <div className="text-gray-700">{user ? <></> : <div className="p-2">It seems you haven't posted yet.<br/>You'll be assigned a unique ID once you do.</div>}</div>
       </div>
       <div>
         {balance !== undefined ? (

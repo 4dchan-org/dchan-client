@@ -112,7 +112,7 @@ export const PostHeader = ({
       publish("FORM_QUOTE", {
         n,
         ...(thread &&
-        [...(thread.replies || []), thread.op].filter((post) => post.n === n)
+        [...(thread.replies || thread.lastReplies || []), thread.op].filter((post) => post.n === n)
           .length > 1
           ? { from }
           : {}),
@@ -179,7 +179,7 @@ export const PostHeader = ({
       ) : (
         <span></span>
       )}
-      <span className="px-0.5 whitespace-nowrap">
+      <span className="px-0.5 break-all">
         <span
           className={`font-bold font-size-090rem ${
             isPostUserAdmin

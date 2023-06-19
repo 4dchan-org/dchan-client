@@ -55,21 +55,21 @@ export const IndexView = ({
             }
           >
             <div className="text-left pl-4 text-sm">
-              {parseInt(thread.replyCount) > 1 + thread.replies?.length ? (
+              {parseInt(thread.replyCount) > 1 + (thread.replies || thread.lastReplies)?.length ? (
                 <Link
                   to={`${Router.thread(thread)}${
                     block ? `?block=${block}` : ""
                   }`}
                   className="dchan-link"
                 >
-                  + {parseInt(thread.replyCount) - thread.replies?.length}{" "}
+                  + {parseInt(thread.replyCount) - (thread.replies || thread.lastReplies)?.length}{" "}
                   replies omitted
                 </Link>
               ) : (
                 ""
               )}
             </div>
-            {[...(thread.replies || [])].reverse().map((post) => (
+            {[...((thread.replies || thread.lastReplies) || [])].reverse().map((post) => (
               <Post
                 post={post}
                 thread={thread}

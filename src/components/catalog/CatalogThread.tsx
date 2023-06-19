@@ -23,8 +23,8 @@ export const CatalogThread = ({
     op,
     replyCount,
     imageCount,
-    replies,
   } = thread;
+  const replies = thread.replies || thread.lastReplies
   const { image } = op;
   const { ipfsHash, isNsfw, isSpoiler } = image || {
     ipfsHash: "",

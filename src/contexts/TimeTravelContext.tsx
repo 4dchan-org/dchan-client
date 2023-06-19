@@ -12,6 +12,8 @@ import {
 } from "src/subgraph/graphql/queries";
 import { ApolloClient, ApolloQueryResult, useQuery } from "@apollo/react-hooks";
 import SubgraphApolloClient from "src/subgraph/client";
+import { useLocation, useNavigate } from "react-router-dom";
+import qs from "query-string";
 
 export const TimeTravelContext = createContext<TimeTravelProvider>({
   firstBlock: undefined,
@@ -150,6 +152,8 @@ export const TimeTravelContextProvider = ({
   const [isTimeTraveling, setIsTimeTraveling] = useState(false);
   const [isPlayback, setIsPlayback] = useState(false);
   const [nextBlockPlaybackAt, setNextBlockPlaybackAt] = useState<number>();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (currentBlock) {
@@ -226,28 +230,29 @@ export const TimeTravelContextProvider = ({
     );
   }, [onBlockQueryResult, currentBlock, subgraphClient]);
 
-  // useEffect(() => {
-  // let { location } = history
-  // let { search, pathname } = location
-  // const oldUrl = pathname + search
-  // if (currentBlock) {
-  //     search = search.match(/[?&]block=/) ?
-  //         search.replace(/([?&]block=)(\d)+/, `$1${currentBlock.number}`)
-  //         : search.includes("?")
-  //             ? `${search}&block=${currentBlock.number}`
-  //             : `?block=${currentBlock.number}`
-  // } else {
-  //     search = search.replace(/[?&]block=(\d)+/, "")
-  // }
-  // const newUrl = pathname + search
-  // newUrl !== oldUrl && history.replace(newUrl);
-  // }, [history, currentBlock])
+  useEffect(() => {
+    const { pathname } = location;
+    let { search } = location;
+    const oldUrl = pathname + search;
+    if (currentBlock) {
+      search = search.match(/[?&]block=/)
+        ? search.replace(/([?&]block=)(\d)+/, `$1${currentBlock.number}`)
+        : search.includes("?")
+        ? `${search}&block=${currentBlock.number}`
+        : `?block=${currentBlock.number}`;
+    } else {
+      search = search.replace(/[?&]block=(\d)+/, "");
+    }
+    const newUrl = pathname + search;
+    newUrl !== oldUrl && navigate(newUrl, { replace: true });
+  }, [navigate, currentBlock, location]);
 
-  // useEffect(() => {
-  //     // const query = qs.parse(location.search);
-  //     // let queriedBlock: number | undefined = parseInt(`${query.block}`) || undefined;
-  //     // queriedBlock && travelToBlockNumber(queriedBlock)
-  // }, [location, travelToBlockNumber])
+  useEffect(() => {
+    const query = qs.parse(location.search);
+    const queriedBlock: number | undefined =
+      parseInt(`${query.block}`) || undefined;
+    queriedBlock && travelToBlockNumber(queriedBlock);
+  }, [location, travelToBlockNumber]);
 
   useEffect(() => {
     isPlayback &&

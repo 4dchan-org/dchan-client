@@ -317,7 +317,7 @@ export const Post = memo(
                   )}
                   <div className="y-1">
                     <div
-                      className={`h-full max-w-max flex flex-wrap text-left sm:items-start pb-1`}
+                      className={`h-full flex flex-wrap text-left sm:items-start pb-2 w-full`}
                     >
                       <div className="w-full table pt-1">
                         {image ? (
@@ -345,7 +345,7 @@ export const Post = memo(
                         <div>
                           <div>
                             {isOp && thread ? (
-                              <div className="font-semibold md:ml-10 ml-5 ">
+                              <div className="font-semibold md:ml-10 ml-5 break-all">
                                 {thread.subject}
                               </div>
                             ) : (
