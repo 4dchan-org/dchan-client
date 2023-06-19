@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="146.41mm" height="146.41mm" version="1.1" viewBox="0 0 146.41 146.41" xml:space="preserve"
   xmlns="http://www.w3.org/2000/svg">
-  <g transform="translate(-37.766 -63.623)" stroke="#54b126">
-    <ellipse cx="110.97" cy="136.83" rx="8.2539" ry="8.2539" stroke="#54b126" fill="#6c3" stroke-width="5" />
+  <g transform="translate(-37.766 -63.623)" stroke="black">
+    <ellipse cx="110.97" cy="136.83" rx="8.2539" ry="8.2539" stroke="black" fill="#6c3" stroke-width="1.314" />
     <g transform="matrix(.59337 0 0 .59337 51.871 105.97)">
       <path transform="matrix(1.6853 0 0 1.6853 -87.418 -178.59)" x="127.13409" y="155.56696" width="19.703302"
-        height="39.275696" d="m127.13 155.57h19.703v39.276h-19.703z" fill="#54b126" stroke-width=".26458" />
+        height="39.275696" d="m127.13 155.57h19.703v39.276h-19.703z" fill="#6c3" stroke-width=".26458" />
       <path
         d="m131.86 90.541v52.503l22.727-13.159v-26.218zm-23.167 39.116 4e-5 -52.227 23.214-13.479 46.271 26.635v53.228l-46.366 26.69-23.106-13.416z"
-        fill="#6c3" stroke-width="8.4264" />
+        fill="#54b126" stroke-width="2" />
     </g>
     <g transform="matrix(0 -.59337 .59337 0 80.116 195.93)">
       <path transform="matrix(1.6853 0 0 1.6853 -87.418 -178.59)" d="m127.13 155.57h19.703v39.276h-19.703z"
-        fill="#54b126" stroke-width=".26458" />
+        fill="#6c3" stroke-width=".26458" />
       <path
         d="m131.86 90.541v52.503l22.727-13.159v-26.218zm-23.167 39.116 4e-5 -52.227 23.214-13.479 46.271 26.635v53.228l-46.366 26.69-23.106-13.416z"
-        fill="#6c3" stroke-width="8.4264" />
+        fill="#54b126" stroke-width="2" />
     </g>
     <g transform="matrix(-.59337 0 0 -.59337 170.07 167.68)">
       <path transform="matrix(1.6853 0 0 1.6853 -87.418 -178.59)" d="m127.13 155.57h19.703v39.276h-19.703z"
-        fill="#54b126" stroke-width=".26458" />
+        fill="#6c3" stroke-width=".26458" />
       <path
         d="m131.86 90.541v52.503l22.727-13.159v-26.218zm-23.167 39.116 4e-5 -52.227 23.214-13.479 46.271 26.635v53.228l-46.366 26.69-23.106-13.416z"
-        fill="#6c3" stroke-width="8.4264" />
+        fill="#54b126" stroke-width="2" />
     </g>
     <g transform="matrix(0 .59337 -.59337 0 141.83 77.728)">
       <path transform="matrix(1.6853 0 0 1.6853 -87.418 -178.59)" d="m127.13 155.57h19.703v39.276h-19.703z"
-        fill="#54b126" stroke-width=".26458" />
+        fill="#6c3" stroke-width=".26458" />
       <path
         d="m131.86 90.541v52.503l22.727-13.159v-26.218zm-23.167 39.116 4e-5 -52.227 23.214-13.479 46.271 26.635v53.228l-46.366 26.69-23.106-13.416z"
-        fill="#6c3" stroke-width="8.4264" />
+        fill="#54b126" stroke-width="2" />
     </g>
   </g>
 </svg>
