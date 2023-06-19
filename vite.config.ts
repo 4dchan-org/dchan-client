@@ -2,8 +2,9 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import { visualizer } from "rollup-plugin-visualizer";
 import * as child from "child_process";
+import { now } from 'lodash';
 
-const commitHash = child.execSync("git rev-parse --short HEAD").toString();
+const buildVersion = child.execSync("git rev-parse --short HEAD").toString().replace("\n", "") + "/" + now();
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -28,7 +29,7 @@ export default defineConfig({
   },
   define: { 
     'process.env': process.env,
-    __COMMIT_HASH__: JSON.stringify(commitHash),
+    __BUILD_VERSION__: JSON.stringify(buildVersion),
   },
   build: {
     outDir: "build"

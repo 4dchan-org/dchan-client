@@ -4,4 +4,4 @@ interface Window {
     ethereum?: any;
 }
 
-declare const __COMMIT_HASH__: string
+declare const __BUILD_VERSION__: string

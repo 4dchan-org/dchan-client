@@ -3,7 +3,7 @@ import thegraphSrc from "src/assets/images/thegraph.png";
 import { FAQButton, RulesButton, AbuseButton, Emoji } from ".";
 import pkgInfo from "../../package.json";
 
-const { name, version } = pkgInfo
+const { name, version } = pkgInfo;
 
 export const Footer = ({
   showContentDisclaimer = false,
@@ -12,8 +12,8 @@ export const Footer = ({
   showContentDisclaimer?: boolean;
   className?: string;
 }) => {
-  const build = __COMMIT_HASH__.replace("\n", "");
-  
+  const build = __BUILD_VERSION__;
+
   return (
     <div className={`flex-grow relative pt-24 ${className}`}>
       <div id="bottom" />
@@ -42,18 +42,20 @@ export const Footer = ({
               <details>
                 <summary>
                   {name} v{version} [
-                  {build && build.match(/^[0-9a-f]+$/) ? (
-                    <a
-                      className="dchan-link"
-                      target="_blank"
-                      rel="noreferrer"
-                      href={`https://github.com/4dchan-org/dchan-client/commit/${build}`}
-                    >
-                      {build}
-                    </a>
-                  ) : (
-                    "dev"
-                  )}
+                  <small className="text-xs">
+                    {build && build.match(/^[0-9a-f]+$/) ? (
+                      <a
+                        className="dchan-link"
+                        target="_blank"
+                        rel="noreferrer"
+                        href={`https://github.com/4dchan-org/dchan-client/commit/${build}`}
+                      >
+                        {build}
+                      </a>
+                    ) : (
+                      "dev"
+                    )}
+                  </small>
                   ]
                 </summary>
                 <div className="bg-secondary border border-tertiary-accent border-solid p-2 absolute bottom-0 right-0 mr-4 mb-4">
