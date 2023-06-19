@@ -12,8 +12,8 @@ export const Footer = ({
   showContentDisclaimer?: boolean;
   className?: string;
 }) => {
-  const build = document.querySelector("meta[name='ui-version']")?.attributes.getNamedItem("content")?.value;
-
+  const build = __COMMIT_HASH__.replace("\n", "");
+  
   return (
     <div className={`flex-grow relative pt-24 ${className}`}>
       <div id="bottom" />

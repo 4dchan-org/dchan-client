@@ -194,7 +194,7 @@ export const ThreadPage = () => {
             <Loading />
           </div>
         ) : (
-          "Post not found."
+          <div className="p-4">Post not found.</div>
         )}
       </div>
 

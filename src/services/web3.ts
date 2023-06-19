@@ -5,9 +5,14 @@ import { MATIC_CHAIN } from "src/chains";
 
 const ERRORS_CHAIN_NOT_FOUND = [-32603, 4902]
 
+export function getWindowEthereum() {
+  if(!window.ethereum) throw "No wallet detected. Use Metamask, Trust Wallet or Brave Browser."
+  else return window.ethereum
+}
+
 export async function switchChain() {
   try {
-    await window.ethereum.request({
+    await getWindowEthereum().request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: MATIC_CHAIN.chainId }],
     });
@@ -21,7 +26,7 @@ export async function switchChain() {
 }
 
 async function addChain() {
-  await window.ethereum.request({
+  await getWindowEthereum().request({
     method: 'wallet_addEthereumChain',
     params: [MATIC_CHAIN],
   })
@@ -55,7 +60,7 @@ export async function sendTip(from: string, to: string, amount: number) {
 }
 
 export function getProvider(): BrowserProvider {
-  return new BrowserProvider(window.ethereum);
+  return new BrowserProvider(getWindowEthereum());
 }
 
 export async function requestAccounts() {

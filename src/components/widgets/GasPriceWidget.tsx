@@ -5,7 +5,7 @@ import { Emoji } from "src/components";
 import { formatUnits } from "ethers";
 
 export const GasPriceWidget = () => {
-  const { balance, gasPrice } = useWeb3();
+  const { balance, gasPrice, provider } = useWeb3();
   const [gweiPrice, setGweiPrice] = useState(NaN);
   const [txPrice, setTxPrice] = useState(NaN);
 
@@ -25,7 +25,7 @@ export const GasPriceWidget = () => {
       ? Math.floor(balance / txPrice)
       : null;
 
-  return (
+  return provider ? (
     <div className="text-xs pt-1 text-gray-400 hover:text-gray-600">
       {postsLeft !== null ? (
         <>
@@ -56,5 +56,5 @@ export const GasPriceWidget = () => {
         </a>
       </small>
     </div>
-  );
+  ) : <></>;
 };

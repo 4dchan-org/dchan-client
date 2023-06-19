@@ -2,6 +2,9 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import { visualizer } from "rollup-plugin-visualizer";
 import { VitePWA } from 'vite-plugin-pwa'
+import * as child from "child_process";
+
+const commitHash = child.execSync("git rev-parse --short HEAD").toString();
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -30,7 +33,10 @@ export default defineConfig({
   server: {
     port: 4444
   },
-  define: { 'process.env': process.env },
+  define: { 
+    'process.env': process.env,
+    __COMMIT_HASH__: JSON.stringify(commitHash),
+  },
   build: {
     outDir: "build"
   }
