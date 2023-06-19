@@ -41,51 +41,9 @@ export const Footer = ({
             <div className="flex text-right justify-end ml-2 flex-grow">
               <details>
                 <summary>
-                  {name} v{version} [
-                  <small className="text-xs">
-                    {build && build.match(/^[0-9a-f]+$/) ? (
-                      <a
-                        className="dchan-link"
-                        target="_blank"
-                        rel="noreferrer"
-                        href={`https://github.com/4dchan-org/dchan-client/commit/${build}`}
-                      >
-                        {build}
-                      </a>
-                    ) : (
-                      "dev"
-                    )}
-                  </small>
-                  ]
+                  {name} v{version}
                 </summary>
                 <div className="bg-secondary border border-tertiary-accent border-solid p-2 absolute bottom-0 right-0 mr-4 mb-4">
-                  <div className="mb-2">
-                    Powered by
-                    <a
-                      className="ml-1"
-                      href="//polygon.technology/"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <img
-                        className="inline w-4 h-4"
-                        src={polygonSrc}
-                        alt="Polygon"
-                      />
-                    </a>
-                    <a
-                      className="ml-1"
-                      href="//thegraph.com/"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <img
-                        className="inline w-4 h-4"
-                        src={thegraphSrc}
-                        alt="The Graph"
-                      />
-                    </a>
-                  </div>
                   <div>
                     <a
                       className="dchan-link"
@@ -120,6 +78,50 @@ export const Footer = ({
                     </a>
                   </div>
                   <div>{/* <IPFSClientsWidget /> */}</div>
+                  <div className="mt-2">
+                    Powered by
+                    <a
+                      className="ml-1"
+                      href="//polygon.technology/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <img
+                        className="inline w-4 h-4"
+                        src={polygonSrc}
+                        alt="Polygon"
+                      />
+                    </a>
+                    <a
+                      className="ml-1"
+                      href="//thegraph.com/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <img
+                        className="inline w-4 h-4"
+                        src={thegraphSrc}
+                        alt="The Graph"
+                      />
+                    </a>
+                  </div>
+                  <div className="text-xs pt-2">
+                    {build ? (
+                      <div>
+                        <span>Build: </span>
+                        <a
+                          className="dchan-link"
+                          target="_blank"
+                          rel="noreferrer"
+                          href={`https://github.com/4dchan-org/dchan-client/commit/${build}`}
+                        >
+                          {build}
+                        </a>
+                      </div>
+                    ) : (
+                      "dev"
+                    )}
+                  </div>
                 </div>
               </details>
             </div>
