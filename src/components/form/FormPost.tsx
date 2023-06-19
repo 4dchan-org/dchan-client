@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { shortenAddress } from "src/services";
-import { postMessage } from "src/actions"
+import { postMessage } from "src/actions";
 import { Board, Thread } from "src/subgraph/types";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -160,8 +160,8 @@ export const FormPost = ({
       clear();
       changeNonce();
       setIsDirty(false);
-      board && setValue("board", board.id)
-      thread && setValue("thread", thread.id)
+      board && setValue("board", board.id);
+      thread && setValue("thread", thread.id);
     },
     [reset, trigger, changeNonce, clear, setIsDirty]
   );
@@ -224,8 +224,8 @@ export const FormPost = ({
     }
   }, [files, setThumbnailB64]);
 
-  useEffect(() => {
-    console.log({files})
+  useEffect(
+    () => {
       if (files && files.length > 0) {
         setFileSize(files[0].size / 1024);
       } else {
@@ -239,7 +239,7 @@ export const FormPost = ({
 
   const fileRemove = useCallback(() => {
     setFiles(undefined);
-    setFileNonce(Math.random().toString())
+    setFileNonce(Math.random().toString());
   }, [setFiles]);
 
   const pasteHandler = useCallback(
@@ -319,15 +319,20 @@ export const FormPost = ({
   }, [setIsDirty]);
 
   useEffect(() => {
-    changeNonce()
-    board && setValue("board", board.id)
-    thread && setValue("thread", thread.id)
-  }, [board, thread])
+    changeNonce();
+    board && setValue("board", board.id);
+    thread && setValue("thread", thread.id);
+  }, [board, changeNonce, setValue, thread]);
 
   const formPostOptions = () => (
     <span>
       <span className="text-xs">
-        <button onClick={() => window.confirm("The form is being reset. Are you sure?") && resetForm(true)}>
+        <button
+          onClick={() =>
+            window.confirm("The form is being reset. Are you sure?") &&
+            resetForm(true)
+          }
+        >
           <Emoji emoji={"❌"} />
         </button>
       </span>

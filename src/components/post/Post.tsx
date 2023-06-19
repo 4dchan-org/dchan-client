@@ -162,7 +162,7 @@ export const Post = memo(
         ? "bg-secondary border-bottom-tertiary-accent border-right-tertiary-accent"
         : "",
       isYou ? "dchan-post-you" : "",
-      "w-full sm:w-full my-2 inline-block relative p-0.5 table",
+      "mt-2 relative p-0.5",
     ].join(" ");
 
     return (
@@ -173,7 +173,7 @@ export const Post = memo(
           ""
         )}
         <div
-          className={`mx-auto sm:mr-3 sm:ml-2 text-left inline ${
+          className={`${
             isOp ? "w-full" : ""
           }`}
           key={id}
@@ -317,7 +317,7 @@ export const Post = memo(
                   )}
                   <div className="y-1">
                     <div
-                      className={`h-full max-w-max flex flex-wrap text-left sm:items-start pb-1 max-w-100vw`}
+                      className={`h-full max-w-max flex flex-wrap text-left sm:items-start pb-1`}
                     >
                       <div className="w-full table pt-1">
                         {image ? (
@@ -372,7 +372,7 @@ export const Post = memo(
                       {children}
                     </div>
                     <Link
-                      className="px-1 text-xs opacity-5 hover:opacity-100 absolute bottom-0 right-0 hidden sm:inline"
+                      className="px-1 text-xs opacity-5 hover:opacity-100 absolute bottom-0 left-0 hidden sm:inline"
                       to={`/${post.id}${block ? `?block=${block}` : ""}`}
                       title="Permalink"
                     >

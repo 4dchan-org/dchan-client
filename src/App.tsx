@@ -42,8 +42,8 @@ function App() {
   return eula === false ? (
     <EULA />
   ) : (
-    <AppContext>
-      <Router basename="/">
+    <Router basename="/">
+      <AppContext>
         <ScrollToHashElement />
         <SingletonHooksContainer />
         <LockBanner />
@@ -86,8 +86,8 @@ function App() {
           </Routes>
           <ModalOverlay />
         </div>
-      </Router>
-    </AppContext>
+      </AppContext>
+    </Router>
   );
 }
 
