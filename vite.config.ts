@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import { visualizer } from "rollup-plugin-visualizer";
-import { VitePWA } from 'vite-plugin-pwa'
 import * as child from "child_process";
 
 const commitHash = child.execSync("git rev-parse --short HEAD").toString();
@@ -16,12 +15,6 @@ export default defineConfig({
       gzipSize: true,
       brotliSize: true,
       filename: "analyse.html", // will be saved in project's root
-    }),
-    VitePWA({
-      registerType: 'autoUpdate',
-      workbox: {
-        globPatterns: ['**/*.{js,css,html}']
-      }
     })
   ],
   resolve: {
