@@ -3,7 +3,7 @@ import { Board, Thread } from "src/subgraph/types";
 import { TabbedCard } from "src/components";
 import { THREADS_TABS, THREADS_TABS_BLOCK } from "src/subgraph/graphql/queries";
 import { Loading, IndexView } from "src/components";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { DateTime } from "luxon";
 import { useTimeTravel } from "src/hooks";
 interface ThreadListData {
@@ -31,7 +31,7 @@ export const ThreadTabs = ({
     ),
     [currentBlock]
   );
-  const { data: newData, loading } = useQuery<ThreadListData, ThreadListVars>(
+  const { data, loading } = useQuery<ThreadListData, ThreadListVars>(
     block ? THREADS_TABS_BLOCK : THREADS_TABS,
     {
       pollInterval: 30_000,
@@ -39,9 +39,6 @@ export const ThreadTabs = ({
       variables: { block, limit, cutoff, board: board?.id || "" },
     }
   );
-
-  const [data, setData] = useState(newData)
-  useEffect(() => newData && setData(newData), [newData, setData])
 
   return data ? (
     <TabbedCard className={`${className} w-auto`} firstTab="Last bumped">

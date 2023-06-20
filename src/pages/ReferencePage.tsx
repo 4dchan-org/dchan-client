@@ -31,12 +31,20 @@ export const ReferencePage = () => {
   const post_ref = `${id}/${post_n}`;
   const { timeTraveledToBlockNumber: block } = useTimeTravel();
 
-  const { loading, data } = useQuery<RefSearchData, RefSearchVars>(
+  const {
+    loading,
+    data,
+    error: errorResult,
+  } = useQuery<RefSearchData, RefSearchVars>(
     block ? queries.query_ref_by_block : queries.query_ref,
     {
       variables: { id: id || "", post_n: post_n || "", post_ref, block: block },
     }
   );
+
+  useEffect(() => {
+    errorResult && setError(JSON.stringify(errorResult, null, 2).repeat(100));
+  }, [errorResult]);
 
   useEffect(() => {
     if (data) {
@@ -77,8 +85,8 @@ export const ReferencePage = () => {
   return (
     <div className="bg-primary center grid w-screen h-screen">
       {error ? (
-        <Error subject={"Not found"}>
-          <span>{error}</span>
+        <Error subject={"Something went wrong"}>
+          <pre className="text-left">{error}</pre>
         </Error>
       ) : (
         <div>

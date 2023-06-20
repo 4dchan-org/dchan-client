@@ -150,6 +150,11 @@ export const FormPost = ({
     setValue("nonce", now());
   }, [setValue]);
 
+  const fileRemove = useCallback(() => {
+    setFiles(undefined);
+    setFileNonce(Math.random().toString());
+  }, [setFiles]);
+
   const resetForm = useCallback(
     (forceReset?: boolean) => {
       if (!forceReset && !window.confirm("Reset form?")) return;
@@ -163,7 +168,7 @@ export const FormPost = ({
       board && setValue("board", board.id);
       thread && setValue("thread", thread.id);
     },
-    [reset, trigger, changeNonce, clear, setIsDirty]
+    [fileRemove, reset, trigger, clear, changeNonce, board, setValue, thread]
   );
 
   const onSubmit = useCallback(
@@ -236,11 +241,6 @@ export const FormPost = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [files]
   );
-
-  const fileRemove = useCallback(() => {
-    setFiles(undefined);
-    setFileNonce(Math.random().toString());
-  }, [setFiles]);
 
   const pasteHandler = useCallback(
     (event: any) => {

@@ -1,22 +1,27 @@
 import { ReactElement } from "react";
 import { Link } from "react-router-dom";
-import { BackButton } from ".";
+import { BackButton, Card } from ".";
 
 export const Error = ({
   subject,
   children,
 }: {
   subject: string;
-  children: ReactElement
+  children: ReactElement;
 }) => {
   return (
     <div className="font-family-arial text-center">
       <div className="grid center min-h-100vh">
         <div>
-          <div className="text-4xl text-contrast font-weight-800 font-family-tahoma m-4">
-            {subject}
-          </div>
-          <div className="grid center m-4">{children}</div>
+          <Card
+            title={
+              <div className="text-xl text-contrast font-weight-800 font-family-tahoma m-4">
+                {subject}
+              </div>
+            }
+          >
+            <div className="grid center m-4">{children}</div>
+          </Card>
           <div>
             <BackButton />
           </div>
@@ -29,4 +34,4 @@ export const Error = ({
       </div>
     </div>
   );
-}
+};

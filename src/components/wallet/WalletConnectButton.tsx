@@ -52,7 +52,7 @@ export const WalletConnectButton = ({
                 modals, then try again.
               </summary>
               <div className="bg-red">
-              {JSON.stringify(error)}
+              {JSON.stringify(error, null, 2)}
               </div>
             </details>
           </span>

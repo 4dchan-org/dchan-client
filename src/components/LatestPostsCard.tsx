@@ -1,9 +1,12 @@
 import { useQuery } from "@apollo/react-hooks";
 import { Board, Post } from "src/subgraph/types";
-import { POSTS_GET_LAST, POSTS_GET_LAST_BLOCK } from "src/subgraph/graphql/queries";
+import {
+  POSTS_GET_LAST,
+  POSTS_GET_LAST_BLOCK,
+} from "src/subgraph/graphql/queries";
 import { Loading, PostSearchResult } from ".";
-import { useEffect, useState } from "react";
 import { useTimeTravel } from "src/hooks";
+import { useEffect, useState } from "react";
 
 export const LatestPostsCard = ({
   limit,
@@ -14,9 +17,8 @@ export const LatestPostsCard = ({
   skip?: number;
   board?: Board;
 }) => {
-  const { timeTraveledToBlockNumber: block } = useTimeTravel()
+  const { timeTraveledToBlockNumber: block } = useTimeTravel();
   const query = block ? POSTS_GET_LAST_BLOCK : POSTS_GET_LAST;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { loading, data: newData } = useQuery<{ posts: Post[] }, any>(query, {
     pollInterval: 10_000,
     variables: {
@@ -26,8 +28,8 @@ export const LatestPostsCard = ({
       board: board?.id || "",
     },
   });
-  const [data, setData] = useState(newData)
-  useEffect(() => newData && setData(newData), [newData, setData])
+  const [data, setData] = useState(newData);
+  useEffect(() => newData && setData(newData), [newData, setData]);
 
   return (
     <div>
@@ -35,12 +37,9 @@ export const LatestPostsCard = ({
         <Loading />
       ) : (
         data?.posts?.map((post) => (
-          <PostSearchResult
-            post={post}
-            key={post.id}
-          />
+          <PostSearchResult post={post} key={post.id} />
         )) || <div>No post found</div>
       )}
     </div>
   );
-}
+};

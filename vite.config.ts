@@ -4,7 +4,8 @@ import { visualizer } from "rollup-plugin-visualizer";
 import * as child from "child_process";
 import { DateTime } from 'luxon';
 
-const buildVersion = child.execSync("git rev-parse --short HEAD").toString().replace("\n", "") + "/" + DateTime.now().toUnixInteger();
+const buildCommit = child.execSync("git rev-parse --short HEAD").toString().replace("\n", "")
+const buildTime = DateTime.now().toUnixInteger();
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -29,7 +30,8 @@ export default defineConfig({
   },
   define: { 
     'process.env': process.env,
-    __BUILD_VERSION__: JSON.stringify(buildVersion),
+    __BUILD_COMMIT__: JSON.stringify(buildCommit),
+    __BUILD_TIME__: JSON.stringify(buildTime),
   },
   build: {
     outDir: "build"

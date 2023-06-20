@@ -1,11 +1,16 @@
 import { User } from "src/subgraph/types";
 import { IdLabel } from ".";
 
-export const UserLabel = ({ user, className = ""}: { className?: string, user: User }) => {
+export const UserLabel = ({
+  user,
+  className = "",
+}: {
+  className?: string;
+  user: User;
+}) => {
   return (
     <a
       className="dchan-link"
-      // eslint-disable-next-line
       href={`https://polygonscan.com/address/${user.address}`}
       target={`_blank`}
     >
@@ -14,4 +19,4 @@ export const UserLabel = ({ user, className = ""}: { className?: string, user: U
       </IdLabel>
     </a>
   );
-}
+};

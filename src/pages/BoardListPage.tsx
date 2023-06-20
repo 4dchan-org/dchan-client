@@ -6,7 +6,7 @@ import {
   SearchWidget,
   BoardTabs,
   BoardList,
-  GenericHeader
+  GenericHeader,
 } from "src/components";
 import { useQuery } from "@apollo/react-hooks";
 import { Board } from "src/subgraph/types";
@@ -15,7 +15,10 @@ import isString from "lodash/isString";
 import uniqBy from "lodash/uniqBy";
 import { Router } from "src/router";
 import { useCallback, useEffect } from "react";
-import { BOARDS_SEARCH, BOARDS_SEARCH_BLOCK } from "src/subgraph/graphql/queries";
+import {
+  BOARDS_SEARCH,
+  BOARDS_SEARCH_BLOCK,
+} from "src/subgraph/graphql/queries";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTimeTravel } from "src/hooks";
 
@@ -33,11 +36,10 @@ interface BoardSearchVars {
 export const BoardListPage = () => {
   const location = useLocation();
   const { id } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const query = qs.parse(location.search);
-  const search =
-    `${id || ""}` || (isString(query.s) ? query.s : "");
-  const { timeTraveledToBlockNumber: block } = useTimeTravel()
+  const search = `${id || ""}` || (isString(query.s) ? query.s : "");
+  const { timeTraveledToBlockNumber: block } = useTimeTravel();
   const {
     refetch: searchRefetch,
     data: searchData,
@@ -56,9 +58,12 @@ export const BoardListPage = () => {
     }
   );
 
-  const onSearch = useCallback((search: string) => {
-    navigate(Router.boards({search}));
-  }, [navigate])
+  const onSearch = useCallback(
+    (search: string) => {
+      navigate(Router.boards({ search }));
+    },
+    [navigate]
+  );
 
   useEffect(() => {
     searchRefetch();
@@ -75,16 +80,12 @@ export const BoardListPage = () => {
 
   return (
     <div className="bg-primary min-h-100vh flex flex-col">
-      <GenericHeader
-        title="Boards"
-      />
+      <GenericHeader title="Boards" />
 
       <div className="relative">
         <div className="flex center">
           <SearchWidget
-            baseUrl={`${Router.boards()}${
-              block ? `?block=${block}` : ""
-            }`}
+            baseUrl={`${Router.boards()}${block ? `?block=${block}` : ""}`}
             search={search}
             onSearch={onSearch}
           />
@@ -92,7 +93,7 @@ export const BoardListPage = () => {
         <div className="">
           {searchLoading ? (
             <div className="center grid">
-              <Loading></Loading>
+              <Loading />
             </div>
           ) : search ? (
             <div className="center flex">
@@ -127,4 +128,4 @@ export const BoardListPage = () => {
       <Footer />
     </div>
   );
-}
+};

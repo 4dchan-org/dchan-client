@@ -203,8 +203,8 @@ export const BoardPage = () => {
           ) : board && threads ? (
             threads.length === 0 ? (
               <>
-                <div className="center grid p-8">No threads.</div>
                 <div className="center grid p-8">
+                  <div className="p-2">No threads.</div>
                   <button
                     className="dchan-link dchan-brackets p-2"
                     onClick={onTimeTravel}

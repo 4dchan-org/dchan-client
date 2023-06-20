@@ -16,7 +16,11 @@ export const WatchedThreadsWidget = () => {
     [favorites]
   );
 
-  const { data: newData, loading, refetch } = useQuery(THREADS_LIST_FAVORITES, {
+  const {
+    data: newData,
+    loading,
+    refetch,
+  } = useQuery(THREADS_LIST_FAVORITES, {
     pollInterval: 30_000,
     variables: {
       ids,
@@ -24,13 +28,13 @@ export const WatchedThreadsWidget = () => {
     skip: !favorites,
   });
 
-  const [data, setData] = useState(newData)
-  useEffect(() => newData && setData(newData), [newData, setData])
+  const [data, setData] = useState(newData);
+  useEffect(() => newData && setData(newData), [newData, setData]);
 
   const threads = data?.threads;
   const doRefetch = useCallback(() => refetch({ ids }), [refetch, ids]);
   const onRefresh = useThrottleCallback(doRefetch, 1, true);
-  const onRemove = removeFavorite ? removeFavorite : () => { };
+  const onRemove = removeFavorite ? removeFavorite : () => ({});
 
   return favorites ? (
     <div className="bg-secondary border border-tertiary-accent p-1">
@@ -38,13 +42,11 @@ export const WatchedThreadsWidget = () => {
         <Loading />
       ) : ids.length > 0 && threads && threads.length > 0 ? (
         <div>
-          <div className="mb-2">Watched threads: 
+          <div className="mb-2">
+            Watched threads:
             <span className="text-xs pl-2">
               [
-              <button
-                className="dchan-link"
-                onClick={onRefresh}
-              >
+              <button className="dchan-link" onClick={onRefresh}>
                 Refresh
               </button>
               ]
@@ -56,7 +58,9 @@ export const WatchedThreadsWidget = () => {
 
               return (
                 <div key={thread.id}>
-                  <button onClick={() => onRemove(thread)}><Emoji emoji={"✖"} /></button>{" "}
+                  <button onClick={() => onRemove(thread)}>
+                    <Emoji emoji={"✖"} />
+                  </button>{" "}
                   {board ? (
                     <span>
                       <BoardLink board={board} />
@@ -64,10 +68,7 @@ export const WatchedThreadsWidget = () => {
                   ) : (
                     ""
                   )}
-                  <Link
-                    className="dchan-link"
-                    to={`${Router.thread(thread)}`}
-                  >
+                  <Link className="dchan-link" to={`${Router.thread(thread)}`}>
                     {" "}
                     - ({thread.replyCount}) -{" "}
                     {truncate(thread.subject || thread.op.comment, {
@@ -81,11 +82,14 @@ export const WatchedThreadsWidget = () => {
             })}
           </div>
         </div>
-      ) : <span>No threads are being watched. Use the <Emoji emoji={"⭐️"} /> button on threads to keep track of them here.</span>}
+      ) : (
+        <span>
+          No threads are being watched. Use the <Emoji emoji={"⭐️"} /> button
+          on threads to keep track of them here.
+        </span>
+      )}
     </div>
   ) : (
-    <div className="bg-secondary border border-tertiary-accent p-1">
-      ...
-    </div>
+    <div className="bg-secondary border border-tertiary-accent p-1">...</div>
   );
-}
+};

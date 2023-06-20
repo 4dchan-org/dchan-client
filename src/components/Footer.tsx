@@ -2,6 +2,7 @@ import polygonSrc from "src/assets/images/polygon.png";
 import thegraphSrc from "src/assets/images/thegraph.png";
 import { FAQButton, RulesButton, AbuseButton, Emoji } from ".";
 import pkgInfo from "../../package.json";
+import { DateTime } from "luxon";
 
 const { name, version } = pkgInfo;
 
@@ -12,7 +13,7 @@ export const Footer = ({
   showContentDisclaimer?: boolean;
   className?: string;
 }) => {
-  const build = __BUILD_VERSION__;
+  const [buildCommit, buildTime] = [__BUILD_COMMIT__, __BUILD_TIME__];
 
   return (
     <div className={`flex-grow relative pt-24 ${className}`}>
@@ -22,8 +23,8 @@ export const Footer = ({
           {showContentDisclaimer ? (
             <div className="text-xs text-gray-400 hover:text-gray-600">
               All trademarks and copyrights on this page are owned by their
-              respective parties. Posted content is responsibility of the
-              poster.
+              respective parties. Images uploaded are the responsibility of the
+              Poster. Comments are owned by the Poster.
             </div>
           ) : (
             ""
@@ -43,7 +44,34 @@ export const Footer = ({
                 <summary>
                   {name} v{version}
                 </summary>
-                <div className="bg-secondary border border-tertiary-accent border-solid p-2 absolute bottom-0 right-0 mr-4 mb-4">
+                <div className="bg-secondary border border-tertiary-accent border-solid p-2 absolute bottom-0 right-0 mr-4 mb-6">
+                  <div className="mb-2">
+                    Powered by
+                    <a
+                      className="ml-1"
+                      href="//polygon.technology/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <img
+                        className="inline w-4 h-4"
+                        src={polygonSrc}
+                        alt="Polygon"
+                      />
+                    </a>
+                    <a
+                      className="ml-1"
+                      href="//thegraph.com/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <img
+                        className="inline w-4 h-4"
+                        src={thegraphSrc}
+                        alt="The Graph"
+                      />
+                    </a>
+                  </div>
                   <div>
                     <a
                       className="dchan-link"
@@ -78,45 +106,25 @@ export const Footer = ({
                     </a>
                   </div>
                   <div>{/* <IPFSClientsWidget /> */}</div>
-                  <div className="mt-2">
-                    Powered by
-                    <a
-                      className="ml-1"
-                      href="//polygon.technology/"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <img
-                        className="inline w-4 h-4"
-                        src={polygonSrc}
-                        alt="Polygon"
-                      />
-                    </a>
-                    <a
-                      className="ml-1"
-                      href="//thegraph.com/"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <img
-                        className="inline w-4 h-4"
-                        src={thegraphSrc}
-                        alt="The Graph"
-                      />
-                    </a>
-                  </div>
                   <div className="text-xs pt-2">
-                    {build ? (
+                    {buildCommit ? (
                       <div>
-                        <span>Build: </span>
-                        <a
-                          className="dchan-link"
-                          target="_blank"
-                          rel="noreferrer"
-                          href={`https://github.com/4dchan-org/dchan-client/commit/${build}`}
-                        >
-                          {build}
-                        </a>
+                        <span>
+                          Build{" "}
+                          <a
+                            className="dchan-link"
+                            target="_blank"
+                            rel="noreferrer"
+                            href={`https://github.com/4dchan-org/dchan-client/commit/${buildCommit}`}
+                          >
+                            {buildCommit}
+                          </a>{" "}
+                          <div>
+                            {DateTime.fromSeconds(
+                              parseInt(buildTime)
+                            ).toLocaleString(DateTime.DATETIME_SHORT)}
+                          </div>
+                        </span>
                       </div>
                     ) : (
                       "dev"
