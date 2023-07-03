@@ -52,7 +52,7 @@ export const AdminPage = () => {
     <div className="bg-primary min-h-100vh">
       <GenericHeader title="Admin panel"></GenericHeader>
 
-      <WalletConnect></WalletConnect>
+      <WalletConnect />
 
       {isAdmin() ? (
         <div>

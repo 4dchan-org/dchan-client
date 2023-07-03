@@ -32,15 +32,13 @@ export const WalletConnectButton = ({
   return (
     <span className={`text-center select-none ${className}`}>
       <div>
-        [
-        <button className="dchan-link" onClick={onClick}>
+        <button className="dchan-link dchan-brackets whitespace-nowrap" onClick={onClick}>
           {isConnecting
             ? "Connecting wallet..."
             : !provider
             ? "Connect Wallet"
             : "Disconnect Wallet"}
         </button>
-        ]
       </div>
       <span className="text-sm">
         {hasError ? (

@@ -22,6 +22,8 @@ export const Footer = ({
         <div className="flex center flex-grow">
           {showContentDisclaimer ? (
             <div className="text-xs text-gray-400 hover:text-gray-600">
+              ---
+              <br />
               All trademarks and copyrights on this page are owned by their
               respective parties. Images uploaded are the responsibility of the
               Poster. Comments are owned by the Poster.

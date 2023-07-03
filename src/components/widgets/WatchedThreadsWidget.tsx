@@ -8,6 +8,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Router } from "src/router";
 import { BoardLink, Loading, Emoji } from "src/components";
+import { isExpired } from "src/subgraph/entities/thread";
 
 export const WatchedThreadsWidget = () => {
   const { favorites, removeFavorite } = useLocalFavorites();
@@ -42,7 +43,7 @@ export const WatchedThreadsWidget = () => {
         <Loading />
       ) : ids.length > 0 && threads && threads.length > 0 ? (
         <div>
-          <div className="mb-2">
+          <div className="mb-1">
             Watched threads:
             <span className="text-xs pl-2">
               [
@@ -76,6 +77,7 @@ export const WatchedThreadsWidget = () => {
                     })}{" "}
                     {thread.isLocked ? <Emoji emoji={"🔒"} /> : ""}{" "}
                     {thread.isPinned ? <Emoji emoji={"📌"} /> : ""}
+                    {isExpired(thread) ? <Emoji emoji={"📁"} /> : ""}
                   </Link>
                 </div>
               );

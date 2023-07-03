@@ -1,7 +1,4 @@
-import {
-  HeaderNavigation,
-  HeaderLogo,
-} from "src/components";
+import { HeaderNavigation, HeaderLogo } from "src/components";
 import { useEffect, useState, useCallback } from "react";
 import { useTitle } from "react-use";
 import { subscribe, unsubscribe } from "pubsub-js";
@@ -47,9 +44,16 @@ export const HomePage = () => {
   return (
     <div className="h-screen bg-primary flex flex-col pb-2">
       <HeaderNavigation />
-      <div className="relative z-20">
+      <div className="z-20">
         <div className="h-20 flex items-center bg-primary">
-          <div className="left-0 absolute"><HeaderLogo /></div>
+          <div className="bg-secondary border-tertiary-accent border solid w-full h-16 flex justify-end text-sm pr-6 shadow pt-1 text-right">
+            <div className="left-0 absolute">
+              <HeaderLogo />
+            </div>
+            <div className="ml-28 lg:ml-64 overflow-scroll text-xs">
+              
+            </div>
+          </div>
         </div>
         <hr />
       </div>

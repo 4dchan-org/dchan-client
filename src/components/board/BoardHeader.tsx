@@ -26,7 +26,7 @@ export const BoardHeader = ({
         thread={thread}
       />
       
-      <div className="left-0 absolute"><HeaderLogo /></div>
+      <div className="top-9 left-0 absolute"><HeaderLogo /></div>
 
       <div className="text-4xl text-contrast font-weight-800 font-family-tahoma relative flex center h-20 z-20 pointer-events-none">
         <div className="dchan-bg-primary-fade-x px-2 h-20 center flex rounded-lg pointer-events-auto">

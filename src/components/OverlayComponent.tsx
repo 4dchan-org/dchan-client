@@ -1,3 +1,4 @@
+import React from "react";
 import { ReactElement } from "react";
 
 interface ContainerProps {
@@ -8,6 +9,21 @@ interface ContainerProps {
 }
 
 export const Overlay = (props: ContainerProps) => {
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.stopPropagation();
+        props.onExit();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [props]);
+  
   return (
     <div
       className="flex fixed top-0 bottom-0 left-0 right-0 overflow-scroll bg-black bg-opacity-50 cursor-default pb-8"

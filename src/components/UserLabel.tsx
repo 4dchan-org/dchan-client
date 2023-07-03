@@ -9,7 +9,7 @@ export const UserLabel = ({
   user: User;
 }) => {
   return (
-    <a
+    user.address ? <a
       className="dchan-link"
       href={`https://polygonscan.com/address/${user.address}`}
       target={`_blank`}
@@ -17,6 +17,6 @@ export const UserLabel = ({
       <IdLabel id={user.address || "0x000000"} className={className}>
         {user.b58id}
       </IdLabel>
-    </a>
+    </a> : ""
   );
 };

@@ -4,12 +4,12 @@ import React from "react";
 
 export const HeaderLogo = React.memo(({ block }: { block?: string }) => {
   return (
-    <span className="h-20 font-mono center flex select-none">
+    <span className="font-mono center flex">
       <Link className="z-20" to={`/${block ? `?block=${block}` : ""}`}>
-        <span className="relative">
-          <span>
+        <span className="h-16 inline-block relative">
+          <span className="select-none">
             <Spinner
-              className="absolute top-0 bottom-0 opacity-10"
+              className="absolute w-14 h-14 top-0 bottom-0 opacity-10"
               size={16}
               style={{
                 animationDelay: `-${
@@ -19,7 +19,7 @@ export const HeaderLogo = React.memo(({ block }: { block?: string }) => {
               speed={"minute"}
             />
             <Spinner
-              className="absolute top-0 bottom-0 ml-3 opacity-20"
+              className="absolute w-14 h-14 top-0 bottom-0 ml-3 opacity-20"
               size={16}
               style={{
                 animationDelay: `-${
@@ -29,7 +29,7 @@ export const HeaderLogo = React.memo(({ block }: { block?: string }) => {
               speed={"minute"}
             />
             <Spinner
-              className="absolute top-0 bottom-0 ml-6 opacity-30"
+              className="absolute w-14 h-14 top-0 bottom-0 ml-6 opacity-30"
               size={16}
               style={{
                 animationDelay: `-${
@@ -39,7 +39,7 @@ export const HeaderLogo = React.memo(({ block }: { block?: string }) => {
               speed={"minute"}
             />
             <Spinner
-              className="absolute top-0 bottom-0 ml-9"
+              className="absolute w-14 h-14 top-0 bottom-0 ml-9"
               size={16}
               style={{
                 animationDelay: `-${new Date().getSeconds()}.${new Date().getMilliseconds()}s`,
@@ -47,7 +47,7 @@ export const HeaderLogo = React.memo(({ block }: { block?: string }) => {
               speed={"minute"}
             />
           </span>
-          <span className="text-left lg:ml-28 z-20 invisible lg:visible">4dchan.org</span>
+          <span className="text-left lg:ml-28 z-20 invisible lg:visible absolute"><div className="font-bold">4dchan.org</div><div className="text-xs text-gray-600 dchan-header-subtitle">Decentralized Timetraveling Imageboard</div></span>
         </span>
       </Link>
     </span>

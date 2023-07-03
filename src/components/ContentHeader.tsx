@@ -55,12 +55,10 @@ export const ContentHeader = ({
               </div>
               <div>{timeTraveledToDateTime?.toRelative()}</div>
             </span>
-            <div className="text-xs text-center p-2">
-              [
-              <button className="dchan-link" onClick={() => openWidget(OpenedWidgetEnum.TIMETRAVEL)}>
+            <div className="text-xs text-center p-2 select-none">
+              <button className="dchan-brackets" onClick={() => openWidget(OpenedWidgetEnum.TIMETRAVEL)}>
                 Time Travel
               </button>
-              ]
             </div>
           </div>
         ) : (
@@ -78,7 +76,7 @@ export const ContentHeader = ({
         ""
       )}
 
-      <div className="lg:sticky top-0 z-30 pt-6 dchan-navigation-sticky">
+      <div className="sticky top-0 z-30 pt-6 dchan-navigation-sticky">
         <div className="text-center sm:text-left grid lg:grid-cols-3 text-xs bg-primary pt-2 lg:pt-0">
           <div className="mx-2 flex flex-wrap sm:flex-nowrap justify-center md:justify-start items-center select-none">
             {board ? <ContentNavigation board={board} /> : <span />}

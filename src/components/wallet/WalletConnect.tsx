@@ -7,42 +7,38 @@ export const WalletConnect = () => {
   return (
     <div>
       <WalletConnectButton />
+
       {!provider ? (
         <div className="text-xs px-2">
           <small className="p-1 text-center">
-            <div>You need to connect your wallet to interact with 4dchan.org</div>
             <div>
-              Works with{" "}
-              <a
-                className="dchan-link"
-                href="//metamask.io"
-                target="_blank"
-              >
+              {"Use "}
+              <a className="dchan-link" href="//metamask.io" target="_blank">
                 Metamask
-              </a>{" or "}
-              <a
-                className="dchan-link"
-                href="//brave.com/"
-                target="_blank"
-              >
+              </a>
+              {" or "}
+              <a className="dchan-link" href="//brave.com/" target="_blank">
                 Brave Browser
               </a>
-              {" "}(for Desktop) {" or "}
+              {" for Desktop"}
+            </div>
+            <div>
+              {"or "}
               <a
                 className="dchan-link"
                 href="//trustwallet.com/"
                 target="_blank"
               >
                 Trust Wallet
-              </a>{" "}
-              (for Mobile) and
+              </a>
+              {" for Mobile"}.
             </div>
             <div>Other wallets might not be supported.</div>
           </small>
         </div>
       ) : (
-        ""
+        <></>
       )}
     </div>
   );
-}
+};

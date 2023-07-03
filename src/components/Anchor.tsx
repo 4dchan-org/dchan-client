@@ -45,7 +45,7 @@ export const Anchor = ({
   const search = useLocation().search;
   
   return (
-    <div>
+    <span>
       [
       <Link
         className="dchan-link"
@@ -55,6 +55,6 @@ export const Anchor = ({
         {label}
       </Link>
       ]
-    </div>
+    </span>
   );
 }

@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 import { Board, Thread, Block, User } from "src/subgraph/types";
 import { BOARDS_LIST_MOST_POPULAR } from "src/subgraph/graphql/queries";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Router } from "src/router";
 import {
@@ -16,11 +16,13 @@ import {
 } from "src/components";
 import { useTimeTravel, useUser, useWeb3 } from "src/hooks";
 import { subscribe, unsubscribe } from "pubsub-js";
+import { WidgetContext } from "src/contexts/WidgetContext";
 
 interface BoardListData {
   boards: Board[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface BoardListVars {}
 
 export enum OpenedWidgetEnum {
@@ -55,9 +57,7 @@ export const HeaderNavigation = ({
     label: "Site creation",
     block: siteCreatedAtBlock,
   });
-  const [openedWidget, setOpenedWidget] = useState<OpenedWidgetEnum | null>(
-    null
-  );
+  const [openedWidget, setOpenedWidget] = useContext(WidgetContext);
   const [showBoards, setShowBoards] = useState<boolean>(false);
   const timeTravelRef = useRef<HTMLDetailsElement>(null);
   const watchedThreadsRef = useRef<HTMLDetailsElement>(null);
@@ -153,9 +153,8 @@ export const HeaderNavigation = ({
           </Link>
           ]
         </span>
-        <span className="inline-flex center flex-grow">
-        </span>
-        <span className="float-right flex flex-row mr-1">
+        <span className="inline-flex center flex-grow" />
+        <span className="float-right flex flex-row mr-1 select-none justify-end flex-grow">
           <TimeTravelWidget
             ref={timeTravelRef}
             open={openedWidget === OpenedWidgetEnum.TIMETRAVEL}
@@ -253,7 +252,7 @@ export const HeaderNavigation = ({
         </span>
         <div
           className={
-            "w-min top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto mx-auto " +
+            "w-min top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto mx-auto overflow-scroll " +
             (showBoards ? "block md:hidden" : "hidden")
           }
         >

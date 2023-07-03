@@ -179,7 +179,7 @@ export const PostHeader = ({
       ) : (
         <span></span>
       )}
-      <span className="px-0.5 break-all">
+      <span className="px-0.5 break-all grid center">
         <span
           className={`font-bold font-size-090rem ${
             isPostUserAdmin

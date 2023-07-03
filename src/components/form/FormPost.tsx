@@ -19,12 +19,12 @@ import { useFormPersist } from "src/hooks";
 import {
   Status,
   Loading,
-  Wallet,
   Menu,
   IdLabel,
   FAQButton,
   RulesButton,
   Emoji,
+  Wallet,
 } from "src/components";
 
 export const FormPost = ({
@@ -188,7 +188,7 @@ export const FormPost = ({
 
         // @HACK Trust wallet fix
         if (
-          result.error.message.match(/failed.*check.*transaction.*receipt/i)
+          result?.error?.message?.match(/failed.*check.*transaction.*receipt/i)
         ) {
           delete result.error;
           result.success = true;
@@ -384,7 +384,9 @@ export const FormPost = ({
         <div>
           {showForm ? (
             <div className="sm:grid center w-full text-left sticky top-0 min-h-200px">
-              <Status status={status} />
+              <div className="center flex overflow-scroll break-words">
+                <Status status={status} />
+              </div>
               <form
                 ref={formRef}
                 id="dchan-post-form"
@@ -418,6 +420,14 @@ export const FormPost = ({
                 )}
                 <table>
                   <tbody>
+                    {/* <tr>
+                    <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
+                      Identity
+                    </td>
+                    <td>
+                      <Identity />
+                    </td>
+                  </tr> */}
                     {!thread ? (
                       <tr>
                         <td className="px-2 border border-solid border-black bg-highlight font-semibold text-sm">
