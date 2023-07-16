@@ -46,12 +46,17 @@ export const HomePage = () => {
       <HeaderNavigation />
       <div className="z-20">
         <div className="h-20 flex items-center bg-primary">
-          <div className="bg-secondary border-tertiary-accent border solid w-full h-16 flex justify-end text-sm pr-6 shadow pt-1 text-right">
+          <div className="w-full h-16 flex justify-end text-sm pr-6 pt-1 text-right">
             <div className="left-0 absolute">
               <HeaderLogo />
             </div>
             <div className="ml-28 lg:ml-64 overflow-scroll text-xs">
-              
+              {/* <details>
+                <summary>
+                <div className="border-tertiary-accent bg-secondary">Stats</div>
+                </summary>
+                Posts
+              </details> */}
             </div>
           </div>
         </div>

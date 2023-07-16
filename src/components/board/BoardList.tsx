@@ -54,16 +54,6 @@ export const BoardItem = ({
       <td>
         <IdLabel id={id}></IdLabel>
       </td>
-      <td className="px-2 whitespace-nowrap hidden sm:block max-w-10rem truncate">
-        <span>
-          <Link
-            className="dchan-link"
-            to={url}
-          >
-            {title}
-          </Link>
-        </span>
-      </td>
       <td className="px-2 whitespace-nowrap">
         <span>
           <Link
@@ -71,6 +61,16 @@ export const BoardItem = ({
             to={url}
           >
             /{name}/
+          </Link>
+        </span>
+      </td>
+      <td className="px-2 whitespace-nowrap hidden sm:block max-w-10rem truncate" colSpan={3}>
+        <span>
+          <Link
+            className="dchan-link"
+            to={url}
+          >
+            {title}
           </Link>
         </span>
       </td>

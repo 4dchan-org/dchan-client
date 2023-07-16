@@ -96,33 +96,30 @@ export const FAQCard = ({
             >
               web3
             </a>{" "}
-            imageboard whose posts are stored on <Polygon />
-            's blockchain and whose images are stored on <IPFS />, using{" "}
-            <TheGraph /> to index and serve the content in a decentralized
-            manner.
+            imageboard that uses the <Polygon />
+            blockchain, <IPFS /> and <TheGraph /> to ensure it will always be
+            online, forever.
           </div>
         </div>
 
         <div className="pb-2">
           <strong>Q: ...Time-Traveling?</strong>
           <div>
-            <Dchan />
-            's backend is powered by <TheGraph />, which is capable of obtaining
+            <Dchan /> is powered by <TheGraph />, which is capable of obtaining
             data as it was at any point in time, allowing you to browse{" "}
             <Dchan />
-            's content exactly as it was whenever in the past.
+            's content exactly as it was, whenever in the past.
             <br />
-            This also means that there is no need for an archive, as it is
-            already built in the protocol. Use the <Emoji emoji={"⏪"} /> button
-            in the header to try it out!
+            This also means that the archive is already built in the protocol.
+            Use the <Emoji emoji={"⏪"} /> button in the header to use it!
           </div>
         </div>
 
         <div className="pb-2">
           <strong>Q: ...Imageboard?</strong>
           <div>
-            <Dchan /> is a simple image-based bulletin board where anyone
-            can post comments, share images and create boards. It is heavily
+            <Dchan /> is a simple image-based bulletin board where anyone can
+            post comments, share images and create boards. It is heavily
             inspired by 4chan.
           </div>
         </div>
@@ -160,16 +157,15 @@ export const FAQCard = ({
             </a>{" "}
             should also work.
             <br />
-            You'll need to connect your crypto wallet to post on{" "}
-            <Dchan />.
+            You'll need to connect your crypto wallet to post on <Dchan />.
           </div>
         </div>
 
         <div className="pb-2">
           <strong>Q: Is it free?</strong>
           <div>
-            Browsing <Dchan /> is free, but you will need a crypto wallet
-            and some <Polygon /> to pay the transaction fee in order to post.
+            Browsing <Dchan /> is free, but you will need a crypto wallet and
+            some <Polygon /> to pay the transaction fee in order to post.
             <br />
             At the time of writing this FAQ (December 2022) the transaction fee
             for a post is around 0.001 MATIC, or around than ~$0.001 per post,
@@ -190,39 +186,49 @@ export const FAQCard = ({
         <div className="pb-2">
           <strong>Q: Is it uncensorable?</strong>
           <div>
-            Kind of. While the content and actions cannot be deleted from{" "}
-            <Polygon /> and <IPFS />, <Dchan /> can still refuse to show
-            that content.
+            Yes.
             <br />
-            All the infrastructure required to display content on{" "}
-            <Dchan /> is controlled by <Dchan />.
+            <Dchan /> users post and perform their actions directly on the{" "}
+            <Polygon /> blockchain and on <IPFS />.
             <br />
-            That means that <Dchan /> can choose what <Dchan />
-            's users can and cannot see, censor content, change rules, ban
-            whoever for whatever reason, shut down the website, and anything
-            else considered necessary to protect <Dchan />
-            's users and <Dchan /> itself from malicious actors.
+            Because of this,{" "}
+            <i>
+              <b>No one</b> can alter or delete users' actions and the content
+              they posted, nor can prevent users from further interacting with
+              the contract.
+            </i>
             <br />
             <i>
               <u>HOWEVER</u>.
             </i>
             <br />
-            <i>
-              <b>No one</b> can alter or delete the content users publicly
-              posted or the actions they performed, nor can prevent users from
-              further interacting with the contract.
-            </i>
+            It is still possible and <u>mandatory</u> to hide malicious
+            actions/content from <Dchan /> itself, as all the infrastructure
+            required to display content on <Dchan /> is controlled by <Dchan />
+            's <a href="mailto:op@4dchan.org">operator</a>.
             <br />
-            What what can be done is, at most, hide actions/content which is
-            considered malicious.
+            <Dchan /> will do anything necessary to protect <Dchan />
+            's users and <Dchan /> itself from malicious actors, including
+            hiding content, banning users, nuking the servers and much more.
             <br />
-            Even if <Dchan /> wanted to nuke absolutely everything and
-            shut down its servers, it would still mean that, at best, content
-            would not be shown on <Dchan />.
+            But still, <Dchan /> cannot delete or alter any of the content, as
+            <b>
+              every action and content posted on the blockchain is public and
+              undeletable
+            </b>
+            . The content will still be available, it simply will not be shown
+            on <Dchan />.
             <br />
-            It would still be possible for anyone to deploy a client and a
-            subgraph that bypasses this censoring, as{" "}
-            <b>every action and content posted is public and undeletable</b>.
+            (For more information on how to deploy your own instance, see{" "}
+            <a
+              className="dchan-link"
+              href="//github.com/4dchan-org/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              github.com/4dchan-org
+            </a>
+            )
           </div>
         </div>
 
@@ -255,9 +261,10 @@ export const FAQCard = ({
         <div className="pb-2">
           <strong>Q: How does this work?</strong>
           <div>
-            <Dchan /> stores posts, threads and boards on the blockchain.
+            <Dchan /> stores its content on <Polygon /> and <IPFS />, and then{" "}
+            <TheGraph /> makes sense of it.
             <br />
-            Users post and interact with the website through{" "}
+            Long version, users post and interact with the website through{" "}
             <a
               className="dchan-link"
               target="_blank"
@@ -292,10 +299,10 @@ export const FAQCard = ({
             >
               a subgraph
             </a>
-            , a computer program running on <TheGraph />
-            's decentralized network, which translates that sequence of actions
-            into the final application state and makes it available in a
-            decentralized manner.
+            , which is a computer program running on <TheGraph />
+            's decentralized network, whose job is to make sense of those
+            actions, translating them into the final application state, and
+            making it available in a decentralized manner.
             <br />
             Please note: this is experimental software, and this is a{" "}
             <i>very</i> simplified explanation!
@@ -307,16 +314,15 @@ export const FAQCard = ({
             Q: Does <Dchan /> use cookies?
           </strong>
           <div>
-            No. Web3 dapps don't use centralized servers, and thus
-            cookies serve no purpose. If a "dapp" uses cookies
-            it's not a dapp.
+            No. Web3 dapps don't use centralized servers, and thus cookies serve
+            no purpose.
           </div>
         </div>
 
         <div className="pb-2">
           <strong>
-            Q: Does <Dchan /> have a token? I need a useless shitcoin to
-            lose my life savings on.
+            Q: Does <Dchan /> have a token? I need a useless shitcoin to lose my
+            life savings on.
           </strong>
           <div>Not right now. In the future, when the time is right.</div>
         </div>
@@ -328,8 +334,8 @@ export const FAQCard = ({
           <div>
             Nothing has been decided.
             <br />
-            The only set rule is that <Dchan /> will not require any
-            token to post except for the transaction fee.
+            The only set rule is that <Dchan /> will not require any token to
+            post except for the transaction fee.
           </div>
         </div>
 
@@ -393,13 +399,16 @@ export const FAQCard = ({
             Q: Is there an official Twitter/Telegram/Discord/Mastodon...?
           </strong>
           <div>
-            <Dchan /> does not have any official online presence outside
-            of <Dchan /> itself.
+            <Dchan /> does not have any official online presence outside of{" "}
+            <Dchan /> itself.
             <br />
-            <b>
-              Do not trust any account or group who claims to be associated to{" "}
+            <u>
+              <Emoji emoji="⚠️" />
+              {` Do not trust any account or group who claims to be associated to `}
               <Dchan />
-            </b>
+              {` `}
+              <Emoji emoji="⚠️" />
+            </u>
             .
             <br />
             Any account or group that claims to be officially endorsed by{" "}
@@ -442,7 +451,7 @@ export const FAQButton = ({ className = "" }: { className?: string }) => {
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
-          setOpen('faq');
+          setOpen("faq");
         }}
       >
         FAQ
