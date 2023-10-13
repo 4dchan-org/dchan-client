@@ -384,9 +384,13 @@ export const FormPost = ({
         <div>
           {showForm ? (
             <div className="sm:grid center w-full text-left sticky top-0 min-h-200px">
-              <div className="center flex overflow-scroll break-words">
-                <Status status={status} />
-              </div>
+              {status ? (
+                <div className="center flex overflow-scroll break-words">
+                  <Status status={status} />
+                </div>
+              ) : (
+                <></>
+              )}
               <form
                 ref={formRef}
                 id="dchan-post-form"

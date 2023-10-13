@@ -33,6 +33,7 @@ export const TimeTravelContext = createContext<TimeTravelProvider>({
   isPlayback: false,
   setIsPlayback: () => ({}),
   nextBlockPlaybackAt: undefined,
+  currentBlockNumber: undefined,
 });
 
 interface BlockData {
@@ -132,6 +133,7 @@ export type TimeTravelProvider = {
   isPlayback: boolean | undefined;
   setIsPlayback: React.Dispatch<SetStateAction<boolean>>;
   nextBlockPlaybackAt: number | undefined;
+  currentBlockNumber: number | undefined;
 };
 
 export const TimeTravelContextProvider = ({
@@ -282,6 +284,13 @@ export const TimeTravelContextProvider = ({
     };
   }, [isTimeTraveling, isPlayback, currentBlock, nextBlock, travelToNextBlock]);
 
+  const [currentBlockNumber, setCurrentBlockNumber] = useState<
+    number | undefined
+  >();
+  useEffect(() => {
+    setCurrentBlockNumber(Number(currentBlock?.number || lastBlock?.number));
+  }, [currentBlock, lastBlock]);
+
   const timeTravel = {
     firstBlock,
     lastBlock,
@@ -300,6 +309,7 @@ export const TimeTravelContextProvider = ({
     isPlayback,
     setIsPlayback,
     nextBlockPlaybackAt,
+    currentBlockNumber,
   };
 
   return (

@@ -17,7 +17,9 @@ import {
   Anchor,
   Post as PostComponent,
 } from "src/components";
-import { ThemeContext } from "src/contexts";interface ThreadContentData {
+import { ThemeContext } from "src/contexts";
+
+interface ThreadContentData {
   board: Board;
   threads: Thread[];
   posts: Post[];

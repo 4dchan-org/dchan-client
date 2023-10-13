@@ -64,7 +64,7 @@ export const Web3ContextProvider = ({
     let interval: any;
     if (connected) {
       // Update provider and associated data every 10 seconds
-      interval = setInterval(updateProvider, 10000);
+      interval = setInterval(updateProvider, 2500);
       updateProvider();
     }
     return () => interval && clearInterval(interval);

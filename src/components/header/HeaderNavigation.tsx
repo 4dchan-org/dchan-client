@@ -110,7 +110,7 @@ export const HeaderNavigation = ({
 
   const boards = data?.boards;
   return (
-    <div className="mb-6 dchan-header-navigation">
+    <div className="dchan-header-navigation">
       <div className="text-sm p-01 border-solid border-bottom-tertiary-accent bg-secondary border-0 border-b-2 text-left fixed top-0 left-0 right-0 shadow-md z-50 flex flex-wrap">
         <span className="text-black text-opacity-50 hover:text-opacity-100 dchan-brackets">
           <Link

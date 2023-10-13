@@ -44,24 +44,20 @@ export const HomePage = () => {
   return (
     <div className="h-screen bg-primary flex flex-col pb-2">
       <HeaderNavigation />
-      <div className="z-20">
-        <div className="h-20 flex items-center bg-primary">
-          <div className="w-full h-16 flex justify-end text-sm pr-6 pt-1 text-right">
-            <div className="left-0 absolute">
-              <HeaderLogo />
-            </div>
-            <div className="ml-28 lg:ml-64 overflow-scroll text-xs">
-              {/* <details>
-                <summary>
-                <div className="border-tertiary-accent bg-secondary">Stats</div>
-                </summary>
-                Posts
-              </details> */}
-            </div>
-          </div>
+      <div className="mt-6 relative">
+        <div className="top-6 left-0 absolute ">
+          <HeaderLogo />
         </div>
-        <hr />
+        <div className="ml-28 lg:ml-64 h-20 overflow-scroll text-xs">
+          {/* <details>
+            <summary>
+              <div className="border-tertiary-accent bg-secondary">Stats</div>
+            </summary>
+            Posts
+          </details> */}
+        </div>
       </div>
+      <hr />
       <div className="mt-2 flex flex-grow flex-col grid-cols-2 lg:grid px-4 text-sm">
         <div>
           <Card

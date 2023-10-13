@@ -30,14 +30,28 @@ export const TheGraph = () => {
 
 export const Polygon = () => {
   return (
-    <a
-      className="dchan-link"
-      href="//polygon.network/"
-      target="_blank"
-      rel="noreferrer"
-    >
-      Polygon
-    </a>
+    <span>
+      <a
+        className="dchan-link"
+        href="//polygon.network/"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Polygon
+      </a>{" "}
+      <span className="text-xs">
+        (ticker:{" "}
+        <a
+          className="dchan-link"
+          href="//www.coingecko.com/en/coins/polygon"
+          target="_blank"
+          rel="noreferrer"
+        >
+          MATIC
+        </a>
+        )
+      </span>
+    </span>
   );
 };
 
@@ -96,9 +110,9 @@ export const FAQCard = ({
             >
               web3
             </a>{" "}
-            imageboard that uses the <Polygon />
-            blockchain, <IPFS /> and <TheGraph /> to ensure it will always be
-            online, forever.
+            imageboard that uses the <Polygon /> blockchain, <IPFS /> and{" "}
+            <TheGraph /> to ensure it will always be online and uncensorable,
+            forever.
           </div>
         </div>
 
@@ -110,8 +124,10 @@ export const FAQCard = ({
             <Dchan />
             's content exactly as it was, whenever in the past.
             <br />
-            This also means that the archive is already built in the protocol.
-            Use the <Emoji emoji={"⏪"} /> button in the header to use it!
+            This also means that the archive is already built in.
+            <br />
+            To use it, click the <Emoji emoji={"⏩"} /> button in the header and
+            use the time travel control panel.
           </div>
         </div>
 
@@ -119,15 +135,19 @@ export const FAQCard = ({
           <strong>Q: ...Imageboard?</strong>
           <div>
             <Dchan /> is a simple image-based bulletin board where anyone can
-            post comments, share images and create boards. It is heavily
-            inspired by 4chan.
+            post comments, share images and create boards.
+            <br />
+            It is heavily inspired by 4chan.
           </div>
         </div>
 
         <div className="pb-2">
           <strong>Q: How do I post?</strong>
           <div>
-            You'll need to install{" "}
+            You'll need to connect your crypto wallet and pay the transaction
+            fee to post on <Dchan />.
+            <br />
+            Supported wallets are{" "}
             <a
               className="dchan-link"
               target="_blank"
@@ -145,7 +165,7 @@ export const FAQCard = ({
             >
               Trust Wallet
             </a>{" "}
-            (if you're on Mobile). Other wallets might not be supported.
+            (if you're on Mobile).
             <br />
             <a
               className="dchan-link"
@@ -157,19 +177,19 @@ export const FAQCard = ({
             </a>{" "}
             should also work.
             <br />
-            You'll need to connect your crypto wallet to post on <Dchan />.
+            Other wallets might not be supported.
           </div>
         </div>
 
         <div className="pb-2">
           <strong>Q: Is it free?</strong>
           <div>
-            Browsing <Dchan /> is free, but you will need a crypto wallet and
-            some <Polygon /> to pay the transaction fee in order to post.
+            Browsing <Dchan /> is free, but you will need some <Polygon /> to
+            pay the transaction fee when posting.
             <br />
             At the time of writing this FAQ (December 2022) the transaction fee
             for a post is around 0.001 MATIC, or around than ~$0.001 per post,
-            so $10 worth of MATIC would allow you to post more than 10000 times!
+            so $10 worth of MATIC would allow you to post more than 10000 times.
             <br />
             Please note that it is possible that fees will be higher during high
             on-chain activity, or that MATIC's price may change wildly in the
@@ -189,37 +209,39 @@ export const FAQCard = ({
             Yes.
             <br />
             <Dchan /> users post and perform their actions directly on the{" "}
-            <Polygon /> blockchain and on <IPFS />.
+            <Polygon /> blockchain and upload their content on <IPFS />.
             <br />
             Because of this,{" "}
             <i>
-              <b>No one</b> can alter or delete users' actions and the content
-              they posted, nor can prevent users from further interacting with
-              the contract.
+              no one can delete or alter users' actions and the content they
+              posted, nor can prevent users from further interacting with the
+              contract.
             </i>
             <br />
-            <i>
-              <u>HOWEVER</u>.
-            </i>
-            <br />
-            It is still possible and <u>mandatory</u> to hide malicious
+            However, it is still possible and <u>mandatory</u> to hide malicious
             actions/content from <Dchan /> itself, as all the infrastructure
             required to display content on <Dchan /> is controlled by <Dchan />
             's <a href="mailto:op@4dchan.org">operator</a>.
             <br />
             <Dchan /> will do anything necessary to protect <Dchan />
             's users and <Dchan /> itself from malicious actors, including
-            hiding content, banning users, nuking the servers and much more.
+            hiding content, banning users, nuking the servers, and more if
+            required.
             <br />
-            But still, <Dchan /> cannot delete or alter any of the content, as
-            <b>
-              every action and content posted on the blockchain is public and
-              undeletable
-            </b>
-            . The content will still be available, it simply will not be shown
-            on <Dchan />.
+            Keep in mind that neither <Dchan /> nor anyone else can delete or
+            alter any of the content posted through it, as{" "}
+            <i>
+              <u>
+                every action and content posted on the blockchain is public and
+                undeletable
+              </u>
+            </i>
+            .<br />
+            The content will still be available, it simply will not be shown on{" "}
+            <Dchan />. It will still be possible for other instances to display
+            that content.
             <br />
-            (For more information on how to deploy your own instance, see{" "}
+            For more information on how to deploy your own instance, see{" "}
             <a
               className="dchan-link"
               href="//github.com/4dchan-org/"
@@ -228,7 +250,7 @@ export const FAQCard = ({
             >
               github.com/4dchan-org
             </a>
-            )
+            .
           </div>
         </div>
 
@@ -252,19 +274,21 @@ export const FAQCard = ({
             same address posts in two different threads/boards, it will have the
             same "ID".
             <br />
-            In short: If you want to be as anonymous as possible, use the faucet
-            and change account after every post. If you want to be a tripfag,
-            use your ENS-associated address.
+            So use the faucet and change account after every post if you want to
+            be anonymous, or use your ENS-associated address if you want to
+            tripfag.
           </div>
         </div>
 
         <div className="pb-2">
           <strong>Q: How does this work?</strong>
           <div>
-            <Dchan /> stores its content on <Polygon /> and <IPFS />, and then{" "}
-            <TheGraph /> makes sense of it.
+            In short, <Dchan /> stores its content on <Polygon /> and <IPFS />,
+            and then <TheGraph /> makes sense of it.
             <br />
-            Long version, users post and interact with the website through{" "}
+            Long version:
+            <br />
+            Users post and interact with the website through{" "}
             <a
               className="dchan-link"
               target="_blank"
@@ -273,12 +297,15 @@ export const FAQCard = ({
             >
               a one-line smart contract
             </a>
-            , which acts as a public record of every action ever performed by
-            users, moderators and administrators.
+            , which simply acts as a public record of every action ever
+            performed by users, moderators and administrators.
             <br />
-            These actions are simply statements: if a user wants to make a new
-            post on the website, they will write a JSON message on the
-            blockchain that essentially says, for example:
+            The smart contract has no logic, and every user, admins included,
+            perform their actions simply by stating their intentions on the
+            blockchain.
+            <br />
+            For example, if a user wants to make a new post on the website, they
+            will write a JSON message on the blockchain that essentially says:
             <details>
               <summary>
                 "I want to create a thread on this board with the comment 'it's
@@ -306,6 +333,17 @@ export const FAQCard = ({
             <br />
             Please note: this is experimental software, and this is a{" "}
             <i>very</i> simplified explanation!
+            <br />
+            For more information on the inner workings of <Dchan />, see{" "}
+            <a
+              className="dchan-link"
+              href="//github.com/4dchan-org/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              github.com/4dchan-org
+            </a>
+            .
           </div>
         </div>
 
@@ -314,8 +352,19 @@ export const FAQCard = ({
             Q: Does <Dchan /> use cookies?
           </strong>
           <div>
-            No. Web3 dapps don't use centralized servers, and thus cookies serve
-            no purpose.
+            No. Web3 dapps don't use centralized servers, thus cookies serve no
+            purpose.
+          </div>
+        </div>
+
+        <div className="pb-2">
+          <strong>
+            Q: Does <Dchan /> respect my privacy?
+          </strong>
+          <div>
+            Yes. No information is stored on <Dchan />
+            's servers, as <Dchan /> has no servers to begin with due to using{" "}
+            <TheGraph /> to retrieve its content.
           </div>
         </div>
 
@@ -325,18 +374,6 @@ export const FAQCard = ({
             life savings on.
           </strong>
           <div>Not right now. In the future, when the time is right.</div>
-        </div>
-
-        <div className="pb-2">
-          <strong>
-            Q: Will the <Dchan /> token *insert anything here* ?
-          </strong>
-          <div>
-            Nothing has been decided.
-            <br />
-            The only set rule is that <Dchan /> will not require any token to
-            post except for the transaction fee.
-          </div>
         </div>
 
         <div className="pb-2">
@@ -383,18 +420,6 @@ export const FAQCard = ({
         </div>
 
         <div className="pb-2">
-          <strong>Q: Can I run this locally?</strong>
-          <div>
-            You can run the client locally... somewhat. If you're on desktop,
-            you can save the page and open it with your browser, so that if{" "}
-            <Dchan /> ever goes down you can still use the client. <br />
-            You may incur in some bugs like missing logos or being unable to
-            post, but you should be able to view the content just fine as long
-            as you are online.
-          </div>
-        </div>
-
-        <div className="pb-2">
           <strong>
             Q: Is there an official Twitter/Telegram/Discord/Mastodon...?
           </strong>
@@ -427,7 +452,7 @@ export const FAQCard = ({
               target="_blank"
               rel="noreferrer"
             >
-              GitHub
+              github.com/4dchan-org
             </a>
           </div>
         </div>
