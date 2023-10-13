@@ -31,7 +31,6 @@ import {
   FAQButton,
   RulesButton,
   Emoji,
-  Wallet,
   OpenedWidgetEnum,
 } from "src/components";
 import { WidgetContext } from "src/contexts/WidgetContext";
