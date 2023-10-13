@@ -60,7 +60,7 @@ export const ThreadTabs = ({
       }
     </TabbedCard>
   ) : loading ? (
-    <div className="border border-solid border-black flex-grow p-2"><Loading /></div>
+    <div className="border border-solid border-tertiary-accent flex-grow p-2"><Loading /></div>
   ) : (
     <span />
   );

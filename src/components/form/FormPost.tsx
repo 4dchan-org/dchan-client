@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { shortenAddress } from "src/services";
 import { postMessage } from "src/actions";
 import { Board, Thread } from "src/subgraph/types";
@@ -25,7 +32,9 @@ import {
   RulesButton,
   Emoji,
   Wallet,
+  OpenedWidgetEnum,
 } from "src/components";
+import { WidgetContext } from "src/contexts/WidgetContext";
 
 export const FormPost = ({
   baseUrl,
@@ -53,6 +62,7 @@ export const FormPost = ({
   const { subscribe, unsubscribe } = usePubSub();
   const { addFavorite } = useLocalFavorites();
   const form = useForm();
+  const [_, setOpenedWidget] = useContext(WidgetContext);
   const {
     register,
     handleSubmit,
@@ -368,7 +378,6 @@ export const FormPost = ({
 
   return (
     <div className="z-30 pt-2">
-      <Wallet />
       <div className="pb-2" />
       {!isJanny && thread?.isLocked ? (
         <div className="text-contrast font-weight-800 font-family-tahoma">
@@ -736,7 +745,19 @@ export const FormPost = ({
               </form>
             </div>
           ) : (
-            ""
+            <div>
+              <div className="text-contrast font-weight-800 font-family-tahoma">
+                <div>Wallet not connected.</div>
+              </div>
+              <div>
+                <button
+                  className="dchan-link dchan-brackets whitespace-nowrap"
+                  onClick={() => setOpenedWidget(OpenedWidgetEnum.WALLET)}
+                >
+                  {"Connect"}
+                </button>
+              </div>
+            </div>
           )}
         </div>
       ) : (

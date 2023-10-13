@@ -34,7 +34,7 @@ export const BoardTabs = ({
   );
 
   return loading ? (
-    <div className=""><Loading /></div>
+    <div className="border border-solid border-tertiary-accent flex-grow p-2"><Loading /></div>
   ) : data ? (
     <TabbedCard className={`${className} w-auto`} firstTab="Last bumped">
       {

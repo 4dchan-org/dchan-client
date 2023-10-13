@@ -6,6 +6,7 @@ import ipfsErrorSrc from "src/assets/images/ipfs_error.png";
 import useMouse from "@react-hook/mouse-position";
 import { useWindowSize } from "react-use";
 import { getIPFSImgSrcs } from "src/services/ipfs"
+import { lerp } from "src/services";
 
 export const IPFSImage = ({
   hash,
@@ -98,7 +99,11 @@ export const IPFSImage = ({
         ),
         flip: mouse.clientX > windowSize.width / 2,
       };
-      setHoverPosition(position);
+      setHoverPosition(hoverPosition => ({
+        x: lerp(hoverPosition?.x ?? position.x, position.x, 0.42),
+        y: lerp(hoverPosition?.y ?? position.y, position.y, 0.42),
+        flip: position.flip
+      }));
     } else {
       setHoverPosition(null);
     }

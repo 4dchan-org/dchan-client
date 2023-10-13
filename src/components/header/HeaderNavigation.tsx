@@ -241,9 +241,7 @@ export const HeaderNavigation = ({
             </summary>
             {openedWidget === OpenedWidgetEnum.WALLET ? (
               <div className={widgetClass}>
-                <div className="bg-secondary border border-tertiary-accent border-solid p-1">
-                  <Wallet />
-                </div>
+                <Wallet />
               </div>
             ) : (
               ""

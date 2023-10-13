@@ -50,7 +50,7 @@ export const TabbedCard = ({
       onMouseOut={onMouseOut}
     >
       <header
-        className="bg-white border border-black flex flex-row justify-evenly"
+        className="bg-white border border-highlight flex flex-row justify-evenly"
         style={{ flex: "0 1 auto" }}
       >
         {Array.from(children.keys()).map((key, index) => (
@@ -69,13 +69,13 @@ export const TabbedCard = ({
               {key}
             </button>
             {index < children.size - 1 ? (
-              <div className="border-l border-black" />
+              <div className="border-l border-highlight" />
             ) : null}
           </React.Fragment>
         ))}
       </header>
       <section
-        className={`animation-fade-in bg-white border border-black flex flex-col border-t-0 ${sectionClassName}`}
+        className={`animation-fade-in bg-white border border-tertiary-accent flex flex-col border-t-0 ${sectionClassName}`}
         style={{ flex: "1 1 auto" }}
       >
         <div className={containerClassName}>

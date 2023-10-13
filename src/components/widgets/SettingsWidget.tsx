@@ -61,7 +61,7 @@ export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
   }, [setSettings])
 
   return (
-    <div className="bg-secondary border-secondary-accent border-2 flex flex-col h-full">
+    <div className="bg-secondary border-tertiary-accent border-2 flex flex-col h-full">
       <div className="mb-2 mt-1 px-3" style={{ flex: "0 1 auto" }}>
         <div className="float-left">
           <span className="font-bold">4dchan.org Settings</span>
@@ -80,7 +80,7 @@ export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
         className="h-full overflow-y-scroll overscroll-contain"
         style={{ flex: "1 1 auto" }}
       >
-        <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
+        <fieldset className="border border-tertiary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">Subgraph Endpoint</legend>
           <div>Endpoint used to query the subgraph for data.</div>
           <div>
@@ -109,7 +109,7 @@ export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
             value={displaySubgraph}
           />
         </fieldset>
-        {/* <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
+        {/* <fieldset className="border border-tertiary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">IPFS Endpoint</legend>
           <div>Endpoint used to upload images to IPFS.</div>
           <div>
@@ -135,7 +135,7 @@ export const SettingsWidget = ({ onExit }: { onExit?: () => void }) => {
             value={displayIPFS}
           />
         </fieldset> */}
-        <fieldset className="border border-secondary-accent rounded px-4 pb-2 mx-2">
+        <fieldset className="border border-tertiary-accent rounded px-4 pb-2 mx-2">
           <legend className="font-bold">Filter Settings</legend>
           <div className="text-contrast">
             ⚠ By disabling/changing filters, it's possible you may view/download

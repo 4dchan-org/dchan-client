@@ -7,7 +7,7 @@ export const PopularBoardsCard = ({highlight}: {highlight?: Board}) => {
   return (
     <div className="dchan-popular-boards">
       <BoardTabs limit={100} highlight={highlight} />
-      <div className="border border-solid border-black p-2">
+      <div className="border border-solid border-tertiary-accent p-2">
         [
         <Link
           className="dchan-link py-1 px-4"
