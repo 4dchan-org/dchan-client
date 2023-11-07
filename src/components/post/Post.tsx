@@ -368,11 +368,11 @@ export const Post = memo(
                         </div>
                       </div>
                     </div>
-                    <div className={isOp ? "pb-2" : ""}>
+                    <div className={isOp ? "pb-4" : ""}>
                       {children}
                     </div>
                     <Link
-                      className="px-1 text-xs opacity-5 hover:opacity-100 absolute bottom-0 left-0 inline"
+                      className="px-1 text-xs opacity-5 hover:opacity-100 absolute bottom-0 left-0 inline pt-2"
                       to={`/${post.id}${block ? `?block=${block}` : ""}`}
                       title="Permalink"
                     >

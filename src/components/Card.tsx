@@ -28,7 +28,7 @@ export const Card = ({
             </header>
           </summary>
           <section
-            className={`${bodyClassName} bg-white border border-tertiary-accent border-t-0 w-full p-1 overflow-auto`}
+            className={`${bodyClassName} bg-white border border-tertiary-accent border-t-0 w-full overflow-auto`}
             style={{ flex: "1 1 auto" }}
           >
             {children}

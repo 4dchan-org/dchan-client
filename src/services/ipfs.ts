@@ -18,20 +18,18 @@ export async function upload(
             });
 
             try {
+                const formData = new FormData();
+                formData.append("file", file);
                 const ipfsResponse = await fetch(
-                    "https://ipfs.4dchan.org/ipfs/",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/octet-stream",
-                        },
-                        body: new Uint8Array(await file.arrayBuffer())
-                    }
+                    `https://ipfs.4dchan.org/api/v0/add`,
+                    { method: "POST", body: formData }
                 );
+
+                const ipfs = await ipfsResponse.json();
 
                 console.log("ipfs.upload", { ipfsResponse });
 
-                const hash = ipfsResponse.headers.get('ipfs-hash');
+                const hash = ipfs.Hash;
                 if (hash) {
                     setStatus({
                         success: "File uploaded",

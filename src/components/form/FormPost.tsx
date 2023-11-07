@@ -393,7 +393,7 @@ export const FormPost = ({
           {showForm ? (
             <div className="sm:grid center w-full text-left sticky top-0 min-h-200px">
               {status ? (
-                <div className="center flex overflow-scroll break-words">
+                <div className="center flex overflow-scroll-disabled break-words">
                   <Status status={status} />
                 </div>
               ) : (

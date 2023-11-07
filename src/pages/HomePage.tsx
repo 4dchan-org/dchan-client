@@ -48,7 +48,7 @@ export const HomePage = () => {
         <div className="top-6 left-0 absolute ">
           <HeaderLogo />
         </div>
-        <div className="ml-28 lg:ml-64 h-20 overflow-scroll text-xs">
+        <div className="ml-28 lg:ml-64 h-20 overflow-scroll-disabled text-xs">
           {/* <details>
             <summary>
               <div className="border-tertiary-accent bg-secondary">Stats</div>
@@ -65,7 +65,7 @@ export const HomePage = () => {
             titleRight={
               <>
                 {board != null ? (
-                  <div className="absolute top-1/2 bottom-1/2 right-0 mr-4">
+                  <div className="absolute top-0 right-0">
                     [
                     <div className="inline dchan-link" onClick={clearBoard}>
                       Clear Board

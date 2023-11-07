@@ -221,7 +221,7 @@ export const FAQCard = ({
             However, it is still possible and <u>mandatory</u> to hide malicious
             actions/content from <Dchan /> itself, as all the infrastructure
             required to display content on <Dchan /> is controlled by <Dchan />
-            's <a href="mailto:op@4dchan.org">operator</a>.
+            's <a href="mailto:op@4dchan.org">op</a>.
             <br />
             <Dchan /> will do anything necessary to protect <Dchan />
             's users and <Dchan /> itself from malicious actors, including
