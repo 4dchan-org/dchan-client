@@ -1,9 +1,10 @@
 import { actions } from "src";
 import { useWeb3 } from "src/hooks";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Card, MaxLengthWatch, Status } from ".";
+import { Card, MaxLengthWatch, OpenedWidgetEnum, Status } from ".";
+import { WidgetContext } from "src/contexts/WidgetContext";
 
 export const BoardCreationForm = () => {
   const { accounts, provider } = useWeb3();
@@ -12,6 +13,7 @@ export const BoardCreationForm = () => {
   const [formDisabled, setFormDisabled] = useState<boolean>(false);
   const [titleLength, setTitleLength] = useState<number>(0);
   const [nameLength, setNameLength] = useState<number>(0);
+  const [_, setOpenedWidget] = useContext(WidgetContext);
 
   const { register, handleSubmit, reset } = useForm();
   const onSubmit = async (data: any) => {
@@ -123,7 +125,14 @@ export const BoardCreationForm = () => {
             </form>
           </div>
         ) : (
-          <></>
+          <div className="p-2">
+            <button
+              className="dchan-link dchan-brackets whitespace-nowrap"
+              onClick={() => setOpenedWidget(OpenedWidgetEnum.WALLET)}
+            >
+              {"Connect your Wallet to create a board"}
+            </button>
+          </div>
         )}
       </div>
     </Card>
