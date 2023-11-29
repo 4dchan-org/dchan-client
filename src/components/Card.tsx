@@ -22,7 +22,7 @@ export const Card = ({
       <article className={`${className} max-w-100vw`}>
         <details open={open}>
           <summary className="bg-secondary border border-tertiary-accent sticky top-0 z-20 text-left px-2">
-            <header className="border border-l-0 border-r-0 border-solid z-50 inline">
+            <header className="z-50 inline">
               <span className="center font-family-tahoma">{title}</span>
               {titleRight}
             </header>

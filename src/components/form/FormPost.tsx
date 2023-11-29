@@ -753,7 +753,7 @@ export const FormPost = ({
                   className="dchan-link dchan-brackets whitespace-nowrap"
                   onClick={() => setOpenedWidget(OpenedWidgetEnum.WALLET)}
                 >
-                  {"Connect"}
+                  {"Connect your Wallet to post"}
                 </button>
               </div>
             </div>

@@ -271,70 +271,66 @@ export const TimeTravelWidget = forwardRef(
                   </span>
                 </div>
                 <div>
-                  {isTimeTraveling ? (
-                    <div>
-                      <div className="flex center">
-                        <div className="text-xs text-center px-2">
-                          <button
-                            className="dchan-link"
-                            onClick={travelToBeginning}
-                            title="Travel To Beginning"
-                          >
-                            <Emoji emoji={"⏪"} />
-                          </button>
-                        </div>
-                        <div className="text-xs text-center px-2">
-                          <button
-                            className="dchan-link"
-                            onClick={travelToPreviousBlock}
-                            title="Travel To Previous Block"
-                          >
-                            <Emoji emoji={"⬅️"} />
-                          </button>
-                        </div>
-                        <div className="text-xs text-center px-2">
-                          {isPlayback ? <button
-                            className="dchan-link"
-                            onClick={onPause}
-                            title="Pause"
-                          >
-                            <Emoji emoji={"⏸"} />
-                          </button> : <button
-                            className="dchan-link"
-                            onClick={onStart}
-                            title="Start"
-                          >
-                            <Emoji emoji={"▶️"} />
-                          </button>}
-                        </div>
-                        <div className="text-xs text-center px-2">
-                          <button
-                            className="dchan-link"
-                            onClick={travelToNextBlock}
-                            title="Travel To Next Block"
-                          >
-                            <Emoji emoji={"➡️"} />
-                          </button>
-                        </div>
-                        <div className="text-xs text-center px-2">
-                          <button
-                            className="dchan-link"
-                            onClick={travelToPresent}
-                            title="Travel To Present"
-                          >
-                            <Emoji emoji={"⏩"} />
-                          </button>
-                        </div>
+                  <div>
+                    <div className="flex center">
+                      <div className="text-xs text-center px-2">
+                        <button
+                          className="dchan-link"
+                          onClick={travelToBeginning}
+                          title="Travel To Beginning"
+                        >
+                          <Emoji emoji={"⏪"} />
+                        </button>
                       </div>
-                      <div className="flex center mt-1">
-                        {isPlayback && nextBlock && nextBlockPlaybackAt ? <>
-                        <div>Next block in {Math.max(0, Math.round((nextBlockPlaybackAt - new Date().getTime()) / 1000))}s</div>
-                        </> : ""}
+                      <div className="text-xs text-center px-2">
+                        <button
+                          className="dchan-link"
+                          onClick={travelToPreviousBlock}
+                          title="Travel To Previous Block"
+                        >
+                          <Emoji emoji={"⬅️"} />
+                        </button>
+                      </div>
+                      <div className="text-xs text-center px-2">
+                        {isPlayback ? <button
+                          className="dchan-link"
+                          onClick={onPause}
+                          title="Pause"
+                        >
+                          <Emoji emoji={"⏸"} />
+                        </button> : <button
+                          className="dchan-link"
+                          onClick={onStart}
+                          title="Start"
+                        >
+                          <Emoji emoji={"▶️"} />
+                        </button>}
+                      </div>
+                      <div className="text-xs text-center px-2">
+                        <button
+                          className="dchan-link"
+                          onClick={travelToNextBlock}
+                          title="Travel To Next Block"
+                        >
+                          <Emoji emoji={"➡️"} />
+                        </button>
+                      </div>
+                      <div className="text-xs text-center px-2">
+                        <button
+                          className="dchan-link"
+                          onClick={travelToPresent}
+                          title="Travel To Present"
+                        >
+                          <Emoji emoji={"⏩"} />
+                        </button>
                       </div>
                     </div>
-                  ) : (
-                    <div className="mb-4" />
-                  )}
+                    <div className="flex center mt-1">
+                      {isPlayback && nextBlock && nextBlockPlaybackAt ? <>
+                      <div>Next block in {Math.max(0, Math.round((nextBlockPlaybackAt - new Date().getTime()) / 1000))}s</div>
+                      </> : ""}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

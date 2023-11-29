@@ -111,6 +111,7 @@ export const HeaderNavigation = ({
   const boards = data?.boards;
   return (
     <div className="dchan-header-navigation">
+      {openedWidget !== null ? <div className="w-100vw h-100vh z-50 fixed top-0 left-0" onClick={() => setOpenedWidget(null)} /> : <></>}
       <div className="text-sm p-01 border-solid border-bottom-tertiary-accent bg-secondary border-0 border-b-2 text-left fixed top-0 left-0 right-0 shadow-md z-50 flex flex-wrap">
         <span className="text-black text-opacity-50 hover:text-opacity-100 dchan-brackets">
           <Link

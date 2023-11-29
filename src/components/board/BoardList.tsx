@@ -3,6 +3,7 @@ import { Board } from "src/subgraph/types";
 import { IdLabel, Loading, Emoji } from "src/components";
 import { usePubSub, useTimeTravel } from "src/hooks";
 import { useCallback, useState } from "react";
+import { DateTime } from "luxon";
 export const BoardItem = ({
   board,
   highlight,
@@ -10,9 +11,9 @@ export const BoardItem = ({
   board: Board;
   highlight?: Board;
 }) => {
-  const { timeTraveledToBlockNumber: block } = useTimeTravel()
+  const { timeTraveledToBlockNumber: block } = useTimeTravel();
   const { id, title, postCount, name, isLocked, isNsfw } = board;
-  const url = `/${name}/${id}${block ? `?block=${block}` : ""}`
+  const url = `/${name}/${id}${block ? `?block=${block}` : ""}`;
 
   const { publish } = usePubSub();
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ export const BoardItem = ({
   }, [board, publish]);
 
   const onDoubleClick = useCallback(() => {
-    navigate(url)
+    navigate(url);
   }, [navigate, url]);
 
   return (
@@ -56,20 +57,16 @@ export const BoardItem = ({
       </td>
       <td className="px-2 whitespace-nowrap">
         <span>
-          <Link
-            className="dchan-link mx-4"
-            to={url}
-          >
+          <Link className="dchan-link mx-4" to={url}>
             /{name}/
           </Link>
         </span>
       </td>
-      <td className="px-2 whitespace-nowrap hidden sm:block max-w-10rem truncate" colSpan={3}>
+      <td
+        className="px-2 whitespace-nowrap hidden sm:block max-w-10rem truncate"
+      >
         <span>
-          <Link
-            className="dchan-link"
-            to={url}
-          >
+          <Link className="dchan-link" to={url}>
             {title}
           </Link>
         </span>
@@ -93,9 +90,14 @@ export const BoardItem = ({
           ""
         )}
       </td>
+      <td>
+        {DateTime.fromSeconds(
+          parseInt(board.lastBumpedAtBlock.timestamp)
+        ).toRelative()}
+      </td>
     </tr>
   );
-}
+};
 
 export const BoardList = ({
   className = "",
@@ -111,15 +113,27 @@ export const BoardList = ({
   return (
     <div className={`${className} flex center`}>
       <table className="flex-grow">
+        <thead className="bg-secondary border-bottom-tertiary-accent sticky top-0">
+          <td className="px-2">ID</td>
+          <td className="px-2">Board</td>
+          <td className=""></td>
+          <td className="px-2">Posts</td>
+          <td></td>
+          <td className="px-2">Last bumped</td>
+        </thead>
         <tbody>
           {loading ? (
             <Loading />
           ) : !boards ? (
             ""
           ) : boards.length > 0 ? (
-            boards.map((board) =>
-              <BoardItem key={"board-"+board.id} board={board} highlight={highlight} />
-            )
+            boards.map((board) => (
+              <BoardItem
+                key={"board-" + board.id}
+                board={board}
+                highlight={highlight}
+              />
+            ))
           ) : (
             "No boards"
           )}
@@ -127,4 +141,4 @@ export const BoardList = ({
       </table>
     </div>
   );
-}
+};

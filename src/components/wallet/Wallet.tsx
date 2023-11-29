@@ -1,5 +1,4 @@
 import {
-  Card,
   GasPriceWidget,
   WalletAccount,
   WalletConnect,
@@ -9,14 +8,12 @@ import {
 export const Wallet = () => {
   return (
     <div className="grid center">
-      <Card title={"Wallet"} collapsible={true}>
-        <span className="text-center">
-          <WalletConnect />
-          <WalletAccount />
-          <WalletSwitchChain />
-          <GasPriceWidget />
-        </span>
-      </Card>
+      <span className="text-center bg-secondary border border-tertiary-accent border-solid">
+        <WalletConnect />
+        <WalletAccount />
+        <WalletSwitchChain />
+        <GasPriceWidget />
+      </span>
     </div>
   );
 };
