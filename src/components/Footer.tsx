@@ -44,7 +44,7 @@ export const Footer = ({
             <div className="flex text-right justify-end ml-2 flex-grow">
               <details>
                 <summary>
-                  {name} v{version}
+                  {name} v{version}-{buildCommit}-{buildTime}
                 </summary>
                 <div className="bg-secondary border border-tertiary-accent border-solid p-2 absolute bottom-0 right-0 mr-4 mb-6">
                   <div className="mb-2">
@@ -112,20 +112,19 @@ export const Footer = ({
                     {buildCommit ? (
                       <div>
                         <span>
-                          Build{" "}
                           <a
                             className="dchan-link"
                             target="_blank"
                             rel="noreferrer"
                             href={`https://github.com/4dchan-org/dchan-client/commit/${buildCommit}`}
                           >
-                            {buildCommit}
+                            Build {buildCommit}
+                            <div>
+                              {DateTime.fromSeconds(
+                                parseInt(buildTime)
+                              ).toLocaleString(DateTime.DATETIME_SHORT)}
+                            </div>
                           </a>{" "}
-                          <div>
-                            {DateTime.fromSeconds(
-                              parseInt(buildTime)
-                            ).toLocaleString(DateTime.DATETIME_SHORT)}
-                          </div>
                         </span>
                       </div>
                     ) : (

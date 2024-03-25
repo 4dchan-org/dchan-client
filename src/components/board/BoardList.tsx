@@ -55,6 +55,22 @@ export const BoardItem = ({
       <td>
         <IdLabel id={id}></IdLabel>
       </td>
+      <td className="min-w-[2rem]">
+        {isLocked ? (
+          <span title="Board locked. You cannot post.">
+            <Emoji emoji={"🔒"} />
+          </span>
+        ) : (
+          ""
+        )}
+        {isNsfw ? (
+          <span title="NSFW Board">
+            <Emoji emoji={"🔞"} />
+          </span>
+        ) : (
+          ""
+        )}
+      </td>
       <td className="px-2 whitespace-nowrap text-center">
         <div className="flex">
           <span>
@@ -80,22 +96,6 @@ export const BoardItem = ({
           parseInt(board.lastBumpedAtBlock.timestamp)
         ).toRelative()}
       </td>
-      <td className="left-full top-0 px-1 whitespace-nowrap center block">
-        {isLocked ? (
-          <span title="Board locked. You cannot post.">
-            <Emoji emoji={"🔒"} />
-          </span>
-        ) : (
-          ""
-        )}
-        {isNsfw ? (
-          <span title="NSFW Board">
-            <Emoji emoji={"🔞"} />
-          </span>
-        ) : (
-          ""
-        )}
-      </td>
     </tr>
   );
 };
@@ -116,10 +116,10 @@ export const BoardList = ({
       <table className="flex-grow">
         <thead className="bg-secondary border-bottom-tertiary-accent sticky top-0">
           <td className="px-2">ID</td>
+          <td></td>
           <td className="px-2">Board</td>
           <td className="px-2">Posts</td>
           <td className="px-2">Last bumped</td>
-          <td></td>
         </thead>
         <tbody>
           {loading ? (
