@@ -55,24 +55,30 @@ export const BoardItem = ({
       <td>
         <IdLabel id={id}></IdLabel>
       </td>
-      <td className="px-2 whitespace-nowrap">
-        <span>
-          <Link className="dchan-link mx-4" to={url}>
-            /{name}/
-          </Link>
-        </span>
-      </td>
-      <td
-        className="px-2 whitespace-nowrap hidden sm:block max-w-10rem truncate"
-      >
-        <span>
-          <Link className="dchan-link" to={url}>
-            {title}
-          </Link>
-        </span>
+      <td className="px-2 whitespace-nowrap text-center">
+        <div className="flex">
+          <span>
+            <Link className="dchan-link max-w-[8rem] text-ellipsis overflow-hidden inline-block" to={url}>
+              /{name}/
+            </Link>
+          </span>
+          <span className="px-2">
+          -
+          </span>
+          <span>
+            <Link className="dchan-link max-w-[8rem] text-ellipsis overflow-hidden inline-block" to={url}>
+              {title}
+            </Link>
+          </span>
+        </div>
       </td>
       <td className="px-2 whitespace-nowrap text-right">
         <span>{postCount} posts</span>
+      </td>
+      <td className="whitespace-nowrap">
+        {DateTime.fromSeconds(
+          parseInt(board.lastBumpedAtBlock.timestamp)
+        ).toRelative()}
       </td>
       <td className="left-full top-0 px-1 whitespace-nowrap center block">
         {isLocked ? (
@@ -90,11 +96,6 @@ export const BoardItem = ({
           ""
         )}
       </td>
-      <td>
-        {DateTime.fromSeconds(
-          parseInt(board.lastBumpedAtBlock.timestamp)
-        ).toRelative()}
-      </td>
     </tr>
   );
 };
@@ -111,15 +112,14 @@ export const BoardList = ({
   highlight?: Board;
 }) => {
   return (
-    <div className={`${className} flex center`}>
+    <div className={`${className} flex overflow-scroll`}>
       <table className="flex-grow">
         <thead className="bg-secondary border-bottom-tertiary-accent sticky top-0">
           <td className="px-2">ID</td>
           <td className="px-2">Board</td>
-          <td className=""></td>
           <td className="px-2">Posts</td>
-          <td></td>
           <td className="px-2">Last bumped</td>
+          <td></td>
         </thead>
         <tbody>
           {loading ? (

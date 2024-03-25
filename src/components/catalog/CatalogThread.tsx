@@ -75,6 +75,7 @@ export const CatalogThread = ({
                 marginRight: "-2rem",
                 width: "14rem",
                 position: "absolute",
+                minHeight: "20rem"
               }
             : {
                 minHeight: "20rem",

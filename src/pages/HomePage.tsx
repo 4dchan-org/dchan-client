@@ -58,7 +58,7 @@ export const HomePage = () => {
         </div>
       </div>
       <hr />
-      <div className="mt-2 flex flex-grow flex-col grid-cols-2 lg:grid px-4 text-sm">
+      <div className="mt-2 flex flex-grow flex-col lg:grid-cols-2 lg:grid px-4 text-sm">
         <div>
           <Card
             title="Boards"
