@@ -52,40 +52,35 @@ export const BoardItem = ({
       onClick={onClick}
       onDoubleClick={onDoubleClick}
     >
+    <td className="min-w-[1rem]">
+      {isLocked ? (
+        <span title="Board locked. You cannot post.">
+          <Emoji emoji={"🔒"} />
+        </span>
+      ) : (
+        ""
+      )}
+      {isNsfw ? (
+        <span title="NSFW Board">
+          <Emoji emoji={"🔞"} />
+        </span>
+      ) : (
+        ""
+      )}
+    </td>
       <td>
         <IdLabel id={id}></IdLabel>
       </td>
-      <td className="min-w-[2rem]">
-        {isLocked ? (
-          <span title="Board locked. You cannot post.">
-            <Emoji emoji={"🔒"} />
-          </span>
-        ) : (
-          ""
-        )}
-        {isNsfw ? (
-          <span title="NSFW Board">
-            <Emoji emoji={"🔞"} />
-          </span>
-        ) : (
-          ""
-        )}
-      </td>
-      <td className="px-2 whitespace-nowrap text-center">
+      <td className="whitespace-nowrap text-center">
         <div className="flex">
-          <span>
-            <Link className="dchan-link max-w-[8rem] text-ellipsis overflow-hidden inline-block" to={url}>
-              /{name}/
-            </Link>
-          </span>
-          <span className="px-2">
-          -
-          </span>
-          <span>
-            <Link className="dchan-link max-w-[8rem] text-ellipsis overflow-hidden inline-block" to={url}>
-              {title}
-            </Link>
-          </span>
+          <Link
+            className="dchan-link max-w-[16rem] text-ellipsis overflow-hidden inline-block"
+            to={url}
+          >
+            <span>/{name}/</span>
+            <span className="px-2">-</span>
+            <span>{title}</span>
+          </Link>
         </div>
       </td>
       <td className="px-2 whitespace-nowrap text-right">
@@ -115,11 +110,13 @@ export const BoardList = ({
     <div className={`${className} flex overflow-scroll`}>
       <table className="flex-grow">
         <thead className="bg-secondary border-bottom-tertiary-accent sticky top-0">
-          <td className="px-2">ID</td>
-          <td></td>
-          <td className="px-2">Board</td>
-          <td className="px-2">Posts</td>
-          <td className="px-2">Last bumped</td>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>Board</td>
+            <td className="px-2">Posts</td>
+            <td className="px-2">Last bumped</td>
+          </tr>
         </thead>
         <tbody>
           {loading ? (

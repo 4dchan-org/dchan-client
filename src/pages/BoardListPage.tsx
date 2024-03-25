@@ -83,7 +83,7 @@ export const BoardListPage = () => {
       <GenericHeader title="Boards" />
 
       <div className="relative">
-        <div className="flex center">
+        <div className="flex center pb-1">
           <SearchWidget
             baseUrl={`${Router.boards()}${block ? `?block=${block}` : ""}`}
             search={search}
@@ -112,8 +112,10 @@ export const BoardListPage = () => {
             </div>
           ) : (
             <>
-              <div className="grid pt-2 justify-center">
-                <BoardTabs />
+              <div className="center flex">
+                <div className="max-w-xl">
+                  <BoardTabs />
+                </div>
               </div>
             </>
           )}
