@@ -14,7 +14,7 @@ export const LatestThreadsCard = ({ board }: { board?: Board }) => {
   const { loading, data: newData } = useQuery<{ threads: Thread[] }, any>(
     query,
     {
-      pollInterval: 60_000,
+      // pollInterval: 60_000,
       variables: {
         block,
         board: board?.id || "",

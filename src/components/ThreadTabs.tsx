@@ -34,7 +34,7 @@ export const ThreadTabs = ({
   const { data, loading } = useQuery<ThreadListData, ThreadListVars>(
     block ? THREADS_TABS_BLOCK : THREADS_TABS,
     {
-      pollInterval: 30_000,
+      // pollInterval: 30_000,
       fetchPolicy: block ? "cache-first" : "network-only",
       variables: { block, limit, cutoff, board: board?.id || "" },
     }

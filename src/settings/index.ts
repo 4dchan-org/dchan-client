@@ -3,7 +3,7 @@ const DefaultSettings = {
         address: "0x5a139ee9f56c4F24240aF366807490C171922b0E".toLowerCase()
     },
     subgraph: {
-        endpoint: "https://api.thegraph.com/subgraphs/name/dchan-network/dchan-alpha-0"
+        endpoint: "https://gateway.thegraph.com/api/418eac8d0a68edf19ab2e47917049c65/subgraphs/id/Aaot6bDHNzCLKRTnbzrCUHEuFKvSQ84quNhWpwyv3cHr"
     },
     ipfs: {
         endpoint: "https://ipfs.4dchan.org/ipfs/"

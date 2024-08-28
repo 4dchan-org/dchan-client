@@ -27,7 +27,7 @@ export const PopularThreadsCard = ({ board }: { board?: Board }) => {
   const { loading, data: newData } = useQuery<{ threads: Thread[] }, any>(
     query,
     {
-      pollInterval: 30_000,
+      // pollInterval: 30_000,
       fetchPolicy: block ? "cache-first" : "network-only",
       variables: {
         cutoff,

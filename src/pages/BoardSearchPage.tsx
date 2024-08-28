@@ -8,7 +8,7 @@ export const BoardSearchPage = () => {
   const { boardName: name } = useParams()
   const { data } = useQuery(BOARDS_SEARCH, {
     variables: { name },
-    pollInterval: 30_000,
+    // pollInterval: 30_000,
   });
 
   return (

@@ -22,7 +22,7 @@ export const WatchedThreadsWidget = () => {
     loading,
     refetch,
   } = useQuery(THREADS_LIST_FAVORITES, {
-    pollInterval: 30_000,
+    // pollInterval: 30_000,
     variables: {
       ids,
     },

@@ -48,7 +48,7 @@ export const PostsPage = () => {
     block ? POST_SEARCH_BLOCK : POST_SEARCH,
     {
       variables,
-      pollInterval: 60_000,
+      // pollInterval: 60_000,
     }
   );
 

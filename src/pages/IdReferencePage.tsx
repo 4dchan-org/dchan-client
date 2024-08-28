@@ -43,7 +43,7 @@ export const IdReferencePage = () => {
   const { data } = useQuery<IdSearchData, IdSearchVars>(graphQuery, {
     variables: { id: id || "", block },
     fetchPolicy: "cache-and-network",
-    pollInterval: 5_000,
+    pollInterval: 10_000,
   });
 
   useEffect(() => {

@@ -107,7 +107,7 @@ function queryGetNextBlock(
 
 export const useBlockRange = () => {
   const query = useQuery<BlockRangeData, BlockRangeVars>(BLOCK_RANGE, {
-    pollInterval: 10_000,
+    // pollInterval:60_000,
   });
   return {
     firstBlock: query.data?.first[0],

@@ -47,7 +47,7 @@ export const BoardListPage = () => {
   } = useQuery<BoardSearchData, BoardSearchVars>(
     block ? BOARDS_SEARCH_BLOCK : BOARDS_SEARCH,
     {
-      pollInterval: 30_000,
+      // pollInterval: 30_000,
       fetchPolicy: block ? "cache-first" : "network-only",
       variables: {
         searchName: search,

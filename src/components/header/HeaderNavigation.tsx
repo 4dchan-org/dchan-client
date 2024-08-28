@@ -96,7 +96,7 @@ export const HeaderNavigation = ({
 
   const { data } = useQuery<BoardListData, BoardListVars>(
     BOARDS_LIST_MOST_POPULAR,
-    { variables: {}, pollInterval: 30_000 }
+    // { variables: {}, pollInterval: 30_000 }
   );
 
   const toggleShowBoards = useCallback(() => {

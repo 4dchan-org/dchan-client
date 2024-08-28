@@ -15,7 +15,7 @@ export const WatchedThreadsCard = () => {
   const { data, loading } = useQuery(
     block ? THREADS_LIST_FAVORITES_BLOCK : THREADS_LIST_FAVORITES,
     {
-      pollInterval: 30_000,
+      // pollInterval: 30_000,
       fetchPolicy: block ? "cache-first" : "network-only",
       variables: {
         ids,

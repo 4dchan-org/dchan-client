@@ -27,7 +27,7 @@ export const BoardTabs = ({
   const { data, loading } = useQuery<BoardListData, BoardListVars>(
     block ? BOARD_TABS_AT_BLOCK : BOARD_TABS,
     {
-      pollInterval: 30_000,
+      // pollInterval: 30_000,
       fetchPolicy: block ? "cache-first" : "network-only",
       variables: { block, limit },
     }
