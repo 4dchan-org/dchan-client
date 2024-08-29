@@ -10,14 +10,14 @@ export const HeaderLogo = React.memo(({ block }: { block?: string }) => {
         to={`/${block ? `?block=${block}` : ""}`}
         title="4dchan.org"
       >
-        <span className="left-0 top-4 absolute">
+        <span className="left-0 top-5 absolute">
           <span className="select-none relative">
             <Spinner
               className="absolute w-14 top-0 bottom-0 opacity-10"
               size={16}
               style={{
                 animationDelay: `-${
-                  new Date().getSeconds() - 3
+                  new Date().getSeconds() - 6
                 }.${new Date().getMilliseconds()}s`,
               }}
               speed={"minute"}
@@ -27,7 +27,7 @@ export const HeaderLogo = React.memo(({ block }: { block?: string }) => {
               size={16}
               style={{
                 animationDelay: `-${
-                  new Date().getSeconds() - 2
+                  new Date().getSeconds() - 4
                 }.${new Date().getMilliseconds()}s`,
               }}
               speed={"minute"}

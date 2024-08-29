@@ -45,18 +45,21 @@ export const ContentHeader = ({
         ""
       ) : thread || board ? (
         isTimeTraveling && timeTraveledToDateTime ? (
-          <div className="pt-2">
-            <span className="opacity-80 p-2">
-              <div>Time traveled to</div>
-              <div>
-                {timeTraveledToDateTime?.toLocaleString(
-                  DateTime.DATETIME_SHORT
-                )}
-              </div>
-              <div>{timeTraveledToDateTime?.toRelative()}</div>
-            </span>
-            <div className="text-xs text-center p-2 select-none">
-              <button className="dchan-brackets" onClick={() => openWidget(OpenedWidgetEnum.TIMETRAVEL)}>
+          <div className="pt-2 text-center">
+            <div className="opacity-80 p-2 bg-secondary rounded-lg shadow-md">
+              <h3 className="text-lg font-semibold mb-2">Time Traveled To</h3>
+              <p className="text-md">
+                {timeTraveledToDateTime?.toLocaleString(DateTime.DATETIME_SHORT)}
+              </p>
+              <p className="text-sm text-gray-600">
+                {timeTraveledToDateTime?.toRelative()}
+              </p>
+            </div>
+            <div className="mt-4">
+              <button 
+                className="dchan-brackets bg-primary hover:bg-primary-dark transition-colors duration-200 px-4 py-2 rounded"
+                onClick={() => openWidget(OpenedWidgetEnum.TIMETRAVEL)}
+              >
                 Time Travel
               </button>
             </div>
@@ -65,7 +68,7 @@ export const ContentHeader = ({
           <FormPost thread={thread} board={board} />
         )
       ) : (
-        "..."
+        <div className="text-center text-gray-500">...</div>
       )}
 
       {board !== null ? (

@@ -43,7 +43,7 @@ export const CatalogThread = ({
   );
 
   const [isFocused, setIsFocused] = useState<boolean>(false);
-
+  // const isFocused = true;
   const goToThread = useCallback(() => {
     navigate(
       `${Router.thread(thread) || "/"}${block ? `?block=${block}` : ""}`
@@ -75,7 +75,8 @@ export const CatalogThread = ({
                 marginRight: "-2rem",
                 width: "14rem",
                 position: "absolute",
-                minHeight: "20rem"
+                minHeight: "20rem",
+                alignItems: "start",
               }
             : {
                 minHeight: "20rem",

@@ -25,4 +25,4 @@ export const IdLabel = ({
 }
 
 export const LABEL_CLASSNAME =
-  "font-mono font-bold text-readable-anywhere pt-0.5 px-0.5 mx-0.5 rounded opacity-75 hover:opacity-100 text-xs whitespace-nowrap";
+  "font-mono font-bold text-readable-anywhere px-0.5 mx-0.5 rounded opacity-75 hover:opacity-100 text-xs whitespace-nowrap";

@@ -26,6 +26,7 @@ interface BoardListData {
 interface BoardListVars {}
 
 export enum OpenedWidgetEnum {
+  BOARDS = "BOARDS",
   TIMETRAVEL = "TIMETRAVEL",
   SEARCH = "SEARCH",
   WATCHEDTHREADS = "WATCHEDTHREADS",
@@ -58,17 +59,21 @@ export const HeaderNavigation = ({
     block: siteCreatedAtBlock,
   });
   const [openedWidget, setOpenedWidget] = useContext(WidgetContext);
-  const [showBoards, setShowBoards] = useState<boolean>(false);
+  const showBoards = openedWidget === OpenedWidgetEnum.BOARDS;
   const timeTravelRef = useRef<HTMLDetailsElement>(null);
+  const boardsRef = useRef<HTMLDetailsElement>(null);
   const watchedThreadsRef = useRef<HTMLDetailsElement>(null);
   const settingsRef = useRef<HTMLDetailsElement>(null);
   const walletRef = useRef<HTMLDetailsElement>(null);
 
   const user = useUser().data?.user;
 
-  const onWidgetOpen = useCallback((_a: string, widget: string) => {
-    widget in OpenedWidgetEnum && setOpenedWidget(widget as OpenedWidgetEnum);
-  }, [setOpenedWidget])
+  const onWidgetOpen = useCallback(
+    (_a: string, widget: string) => {
+      widget in OpenedWidgetEnum && setOpenedWidget(widget as OpenedWidgetEnum);
+    },
+    [setOpenedWidget]
+  );
 
   useEffect(() => {
     const sub = subscribe("WIDGET_OPEN", onWidgetOpen);
@@ -95,71 +100,98 @@ export const HeaderNavigation = ({
   }, [thread, board, setStartBlock]);
 
   const { data } = useQuery<BoardListData, BoardListVars>(
-    BOARDS_LIST_MOST_POPULAR,
+    BOARDS_LIST_MOST_POPULAR
     // { variables: {}, pollInterval: 30_000 }
   );
 
-  const toggleShowBoards = useCallback(() => {
-    setShowBoards(!showBoards);
-  }, [showBoards, setShowBoards]);
-
-  const widgetClass = [
-    "absolute top-0 w-screen sm:w-max mt-1 md:mt-1 left-0 right-0 sm:left-auto sm:right-2 sm:opacity-90 hover:opacity-100",
-    showBoards ? "top-11 md:top-full" : "top-full md:top-6",
-  ].join(" ");
+  const widgetClass = ["fixed top-6"].join(" ");
 
   const boards = data?.boards;
   return (
     <div className="dchan-header-navigation">
-      {openedWidget !== null ? <div className="w-100vw h-100vh z-50 fixed top-0 left-0" onClick={() => setOpenedWidget(null)} /> : <></>}
-      <div className="text-sm p-01 border-solid border-bottom-tertiary-accent bg-secondary border-0 border-b-2 text-left fixed top-0 left-0 right-0 shadow-md z-50 flex flex-wrap">
-        <span className="text-black text-opacity-50 hover:text-opacity-100 dchan-brackets">
-          <Link
-            className="dchan-link font-bold"
-            to={`/${block ? `?block=${block}` : ""}`}
-          >
-            4dchan.org
-          </Link>
-        </span>
-        {board ? <BoardLink board={board} /> : <></>}
-        <span className="text-black text-opacity-50 hover:text-opacity-100 select-none px-1">
-          <span className="inline dchan-brackets" onClick={toggleShowBoards}>
-            <span className="dchan-link w-2 inline-block text-center">{showBoards ? "-" : "+"}</span>
+      {openedWidget !== null ? (
+        <div
+          className="w-100vw h-100vh z-50 fixed top-0 left-0"
+          onClick={() => setOpenedWidget(null)}
+        />
+      ) : (
+        <></>
+      )}
+      <div className="text-sm p-01 border-solid border-bottom-tertiary-accent bg-secondary border-0 border-b-2 text-left fixed top-0 left-0 right-0 shadow-md z-50 flex flex-wrap justify-between items-center">
+        <div className="header-section flex-1">
+          <span className="text-black text-opacity-50 hover:text-opacity-100 dchan-brackets">
+            <Link
+              className="dchan-link font-bold"
+              to={`/${block ? `?block=${block}` : ""}`}
+            >
+              4dchan.org
+            </Link>
           </span>
-          <span className={showBoards ? "hidden md:inline" : "hidden"}>
-            <span className="hidden sm:inline-block dchan-brackets">
-              {boards &&
-                boards.map((board) => (
-                  <span className="dchan-navigation-board" key={board.id}>
-                    <wbr />
-                    <BoardLink board={board} />
+          {board ? <BoardLink board={board} /> : <></>}
+          <span className="text-black text-opacity-50 hover:text-opacity-100 select-none px-1">
+            <details
+              className="mx-1 inline"
+              title="Boards"
+              open={openedWidget === OpenedWidgetEnum.BOARDS}
+              ref={boardsRef}
+            >
+              <summary
+                className="list-none cursor-pointer opacity-60 hover:opacity-100 select-none"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setOpenedWidget(
+                    openedWidget === OpenedWidgetEnum.BOARDS
+                      ? null
+                      : OpenedWidgetEnum.BOARDS
+                  );
+                }}
+              >
+                <span className="inline dchan-brackets">
+                  <span className="dchan-link w-2 inline-block text-center">
+                    {showBoards ? "-" : "+"}
                   </span>
-                ))}
-            </span>
+                </span>
+              </summary>
+              <div className={widgetClass + " left-0"}>
+                <div className="bg-secondary border border-tertiary-accent border-solid p-1">
+                  <span className="hidden sm:inline-block dchan-brackets">
+                    {boards &&
+                      boards.map((board) => (
+                        <span
+                          className="dchan-navigation-board"
+                          key={board.id}
+                        >
+                          <wbr />
+                          <BoardLink board={board} />
+                        </span>
+                      ))}
+                  </span>
+                  <Link
+                    className={"dchan-brackets " + (showBoards ? "" : "hidden")}
+                    to={`${Router.boards()}${block ? `?block=${block}` : ""}`}
+                  >
+                    <span className="dchan-link">...</span>
+                  </Link>
+                </div>
+              </div>
+            </details>
           </span>
-          <Link
-            className={"dchan-brackets " + (showBoards ? "" : "hidden")}
-            to={`${Router.boards()}${block ? `?block=${block}` : ""}`}
-          >
-            <span className="dchan-link">...</span>
-          </Link>
-        </span>
-        <span className="text-black text-opacity-50 hover:text-opacity-100 select-none pr-1">
-          [
-          <Link
-            className="dchan-link"
-            to={`${Router.posts()}${block ? `?block=${block}` : ""}`}
-          >
-            <Emoji emoji={"🔍"} />
-          </Link>
-          ]
-        </span>
-        <span className="inline-flex center flex-grow" />
-        <span className="float-right flex flex-row mr-1 select-none justify-end flex-grow">
+          <span className="text-black text-opacity-50 hover:text-opacity-100 select-none pr-1">
+            [
+            <Link
+              className="dchan-link"
+              to={`${Router.posts()}${block ? `?block=${block}` : ""}`}
+            >
+              <Emoji emoji={"🔍"} />
+            </Link>
+            ]
+          </span>
+        </div>
+        <div className="header-section flex-1 flex justify-center">
           <TimeTravelWidget
             ref={timeTravelRef}
             open={openedWidget === OpenedWidgetEnum.TIMETRAVEL}
-            widgetClassName={widgetClass}
+            widgetClassName={widgetClass + " w-screen left-0"}
             onOpen={() => {
               setOpenedWidget(
                 openedWidget === OpenedWidgetEnum.TIMETRAVEL
@@ -171,98 +203,88 @@ export const HeaderNavigation = ({
             startBlock={startBlock.block}
             startRangeLabel={startBlock.label}
           />
-          <details
-            className="mx-1"
-            title="Watched Threads"
-            open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS}
-            ref={watchedThreadsRef}
-          >
-            <summary
-              className="list-none cursor-pointer opacity-60 hover:opacity-100 select-none"
-              onClick={(event) => {
-                event.preventDefault();
-                setOpenedWidget(
-                  openedWidget === OpenedWidgetEnum.WATCHEDTHREADS
-                    ? null
-                    : OpenedWidgetEnum.WATCHEDTHREADS
-                );
-              }}
+        </div>
+        <div className="header-section flex-1 flex justify-end">
+          <span className="flex flex-row mr-1 select-none">
+            <details
+              className="mx-1"
+              title="Watched Threads"
+              open={openedWidget === OpenedWidgetEnum.WATCHEDTHREADS}
+              ref={watchedThreadsRef}
             >
-              <Emoji emoji={"⭐️"} />
-            </summary>
-            <div className={widgetClass}>
-              <WatchedThreadsWidget />
-            </div>
-          </details>
-          <span
-            ref={settingsRef}
-            title={"Settings"}
-            className="cursor-pointer opacity-60 hover:opacity-100 mx-1 select-none"
-            onClick={() => {
-              setOpenedWidget(
-                openedWidget === OpenedWidgetEnum.SETTINGS
-                  ? null
-                  : OpenedWidgetEnum.SETTINGS
-              );
-            }}
-          >
-            <Emoji emoji={"⚙️"} />
-            {openedWidget === OpenedWidgetEnum.SETTINGS ? (
-              <Overlay
-                onExit={() => setOpenedWidget(null)}
-                overlayClassName="w-full sm:w-4/6 h-5/6"
+              <summary
+                className="list-none cursor-pointer opacity-60 hover:opacity-100 select-none"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setOpenedWidget(
+                    openedWidget === OpenedWidgetEnum.WATCHEDTHREADS
+                      ? null
+                      : OpenedWidgetEnum.WATCHEDTHREADS
+                  );
+                }}
               >
-                <SettingsWidget onExit={() => setOpenedWidget(null)} />
-              </Overlay>
-            ) : (
-              ""
-            )}
-          </span>
-          <details
-            className="mx-1 select-none"
-            open={openedWidget === OpenedWidgetEnum.WALLET}
-            ref={walletRef}
-          >
-            <summary
-              title="Wallet"
-              className="list-none cursor-pointer opacity-60 hover:opacity-100"
-              onClick={(event) => {
-                event.preventDefault();
+                <Emoji emoji={"⭐️"} />
+              </summary>
+              <div className={widgetClass + " right-0"}>
+                <WatchedThreadsWidget />
+              </div>
+            </details>
+            <span
+              ref={settingsRef}
+              title={"Settings"}
+              className="cursor-pointer opacity-60 hover:opacity-100 mx-1 select-none"
+              onClick={() => {
                 setOpenedWidget(
-                  openedWidget === OpenedWidgetEnum.WALLET
+                  openedWidget === OpenedWidgetEnum.SETTINGS
                     ? null
-                    : OpenedWidgetEnum.WALLET
+                    : OpenedWidgetEnum.SETTINGS
                 );
               }}
             >
-              <span className={provider ? "" : "filter grayscale"}>
-                <UserLabel user={user ? user : {address: accounts[0]} as User} />
-                <Emoji emoji={"🦊"} />
-              </span>
-            </summary>
-            {openedWidget === OpenedWidgetEnum.WALLET ? (
-              <div className={widgetClass}>
-                <Wallet />
-              </div>
-            ) : (
-              ""
-            )}
-          </details>
-        </span>
-        <div
-          className={
-            "w-min top-7 sm:top-full sm:mt-1 left-0 right-0 sm:left-auto mx-auto overflow-scroll " +
-            (showBoards ? "block md:hidden" : "hidden")
-          }
-        >
-          <span className="dchan-brackets flex">
-            {boards &&
-              boards.map((board) => (
-                <span className="dchan-navigation-board" key={board.id}>
-                  <wbr />
-                  <BoardLink board={board} />
+              <Emoji emoji={"⚙️"} />
+              {openedWidget === OpenedWidgetEnum.SETTINGS ? (
+                <Overlay
+                  onExit={() => setOpenedWidget(null)}
+                  overlayClassName="w-full sm:w-4/6 h-5/6"
+                >
+                  <SettingsWidget onExit={() => setOpenedWidget(null)} />
+                </Overlay>
+              ) : (
+                ""
+              )}
+            </span>
+            <details
+              className="mx-1 select-none"
+              open={openedWidget === OpenedWidgetEnum.WALLET}
+              ref={walletRef}
+            >
+              <summary
+                title="Wallet"
+                className="list-none cursor-pointer opacity-60 hover:opacity-100"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setOpenedWidget(
+                    openedWidget === OpenedWidgetEnum.WALLET
+                      ? null
+                      : OpenedWidgetEnum.WALLET
+                  );
+                }}
+              >
+                <span className={provider ? "" : "filter grayscale"}>
+                  <UserLabel
+                    user={user ? user : ({ address: accounts[0] } as User)}
+                  />
+                  <Emoji emoji={"🦊"} />
                 </span>
-              ))}
+              </summary>
+              {openedWidget === OpenedWidgetEnum.WALLET ? (
+                <div className={widgetClass + " right-0"}>
+                  <Wallet />
+                </div>
+              ) : (
+                ""
+              )}
+            </details>
           </span>
         </div>
       </div>
