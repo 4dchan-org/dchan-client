@@ -23,11 +23,14 @@ import {
   ModalOverlay,
   ScrollToHashElement,
 } from "src/components";
-import { useEula } from "src/hooks";
+import { useEula, useTimeTravel } from "src/hooks";
 import { AppContext } from "./contexts/AppContext";
+import TimeTravelEffect from "./components/TimeTravelEffect";
 
 function App() {
   const [eula] = useEula();
+  const { isTimeTraveling } = useTimeTravel();
+  console.log("isTimeTraveling", isTimeTraveling);
 
   const IdRefRouter = () => {
     const { id } = useParams();
@@ -44,48 +47,50 @@ function App() {
   ) : (
     <Router basename="/">
       <AppContext>
-        <ScrollToHashElement />
-        <SingletonHooksContainer />
-        <LockBanner />
-        <div className="App text-center">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="_/boards" element={<BoardListPage />} />
-            <Route path="_/admin" element={<AdminPage />} />
-            <Route path="_/posts" element={<PostsPage />} />
-            <Route path=":id" element={<IdRefRouter />} />
-            <Route path=":board_name/:board_id" element={<RefRouter />} />
-            <Route
-              path=":board_name/:board_id/archive"
-              element={<ArchivePage />}
-            />
-            <Route
-              path=":board_name/:board_id/:view_mode"
-              element={<BoardPage />}
-            />
-            <Route
-              path=":board_name/:board_id/:user_id/:thread_n/:focus_user_id/:focus_post_n"
-              element={<ThreadPage />}
-            />
-            <Route
-              path=":board_name/:board_id/:user_id/:thread_n/:focus_user_id"
-              element={<ThreadPage />}
-            />
-            <Route
-              path=":board_name/:board_id/:user_id/:thread_n/:focus_post_n"
-              element={<ThreadPage />}
-            />
-            <Route
-              path=":board_name/:board_id/:user_id/:thread_n/:post_n"
-              element={<ThreadPage />}
-            />
-            <Route
-              path=":board_name/:board_id/:user_id/:thread_n"
-              element={<ThreadPage />}
-            />
-          </Routes>
-          <ModalOverlay />
-        </div>
+        <TimeTravelEffect>
+          <ScrollToHashElement />
+          <SingletonHooksContainer />
+          <LockBanner />
+          <div className="App text-center">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="_/boards" element={<BoardListPage />} />
+              <Route path="_/admin" element={<AdminPage />} />
+              <Route path="_/posts" element={<PostsPage />} />
+              <Route path=":id" element={<IdRefRouter />} />
+              <Route path=":board_name/:board_id" element={<RefRouter />} />
+              <Route
+                path=":board_name/:board_id/archive"
+                element={<ArchivePage />}
+              />
+              <Route
+                path=":board_name/:board_id/:view_mode"
+                element={<BoardPage />}
+              />
+              <Route
+                path=":board_name/:board_id/:user_id/:thread_n/:focus_user_id/:focus_post_n"
+                element={<ThreadPage />}
+              />
+              <Route
+                path=":board_name/:board_id/:user_id/:thread_n/:focus_user_id"
+                element={<ThreadPage />}
+              />
+              <Route
+                path=":board_name/:board_id/:user_id/:thread_n/:focus_post_n"
+                element={<ThreadPage />}
+              />
+              <Route
+                path=":board_name/:board_id/:user_id/:thread_n/:post_n"
+                element={<ThreadPage />}
+              />
+              <Route
+                path=":board_name/:board_id/:user_id/:thread_n"
+                element={<ThreadPage />}
+              />
+            </Routes>
+            <ModalOverlay />
+          </div>
+          </TimeTravelEffect>
       </AppContext>
     </Router>
   );

@@ -189,7 +189,7 @@ export const FormPost = ({
       thread && addFavorite && addFavorite(thread);
       setIsSending(true);
 
-      let result: { error?: any; success?: any; events?: any } | null = null;
+      let result: any = null;
       try {
         result = await postMessage(data, accounts[0], setStatus);
       } catch (error) {
@@ -214,10 +214,15 @@ export const FormPost = ({
         resetForm(true);
       }
 
+      console.log("result", JSON.stringify({result}))
+
       const events = result?.events;
       if (events && events[0]) {
         const { transactionHash } = events[0];
         const url = `/${transactionHash}`;
+        navigate(url);
+      } else if (result?.hash) {
+        const url = `/${result.hash}`;
         navigate(url);
       }
     },
